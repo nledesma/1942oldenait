@@ -11,7 +11,7 @@ using namespace std;
 class Servidor: public GameSocket{
 private:
 	list <int> clientes;
-public: 
+public:
 	Servidor(int port, int cantidadDeClientes):GameSocket(){
 		inicializar(port);
 	}
@@ -25,12 +25,12 @@ public:
 	void setAddress(int port){
    		this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
     	this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
-    
+
       	this->addr_info.sin_addr.s_addr = INADDR_ANY; // El socket se puede asociar a cualquier conexión
-    
+
     	memset(this->addr_info.sin_zero, 0, sizeof(this->addr_info.sin_zero));
   	}
-  
+
 	void pasivar(int backlog){
     	listen(this->socketFd, backlog);
   	}
@@ -38,14 +38,14 @@ public:
   	//Agrega el nuevo cliente a la lista de clientes para aceptarlo.
   	void aceptar(){
 
-  		clientes.push_back(accept(this->getSocketFd(), 0, 0));
-  	
+  		clientes.push_back(accept(socketFd, 0, 0));
+
 		cout << "Conexión aceptada" << endl;
 
   	}
 
  	void enviarMensaje(string mensaje, int longitudMensaje){
-  		
+
   		char *pMensaje = &(mensaje[0]);
  		int bytesSent = 0;
 
@@ -56,7 +56,7 @@ public:
 			cout << "Enviado " << bytesSent << " bytes" << endl;
 		}
 		cout << "Datos enviados" << endl;
-	
+
 	}
 
 	void cerrar(){
@@ -65,12 +65,11 @@ public:
 				shutdown(clienteActual, 0);
 				close(clienteActual);
 		}
-		shutdown(this->getSocketFd(), 0); //Dejo de transmitir datos
-		close(this->getSocketFd());
+		shutdown(socketFd, 0); //Dejo de transmitir datos
+		close(socketFd);
 
 		cout << "Servidor cerrado" << endl;
 
 	}
 
 };
-

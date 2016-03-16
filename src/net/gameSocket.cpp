@@ -17,13 +17,4 @@ public:
     // Se inicializa el socket para dominios IPv4, tipo de conexión SOCK_STREAM (TCP), y protocolo a definir
     this->socketFd =  socket(PF_INET, SOCK_STREAM, 0);
   }
-
-  
-
-
-  // TODO Esto no va a ser necesario cuando implementemos un par de funciones más.
-  int getSocketFd(){
-    return this->socketFd;
-  }
-
 };
