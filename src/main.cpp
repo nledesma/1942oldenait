@@ -1,85 +1,64 @@
 #include "gameSocket.cpp"
+#include "servidor.cpp"
+#include "cliente.cpp"
 #include <pthread.h>
+#include <string>
+#include <iostream>
 #define LOCALHOST "127.0.0.1"
 #define PUERTO 8080
 #define LONG_MSG 30
 #define N_BYTES 50
 //#define IP LOCALHOST + ":" + PUERTO
 
-void* inicializarServ(void* arg){
-  cout << "Iniciando servidor" << endl;
+Servidor *servidor = new Servidor(8080,3);
+Cliente *cliente = new Cliente(LOCALHOST, 8080);
 
-  GameSocket *gameSocket = new GameSocket();
-
-  gameSocket->inicializarServidor(8080);
-  gameSocket->pasivarServidor(20);
-
-  cout << "Esperando conexión..." << endl;
+void* fservidor(void* arg){
+  
 	//Acepto una conexión e ignoro la información de la misma
-	int clientFd = accept(gameSocket->getSocketFd(), 0, 0);
-	cout << "Conexión aceptada" << endl;
+	servidor->aceptar();
 
-	int bytesSent = 0;
+  string mensajeDePrueba = "HolaEstoEsUnaPrueba\n";
+  int longitudDelMensaje = mensajeDePrueba.length();
 
-	cout << "Enviando datos" << endl;
-	//Le envío 30 bytes al cliente (un número arbitrario)
-	while (bytesSent < 40 && bytesSent != -1){
-    cout << "ESTO ES ENVIADOS" << bytesSent;
-		char message[40] = "MENSAJE\n";
-		// Agrego offsets si es que no se envía todo el mensaje
-		bytesSent = send(clientFd, message + bytesSent, 40 - bytesSent, MSG_NOSIGNAL);
-		cout << "Enviado " << bytesSent << " bytes" << endl;
-	}
-	cout << "Datos enviados" << endl;
+	servidor->enviarMensaje(mensajeDePrueba,longitudDelMensaje);
 
-	shutdown(gameSocket->getSocketFd(), 0); //Dejo de transmitir datos
-	shutdown(clientFd, 0);
-
-	close(gameSocket->getSocketFd());
-	close(clientFd);
-
-	cout << "Gracias, vuelvas prontos" << endl;
+  servidor->cerrar();
+	
   pthread_exit(NULL);
 }
 
-void* inicializarCliente(void* arg){
+void* fcliente(void* arg){
   cout << "Iniciando el cliente en la direccion " << LOCALHOST << endl;
-  GameSocket *socket = new GameSocket();
-  socket->inicializarCliente(PUERTO, (char*) LOCALHOST);
-  socket->conectarCliente();
+ 
+  cliente->conectar();
 
-  char message[LONG_MSG];
-  int recibidos = 0;
-  cout << "Recibiendo el mensaje... " << endl;
+  int caracteresARecibir = 10;
+  string mensajeRecibido = cliente->recibir(caracteresARecibir);
 
-  // Le envio los bytes al cliente
-  while (recibidos < LONG_MSG && recibidos != -1){
-    cout << "ESTO ES RECIBIDOS: " << recibidos << endl;
-    // Agrego offsets si es que no se envia todo el mensaje
-    recibidos += recv(socket->getSocketFd(), message + recibidos, LONG_MSG - recibidos, 0);
-    cout << "Recibido" << recibidos << "bytes" << endl;
-  }
-
-  message[LONG_MSG - 1] = 0; // Cierro string
-
-  cout << "Recibo el mensaje" << message << endl;
-
-  // socket.shutdown?
-  shutdown(socket->getSocketFd(), 0); // Dejo de transmitir datos
-
-  //socket.close?
-  close(socket->getSocketFd()); // Cierro file descriptor
+  cout << "Mensaje Recibido con exito: " << mensajeRecibido << endl;
 
   cout << "Termina la parte del cliente." << endl;
   pthread_exit(NULL);
 }
 
 int main(){
+
+  cout << "Iniciando servidor" << endl;
+
+  //Por ahora la cantidad de clientes es 3, despues se modificara con el archivo XML.
+  
+
+  //20 es la cantidad de conexiones a encolar
+  servidor->pasivar(20);
+
+  cout << "Esperando conexión..." << endl;
+
   pthread_t th_cliente, th_servidor;
 
   // Arranco los threads.
-  pthread_create(&th_servidor, NULL, inicializarServ, NULL);
-  pthread_create(&th_cliente, NULL, inicializarCliente, NULL);
+  pthread_create(&th_servidor, NULL, fservidor, NULL);
+  pthread_create(&th_cliente, NULL, fcliente, NULL);
 
   // Cierro los threads cuando terminan.
   pthread_join(th_servidor, NULL);
