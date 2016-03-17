@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include <tinyxml2.h>
+#include "tinyxml2.cpp"
 
 using namespace std;
 using namespace tinyxml2;

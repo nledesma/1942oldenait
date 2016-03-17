@@ -1,4 +1,5 @@
 #include "fruta.cpp"
+
 int main(){
   Fruta *anana = new Fruta();
   anana->setGusto("dulce");
