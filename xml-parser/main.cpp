@@ -1,9 +1,10 @@
 #include "fruta.cpp"
 
+using namespace std;
+
 int main(){
   Fruta *anana = new Fruta();
-  anana->setGusto("dulce");
-  anana->setPeso(30);
-  anana->serializar();
+  anana->deserializar("fruta.xml");
+  cout<<anana->getGusto()<<endl<<anana->getPeso();
   return 0;
 }

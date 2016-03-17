@@ -23,12 +23,7 @@ class Fruta{
     void setPeso(int peso){
       this->peso = peso;
     }
-    /* Escribir un fruta.xml con los datos.
-    <Fruta>
-      <gusto> dulce </gusto>
-      <peso> 30 </peso>
-    </Fruta>
-    */
+   
     void serializar(){
       XMLDocument doc;
 
@@ -53,4 +48,23 @@ class Fruta{
         cout << "Error! " << e << endl;
       }
     }
+
+    void deserializar (string ruta) {
+      XMLDocument xmlDoc;
+      XMLError eResult = xmlDoc.LoadFile("fruta.xml");
+
+      XMLNode * pRoot = xmlDoc.FirstChildElement();
+      XMLElement * pElement = pRoot -> FirstChildElement("peso");
+
+      int unPeso;
+      eResult = pElement -> QueryIntText(&unPeso);
+
+      pElement = pRoot -> FirstChildElement("gusto");
+      
+      string unGusto;
+      unGusto = pElement -> Value();
+
+      peso = unPeso;
+      gusto = unGusto;
+  }
 };
