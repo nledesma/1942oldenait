@@ -5,16 +5,22 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
-
+#include <list>
+#include "mensaje.cpp"
 using namespace std;
 
 class Cliente: public GameSocket{
+private: 
+    string ip;
+    int port;
+    list <Mensaje> listaMensajes;
 
 public:
 	Cliente(string ip, int port):GameSocket(){
-		inicializar(ip,port);
-
-	}
+		this->ip = ip;
+    this->port = port;
+    inicializar(ip,port);
+	};
 
   void inicializar(string serverAddress ,int port){
     this->setAddress(serverAddress, port);
@@ -64,6 +70,18 @@ public:
 
   		return string(mensaje);
 	}
+
+  string getIP(){
+    return this->ip;
+  }
+
+  int getPort(){
+    return this->port;
+  }
+
+  list <Mensaje> getMensajes(){
+    return this->listaMensajes;
+  }
 
 	/*void cerrar(){
 		// socket.shutdown?
