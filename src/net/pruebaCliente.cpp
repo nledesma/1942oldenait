@@ -1,6 +1,9 @@
 #include <iostream>
 using namespace std;
-#include "clienteParser.cpp"
+#include "clienteParser.hpp"
+#include "cliente.hpp"
+#include "mensaje.hpp"
+#include "tinyxml2.h"
 #define T_STRING 0
 #define T_INT 1
 #define T_DOUBLE 2

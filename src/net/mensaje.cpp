@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include "mensaje.hpp"
 
 // Esto tendría en un .h de constantes.
 #define T_STRING 0
@@ -11,26 +12,6 @@
 #define T_CHAR 3
 
 using namespace std;
-
-class Mensaje{
-	private:
-		int id;
-		int tipo;
-		void * valor;
-	public:
-
-// Ver si lo decodifica el parser...
-		Mensaje(int unId, string unValor, int unTipo);
-		~Mensaje();
-		void setId(int unId);
-		int getId();
-		void setValor(void* unValor);
-		void* getValor();
-		int getTipo();
-		void setTipo(int unTipo);
-		string devolverTipo();
-
-};
 
 Mensaje::Mensaje(int unId, string unValor, int unTipo) {
 	id = unId;

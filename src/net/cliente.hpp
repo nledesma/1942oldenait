@@ -1,4 +1,9 @@
-#include "gameSocket.cpp"
+#ifndef CLIENTE_H
+#define CLIENTE_H
+#include "gameSocket.hpp"
+#include <list>
+#include "mensaje.hpp"
+#include <string>
 using namespace std;
 
 class Cliente: public GameSocket{
@@ -8,7 +13,7 @@ private:
     list <Mensaje*> listaMensajes;
 
 public:
-	Cliente(string ip, int port):GameSocket();
+	Cliente(string ip, int port);
 
 
   void inicializar(string serverAddress ,int port);
@@ -21,3 +26,4 @@ public:
   list <Mensaje*>& getMensajes();
 
 };
+#endif // CLIENTE_H

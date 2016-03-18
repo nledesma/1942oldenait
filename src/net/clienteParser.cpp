@@ -6,20 +6,18 @@
 #include <iostream>
 #include <string>
 #include "tinyxml2.h"
-#include "cliente.cpp"
+#include "cliente.hpp"
 #include <list>
 #include <iterator>
+#include "clienteParser.hpp"
+
+#define T_STRING 0
+#define T_INT 1
+#define T_DOUBLE 2
+#define T_CHAR 3
 
 using namespace std;
 using namespace tinyxml2;
-
-class ClienteParser {
-	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
-	public:
-		ClienteParser();
-		void serializador(Cliente *cliente,string ruta);
-		Cliente deserializador(string ruta);
-};
 
 ClienteParser::ClienteParser(){
 	cout << "hola" << endl;

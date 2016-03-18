@@ -1,6 +1,6 @@
-#include "gameSocket.cpp"
-#include "servidor.cpp"
-#include "cliente.cpp"
+#include "gameSocket.hpp"
+#include "servidor.hpp"
+#include "cliente.hpp"
 #include <pthread.h>
 #include <string>
 #include <iostream>

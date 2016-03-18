@@ -1,6 +1,3 @@
-#ifndef(GAME_SOCKET)
-#define GAME_SOCKET
-
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -16,4 +13,4 @@ GameSocket::GameSocket(){
   this->socketFd =  socket(PF_INET, SOCK_STREAM, 0);
 }
 
-#endif
+

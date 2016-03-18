@@ -6,15 +6,15 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "mensaje.cpp"
-#include "gameSocket.cpp"
+#include "mensaje.hpp"
+#include "gameSocket.hpp"
 #include "cliente.hpp"
 using namespace std;
 
 Cliente::Cliente(string ip, int port):GameSocket(){
-this->ip = ip;
-this->port = port;
-inicializar(ip,port);
+	this->ip = ip;
+	this->port = port;
+	inicializar(ip,port);
 }
 void Cliente::inicializar(string serverAddress ,int port){
   this->setAddress(serverAddress, port);
