@@ -1,20 +1,19 @@
+#ifndef(GAME_SOCKET)
+#define GAME_SOCKET
+
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <iostream>
+#include "gameSocket.hpp"
 
 using namespace std;
 
-class GameSocket {
-protected:
-  int socketFd;
-  struct sockaddr_in addr_info;
+GameSocket::GameSocket(){
+  // Se inicializa el socket para dominios IPv4, tipo de conexión SOCK_STREAM (TCP), y protocolo a definir
+  this->socketFd =  socket(PF_INET, SOCK_STREAM, 0);
+}
 
-public:
-  GameSocket(){
-    // Se inicializa el socket para dominios IPv4, tipo de conexión SOCK_STREAM (TCP), y protocolo a definir
-    this->socketFd =  socket(PF_INET, SOCK_STREAM, 0);
-  }
-};
+#endif
