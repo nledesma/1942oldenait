@@ -5,49 +5,76 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
-#include "tinyxml2.cpp"
+#include "tinyxml2.h"
 #include "cliente.cpp"
 #include <list>
+#include <iterator>
 
 using namespace std;
 using namespace tinyxml2;
 
 class ClienteParser {
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
-	public: void serializador(Cliente cliente,string ruta);
+	public: void serializador(Cliente *cliente,string ruta);
 	public: Cliente deserializador(string ruta);
 };
 
-void ClienteParser::serializador(Cliente cliente, string ruta){
-    XMLDocument doc;
+void ClienteParser::serializador(Cliente *cliente, string ruta){
+	XMLDocument doc;
 
-    // Root
-    XMLNode * pRoot = doc.NewElement("Cliente");
-    doc.InsertFirstChild(pRoot);
+	// Root
+	XMLNode * pRoot = doc.NewElement("Cliente");
+	doc.InsertFirstChild(pRoot);
 
-    // Hijos del root. TODO: diferencia entre element y node.
-    XMLElement * pNodoIp = doc.NewElement("ip");
-    (*pNodoIp).SetText(10);
+	// Hijos del root. TODO: diferencia entre element y node.
+	XMLElement * pNodoIp = doc.NewElement("ip");
+	(*pNodoIp).SetText(10);
 
 	XMLElement * pNodoPort = doc.NewElement("port");
-    // castear a string?
-    (*pNodoPort).SetText(10);
+  // castear a string?
+  (*pNodoPort).SetText(10);
 
 	XMLElement * pNodoMensajes = doc.NewElement("mensajes");
-    // castear a string?
+  // castear a string?
 
-	for (int i = 0 ; i < cliente->getMensajes().size(); i++){
-		XMLElement * pListaMensajes = xmlDoc.NewElement("mensaje");
+	// NOTE: hacer la lista de punteros, para que no se copien mensajes, sino punteros.
+	for(list<Mensaje>::iterator iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++){
+		Mensaje mensaje = (*iterador);
+
+		XMLElement * pListaMensajes = doc.NewElement("mensaje");
 		pListaMensajes-> SetText(mensaje);
 
-		XMLElement * pListaMensajes = xmlDoc.NewElement("id");
-		pListaMensajes-> SetText(id);
+		XMLElement * pListaMensajes = doc.NewElement("id");
+		pListaMensajes-> SetText(mensaje.getId());
 
-		XMLElement * pListaMensajes = xmlDoc.NewElement("tipo");
-		pListaMensajes-> SetText(tipo);
+		XMLElement * pListaMensajes = doc.NewElement("tipo");
+		pListaMensajes-> SetText(mensaje.getTipo());
 
-		XMLElement * pListaMensajes = xmlDoc.NewElement("valor");
-		pListaMensajes-> SetText(valor);
+
+		XMLElement * pListaMensajes = doc.NewElement("valor");
+		// TODO ¿Quién debería encargarse de esto?
+		switch (mensaje.getTipo()) {
+			case T_STRING:{
+				string valor = (string) (*mensaje.getValor());
+				pListaMensajes-> SetText(valor);
+				break;
+			}
+			case T_INT:{
+				int valor = (int) (*mensaje.getValor());
+				pListaMensajes-> SetText(valor);
+				break;
+			}
+			case T_DOUBLE:{
+				double valor = (double) (*mensaje.getValor());
+				pListaMensajes-> SetText(valor);
+				break;
+				}
+			case T_CHAR:{
+				char valor = (char) (*mensaje.getValor());
+				pListaMensajes-> SetText(valor);
+				break;
+			}
+		}
 
 		pMensaje->InsertEndChild(pListaMensajes);
 		}

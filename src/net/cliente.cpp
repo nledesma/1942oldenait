@@ -7,10 +7,11 @@
 #include <string>
 #include <list>
 #include "mensaje.cpp"
+#include "gameSocket.cpp"
 using namespace std;
 
 class Cliente: public GameSocket{
-private: 
+private:
     string ip;
     int port;
     list <Mensaje> listaMensajes;

@@ -1,65 +1,109 @@
-#include <sys/socket.h>
-#include <arpa/inet.h>
 #include <unistd.h>
-#include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+
+// Esto tendría en un .h de constantes.
+#define T_STRING 0
+#define T_INT 1
+#define T_DOUBLE 2
+#define T_CHAR 3
 
 using namespace std;
-
-template <class T>
-
 
 class Mensaje{
 	private:
 		int id;
-		string tipo;
-		T valor;
+		int tipo;
+		void * valor;
 	public:
 
-		Mensaje(int unId, T unValor, string unTipo);
+// Ver si lo decodifica el parser...
+		Mensaje(int unId, string unValor, int unTipo);
+		~Mensaje();
 		void setId(int unId);
 		int getId();
-		void setValor(T unValor);
-		T getValor();
-		string getTipo();
-		void setTipo(string unTipo);
+		void setValor(void* unValor);
+		void* getValor();
+		int getTipo();
+		void setTipo(int unTipo);
 
 };
 
-template <class T>
-Mensaje<T>::Mensaje(int unId, T unValor, string unTipo) {
+Mensaje::Mensaje(int unId, string unValor, int unTipo) {
 	id = unId;
-	valor = unValor;
 	tipo = unTipo;
+	//TODO template!
+	switch (tipo) {
+		case T_STRING:{
+			string* val = new string();
+			(*val) = unValor;
+			valor = (void*) val;
+			break;
+		}
+		case T_INT:{
+			int *val = new int();
+			(*val) = atoi(unValor.c_str());
+			valor = (void*) val;
+			break;}
+		case T_DOUBLE:{
+			double *val = new double();
+			(*val) = atof(unValor.c_str());
+			valor = (void*) val;
+			break;}
+		case T_CHAR:{
+			char *val = new char();
+			(*val) = unValor[0];
+			valor = (void*) val;
+			break;}
+	}
+
 }
 
-template <class T>
-void Mensaje<T>::setId(int unId) {
+void Mensaje::setId(int unId) {
 	id = unId;
 }
 
-template <class T>
-int Mensaje<T>::getId() {
+int Mensaje::getId() {
 	return id;
-} 
-template <class T>
-void Mensaje<T>::setValor(T unValor) {
+}
+
+void Mensaje::setValor(void* unValor) {
 	valor = unValor;
 }
-template <class T>
-T Mensaje<T>::getValor() {
+
+void* Mensaje::getValor() {
 	return valor;
 }
 
-template <class T>
-string Mensaje<T>::getTipo(){
+
+int Mensaje::getTipo(){
 	return tipo;
 }
 
-template <class T>
-void Mensaje<T>::setTipo(string unTipo) {
+void Mensaje::setTipo(int unTipo) {
 	tipo = unTipo;
 }
 
+Mensaje::~Mensaje(){
+	// Borrado sin clase.
+	switch (tipo) {
+		case T_STRING:{
+			delete (string*) valor;
+			break;
+		}
+		case T_INT:{
+			delete(int*) valor;
+			break;
+		}
+		case T_DOUBLE:{
+			delete (double*) valor;
+			break;
+			}
+		case T_CHAR:{
+			delete (char*) valor;
+			break;
+		}
+	}
+}
