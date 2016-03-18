@@ -14,7 +14,7 @@ class Cliente: public GameSocket{
 private:
     string ip;
     int port;
-    list <Mensaje> listaMensajes;
+    list <Mensaje*> listaMensajes;
 
 public:
 	Cliente(string ip, int port):GameSocket(){
@@ -80,7 +80,7 @@ public:
     return this->port;
   }
 
-  list <Mensaje> getMensajes(){
+  list <Mensaje*> getMensajes(){
     return this->listaMensajes;
   }
 
