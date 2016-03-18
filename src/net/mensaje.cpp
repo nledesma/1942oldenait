@@ -28,6 +28,7 @@ class Mensaje{
 		void* getValor();
 		int getTipo();
 		void setTipo(int unTipo);
+		string devolverTipo();
 
 };
 
@@ -85,6 +86,32 @@ int Mensaje::getTipo(){
 void Mensaje::setTipo(int unTipo) {
 	tipo = unTipo;
 }
+
+string Mensaje::devolverTipo(){
+	switch (this->tipo) {
+		case T_STRING:{
+			return "string";
+			break;
+		}
+		case T_INT:{
+			return "int";
+			break;
+		}
+		case T_DOUBLE:{
+			return "double";
+			break;
+			}
+		case T_CHAR:{
+			return "char";
+			break;
+		}
+		default:{
+			cout << "flasheaste" << endl;
+			break;
+		}
+	}
+}
+
 
 Mensaje::~Mensaje(){
 	// Borrado sin clase.

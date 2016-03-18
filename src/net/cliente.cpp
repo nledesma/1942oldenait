@@ -27,6 +27,10 @@ public:
     this->setAddress(serverAddress, port);
   }
 
+  void agregarMensaje(Mensaje* pMensaje){
+    listaMensajes.push_back(pMensaje);
+  }
+
   void setAddress(string serverAddress, int port){
    		this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
     	this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
@@ -80,7 +84,7 @@ public:
     return this->port;
   }
 
-  list <Mensaje*> getMensajes(){
+  list <Mensaje*>& getMensajes(){
     return this->listaMensajes;
   }
 

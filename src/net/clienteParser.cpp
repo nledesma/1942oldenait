@@ -15,39 +15,45 @@ using namespace tinyxml2;
 
 class ClienteParser {
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
-	public: void serializador(Cliente *cliente,string ruta);
-	public: Cliente deserializador(string ruta);
+	public:
+		ClienteParser();
+		void serializador(Cliente *cliente,string ruta);
+		Cliente deserializador(string ruta);
 };
+
+ClienteParser::ClienteParser(){
+	cout << "hola" << endl;
+}
 
 void ClienteParser::serializador(Cliente *cliente, string ruta){
 	XMLDocument doc;
 
 	// Root
 	XMLNode * pCliente = doc.NewElement("cliente");
-	doc.InsertFirstChild(pCliente);
+	doc.InsertEndChild(pCliente);
 
-	// Hijos del root. TODO: diferencia entre element y node.
 	XMLElement * pNodoIp = doc.NewElement("ip");
-	(*pNodoIp).SetText(10);
+	(*pNodoIp).SetText(cliente->getIP().c_str());
 
 	XMLElement * pNodoPort = doc.NewElement("port");
   // castear a string?
-  (*pNodoPort).SetText(10);
+  (*pNodoPort).SetText(cliente->getPort());
 
 	XMLElement * pNodoMensajes = doc.NewElement("mensajes");
   // castear a string?
 
 	// NOTE: hacer la lista de punteros, para que no se copien mensajes, sino punteros.
-	for(list<Mensaje*>::iterator iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++){
+	for(list<Mensaje*>::iterator iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); ++iterador){
+		cout << 1 << endl;
 		XMLElement * pMensaje = doc.NewElement("mensaje");
-		Mensaje *mensaje =  (*iterador);
+		Mensaje *mensaje = *iterador;
 
 		XMLElement * pId = doc.NewElement("id");
 		pId-> SetText(mensaje->getId());
 		pMensaje ->InsertEndChild(pId);
 
 		XMLElement * pTipo = doc.NewElement("tipo");
-		pTipo-> SetText(mensaje->getTipo());
+		pTipo-> SetText(mensaje->devolverTipo().c_str());
 		pMensaje ->InsertEndChild(pTipo);
 
 		XMLElement * pValor = doc.NewElement("valor");
@@ -73,15 +79,21 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 				pValor-> SetText(valor);
 				break;
 			}
+			default:{
+				cout << "flasheaste" << endl;
+				break;
+			}
 		}
 
 		pMensaje->InsertEndChild(pValor);
+		cout << 2 << endl;
+		pNodoMensajes -> InsertEndChild(pMensaje);
 	}
 
   // Inserto ambos elementos al root.
-  pCliente-> InsertFirstChild(pNodoIp);
-  pCliente-> InsertFirstChild(pNodoPort);
-  pCliente-> InsertFirstChild(pNodoMensajes);
+  pCliente-> InsertEndChild(pNodoIp);
+  pCliente-> InsertEndChild(pNodoPort);
+  pCliente-> InsertEndChild(pNodoMensajes);
 
   XMLError e = doc.SaveFile("cliente.xml");
   if (e != XML_SUCCESS){
