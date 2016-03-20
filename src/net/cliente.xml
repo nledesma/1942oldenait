@@ -1,0 +1,21 @@
+<cliente>
+    <ip>127.0.0.1</ip>
+    <port>8080</port>
+    <mensajes>
+        <mensaje>
+            <id>1</id>
+            <tipo>string</tipo>
+            <valor>HOLA</valor>
+        </mensaje>
+        <mensaje>
+            <id>27</id>
+            <tipo>int</tipo>
+            <valor>1</valor>
+        </mensaje>
+        <mensaje>
+            <id>3</id>
+            <tipo>char</tipo>
+            <valor>A</valor>
+        </mensaje>
+    </mensajes>
+</cliente>
