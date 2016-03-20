@@ -14,8 +14,6 @@ private:
 
 public:
 	Cliente(string ip, int port);
-
-
   void inicializar(string serverAddress ,int port);
   void agregarMensaje(Mensaje* pMensaje);
   void setAddress(string serverAddress, int port);
