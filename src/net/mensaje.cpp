@@ -68,7 +68,8 @@ void Mensaje::setTipo(int unTipo) {
 	tipo = unTipo;
 }
 
-string Mensaje::devolverTipo(){
+// Devuelve la string
+string Mensaje::strTipo(){
 	switch (this->tipo) {
 		case T_STRING:{
 			return "string";
@@ -87,7 +88,9 @@ string Mensaje::devolverTipo(){
 			break;
 		}
 		default:{
+			// TODO pasar a un log.
 			cout << "flasheaste" << endl;
+			return "";
 			break;
 		}
 	}

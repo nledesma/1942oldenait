@@ -8,7 +8,6 @@
 class ClienteParser {
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
 	public:
-		ClienteParser();
 		void serializador(Cliente *cliente,string ruta);
 		Cliente deserializador(string ruta);
 };

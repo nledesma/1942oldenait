@@ -19,43 +19,40 @@
 using namespace std;
 using namespace tinyxml2;
 
-ClienteParser::ClienteParser(){
-	cout << "hola" << endl;
-}
-
 void ClienteParser::serializador(Cliente *cliente, string ruta){
 	XMLDocument doc;
 
-	// Root
+	// Cliente (root)
 	XMLNode * pCliente = doc.NewElement("cliente");
 	doc.InsertEndChild(pCliente);
 
+	// IP del cliente.
 	XMLElement * pNodoIp = doc.NewElement("ip");
 	(*pNodoIp).SetText(cliente->getIP().c_str());
 
+	// Puerto del cliente.
 	XMLElement * pNodoPort = doc.NewElement("port");
-  // castear a string?
   (*pNodoPort).SetText(cliente->getPort());
 
+	// Lista de mensajes.
 	XMLElement * pNodoMensajes = doc.NewElement("mensajes");
-  // castear a string?
 
-	// NOTE: hacer la lista de punteros, para que no se copien mensajes, sino punteros.
 	for(list<Mensaje*>::iterator iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); ++iterador){
-		cout << 1 << endl;
 		XMLElement * pMensaje = doc.NewElement("mensaje");
 		Mensaje *mensaje = *iterador;
 
+		// ID del mensaje.
 		XMLElement * pId = doc.NewElement("id");
 		pId-> SetText(mensaje->getId());
 		pMensaje ->InsertEndChild(pId);
 
+		// Tipo de datos del mensaje.
 		XMLElement * pTipo = doc.NewElement("tipo");
-		pTipo-> SetText(mensaje->devolverTipo().c_str());
+		pTipo-> SetText(mensaje->strTipo().c_str());
 		pMensaje ->InsertEndChild(pTipo);
 
 		XMLElement * pValor = doc.NewElement("valor");
-		// TODO ¿Quién debería encargarse de esto?
+		// TODO ¿Quién debería encargarse de esto? ¿Herencia de mensajes?
 		switch (mensaje->getTipo()) {
 			case T_STRING:{
 				string valor = *((string*) mensaje->getValor());
@@ -74,27 +71,32 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 				}
 			case T_CHAR:{
 				char valor = *((char*) mensaje->getValor());
-				pValor-> SetText(valor);
+				char arr[] = {valor , '\0'};
+				pValor-> SetText(arr);
 				break;
 			}
 			default:{
-				cout << "flasheaste" << endl;
+				// TODO pasar a un log.
+				cout << "Tipo " << mensaje->getTipo() << " no válido." << endl;
 				break;
 			}
 		}
 
+		// Valor del mensaje.
 		pMensaje->InsertEndChild(pValor);
-		cout << 2 << endl;
-		pNodoMensajes -> InsertEndChild(pMensaje);
+		// Agrego el mensaje a la lista en el xml.
+		pNodoMensajes->InsertEndChild(pMensaje);
 	}
 
-  // Inserto ambos elementos al root.
+  // Inserto IP, Puerto y Lista al xml.
   pCliente-> InsertEndChild(pNodoIp);
   pCliente-> InsertEndChild(pNodoPort);
   pCliente-> InsertEndChild(pNodoMensajes);
 
+	// Guardado del xml.
   XMLError e = doc.SaveFile("cliente.xml");
   if (e != XML_SUCCESS){
+		// TODO pasar a un log.
     cout << "Error! " << e << endl;
   }
 }

@@ -19,7 +19,7 @@ class Mensaje{
 		void* getValor();
 		int getTipo();
 		void setTipo(int unTipo);
-		string devolverTipo();
+		string strTipo();
 
 };
 #endif // MENSAJE_H
