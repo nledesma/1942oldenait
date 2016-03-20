@@ -2,16 +2,21 @@
 #define MENSAJE_H
 #include <string>
 
+#define T_STRING 0
+#define T_INT 1
+#define T_DOUBLE 2
+#define T_CHAR 3
+
 using namespace std;
 class Mensaje{
-	private:
+	protected:
 		int id;
 		int tipo;
-		void * valor;
+
 	public:
 
 // Ver si lo decodifica el parser...
-		Mensaje(int unId, string unValor, int unTipo);
+		Mensaje();
 		~Mensaje();
 		void setId(int unId);
 		int getId();
