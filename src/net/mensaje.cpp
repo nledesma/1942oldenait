@@ -44,7 +44,8 @@ int Mensaje::getId() {
 	return id;
 }
 
-// Mensaje::~Mensaje(){
+// TODO por qué no se puede descomentar esto?
+Mensaje::~Mensaje(){
 // 	// Borrado sin clase.
 // 	switch (tipo) {
 // 		case T_STRING:{
@@ -64,4 +65,4 @@ int Mensaje::getId() {
 // 			break;
 // 		}
 // 	}
-// }
+}

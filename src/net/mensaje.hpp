@@ -24,7 +24,8 @@ class Mensaje{
 		void* getValor();
 		int getTipo();
 		void setTipo(int unTipo);
-		string strTipo();
+		virtual string strTipo() = 0;
+		virtual string strValor() = 0;
 
 };
 #endif // MENSAJE_H

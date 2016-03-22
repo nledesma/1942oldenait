@@ -51,39 +51,11 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 		pTipo-> SetText(mensaje->strTipo().c_str());
 		pMensaje ->InsertEndChild(pTipo);
 
-		XMLElement * pValor = doc.NewElement("valor");
-		// TODO ¿Quién debería encargarse de esto? ¿Herencia de mensajes?
-		switch (mensaje->getTipo()) {
-			case T_STRING:{
-				string valor = *((string*) mensaje->getValor());
-				pValor-> SetText(valor.c_str());
-				break;
-			}
-			case T_INT:{
-				int valor = *((int*) mensaje->getValor());
-				pValor-> SetText(valor);
-				break;
-			}
-			case T_DOUBLE:{
-				double valor = *((double*) mensaje->getValor());
-				pValor-> SetText(valor);
-				break;
-				}
-			case T_CHAR:{
-				char valor = *((char*) mensaje->getValor());
-				char arr[] = {valor , '\0'};
-				pValor-> SetText(arr);
-				break;
-			}
-			default:{
-				// TODO pasar a un log.
-				cout << "Tipo " << mensaje->getTipo() << " no válido." << endl;
-				break;
-			}
-		}
-
 		// Valor del mensaje.
+		XMLElement * pValor = doc.NewElement("valor");
+		pValor -> SetText(mensaje->strValor().c_str());
 		pMensaje->InsertEndChild(pValor);
+
 		// Agrego el mensaje a la lista en el xml.
 		pNodoMensajes->InsertEndChild(pMensaje);
 	}

@@ -35,5 +35,5 @@ string MensajeChar::strTipo(){
 
 string MensajeChar::strValor(){
 	char arr[ ] = {valor, '\0'};
-	return str(arr);
+	return string(arr);
 }
