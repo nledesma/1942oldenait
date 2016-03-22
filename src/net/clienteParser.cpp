@@ -77,7 +77,7 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 Cliente ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
-	// TODO Chequear que haya levantado bien!
+	// TODO Chequear que haya levantado bien! Pasar a un log si no.
 	XMLNode * pRoot = doc.FirstChild();
 
 	XMLElement * pElement = pRoot -> FirstChildElement("ip");
@@ -91,14 +91,12 @@ Cliente ClienteParser::deserializador(string ruta){
 
 	Cliente cliente(ip, puerto);
 
-	//TODO MENSAJES.
 	XMLElement * pMensajes = pRoot -> FirstChildElement("mensajes");
 	XMLElement * pMensaje = pMensajes -> FirstChildElement("mensaje");
 
 	FabricaMensajes fabrica;
 
 	while(pMensaje != NULL){
-		//TODO HACER COSAS
 		int id; string tipo, valor;
 
 		pMensaje -> FirstChildElement("id") -> QueryIntText(&id);
