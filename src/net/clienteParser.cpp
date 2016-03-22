@@ -10,6 +10,7 @@
 #include <list>
 #include <iterator>
 #include "clienteParser.hpp"
+#include "fabricaMensajes.hpp"
 
 #define T_STRING 0
 #define T_INT 1
@@ -66,9 +67,48 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
   pCliente-> InsertEndChild(pNodoMensajes);
 
 	// Guardado del xml.
-  XMLError e = doc.SaveFile("cliente.xml");
+  XMLError e = doc.SaveFile(ruta.c_str());
   if (e != XML_SUCCESS){
 		// TODO pasar a un log.
     cout << "Error! " << e << endl;
   }
+}
+
+Cliente ClienteParser::deserializador(string ruta){
+	XMLDocument doc;
+	XMLError eResult = doc.LoadFile(ruta.c_str());
+	// TODO Chequear que haya levantado bien!
+	XMLNode * pRoot = doc.FirstChild();
+
+	XMLElement * pElement = pRoot -> FirstChildElement("ip");
+
+	string ip = pElement -> GetText();
+
+	pElement = pRoot -> FirstChildElement("port");
+
+	int puerto;
+	eResult = pElement -> QueryIntText(&puerto);
+
+	Cliente cliente(ip, puerto);
+
+	//TODO MENSAJES.
+	XMLElement * pMensajes = pRoot -> FirstChildElement("mensajes");
+	XMLElement * pMensaje = pMensajes -> FirstChildElement("mensaje");
+
+	FabricaMensajes fabrica;
+
+	while(pMensaje != NULL){
+		//TODO HACER COSAS
+		int id; string tipo, valor;
+
+		pMensaje -> FirstChildElement("id") -> QueryIntText(&id);
+		tipo = pMensaje->FirstChildElement("tipo")->GetText();
+		valor = pMensaje->FirstChildElement("valor")->GetText();
+
+		cliente.agregarMensaje(fabrica.fabricarMensaje(id, tipo, valor));
+
+		pMensaje = pMensaje -> NextSiblingElement("mensaje");
+	}
+
+	return cliente;
 }
