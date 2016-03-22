@@ -74,27 +74,25 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
   }
 }
 
+// TODO Probablemente debería devolver un puntero a cliente.
 Cliente ClienteParser::deserializador(string ruta){
+	// TODO Chequear que haya levantado bien! Pasar a un log si hubo error.
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
-	// TODO Chequear que haya levantado bien! Pasar a un log si no.
 	XMLNode * pRoot = doc.FirstChild();
 
 	XMLElement * pElement = pRoot -> FirstChildElement("ip");
-
 	string ip = pElement -> GetText();
 
 	pElement = pRoot -> FirstChildElement("port");
-
 	int puerto;
 	eResult = pElement -> QueryIntText(&puerto);
 
 	Cliente cliente(ip, puerto);
+	FabricaMensajes fabrica;
 
 	XMLElement * pMensajes = pRoot -> FirstChildElement("mensajes");
 	XMLElement * pMensaje = pMensajes -> FirstChildElement("mensaje");
-
-	FabricaMensajes fabrica;
 
 	while(pMensaje != NULL){
 		int id; string tipo, valor;
@@ -107,6 +105,5 @@ Cliente ClienteParser::deserializador(string ruta){
 
 		pMensaje = pMensaje -> NextSiblingElement("mensaje");
 	}
-
 	return cliente;
 }
