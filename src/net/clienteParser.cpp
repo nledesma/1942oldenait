@@ -27,6 +27,10 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 	XMLNode * pCliente = doc.NewElement("cliente");
 	doc.InsertEndChild(pCliente);
 
+	//Conexion
+	XMLElement *pConexion = doc.NewElement("conexion");
+	doc.InsertEndChild(pConexion);
+
 	// IP del cliente.
 	XMLElement * pNodoIp = doc.NewElement("ip");
 	(*pNodoIp).SetText(cliente->getIP().c_str());
@@ -35,6 +39,8 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 	XMLElement * pNodoPort = doc.NewElement("port");
   (*pNodoPort).SetText(cliente->getPort());
 
+	pConexion->InsertEndChild(pNodoIp);
+	pConexion->InsertEndChild(pNodoPort);
 	// Lista de mensajes.
 	XMLElement * pNodoMensajes = doc.NewElement("mensajes");
 
@@ -61,10 +67,9 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 		pNodoMensajes->InsertEndChild(pMensaje);
 	}
 
-  // Inserto IP, Puerto y Lista al xml.
-  pCliente-> InsertEndChild(pNodoIp);
-  pCliente-> InsertEndChild(pNodoPort);
-  pCliente-> InsertEndChild(pNodoMensajes);
+  // Inserto Conexion (IP y Puerto) y Lista al xml.
+	pCliente->InsertEndChild(pConexion);
+	pCliente-> InsertEndChild(pNodoMensajes);
 
 	// Guardado del xml.
   XMLError e = doc.SaveFile(ruta.c_str());

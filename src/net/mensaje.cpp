@@ -6,35 +6,7 @@
 
 using namespace std;
 
-Mensaje::Mensaje() {
-	// id = unId;
-	// tipo = unTipo;
-	// //TODO template!
-	// switch (tipo) {
-	// 	case T_STRING:{
-	// 		string* val = new string();
-	// 		(*val) = unValor;
-	// 		valor = (void*) val;
-	// 		break;
-	// 	}
-	// 	case T_INT:{
-	// 		int *val = new int();
-	// 		(*val) = atoi(unValor.c_str());
-	// 		valor = (void*) val;
-	// 		break;}
-	// 	case T_DOUBLE:{
-	// 		double *val = new double();
-	// 		(*val) = atof(unValor.c_str());
-	// 		valor = (void*) val;
-	// 		break;}
-	// 	case T_CHAR:{
-	// 		char *val = new char();
-	// 		(*val) = unValor[0];
-	// 		valor = (void*) val;
-	// 		break;}
-	// }
-
-}
+Mensaje::Mensaje(){}
 
 void Mensaje::setId(int unId) {
 	id = unId;
@@ -45,24 +17,31 @@ int Mensaje::getId() {
 }
 
 // TODO por qué no se puede descomentar esto?
-Mensaje::~Mensaje(){
-// 	// Borrado sin clase.
-// 	switch (tipo) {
-// 		case T_STRING:{
-// 			delete (string*) valor;
-// 			break;
-// 		}
-// 		case T_INT:{
-// 			delete(int*) valor;
-// 			break;
-// 		}
-// 		case T_DOUBLE:{
-// 			delete (double*) valor;
-// 			break;
-// 			}
-// 		case T_CHAR:{
-// 			delete (char*) valor;
-// 			break;
-// 		}
-// 	}
+Mensaje::~Mensaje(){}
+
+char * Mensaje::intToBytes(int n){
+	int tamInt = sizeof(int);
+	char * bytes = new char[tamInt];
+
+	for (int i = 0; i < tamInt; i++){
+		bytes[i] = (n >> 8*(tamInt - (i+1))) & 0xFF;
+	}
+
+	return bytes;
+}
+
+void Mensaje::pushearInt(string &str, int n){
+	char * bytes = intToBytes(n);
+	for (int i = 0 ; i < sizeof(int); i++){
+		str += bytes[i];
+	}
+	delete []bytes;
+}
+
+void Mensaje::pushearDouble(string &str, int n){
+	char * bytes = intToBytes(n);
+	for (int i = 0 ; i < sizeof(double); i++){
+		str += bytes[i];
+	}
+	delete []bytes;
 }

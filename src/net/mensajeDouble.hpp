@@ -15,6 +15,7 @@ public:
   double getValor();
   string strTipo();
   string strValor();
+  const char * codificar();
 };
 
 #endif

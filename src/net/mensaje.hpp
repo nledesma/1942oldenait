@@ -12,6 +12,9 @@ class Mensaje{
 	protected:
 		int id;
 		int tipo;
+		char * intToBytes(int n);
+		void pushearInt(string &str, int n);
+		void pushearDouble(string &str, int n);
 
 	public:
 
@@ -26,6 +29,7 @@ class Mensaje{
 		void setTipo(int unTipo);
 		virtual string strTipo() = 0;
 		virtual string strValor() = 0;
+		virtual const	char * codificar() = 0;
 
 };
 #endif // MENSAJE_H
