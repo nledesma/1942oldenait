@@ -38,3 +38,18 @@ string MensajeInt::strValor(){
 	string varAsString = sstream.str();
 	return varAsString;
 }
+
+const char * MensajeInt::codificar(){
+	string bytes = "";
+	// Tipo
+	bytes += (char) T_INT;
+
+	pushearInt(bytes, sizeof(int));
+
+	pushearInt(bytes, id);
+
+	pushearInt(bytes, valor);
+
+	return bytes.c_str();
+
+}

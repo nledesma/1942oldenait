@@ -45,7 +45,7 @@ int Cliente::conectar(){
 }
 
 string Cliente::recibir(int longitudMensaje){
-	char mensaje[longitudMensaje];
+	char *mensaje = new char[longitudMensaje];
 		int recibidos = 0;
 		cout << "Recibiendo el mensaje... " << endl;
 

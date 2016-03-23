@@ -7,7 +7,6 @@
 using namespace std;
 
 MensajeChar::MensajeChar(int unId, string unValor):Mensaje() {
-
 	id = unId;
   valor = unValor[0];
 }
@@ -36,4 +35,18 @@ string MensajeChar::strTipo(){
 string MensajeChar::strValor(){
 	char arr[ ] = {valor, '\0'};
 	return string(arr);
+}
+
+const char * MensajeChar::codificar(){
+	string bytes = "";
+	// Tipo
+	bytes += (char) T_CHAR;
+
+	pushearInt(bytes, 1);
+
+	pushearInt(bytes, id);
+
+	bytes += valor;
+
+	return bytes.c_str();
 }

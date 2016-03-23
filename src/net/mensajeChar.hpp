@@ -15,6 +15,7 @@ public:
   char getValor();
   string strTipo();
   string strValor();
+  const char * codificar(); 
 };
 
 #endif // MENSAJE_CHAR_H

@@ -1,4 +1,4 @@
-#include "gameSocket.hpp"
+//#include "gameSocket.hpp"
 #include "servidor.hpp"
 #include "cliente.hpp"
 #include <pthread.h>
@@ -14,7 +14,7 @@ Servidor *servidor = new Servidor(8080,3);
 Cliente *cliente = new Cliente(LOCALHOST, 8080);
 
 void* fservidor(void* arg){
-  
+
 	//Acepto una conexión e ignoro la información de la misma
 	servidor->aceptar();
 
@@ -24,13 +24,13 @@ void* fservidor(void* arg){
 	servidor->enviarMensaje(mensajeDePrueba,longitudDelMensaje);
 
   servidor->cerrar();
-	
+
   pthread_exit(NULL);
 }
 
 void* fcliente(void* arg){
   cout << "Iniciando el cliente en la direccion " << LOCALHOST << endl;
- 
+
   cliente->conectar();
 
   int caracteresARecibir = 10;
@@ -47,10 +47,10 @@ int main(){
   cout << "Iniciando servidor" << endl;
 
   //Por ahora la cantidad de clientes es 3, despues se modificara con el archivo XML.
-  
+
 
   //20 es la cantidad de conexiones a encolar
-  servidor->pasivar(20);
+  servidor->pasivar();
 
   cout << "Esperando conexión..." << endl;
 

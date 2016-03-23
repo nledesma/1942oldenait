@@ -38,3 +38,18 @@ string MensajeDouble::strValor(){
 	string varAsString = sstream.str();
 	return varAsString;
 }
+
+const char * MensajeDouble::codificar(){
+	string bytes = "";
+	// Tipo
+	bytes += (char) T_DOUBLE;
+
+	pushearInt(bytes, sizeof(double));
+
+	pushearInt(bytes, id);
+
+	pushearDouble(bytes, valor);
+
+	return bytes.c_str();
+
+}

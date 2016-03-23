@@ -35,3 +35,17 @@ string MensajeString::strTipo(){
 string MensajeString::strValor(){
 		return valor;
 }
+const char * MensajeString::codificar(){
+	string bytes = "";
+	// Tipo
+	bytes += (char) T_STRING;
+
+	pushearInt(bytes, valor.length());
+
+	pushearInt(bytes, id);
+
+	bytes += valor;
+
+	return bytes.c_str();
+
+}

@@ -8,10 +8,19 @@
 #include "servidor.hpp"
 #include "gameSocket.hpp"
 
+
 using namespace std;
 
 Servidor::Servidor(int port, int cantidadDeClientes):GameSocket(){
 	inicializar(port);
+}
+
+void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
+	cantidadMaximaDeClientes = unaCantidadDeClientes;
+}
+
+int Servidor::getCantidadMaximaDeClientes() {
+	return cantidadMaximaDeClientes;
 }
 
 void Servidor::inicializar(int port){
@@ -26,27 +35,46 @@ void Servidor::setAddress(int port){
 	memset(this->addr_info.sin_zero, 0, sizeof(this->addr_info.sin_zero));
 }
 
-void Servidor::pasivar(int backlog){
-	listen(this->socketFd, backlog);
+void Servidor::pasivar(){
+	listen(this->socketFd, this->cantidadMaximaDeClientes);
 }
 
 //Agrega el nuevo cliente a la lista de clientes para aceptarlo.
-void Servidor::aceptar(){
+int Servidor::aceptar(){
+	int numeroDeCliente;
+	pthread_mutex_lock(&mutexAceptar);
 	clientes.push_back(accept(socketFd, 0, 0));
+	numeroDeCliente = (clientes.size()-1);
+	pthread_mutex_unlock(&mutexAceptar);
+
 	cout << "Conexión aceptada" << endl;
+
+	return numeroDeCliente;
+
 }
 
 void Servidor::enviarMensaje(string mensaje, int longitudMensaje){
 	char *pMensaje = &(mensaje[0]);
-	int bytesSent = 0;
+	int bytesEnviados = 0;
 
 	cout << "Enviando datos" << endl;
-	while (bytesSent < longitudMensaje && bytesSent != -1){
+	while (bytesEnviados < longitudMensaje && bytesEnviados != -1){
 		// Agrego offsets si es que no se envía todo el mensaje
-		bytesSent = send(clientes.front(), pMensaje + bytesSent, longitudMensaje - bytesSent, MSG_NOSIGNAL);
-		cout << "Enviado " << bytesSent << " bytes" << endl;
+		bytesEnviados += write(clientes.front(), pMensaje + bytesEnviados, longitudMensaje - bytesEnviados);
+		cout << "Enviado " << bytesEnviados << " bytes" << endl;
 	}
 	cout << "Datos enviados" << endl;
+}
+
+void Servidor::recibirMensaje(string mensaje, int longitudMensaje){
+	char *pMensaje = &(mensaje[0]);
+	int bytesRecibidos = 0;
+
+	while (bytesRecibidos < longitudMensaje && bytesRecibidos != -1){
+		// Agrego offsets si es que no se envía todo el mensaje
+		bytesRecibidos += read(clientes.front(), pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos);
+		cout << "recibidos " << bytesRecibidos << " bytes" << endl;
+	}
 }
 
 void Servidor::cerrar(){
@@ -59,4 +87,12 @@ void Servidor::cerrar(){
 	close(socketFd);
 
 	cout << "Servidor cerrado" << endl;
+}
+
+void Servidor::setPuerto(int unPuerto) {
+	puerto = unPuerto;
+}
+
+int Servidor::getPuerto() {
+	return puerto;
 }
