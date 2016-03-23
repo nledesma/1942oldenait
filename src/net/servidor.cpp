@@ -15,6 +15,14 @@ Servidor::Servidor(int port, int cantidadDeClientes):GameSocket(){
 	inicializar(port);
 }
 
+void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
+	cantidadMaximaDeClientes = unaCantidadDeClientes;
+}
+
+int Servidor::getCantidadMaximaDeClientes() {
+	return cantidadMaximaDeClientes;
+}
+
 void Servidor::inicializar(int port){
 	this->setAddress(port); // Se setea el puerto en addr_info
 	bind(this->socketFd, (struct sockaddr*) &this->addr_info, sizeof(struct sockaddr_in)); // Se vincula el socket al puerto indicado en addr_info
@@ -28,20 +36,20 @@ void Servidor::setAddress(int port){
 }
 
 void Servidor::pasivar(){
-	listen(this->socketFd, this->cantidadDeClientes);
+	listen(this->socketFd, this->cantidadMaximaDeClientes);
 }
 
 //Agrega el nuevo cliente a la lista de clientes para aceptarlo.
 int Servidor::aceptar(){
-	int numeroDecliente;
+	int numeroDeCliente;
 	pthread_mutex_lock(&mutexAceptar);
 	clientes.push_back(accept(socketFd, 0, 0));
-	numeroDeCliente = clientes.length())-1;
+	numeroDeCliente = (clientes.size()-1);
 	pthread_mutex_unlock(&mutexAceptar);
 
 	cout << "Conexión aceptada" << endl;
 
-	return numeroDecliente;
+	return numeroDeCliente;
 
 }
 
@@ -79,4 +87,12 @@ void Servidor::cerrar(){
 	close(socketFd);
 
 	cout << "Servidor cerrado" << endl;
+}
+
+void Servidor::setPuerto(int unPuerto) {
+	puerto = unPuerto;
+}
+
+int Servidor::getPuerto() {
+	return puerto;
 }

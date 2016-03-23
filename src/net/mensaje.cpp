@@ -32,7 +32,7 @@ char * Mensaje::intToBytes(int n){
 
 void Mensaje::pushearInt(string &str, int n){
 	char * bytes = intToBytes(n);
-	for (int i = 0 ; i < sizeof(int); i++){
+	for (unsigned int i = 0 ; i < sizeof(int); i++){
 		str += bytes[i];
 	}
 	delete []bytes;
@@ -40,7 +40,7 @@ void Mensaje::pushearInt(string &str, int n){
 
 void Mensaje::pushearDouble(string &str, int n){
 	char * bytes = intToBytes(n);
-	for (int i = 0 ; i < sizeof(double); i++){
+	for (unsigned int i = 0 ; i < sizeof(double); i++){
 		str += bytes[i];
 	}
 	delete []bytes;

@@ -1,12 +1,13 @@
 #include "cliente.hpp"
 #include "servidor.hpp"
 #include "mensaje.hpp"
-#include "ServidorParser.hpp"
+#include "servidorParser.hpp"
 #include <string>
-#include <pthread>
+#include <pthread.h>
 
 using namespace std;
 
+Servidor * servidor;
 void* funcion(void* arg){
   //Acepta la conexion y devuelve el numero del cliente.
     int numeroCliente = servidor->aceptar();
@@ -19,7 +20,7 @@ int mainServidor(){
 
   //Se crea el servidor.
   ServidorParser servidorParser;
-  Servidor* servidor = servidorParser.deserializar("servidorPrueba.xml");
+  servidor = servidorParser.deserializar("servidorPrueba.xml");
 
   //Servidor aceptando conexiones
   servidor->pasivar();
@@ -28,8 +29,8 @@ int mainServidor(){
   pthread_create(&threadCliente1, NULL, funcion, NULL);
   pthread_create(&threadCliente2, NULL, funcion, NULL);
 
-  pthread_join(&threadCliente1, NULL);
-  pthread_join(&threadCliente2, NULL);
+  pthread_join(threadCliente1, NULL);
+  pthread_join(threadCliente2, NULL);
 
   return 0;
 }
