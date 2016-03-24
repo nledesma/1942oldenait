@@ -2,7 +2,7 @@
 #define SERVIDOR_PARSER_H
 
 #include <string>
-#include "servidor.cpp"
+#include "servidor.hpp"
 
 using namespace std;
 
