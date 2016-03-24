@@ -5,8 +5,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "mensaje.hpp"
-#include "gameSocket.hpp"
 #include "cliente.hpp"
 using namespace std;
 

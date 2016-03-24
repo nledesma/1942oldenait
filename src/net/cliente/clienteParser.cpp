@@ -5,12 +5,10 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
-#include "tinyxml2.h"
-#include "cliente.hpp"
 #include <list>
 #include <iterator>
 #include "clienteParser.hpp"
-#include "fabricaMensajes.hpp"
+
 
 #define T_STRING 0
 #define T_INT 1

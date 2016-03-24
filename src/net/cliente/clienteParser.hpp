@@ -2,6 +2,8 @@
 #define CLIENTE_PARSER_H
 
 #include "cliente.hpp"
+#include "../tinyxml2.h"
+#include "../mensaje/fabricaMensajes.hpp"
 
 class ClienteParser {
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido

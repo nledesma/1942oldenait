@@ -1,6 +1,6 @@
 //#include "gameSocket.hpp"
-#include "servidor.hpp"
-#include "cliente.hpp"
+#include "../src/net/servidor/servidor.hpp"
+#include "../src/net/cliente/cliente.hpp"
 #include <pthread.h>
 #include <string>
 #include <iostream>

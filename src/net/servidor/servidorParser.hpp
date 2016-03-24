@@ -3,6 +3,7 @@
 
 #include <string>
 #include "servidor.hpp"
+#include "../tinyxml2.h"
 
 using namespace std;
 

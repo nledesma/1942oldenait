@@ -7,8 +7,8 @@
 #include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <list>
-#include "mensaje.hpp"
-#include "gameSocket.hpp"
+#include "../mensaje/mensaje.hpp"
+#include "../gameSocket.hpp"
 #include <stack>
 using namespace std;
 

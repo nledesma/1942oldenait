@@ -1,8 +1,8 @@
 #ifndef CLIENTE_H
-#define CLIENTE_H
-#include "gameSocket.hpp"
+#define CLIENTE_
+#include "../gameSocket.hpp"
 #include <list>
-#include "mensaje.hpp"
+#include "../mensaje/mensaje.hpp"
 #include <string>
 using namespace std;
 

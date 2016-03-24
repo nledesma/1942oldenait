@@ -6,7 +6,7 @@
 #include <iostream>
 #include <list>
 #include "servidor.hpp"
-#include "gameSocket.hpp"
+
 
 
 using namespace std;
