@@ -2,7 +2,7 @@
 #define CLIENTE_PARSER_H
 
 #include "cliente.hpp"
-#include "../tinyxml2.h"
+#include "../../../resources/lib/tinyxml2.h"
 #include "../mensaje/fabricaMensajes.hpp"
 
 class ClienteParser {

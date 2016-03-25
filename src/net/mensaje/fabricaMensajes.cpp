@@ -1,9 +1,4 @@
 #include "fabricaMensajes.hpp"
-#include "mensaje.hpp"
-#include "mensajeInt.hpp"
-#include "mensajeString.hpp"
-#include "mensajeChar.hpp"
-#include "mensajeDouble.hpp"
 #include <string>
 #include <iostream>
 using namespace std;
