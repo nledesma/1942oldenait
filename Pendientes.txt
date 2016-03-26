@@ -1,0 +1,9 @@
+ MD es para putos
+1. Tanto cliente como servidor tiene que recibir y enviar mensajes. Este comportamiento debería estar definido en la clase gameSocket.
+2. Ver como el cliente cierra la conexión con el servidor.
+3. Como el servidor procesa los mensajes.
+4. Logger concurrente.
+5. Validaciones.
+    - Pruebas de conectividad: desconectar a un cliente de repente
+    - XML invalido, incompleto o inexistente
+    -

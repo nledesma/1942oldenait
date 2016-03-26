@@ -53,30 +53,6 @@ int Servidor::aceptar(){
 
 }
 
-void Servidor::enviarMensaje(string mensaje, int longitudMensaje){
-	char *pMensaje = &(mensaje[0]);
-	int bytesEnviados = 0;
-
-	cout << "Enviando datos" << endl;
-	while (bytesEnviados < longitudMensaje && bytesEnviados != -1){
-		// Agrego offsets si es que no se envía todo el mensaje
-		bytesEnviados += write(clientes.front(), pMensaje + bytesEnviados, longitudMensaje - bytesEnviados);
-		cout << "Enviado " << bytesEnviados << " bytes" << endl;
-	}
-	cout << "Datos enviados" << endl;
-}
-
-void Servidor::recibirMensaje(string mensaje, int longitudMensaje){
-	char *pMensaje = &(mensaje[0]);
-	int bytesRecibidos = 0;
-
-	while (bytesRecibidos < longitudMensaje && bytesRecibidos != -1){
-		// Agrego offsets si es que no se envía todo el mensaje
-		bytesRecibidos += read(clientes.front(), pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos);
-		cout << "recibidos " << bytesRecibidos << " bytes" << endl;
-	}
-}
-
 void Servidor::cerrar(){
 	for(list<int>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
 		int clienteActual = *iterador;

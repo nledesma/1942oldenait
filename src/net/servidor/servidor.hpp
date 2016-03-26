@@ -9,14 +9,14 @@
 #include <list>
 #include "../mensaje/mensaje.hpp"
 #include "../gameSocket.hpp"
-#include <stack>
+#include <queue>
 using namespace std;
 
 class Servidor: public GameSocket{
 private:
 	list <int> clientes;
   struct sockaddr_in addr_info;
-	stack <Mensaje*> colaDeMensajes;
+	queue <Mensaje*> colaDeMensajes;
 	pthread_mutex_t mutexAceptar = PTHREAD_MUTEX_INITIALIZER;
 	int cantidadMaximaDeClientes;
 	int puerto;

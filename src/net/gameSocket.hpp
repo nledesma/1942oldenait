@@ -16,6 +16,8 @@ protected:
 
 public:
   GameSocket();
+  void enviarBytes(string mensaje, int longitudMensaje);
+  void recibirBytes(string mensaje, int longitudMensaje);
 };
 
 #endif // GAME_SOCKET_H
