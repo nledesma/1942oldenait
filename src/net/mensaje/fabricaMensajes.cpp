@@ -12,3 +12,13 @@ Mensaje *FabricaMensajes::fabricarMensaje(int id, string tipo, string valor){
   cout << "Tipo no válido, no se pudo crear mensaje." << endl;
   return NULL;
 }
+
+static FabricaMensajes::fabricarMensaje(infoMensaje datos, char *valor){
+  if (datos.tipo == T_STRING) return new MensajeString(datos,valor);
+  if (datos.tipo == T_INT) return new MensajeInt(datos,valor);
+  if (datos.tipo == T_DOUBLE) return new MensajeDouble(datos,valor);
+  if (datos.tipo == T_CHAR) return new MensajeChar(datos,valor);
+  // TODO LOG.
+  cout << "Tipo no válido, no se pudo crear mensaje." << endl;
+  return NULL;
+}

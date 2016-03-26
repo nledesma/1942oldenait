@@ -11,6 +11,13 @@ MensajeDouble::MensajeDouble(int unId, string unValor):Mensaje() {
 	valor = (double) (atof(unValor.c_str()));
 }
 
+MensajeDouble::MensajeDouble(infoMensaje datos, char * valor):Mensaje() {
+	id = datos.id;
+	tipo = datos.tipo;
+	// TODO QUE ONDA ESTO. TODO 2 TODO TODO TODO codificar bien.
+	valor = (datos.valor[0] << 24) + (datos.valor[1] << 16) + (datos.valor[2] << 8) + datos.valor[3]);
+}
+
 void MensajeDouble::setValor(double unValor) {
 	valor = unValor;
 }

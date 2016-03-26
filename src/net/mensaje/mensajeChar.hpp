@@ -9,13 +9,14 @@ private:
   char valor;
 public:
   MensajeChar(int unId, string valor);
+  MensajeChar(infoMensaje datos, char* valor);
   int getTipo();
   void setTipo(int unTipo);
   void setValor(char unValor);
   char getValor();
   string strTipo();
   string strValor();
-  const char * codificar(); 
+  const char * codificar();
 };
 
 #endif // MENSAJE_CHAR_H

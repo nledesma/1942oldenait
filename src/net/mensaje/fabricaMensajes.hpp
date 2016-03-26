@@ -6,6 +6,7 @@
 
 class FabricaMensajes {
 public:
+    // TODO pasar a static.
     Mensaje *fabricarMensaje(int id, string tipo, string valor);
-    //? Mensaje * fabricarMensaje(int id, int tipo, string valor)
+    static Mensaje *fabricarMensaje(infoMensaje datos, char * valor);
 };

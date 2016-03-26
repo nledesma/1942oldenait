@@ -18,9 +18,11 @@ int Mensaje::getId() {
 
 // TODO por qué no se puede descomentar esto?
 Mensaje::~Mensaje(){}
-
 char * Mensaje::intToBytes(int n){
-	int tamInt = sizeof(int);
+
+
+	//int tamInt = sizeof(int);
+	int tamInt = INT_SIZE;
 	char * bytes = new char[tamInt];
 
 	for (int i = 0; i < tamInt; i++){
@@ -32,7 +34,7 @@ char * Mensaje::intToBytes(int n){
 
 void Mensaje::pushearInt(string &str, int n){
 	char * bytes = intToBytes(n);
-	for (unsigned int i = 0 ; i < sizeof(int); i++){
+	for (unsigned int i = 0 ; i < INT_SIZE; i++){
 		str += bytes[i];
 	}
 	delete []bytes;
@@ -40,7 +42,7 @@ void Mensaje::pushearInt(string &str, int n){
 
 void Mensaje::pushearDouble(string &str, int n){
 	char * bytes = intToBytes(n);
-	for (unsigned int i = 0 ; i < sizeof(double); i++){
+	for (unsigned int i = 0 ; i < DOUBLE_SIZE; i++){
 		str += bytes[i];
 	}
 	delete []bytes;

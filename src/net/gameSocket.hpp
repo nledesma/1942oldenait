@@ -12,12 +12,14 @@ using namespace std;
 class GameSocket {
 protected:
   int socketFd;
+  int enviarBytes(string mensaje, int longitudMensaje, int fdReceptor);
+  int recibirBytes(string mensaje, int longitudMensaje, int fdEmisor);
+  int enviarMensaje(string mensaje, int fdReceptor);
+  int recibirMensaje(string & mensaje, int fdEmisor);
   struct sockaddr_in addr_info;
 
 public:
   GameSocket();
-  void enviarBytes(string mensaje, int longitudMensaje);
-  void recibirBytes(string mensaje, int longitudMensaje);
 };
 
 #endif // GAME_SOCKET_H
