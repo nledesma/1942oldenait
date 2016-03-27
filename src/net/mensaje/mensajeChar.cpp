@@ -11,10 +11,10 @@ MensajeChar::MensajeChar(int unId, string unValor):Mensaje() {
   valor = unValor[0];
 }
 
-MensajeChar::MensajeChar(infoMensaje datos, char* valor):Mensaje(){
+MensajeChar::MensajeChar(infoMensaje datos, char* unValor):Mensaje(){
 	id = datos.id;
 	tipo = datos.tipo;
-	valor = *valor;
+	valor = *unValor;
 }
 
 void MensajeChar::setValor(char unValor) {

@@ -11,6 +11,12 @@ MensajeString::MensajeString(int unId, string unValor):Mensaje() {
   valor = unValor;
 }
 
+MensajeString::MensajeString(infoMensaje datos, char * unValor):Mensaje() {
+	id = datos.id;
+	tipo = datos.tipo;
+	valor = string(unValor);
+}
+
 void MensajeString::setValor(string unValor) {
 	valor = unValor;
 }

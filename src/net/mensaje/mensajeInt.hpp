@@ -9,7 +9,7 @@ private:
   int valor;
 public:
   MensajeInt(int unId, string valor);
-  MensajeInt(infoMensaje datos, char * valor);
+  MensajeInt(infoMensaje datos, char * unValor);
   int getTipo();
   void setTipo(int unTipo);
   void setValor(int unValor);

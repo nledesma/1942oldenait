@@ -6,15 +6,16 @@
 #define T_INT 1
 #define T_DOUBLE 2
 #define T_CHAR 3
-#define LONG_INFO_MENSAJE 9;
+#define LONG_INFO_MENSAJE 9
 // Utilizamos 32 bits para evitar incompatibilidades.
 #define INT_SIZE 4
 #define DOUBLE_SIZE 8
+
 typedef struct infoMensaje {
 	int id;
 	int tipo;
 	int longitud;
-}
+};
 
 using namespace std;
 class Mensaje{
@@ -45,6 +46,7 @@ class Mensaje{
 		** - longitud bytes para el contenido.
 		*/
 		virtual const	char * codificar() = 0;
+		static infoMensaje decodificarInfo(char * pInfoMensaje);
 
 };
 #endif // MENSAJE_H

@@ -11,10 +11,10 @@ MensajeInt::MensajeInt(int unId, string unValor):Mensaje() {
   valor = atoi(unValor.c_str());
 }
 
-MensajeInt::MensajeInt(infoMensaje datos, char * valor):Mensaje() {
+MensajeInt::MensajeInt(infoMensaje datos, char * unValor):Mensaje() {
 	id = datos.id;
 	tipo = datos.tipo;
-	valor = (datos.valor[0] << 24) + (datos.valor[1] << 16) + (datos.valor[2] << 8) + datos.valor[3]);
+	valor = (unValor[0] << 24) + (unValor[1] << 16) + (unValor[2] << 8) + unValor[3];
 }
 
 void MensajeInt::setValor(int unValor) {

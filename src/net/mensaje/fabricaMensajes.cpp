@@ -13,7 +13,7 @@ Mensaje *FabricaMensajes::fabricarMensaje(int id, string tipo, string valor){
   return NULL;
 }
 
-static FabricaMensajes::fabricarMensaje(infoMensaje datos, char *valor){
+Mensaje * FabricaMensajes::fabricarMensaje(infoMensaje datos, char *valor){
   if (datos.tipo == T_STRING) return new MensajeString(datos,valor);
   if (datos.tipo == T_INT) return new MensajeInt(datos,valor);
   if (datos.tipo == T_DOUBLE) return new MensajeDouble(datos,valor);

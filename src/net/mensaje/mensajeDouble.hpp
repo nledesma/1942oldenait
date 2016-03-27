@@ -9,7 +9,7 @@ private:
   double valor;
 public:
   MensajeDouble(int unId, string valor);
-  MensajeDouble(infoMensaje datos, char * valor);
+  MensajeDouble(infoMensaje datos, char * unValor);
   int getTipo();
   void setTipo(int unTipo);
   void setValor(double unValor);

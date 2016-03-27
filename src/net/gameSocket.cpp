@@ -5,7 +5,8 @@
 #include <cstdio>
 #include <iostream>
 #include "gameSocket.hpp"
-#include "mensaje.hpp"
+#include "mensaje/mensaje.hpp"
+#include "mensaje/fabricaMensajes.hpp"
 
 using namespace std;
 
@@ -15,8 +16,7 @@ GameSocket::GameSocket(){
 }
 
 //TODO ver si conviene pasar mensaje a char* o dejarlo en string.
-int GameSocket::enviarBytes(string mensaje, int longitudMensaje, int fdReceptor){
-	char *pMensaje = &(mensaje[0]);
+int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor){
 	int bytesEnviados = 0;
   int bytesActuales = 0;
 
@@ -29,7 +29,7 @@ int GameSocket::enviarBytes(string mensaje, int longitudMensaje, int fdReceptor)
 		cout << "Enviado " << bytesEnviados << " bytes" << endl;
 	}
 	cout << "Datos enviados" << endl;
-  if (bytesActuales == - 1 ) return -1 // TODO error.
+  if (bytesActuales == - 1 ) return -1; // TODO error.
   return 0;
 }
 
@@ -53,16 +53,24 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
 }
 
 int GameSocket::enviarMensaje(Mensaje * mensaje, int fdReceptor){
-  string strMensaje = mensaje->codificar();
-  enviarBytes(strMensaje, strMensaje.size(), fdReceptor);
+  const char * pMensaje = mensaje->codificar();
+  int resultado = enviarBytes((char*)pMensaje, sizeof(pMensaje), fdReceptor);
+  return resultado;
 }
 
+// TODO manejar mejor errores y flujos alternativos
 int GameSocket::recibirMensaje(Mensaje * mensaje, int fdEmisor){
   char * pInfoMensaje = new char[LONG_INFO_MENSAJE];
-  recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
-  infoMensaje datos = Mensaje::decodificarInfo();
-  delete [] pInfoMensaje;
-  char * pMensaje = new char[longitud];
-  recibirBytes(pMensaje, longitud, fdEmisor);
-  FabricaMensaje::fabricar(datos, mensaje);
+  int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
+  if (resultado == 0){
+    infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
+    delete [] pInfoMensaje;
+    char * pMensaje = new char[datos.longitud];
+    int resultadoBis = recibirBytes(pMensaje, datos.longitud, fdEmisor);
+    if (resultadoBis == 0){
+      mensaje = FabricaMensajes::fabricarMensaje(datos, pMensaje);
+      return 0;
+    }
+  }
+  return -1;
 }

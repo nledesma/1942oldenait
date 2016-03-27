@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <cstdlib>
 #include <sstream>
 #include "mensajeDouble.hpp"
@@ -11,11 +12,12 @@ MensajeDouble::MensajeDouble(int unId, string unValor):Mensaje() {
 	valor = (double) (atof(unValor.c_str()));
 }
 
-MensajeDouble::MensajeDouble(infoMensaje datos, char * valor):Mensaje() {
+MensajeDouble::MensajeDouble(infoMensaje datos, char * unValor):Mensaje() {
 	id = datos.id;
 	tipo = datos.tipo;
-	// TODO QUE ONDA ESTO. TODO 2 TODO TODO TODO codificar bien.
-	valor = (datos.valor[0] << 24) + (datos.valor[1] << 16) + (datos.valor[2] << 8) + datos.valor[3]);
+	double valorDecodificado;
+	memcpy( &valorDecodificado , unValor , sizeof( double ) );
+	valor = valorDecodificado;
 }
 
 void MensajeDouble::setValor(double unValor) {

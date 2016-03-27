@@ -6,16 +6,17 @@
 #include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <iostream>
+#include "mensaje/mensaje.hpp"
 
 using namespace std;
 
 class GameSocket {
 protected:
   int socketFd;
-  int enviarBytes(string mensaje, int longitudMensaje, int fdReceptor);
-  int recibirBytes(string mensaje, int longitudMensaje, int fdEmisor);
-  int enviarMensaje(string mensaje, int fdReceptor);
-  int recibirMensaje(string & mensaje, int fdEmisor);
+  int enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor);
+  int recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor);
+  virtual int enviarMensaje(Mensaje * mensaje, int fdReceptor);
+  virtual int recibirMensaje(Mensaje * mensaje, int fdEmisor);
   struct sockaddr_in addr_info;
 
 public:
