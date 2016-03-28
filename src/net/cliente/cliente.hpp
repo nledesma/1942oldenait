@@ -1,5 +1,5 @@
 #ifndef CLIENTE_H
-#define CLIENTE_
+#define CLIENTE_H
 #include "../gameSocket.hpp"
 #include <list>
 #include "../mensaje/mensaje.hpp"

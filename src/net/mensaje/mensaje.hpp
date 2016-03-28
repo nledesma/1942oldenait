@@ -10,8 +10,10 @@
 // Utilizamos 32 bits para evitar incompatibilidades.
 #define INT_SIZE 4
 #define DOUBLE_SIZE 8
+#define MENSAJEOK 1
 
-typedef struct infoMensaje {
+
+struct infoMensaje {
 	int id;
 	int tipo;
 	int longitud;

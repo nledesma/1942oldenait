@@ -1,14 +1,4 @@
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <cstring> // Necesario para el memset.
-#include <cstdio>
-#include <iostream>
-#include <list>
 #include "servidor.hpp"
-
-
-
 using namespace std;
 
 Servidor::Servidor(int port, int cantidadDeClientes):GameSocket(){
@@ -36,28 +26,25 @@ void Servidor::setAddress(int port){
 }
 
 void Servidor::pasivar(){
+	cout << "ENTRANDO A PASIVAR" << endl;
 	listen(this->socketFd, this->cantidadMaximaDeClientes);
+	cout << "DESPUES DE LISTEN" << endl;
+	ThreadAceptar aceptador(this);
+	cout << "YA MANDO EL THREAD DE ACEPTAR." << endl;
+	aceptador.iniciar();
+	cout << "YA INICIO. FIN PASIVAR.	" << endl;
 }
 
-//Agrega el nuevo cliente a la lista de clientes para aceptarlo.
 int Servidor::aceptar(){
-	int numeroDeCliente;
-	pthread_mutex_lock(&mutexAceptar);
-	clientes.push_back(accept(socketFd, 0, 0));
-	numeroDeCliente = (clientes.size()-1);
-	pthread_mutex_unlock(&mutexAceptar);
-
-	cout << "Conexión aceptada" << endl;
-
-	return numeroDeCliente;
-
+  return accept(socketFd, 0, 0);
 }
+
 
 void Servidor::cerrar(){
-	for(list<int>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
-		int clienteActual = *iterador;
-			shutdown(clienteActual, 0);
-			close(clienteActual);
+	for(map<int, Thread*>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
+		int clienteActual = (*iterador).first;
+		shutdown(clienteActual, 0);
+		close(clienteActual);
 	}
 	shutdown(socketFd, 0); //Dejo de transmitir datos
 	close(socketFd);
@@ -71,4 +58,10 @@ void Servidor::setPuerto(int unPuerto) {
 
 int Servidor::getPuerto() {
 	return puerto;
+}
+
+void Servidor::agregarCliente(int idCliente, Thread* thread){
+	pthread_mutex_lock(&mutexAgregar);
+	clientes.insert(pair<int, Thread*> (idCliente, thread));
+	pthread_mutex_unlock(&mutexAgregar);
 }

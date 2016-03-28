@@ -30,7 +30,7 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
 	}
 	cout << "Datos enviados" << endl;
   if (bytesActuales == - 1 ) return -1; // TODO error.
-  return 0;
+  return MENSAJEOK;
 }
 
 int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
@@ -48,29 +48,28 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
   if (bytesActuales == - 1 ){
     return -1; // TODO error.
   } else {
-    return 0;
+    return MENSAJEOK;
   }
 }
 
 int GameSocket::enviarMensaje(Mensaje * mensaje, int fdReceptor){
   const char * pMensaje = mensaje->codificar();
-  int resultado = enviarBytes((char*)pMensaje, sizeof(pMensaje), fdReceptor);
-  return resultado;
+  return enviarBytes((char*)pMensaje, sizeof(pMensaje), fdReceptor);
+
 }
 
 // TODO manejar mejor errores y flujos alternativos
 int GameSocket::recibirMensaje(Mensaje * mensaje, int fdEmisor){
   char * pInfoMensaje = new char[LONG_INFO_MENSAJE];
-  int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
-  if (resultado == 0){
+  if (recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor) == MENSAJEOK){
     infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
     delete [] pInfoMensaje;
     char * pMensaje = new char[datos.longitud];
-    int resultadoBis = recibirBytes(pMensaje, datos.longitud, fdEmisor);
-    if (resultadoBis == 0){
+    if (recibirBytes(pMensaje, datos.longitud, fdEmisor) == MENSAJEOK){
       mensaje = FabricaMensajes::fabricarMensaje(datos, pMensaje);
-      return 0;
+      return MENSAJEOK;
     }
+    delete [] pMensaje;
   }
   return -1;
 }

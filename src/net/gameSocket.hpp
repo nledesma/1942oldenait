@@ -15,8 +15,8 @@ protected:
   int socketFd;
   int enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor);
   int recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor);
-  virtual int enviarMensaje(Mensaje * mensaje, int fdReceptor);
-  virtual int recibirMensaje(Mensaje * mensaje, int fdEmisor);
+  int enviarMensaje(Mensaje * mensaje, int fdReceptor);
+  int recibirMensaje(Mensaje * mensaje, int fdEmisor);
   struct sockaddr_in addr_info;
 
 public:
