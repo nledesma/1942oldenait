@@ -13,16 +13,15 @@
 #include <queue>
 #include <pthread.h>
 #include <map>
-#include "../../Thread/thread.hpp"
-#include "../../Thread/threadAtender.hpp"
-#include "../../Thread/threadAceptar.hpp"
+// #include "../../Thread/thread.hpp"
+// #include "../../Thread/threadAtender.hpp"
+// #include "../../Thread/threadAceptar.hpp"
 using namespace std;
-
-class Thread;
+// class Thread;
 
 class Servidor: public GameSocket{
 private:
-	map <int, Thread*> clientes;
+	map <int, pthread_t> clientes;
   struct sockaddr_in addr_info;
 	queue <Mensaje*> colaDeMensajes;
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
@@ -42,8 +41,10 @@ public:
 	void cerrar();
 	int getPuerto();
 	void setPuerto(int unPuerto);
-	void* atenderCliente(void* arg);
-	void agregarCliente(int idCliente, Thread* thread);
+	void agregarCliente(int idCliente, pthread_t thread);
+	static void *atenderCliente(void* THIS);
+	static void *cicloAceptar(void* THIS);
+	void esperar();
 };
 
 #endif

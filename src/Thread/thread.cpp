@@ -15,6 +15,9 @@ void* Thread::esperar(){
   return NULL;
 }
 
+  void Thread::ejecutar() {
+
+  }
 void* Thread::helper(void* This){
   cout << "Esto es un helper" << endl;
   cout << This << endl;

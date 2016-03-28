@@ -8,8 +8,8 @@ using namespace std;
 class Thread{
   private:
     pthread_t id;
-    static void* helper(void* This);
   protected:
+    static void* helper(void* This);
     virtual void ejecutar() = 0;
   public:
     Thread();

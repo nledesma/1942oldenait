@@ -26,22 +26,33 @@ void Servidor::setAddress(int port){
 }
 
 void Servidor::pasivar(){
-	cout << "ENTRANDO A PASIVAR" << endl;
 	listen(this->socketFd, this->cantidadMaximaDeClientes);
-	cout << "DESPUES DE LISTEN" << endl;
-	ThreadAceptar aceptador(this);
-	cout << "YA MANDO EL THREAD DE ACEPTAR." << endl;
-	aceptador.iniciar();
-	cout << "YA INICIO. FIN PASIVAR.	" << endl;
+	pthread_t aceptarID;
+	pthread_create(&aceptarID, NULL, cicloAceptar, (void*)this);
+}
+
+void * Servidor::cicloAceptar(void * THIS){
+	Servidor * servidor = (Servidor*) THIS;
+	while(true){
+    int idCliente = servidor->aceptar();
+		pthread_t atender;
+		pthread_create(&atender, NULL, atenderCliente, NULL);
+		servidor->agregarCliente(idCliente, atender);
+  }
+	pthread_exit(NULL);
+}
+
+void * Servidor::atenderCliente(void *arg){
+	cout << "Atendiendo un cliente"<< endl;
+	pthread_exit(NULL);
 }
 
 int Servidor::aceptar(){
   return accept(socketFd, 0, 0);
 }
 
-
 void Servidor::cerrar(){
-	for(map<int, Thread*>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
+	for(map<int, pthread_t>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
 		int clienteActual = (*iterador).first;
 		shutdown(clienteActual, 0);
 		close(clienteActual);
@@ -60,8 +71,14 @@ int Servidor::getPuerto() {
 	return puerto;
 }
 
-void Servidor::agregarCliente(int idCliente, Thread* thread){
+void Servidor::esperar(){
+	for(map<int, pthread_t>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
+		pthread_join(iterador->second, NULL);
+	}
+}
+
+void Servidor::agregarCliente(int idCliente, pthread_t thread){
 	pthread_mutex_lock(&mutexAgregar);
-	clientes.insert(pair<int, Thread*> (idCliente, thread));
+	clientes.insert(pair<int, pthread_t> (idCliente, thread));
 	pthread_mutex_unlock(&mutexAgregar);
 }
