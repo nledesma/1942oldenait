@@ -35,7 +35,6 @@ void Servidor::pasivar(){
 void * Servidor::cicloAceptar(void * THIS){
 	Servidor * servidor = (Servidor*) THIS;
 	while(true){
-		cout << 1 << endl;
     	int idCliente = servidor->aceptar();
 		pthread_t atender;
 		pthread_create(&atender, NULL, atenderCliente, NULL);
@@ -74,6 +73,7 @@ int Servidor::getPuerto() {
 }
 
 void Servidor::esperar(){
+	sleep(10);
 	for(map<int, pthread_t>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
 		pthread_join(iterador->second, NULL);
 	}

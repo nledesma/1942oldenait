@@ -32,6 +32,5 @@ int main(){
   pthread_join(threadCliente1, NULL);
   pthread_join(threadCliente2, NULL);
   servidor->esperar();
-
-  return 0;
+  servidor->cerrar();
 }
