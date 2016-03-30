@@ -3,6 +3,7 @@ using namespace std;
 
 Servidor::Servidor(int port, int cantidadDeClientes):GameSocket(){
 	inicializar(port);
+	setCantidadMaximaDeClientes(cantidadDeClientes);
 }
 
 void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
@@ -34,7 +35,8 @@ void Servidor::pasivar(){
 void * Servidor::cicloAceptar(void * THIS){
 	Servidor * servidor = (Servidor*) THIS;
 	while(true){
-    int idCliente = servidor->aceptar();
+		cout << 1 << endl;
+    	int idCliente = servidor->aceptar();
 		pthread_t atender;
 		pthread_create(&atender, NULL, atenderCliente, NULL);
 		servidor->agregarCliente(idCliente, atender);
