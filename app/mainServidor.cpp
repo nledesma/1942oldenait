@@ -33,4 +33,6 @@ int main(){
   pthread_join(threadCliente2, NULL);
   servidor->esperar();
   servidor->cerrar();
+  cliente1.cerrar();
+  cliente2.cerrar();
 }

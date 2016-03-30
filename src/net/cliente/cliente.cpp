@@ -37,9 +37,13 @@ int Cliente::conectar(){
     sizeof(struct sockaddr_in)
   ); // Me conecto a la direccion.
   if (connected != 0){
-    cout << "La conexión falló" << endl;
+    cout << "La conexión falló, error" << errno << endl;
   }
   return connected;
+}
+
+void Cliente::cerrar(){
+	cerrarSocket();
 }
 
 string Cliente::recibir(int longitudMensaje){

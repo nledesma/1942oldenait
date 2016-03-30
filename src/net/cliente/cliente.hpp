@@ -4,6 +4,7 @@
 #include <list>
 #include "../mensaje/mensaje.hpp"
 #include <string>
+#include <errno.h>
 using namespace std;
 
 class Cliente: public GameSocket{
@@ -18,6 +19,7 @@ public:
   void agregarMensaje(Mensaje* pMensaje);
   void setAddress(string serverAddress, int port);
   int conectar();
+  void cerrar();
   string recibir(int longitudMensaje);
   string getIP();
   int getPort();

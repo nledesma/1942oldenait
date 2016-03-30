@@ -58,8 +58,7 @@ void Servidor::cerrar(){
 		shutdown(clienteActual, 0);
 		close(clienteActual);
 	}
-	shutdown(socketFd, 0); //Dejo de transmitir datos
-	close(socketFd);
+	cerrarSocket();
 
 	cout << "Servidor cerrado" << endl;
 }

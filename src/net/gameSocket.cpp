@@ -52,6 +52,11 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
   }
 }
 
+void GameSocket::cerrarSocket() {
+  shutdown(socketFd, 0); //Dejo de transmitir datos
+  close(socketFd);
+}
+
 int GameSocket::enviarMensaje(Mensaje * mensaje, int fdReceptor){
   const char * pMensaje = mensaje->codificar();
   return enviarBytes((char*)pMensaje, sizeof(pMensaje), fdReceptor);
