@@ -1,14 +1,15 @@
 #include "logger.hpp"
-#include <cstdio>
-#include <ctime>
 
+pthread_mutex_t Logger::mutexCrear = PTHREAD_MUTEX_INITIALIZER;
 // Declaramos la única instancia.
 Logger* Logger::pInstance = NULL;
 
 Logger* Logger::instance(){
+  pthread_mutex_lock(&mutexCrear);
   if(pInstance == NULL){
     pInstance = new Logger();
   }
+  pthread_mutex_unlock(&mutexCrear);
   return pInstance;
 }
 
@@ -21,13 +22,14 @@ void Logger::cerrar(){
 }
 
 void Logger::log(string str){
-  //TODO AGREGAR MUTEX
   time_t rawtime;
   tm * timeinfo;
   char buffer [80];
   time(&rawtime);
   timeinfo = localtime(&rawtime);
-
   strftime(buffer, 80, "[%Y/%m/%d - %H:%M:%S]:", timeinfo);
+
+  pthread_mutex_lock(&mutexLog);
   arch << buffer << " " << str << endl;
+  pthread_mutex_unlock(&mutexLog);
 }
