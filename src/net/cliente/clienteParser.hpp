@@ -3,7 +3,9 @@
 
 #include "cliente.hpp"
 #include "../../../resources/lib/tinyxml2.h"
+#include "../../logger.hpp"
 #include "../mensaje/fabricaMensajes.hpp"
+#include <sstream>
 
 class ClienteParser {
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
