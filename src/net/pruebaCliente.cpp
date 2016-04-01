@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-#include "clienteParser.hpp"
+#include "cliente/clienteParser.hpp"
 #include "cliente.hpp"
 #include "mensaje.hpp"
 #include "tinyxml2.h"
@@ -9,13 +9,14 @@ using namespace std;
 #include "mensajeChar.hpp"
 
 int main(){
-
-  //RAII
   Cliente cliente("127.0.0.1", 8080);
-  // TODO MATAR MENSAJES.
-  cliente.agregarMensaje(new MensajeString(1,"HOLA"));
-  cliente.agregarMensaje(new MensajeInt(27,"1"));
-  cliente.agregarMensaje(new MensajeChar(3,"A"));
+  MensajeString m1(1,"hola");
+  MensajeInt m2(27,"1");
+  MensajeChar m3(3,"A");
+
+  cliente.agregarMensaje(&m1);
+  cliente.agregarMensaje(&m2);
+  cliente.agregarMensaje(&m3);
 
   ClienteParser clParser;
   clParser.serializador(&cliente, "clientePrueba.xml");
