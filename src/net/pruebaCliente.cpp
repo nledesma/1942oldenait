@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
 #include "cliente/clienteParser.hpp"
-#include "cliente.hpp"
-#include "mensaje.hpp"
-#include "tinyxml2.h"
-#include "mensajeString.hpp"
-#include "mensajeInt.hpp"
-#include "mensajeChar.hpp"
+#include "cliente/cliente.hpp"
+#include "mensaje/mensaje.hpp"
+#include "../../resources/lib/tinyxml2.h"
+#include "mensaje/mensajeString.hpp"
+#include "mensaje/mensajeInt.hpp"
+#include "mensaje/mensajeChar.hpp"
 
 int main(){
   Cliente cliente("127.0.0.1", 8080);
