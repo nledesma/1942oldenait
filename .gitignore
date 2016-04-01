@@ -51,3 +51,7 @@
 # Binarios
 *servidor
 *program
+
+# Logs
+
+*.log

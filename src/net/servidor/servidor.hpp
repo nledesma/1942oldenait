@@ -27,6 +27,7 @@ private:
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
 	int cantidadMaximaDeClientes;
 	int puerto;
+	bool servidorActivado;
 
 public:
 	Servidor(int port, int cantidadDeClientes);
@@ -45,6 +46,8 @@ public:
 	static void *atenderCliente(void* THIS);
 	static void *cicloAceptar(void* THIS);
 	void esperar();
+	void desactivarServidor();
+	bool servidorActivo();
 };
 
 #endif
