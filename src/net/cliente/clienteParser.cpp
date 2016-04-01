@@ -82,6 +82,14 @@ Cliente ClienteParser::deserializador(string ruta){
 	// TODO Chequear que haya levantado bien! Pasar a un log si hubo error.
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
+
+	if (eResult != XML_NO_ERROR){
+		stringstream ss;
+		ss << "Error al cargar el mensaje. Código: " << eResult;
+		Logger::instance()->log(ss.str());
+		doc.LoadFile("resources/xml/clienteDefault.xml");
+	}
+
 	XMLNode * pRoot = doc.FirstChild();
 
 	XMLElement * pElement = pRoot -> FirstChildElement("ip");
