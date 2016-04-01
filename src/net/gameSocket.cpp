@@ -78,11 +78,11 @@ int GameSocket::recibirMensaje(Mensaje * mensaje, int fdEmisor){
       stringstream ss;
       ss << "Error al recibir bytes del mensaje con id " << datos.id << " de tipo " << datos.tipo;
       cout << ss.str() << endl;
-      Logger::instance()->log(ss.str());
+      Logger::instance()->logInfo(ss.str());
       delete [] pMensaje;
     }
   } else {
-    Logger::instance()->log("Error al recibir bytes de la cabecera del mensaje.");
+    Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
   }
   return -1;
 }
