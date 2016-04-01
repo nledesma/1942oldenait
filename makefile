@@ -3,6 +3,7 @@ DIRS = -Inet -IThread
 WAR = -Wall -pedantic
 NET_PATH = src/net/
 THREAD_PATH = src/Thread/
+LOGGER_PATH = src/
 DEBUG = -g -O0
 
 all: program mainServidor clean
@@ -10,8 +11,8 @@ all: program mainServidor clean
 program: main.o tinyxml2.o servidorParser.o servidor.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o cliente.o gameSocket.o clienteParser.o fabricaMensajes.o
 	g++ $(WAR) main.o tinyxml2.o servidorParser.o servidor.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o cliente.o gameSocket.o clienteParser.o fabricaMensajes.o -o program  $(LIBS)
 
-mainServidor: mainServidor.o tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o
-	g++ $(DEBUG) $(WAR) mainServidor.o tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o -o servidor $(LIBS)
+mainServidor: mainServidor.o tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o
+	g++ $(DEBUG) $(WAR) mainServidor.o tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o -o servidor $(LIBS)
 
 mainServidor.o: app/mainServidor.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
 	g++ $(DEBUG) -o mainServidor.o app/mainServidor.cpp $(DIRS) -c
@@ -63,6 +64,9 @@ threadAtender.o: $(THREAD_PATH)threadAtender.cpp $(NET_PATH)servidor/servidor.cp
 
 threadAceptar.o: $(THREAD_PATH)threadAceptar.cpp $(NET_PATH)servidor/servidor.cpp
 	g++ $(DEBUG) $(WAR) -c -o threadAceptar.o $(THREAD_PATH)threadAceptar.cpp
+
+logger.o: $(LOGGER_PATH)logger.cpp
+	g++ $(DEBUG) $(WAR) -c -o logger.o $(LOGGER_PATH)logger.cpp
 
 clean:
 	rm *.o

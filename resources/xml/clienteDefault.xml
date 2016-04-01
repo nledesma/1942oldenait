@@ -1,0 +1,11 @@
+<cliente>
+  <ip>127.0.0.1</ip>
+  <port>8080</port>
+  <mensajes>
+    <mensaje>
+      <id>1</id>
+      <tipo>string</tipo>
+      <valor>Mensaje por default.</valor>
+    </mensaje>
+  </mensajes>
+</cliente>

@@ -28,6 +28,13 @@ void ServidorParser::serializar(Servidor * servidor, string ruta) {
 Servidor * ServidorParser::deserializar(string ruta) {
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
+	
+	if (eResult != XML_NO_ERROR){
+		stringstream ss;
+		ss << "Error al cargar el mensaje. Código: " << eResult;
+		Logger::instance()->log(ss.str());
+		doc.LoadFile("resources/xml/servidorDefault.xml");
+	}
 
 	XMLNode * pRoot = doc.FirstChildElement();
 	XMLElement * pElement = pRoot -> FirstChildElement("cantidadMaximaDeClientes");
