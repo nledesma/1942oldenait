@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <iostream>
 #include "mensaje/mensaje.hpp"
-
+#include "../logger.hpp"
 using namespace std;
 
 class GameSocket {
