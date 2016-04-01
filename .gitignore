@@ -43,3 +43,6 @@
 *.exe
 *.out
 *.app
+
+# CLion ide
+*.idea/
