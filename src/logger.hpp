@@ -13,8 +13,10 @@ class Logger {
 private:
   static Logger* pInstance;
   Logger(); // Constructor privado.
-  Logger(Logger const&){}; // TODO: Por qué hay un constructor por copia?
-  Logger& operator=(Logger const&); // TODO: Por qué hay que reddefinir esto?
+  // Constructor por copia. Esto es para que una eventual clase hija no pueda definirlo.
+  Logger(Logger const&);
+  // Redefinimos esto para no poder obtener la instancia y hacer "=".
+  Logger& operator=(Logger const&);
   ofstream arch;
   static pthread_mutex_t mutexCrear;
   pthread_mutex_t mutexLog = PTHREAD_MUTEX_INITIALIZER;

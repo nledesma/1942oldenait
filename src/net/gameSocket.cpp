@@ -15,7 +15,6 @@ GameSocket::GameSocket(){
   this->socketFd =  socket(PF_INET, SOCK_STREAM, 0);
 }
 
-//TODO ver si conviene pasar mensaje a char* o dejarlo en string.
 int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor){
 	int bytesEnviados = 0;
   int bytesActuales = 0;
@@ -24,7 +23,6 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
 	while (bytesEnviados < longitudMensaje && bytesActuales != -1){
 		// Agrego offsets si es que no se envía todo el mensaje
 		bytesActuales = send(fdReceptor, pMensaje + bytesEnviados, longitudMensaje - bytesEnviados, MSG_NOSIGNAL); // Send retorna la cantidad de byes enviados
-                                                                                                                // -1 em caso de error. TODO wtf is ERRNO
     bytesEnviados += bytesActuales;
 		cout << "Enviado " << bytesEnviados << " bytes" << endl;
 	}
@@ -67,18 +65,24 @@ int GameSocket::enviarMensaje(Mensaje * mensaje, int fdReceptor){
 
 }
 
-// TODO manejar mejor errores y flujos alternativos
 int GameSocket::recibirMensaje(Mensaje * mensaje, int fdEmisor){
-  char * pInfoMensaje = new char[LONG_INFO_MENSAJE];
+  char pInfoMensaje[LONG_INFO_MENSAJE];
   if (recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor) == MENSAJEOK){
     infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
-    delete [] pInfoMensaje;
     char * pMensaje = new char[datos.longitud];
     if (recibirBytes(pMensaje, datos.longitud, fdEmisor) == MENSAJEOK){
       mensaje = FabricaMensajes::fabricarMensaje(datos, pMensaje);
+      delete [] pMensaje;
       return MENSAJEOK;
+    } else {
+      stringstream ss;
+      ss << "Error al recibir bytes del mensaje con id " << datos.id << " de tipo " << datos.tipo;
+      cout << ss.str() << endl;
+      Logger::instance()->log(ss.str());
+      delete [] pMensaje;
     }
-    delete [] pMensaje;
+  } else {
+    Logger::instance()->log("Error al recibir bytes de la cabecera del mensaje.");
   }
   return -1;
 }

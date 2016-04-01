@@ -18,43 +18,43 @@ mainServidor.o: app/mainServidor.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH
 	g++ $(DEBUG) -o mainServidor.o app/mainServidor.cpp $(DIRS) -c
 
 main.o: app/main.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
-	g++ -c -o main.o app/main.cpp $(DIRS)
+	g++ $(DEBUG) -c -o main.o app/main.cpp $(DIRS)
 
 cliente.o: $(NET_PATH)cliente/cliente.cpp src/net/gameSocket.cpp $(NET_PATH)mensaje/mensaje.cpp
-	g++ $(WAR) -c -o cliente.o $(NET_PATH)cliente/cliente.cpp
+	g++ $(DEBUG) $(WAR) -c -o cliente.o $(NET_PATH)cliente/cliente.cpp
 
 gameSocket.o: $(NET_PATH)gameSocket.cpp
-	g++ $(WAR) -c -o gameSocket.o $(NET_PATH)gameSocket.cpp
+	g++ $(DEBUG) $(WAR) -c -o gameSocket.o $(NET_PATH)gameSocket.cpp
 
 clienteParser.o: $(NET_PATH)cliente/clienteParser.cpp resources/lib/tinyxml2.cpp $(NET_PATH)mensaje/fabricaMensajes.cpp $(NET_PATH)cliente/cliente.cpp
-	g++ $(WAR) -c -o clienteParser.o $(NET_PATH)cliente/clienteParser.cpp
+	g++ $(DEBUG) $(WAR) -c -o clienteParser.o $(NET_PATH)cliente/clienteParser.cpp
 
 fabricaMensajes.o: $(NET_PATH)mensaje/fabricaMensajes.cpp $(NET_PATH)mensaje/mensaje.cpp $(NET_PATH)mensaje/mensajeInt.cpp $(NET_PATH)mensaje/mensajeString.cpp $(NET_PATH)mensaje/mensajeChar.cpp $(NET_PATH)mensaje/mensajeDouble.cpp
-	g++ $(WAR) -c -o fabricaMensajes.o $(NET_PATH)mensaje/fabricaMensajes.cpp
+	g++ $(DEBUG) $(WAR) -c -o fabricaMensajes.o $(NET_PATH)mensaje/fabricaMensajes.cpp
 
 mensaje.o: $(NET_PATH)mensaje/mensaje.cpp
-	g++ $(WAR) -c -o mensaje.o $(NET_PATH)mensaje/mensaje.cpp
+	g++ $(DEBUG) $(WAR) -c -o mensaje.o $(NET_PATH)mensaje/mensaje.cpp
 
 mensajeChar.o: $(NET_PATH)mensaje/mensajeChar.cpp
-	g++ $(WAR) -c -o mensajeChar.o $(NET_PATH)mensaje/mensajeChar.cpp
+	g++ $(DEBUG) $(WAR) -c -o mensajeChar.o $(NET_PATH)mensaje/mensajeChar.cpp
 
 mensajeDouble.o: $(NET_PATH)mensaje/mensajeDouble.cpp
-	g++ $(WAR) -c -o mensajeDouble.o $(NET_PATH)mensaje/mensajeDouble.cpp
+	g++ $(DEBUG) $(WAR) -c -o mensajeDouble.o $(NET_PATH)mensaje/mensajeDouble.cpp
 
 mensajeInt.o: $(NET_PATH)mensaje/mensajeInt.cpp
-	g++ $(WAR) -c -o mensajeInt.o $(NET_PATH)mensaje/mensajeInt.cpp
+	g++ $(DEBUG) $(WAR) -c -o mensajeInt.o $(NET_PATH)mensaje/mensajeInt.cpp
 
 mensajeString.o: $(NET_PATH)mensaje/mensajeString.cpp
-	g++ $(WAR) -c -o mensajeString.o $(NET_PATH)mensaje/mensajeString.cpp
+	g++ $(DEBUG) $(WAR) -c -o mensajeString.o $(NET_PATH)mensaje/mensajeString.cpp
 
 servidor.o: $(NET_PATH)servidor/servidor.cpp $(NET_PATH)gameSocket.cpp $(NET_PATH)mensaje/mensaje.cpp
 	g++ $(DEBUG) $(WAR) -c -o servidor.o $(NET_PATH)servidor/servidor.cpp
 
 servidorParser.o: $(NET_PATH)servidor/servidorParser.cpp resources/lib/tinyxml2.cpp
-	g++ $(WAR) -c -o servidorParser.o $(NET_PATH)servidor/servidorParser.cpp
+	g++ $(DEBUG) $(WAR) -c -o servidorParser.o $(NET_PATH)servidor/servidorParser.cpp
 
 tinyxml2.o: resources/lib/tinyxml2.cpp
-	g++ $(WAR) -c -o tinyxml2.o resources/lib/tinyxml2.cpp
+	g++ $(DEBUG) $(WAR) -c -o tinyxml2.o resources/lib/tinyxml2.cpp
 
 thread.o: $(THREAD_PATH)thread.cpp
 	g++ $(DEBUG) $(WAR) -c -o thread.o $(THREAD_PATH)thread.cpp

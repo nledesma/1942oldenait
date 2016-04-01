@@ -32,7 +32,7 @@ class Mensaje{
 
 // Ver si lo decodifica el parser...
 		Mensaje();
-		~Mensaje();
+		virtual ~Mensaje();
 		void setId(int unId);
 		int getId();
 		void setValor(void* unValor);

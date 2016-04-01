@@ -18,9 +18,8 @@ int Mensaje::getId() {
 
 // TODO por qué no se puede descomentar esto?
 Mensaje::~Mensaje(){}
+
 char * Mensaje::intToBytes(int n){
-
-
 	//int tamInt = sizeof(int);
 	int tamInt = INT_SIZE;
 	char * bytes = new char[tamInt];

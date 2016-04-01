@@ -8,7 +8,7 @@ Mensaje *FabricaMensajes::fabricarMensaje(int id, string tipo, string valor){
 
   stringstream ss;
   ss << "Tipo no válido, no se puede crear mensaje. Tipo: " << tipo << endl;
-  Logger::instance->log(ss.str());
+  Logger::instance()->log(ss.str());
   cout << ss.str() << endl;
 
   return NULL;
@@ -22,8 +22,8 @@ Mensaje * FabricaMensajes::fabricarMensaje(infoMensaje datos, char *valor){
 
   stringstream ss;
   ss << "Tipo no válido, no se puede crear mensaje. Tipo: " << datos.tipo << endl;
-  Logger::instance->log(ss.str());
+  Logger::instance()->log(ss.str());
   cout << ss.str() << endl;
-  
+
   return NULL;
 }
