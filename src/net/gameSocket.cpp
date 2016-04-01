@@ -30,7 +30,7 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
 	}
 	cout << "Datos enviados" << endl;
   if (bytesActuales == - 1 ) {
-    Logger::instance()->log("Error al enviar bytes(socket).");
+    Logger::instance()->logInfo("Error al enviar bytes(socket).");
     return -1;
   }
   return MENSAJEOK;
@@ -49,7 +49,7 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
 		cout << "recibidos " << bytesRecibidos << " bytes" << endl;
 	}
   if (bytesActuales == - 1 ){
-    Logger::instance()->log("Error al recibir bytes (socket).");
+    Logger::instance()->logInfo("Error al recibir bytes (socket).");
     return -1;
   } else {
     return MENSAJEOK;

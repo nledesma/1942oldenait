@@ -46,3 +46,8 @@
 
 # CLion ide
 *.idea/
+*CMakeLists.txt
+
+# Binarios
+*servidor
+*program
