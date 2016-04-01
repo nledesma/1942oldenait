@@ -1,4 +1,4 @@
-#include "src/logger.hpp"
+#include "../src/logger.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
@@ -11,7 +11,7 @@ void* f(void* arg){
   long int nro = (long int) arg;
   stringstream ss;
   ss << "Esto es un mensaje del thread " << nro;
-  Logger::instance()->log(ss.str());
+  Logger::instance()->logInfo(ss.str());
 }
 
 int main() {
@@ -22,12 +22,13 @@ int main() {
   }
 
   Logger * logger = Logger::instance();
-  logger->log("Esto es el main.");
+  logger->logInfo("Esto es el main.");
 
   for (int i = 0; i < 30; i++){
     pthread_join(ids[i], NULL);
   }
 
+  logger->logError(111,"Se ha producido un horrible error");
   logger->cerrar();
   return 0;
 }

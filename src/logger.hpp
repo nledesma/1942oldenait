@@ -6,7 +6,6 @@
 #include <ctime>
 #include <fstream>
 #include <string>
-
 using namespace std;
 
 class Logger {
@@ -22,7 +21,8 @@ private:
   pthread_mutex_t mutexLog = PTHREAD_MUTEX_INITIALIZER;
 public:
   static Logger * instance();
-  void log(string mensaje);
+  void logInfo(string mensaje);
+  void logError(int errno, string error);
   void cerrar();
 };
 

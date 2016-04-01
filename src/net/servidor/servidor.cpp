@@ -4,6 +4,7 @@ using namespace std;
 Servidor::Servidor(int port, int cantidadDeClientes):GameSocket(){
 	inicializar(port);
 	setCantidadMaximaDeClientes(cantidadDeClientes);
+	servidorActivado = false;
 }
 
 void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
@@ -28,13 +29,14 @@ void Servidor::setAddress(int port){
 
 void Servidor::pasivar(){
 	listen(this->socketFd, this->cantidadMaximaDeClientes);
+	servidorActivado = true;
 	pthread_t aceptarID;
 	pthread_create(&aceptarID, NULL, cicloAceptar, (void*)this);
 }
 
 void * Servidor::cicloAceptar(void * THIS){
 	Servidor * servidor = (Servidor*) THIS;
-	while(true){
+	while(servidor->servidorActivo()){
     	int idCliente = servidor->aceptar();
 		pthread_t atender;
 		pthread_create(&atender, NULL, atenderCliente, NULL);
@@ -53,6 +55,7 @@ int Servidor::aceptar(){
 }
 
 void Servidor::cerrar(){
+	this->desactivarServidor();
 	for(map<int, pthread_t>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
 		int clienteActual = (*iterador).first;
 		shutdown(clienteActual, 0);
@@ -76,6 +79,14 @@ void Servidor::esperar(){
 	for(map<int, pthread_t>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++){
 		pthread_join(iterador->second, NULL);
 	}
+}
+
+bool Servidor::servidorActivo() {
+	return this->servidorActivado;
+}
+
+void Servidor::desactivarServidor() {
+	servidorActivado = false;
 }
 
 void Servidor::agregarCliente(int idCliente, pthread_t thread){
