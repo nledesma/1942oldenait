@@ -72,14 +72,14 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 	// Guardado del xml.
   XMLError e = doc.SaveFile(ruta.c_str());
   if (e != XML_SUCCESS){
-		// TODO pasar a un log.
-    cout << "Error! " << e << endl;
+		stringstream ss;
+    ss << "Error al guardar cliente. " << e << endl;
+		Logger::instance()->log(ss.str());
   }
 }
 
 // TODO Probablemente debería devolver un puntero a cliente.
 Cliente ClienteParser::deserializador(string ruta){
-	// TODO Chequear que haya levantado bien! Pasar a un log si hubo error.
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 
@@ -100,7 +100,6 @@ Cliente ClienteParser::deserializador(string ruta){
 	eResult = pElement -> QueryIntText(&puerto);
 
 	Cliente cliente(ip, puerto);
-	FabricaMensajes fabrica;
 
 	XMLElement * pMensajes = pRoot -> FirstChildElement("mensajes");
 	XMLElement * pMensaje = pMensajes -> FirstChildElement("mensaje");
@@ -112,7 +111,7 @@ Cliente ClienteParser::deserializador(string ruta){
 		tipo = pMensaje->FirstChildElement("tipo")->GetText();
 		valor = pMensaje->FirstChildElement("valor")->GetText();
 
-		cliente.agregarMensaje(fabrica.fabricarMensaje(id, tipo, valor));
+		cliente.agregarMensaje(FabricaMensajes::fabricarMensaje(id, tipo, valor));
 
 		pMensaje = pMensaje -> NextSiblingElement("mensaje");
 	}

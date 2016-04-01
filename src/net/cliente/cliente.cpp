@@ -24,8 +24,7 @@ void Cliente::agregarMensaje(Mensaje* pMensaje){
 void Cliente::setAddress(string serverAddress, int port){
  		this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
   	this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
-
-    	this->addr_info.sin_addr.s_addr = inet_addr(serverAddress.c_str()); // Se setea la dirección del server
+		this->addr_info.sin_addr.s_addr = inet_addr(serverAddress.c_str()); // Se setea la dirección del server
 
   	memset(this->addr_info.sin_zero, 0, sizeof(this->addr_info.sin_zero));
 }
