@@ -6,4 +6,5 @@
 5. Validaciones.
     - Pruebas de conectividad: desconectar a un cliente de repente
     - XML invalido, incompleto o inexistente
-    -
+    - Si se supera la cantidad maxima de clientes, hay que destruir uno que ya está conectado e intentar conectar el nuevo que quiere
+    entrar.

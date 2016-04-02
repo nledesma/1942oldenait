@@ -2,7 +2,11 @@
 using namespace std;
 
 Servidor::Servidor(int port, int cantidadDeClientes):GameSocket(){
-	inicializar(port);
+	try{
+		inicializar(port);
+	}catch(runtime_error &e){
+		Logger::instance()->logError(errno,"Se produjo un error en el BIND");
+	}
 	setCantidadMaximaDeClientes(cantidadDeClientes);
 	servidorActivado = false;
 }
@@ -17,7 +21,10 @@ int Servidor::getCantidadMaximaDeClientes() {
 
 void Servidor::inicializar(int port){
 	this->setAddress(port); // Se setea el puerto en addr_info
-	bind(this->socketFd, (struct sockaddr*) &this->addr_info, sizeof(struct sockaddr_in)); // Se vincula el socket al puerto indicado en addr_info
+	// Se vincula el socket al puerto indicado en addr_info
+	if(bind(this->socketFd, (struct sockaddr*) &this->addr_info, sizeof(struct sockaddr_in)) == -1){
+		throw runtime_error("BIND_EXCEPTION");
+	 }
 }
 
 void Servidor::setAddress(int port){
@@ -28,7 +35,9 @@ void Servidor::setAddress(int port){
 }
 
 void Servidor::pasivar(){
-	listen(this->socketFd, this->cantidadMaximaDeClientes);
+	if(listen(this->socketFd, this->cantidadMaximaDeClientes) == -1){
+		throw runtime_error("LISTEN_EXCEPTION");
+	}
 	servidorActivado = true;
 	pthread_t aceptarID;
 	pthread_create(&aceptarID, NULL, cicloAceptar, (void*)this);
@@ -36,12 +45,20 @@ void Servidor::pasivar(){
 
 void * Servidor::cicloAceptar(void * THIS){
 	Servidor * servidor = (Servidor*) THIS;
+	int idCliente;
 	while(servidor->servidorActivo()){
-    	int idCliente = servidor->aceptar();
-		pthread_t atender;
-		pthread_create(&atender, NULL, atenderCliente, NULL);
-		servidor->agregarCliente(idCliente, atender);
-  }
+		try{
+    	idCliente = servidor->aceptar();
+			pthread_t atender;
+			pthread_create(&atender, NULL, atenderCliente, NULL);
+			servidor->agregarCliente(idCliente, atender);
+	  }
+		catch(runtime_error &e){
+			Logger::instance()->logError(errno,"Se produjo un error en el ACCEPT");
+			cout << "La conexión falló, por favor intente nuevamente conectarse" << endl;
+			//TODO llamar mainMenu()
+		}
+	}
 	pthread_exit(NULL);
 }
 
@@ -51,7 +68,11 @@ void * Servidor::atenderCliente(void *arg){
 }
 
 int Servidor::aceptar(){
-  return accept(socketFd, 0, 0);
+	int resulAccept = accept(socketFd, 0, 0);
+	if(resulAccept == -1){
+		throw runtime_error("ACCEPT_EXCEPTION");
+	}
+	return resulAccept;
 }
 
 void Servidor::cerrar(){

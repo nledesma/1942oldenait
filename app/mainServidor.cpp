@@ -9,7 +9,11 @@ void* funcion(void* arg){
   cout << "ESTO ES UN CLIENTE" << endl;
   //Cada cliente se conecta al servidor.
   Cliente* pcliente = (Cliente*)arg;
-  pcliente->conectar();
+  try{
+    pcliente->conectar();
+  }catch(runtime_error &e){
+    Logger::instance()->logError(errno,"Se produjo un error en el connect");
+  }
   pthread_exit(NULL);
 }
 
@@ -23,7 +27,11 @@ int main(){
   servidor = servidorParser.deserializar("servidorPrueba.xml");
 
   // Servidor aceptando conexiones
-  servidor->pasivar();
+  try{
+    servidor->pasivar();
+  }catch(runtime_error &e){
+    Logger::instance()->logError(errno,"Se produjo un error en el listen");
+  }
   // Se iniciliazan los threads
   pthread_create(&threadCliente1, NULL, funcion, &cliente1);
   pthread_create(&threadCliente2, NULL, funcion, &cliente2);

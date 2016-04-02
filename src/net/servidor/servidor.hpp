@@ -13,6 +13,10 @@
 #include <queue>
 #include <pthread.h>
 #include <map>
+#include <stdexcept>
+#include <errno.h>
+#include <cstdlib>
+
 // #include "../../Thread/thread.hpp"
 // #include "../../Thread/threadAtender.hpp"
 // #include "../../Thread/threadAceptar.hpp"
