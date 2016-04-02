@@ -37,18 +37,21 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
 int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
 
 	int bytesRecibidos = 0;
-  int bytesActuales = 0;
+  int bytesActuales = ESTADO_INICIAL;
 
-	while (bytesRecibidos < longitudMensaje && bytesActuales != -1){
+	while (bytesRecibidos < longitudMensaje && bytesActuales != -1 && bytesActuales != 0){
 		// Agrego offsets si es que no se envía todo el mensaje
 		bytesActuales = recv(fdEmisor, pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos, 0); // Recv retorna la cantidad de bytes recibidos.
 
     bytesRecibidos += bytesActuales;
 		cout << "recibidos " << bytesRecibidos << " bytes" << endl;
 	}
-  if (bytesActuales == - 1 ){
-    Logger::instance()->logInfo("Error al recibir bytes (socket).");
-    return -1;
+  if (bytesActuales == - 1 ) {
+      Logger::instance()->logInfo("Error al recibir bytes (socket).");
+      return -1;
+  } else if (bytesActuales == 0){
+      Logger::instance()->logInfo("El peer se desconectó.");
+      return PEER_DESCONECTADO;
   } else {
     return MENSAJEOK;
   }
@@ -67,7 +70,8 @@ int GameSocket::enviarMensaje(Mensaje * mensaje, int fdReceptor){
 
 int GameSocket::recibirMensaje(Mensaje * mensaje, int fdEmisor){
   char pInfoMensaje[LONG_INFO_MENSAJE];
-  if (recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor) == MENSAJEOK){
+  int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
+  if (resultado == MENSAJEOK){
     infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
     char * pMensaje = new char[datos.longitud];
     if (recibirBytes(pMensaje, datos.longitud, fdEmisor) == MENSAJEOK){
@@ -81,7 +85,9 @@ int GameSocket::recibirMensaje(Mensaje * mensaje, int fdEmisor){
       Logger::instance()->logInfo(ss.str());
       delete [] pMensaje;
     }
-  } else {
+  } else if (resultado == PEER_DESCONECTADO) {
+    return PEER_DESCONECTADO;
+  }else {
     Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
   }
   return -1;

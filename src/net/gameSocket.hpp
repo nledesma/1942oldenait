@@ -10,6 +10,9 @@
 #include "../logger.hpp"
 using namespace std;
 
+#define PEER_DESCONECTADO 0
+#define ESTADO_INICIAL -2;
+
 class GameSocket {
 protected:
   int socketFd;

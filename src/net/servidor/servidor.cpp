@@ -70,7 +70,7 @@ void *Servidor::atenderCliente(void *arg) {
 int Servidor::aceptar() {
 	struct sockaddr_in client_addr;
  	int client_addr_len = sizeof(client_addr);
-	int resulAccept = accept(socketFd, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len));	
+	int resulAccept = accept(socketFd, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
 	if(resulAccept == -1){
 		throw runtime_error("ACCEPT_EXCEPTION");
 	}
@@ -80,7 +80,7 @@ int Servidor::aceptar() {
 
 void Servidor::cerrar() {
     this->desactivarServidor();
-    pthread_join(this->cicloAceptaciones, NULL);
+//    pthread_join(this->cicloAceptaciones, NULL);
     for (map<int, pthread_t>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++) {
         int clienteActual = (*iterador).first;
         shutdown(clienteActual, 0);
