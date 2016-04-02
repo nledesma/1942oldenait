@@ -28,6 +28,7 @@ private:
 	int cantidadMaximaDeClientes;
 	int puerto;
 	bool servidorActivado;
+	pthread_t cicloAceptaciones;
 
 public:
 	Servidor(int port, int cantidadDeClientes);
