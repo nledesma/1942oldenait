@@ -22,7 +22,7 @@ private:
 public:
   static Logger * instance();
   void logInfo(string mensaje);
-  void logError(int errno, string error);
+  void logError(int numError, string error);
   void cerrar();
 };
 
