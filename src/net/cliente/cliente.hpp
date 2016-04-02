@@ -5,6 +5,7 @@
 #include "../mensaje/mensaje.hpp"
 #include <string>
 #include <errno.h>
+#include <stdexcept>
 using namespace std;
 
 class Cliente: public GameSocket{

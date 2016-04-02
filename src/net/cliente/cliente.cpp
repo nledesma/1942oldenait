@@ -30,13 +30,11 @@ void Cliente::setAddress(string serverAddress, int port){
 }
 
 int Cliente::conectar(){
-  int connected = connect(
-    this->socketFd,
-    (struct sockaddr *) &this->addr_info,
-    sizeof(struct sockaddr_in)
-  ); // Me conecto a la direccion.
-  if (connected != 0){
+	// Me conecto a la direccion.
+	int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
+  if (connected == -1){
     cout << "La conexión falló, error" << errno << endl;
+		throw runtime_error("CLIENTE_EXCEPTION");
   }
   return connected;
 }
