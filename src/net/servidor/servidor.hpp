@@ -24,12 +24,18 @@
 using namespace std;
 // class Thread;
 
+struct datosCliente{
+	pthread_t th;
+	const char* dir;
+};
+
 class Servidor: public GameSocket{
 private:
-	map <int, pthread_t> clientes;
+	map <int, datosCliente> clientes;
   	struct sockaddr_in addr_info;
-	queue <Mensaje*> colaDeMensajes;
+	queue < pair<int, Mensaje*> > colaDeMensajes;
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_t mutexCola = PTHREAD_MUTEX_INITIALIZER;
 	int cantidadMaximaDeClientes;
 	int puerto;
 	bool servidorActivado;
@@ -43,17 +49,17 @@ public:
 	void setAddress(int port);
 	void pasivar();
 	int aceptar();
- 	void enviarMensaje(string mensaje, int longitudMensaje);
-	void recibirMensaje(string mensaje, int longitudMensaje);
 	void cerrar();
 	int getPuerto();
 	void setPuerto(int unPuerto);
 	void agregarCliente(int idCliente, pthread_t thread);
+	void quitarCliente(int fdCliente);
 	static void *atenderCliente(void* THIS);
 	static void *cicloAceptar(void* THIS);
 	void esperar();
 	void desactivarServidor();
 	bool servidorActivo();
+	void encolarMensaje(pair <int, Mensaje*> clienteMensaje);
 };
 
 #endif

@@ -11,7 +11,8 @@
 using namespace std;
 
 #define PEER_DESCONECTADO 0
-#define ESTADO_INICIAL -2;
+#define PEER_ERROR -1
+#define ESTADO_INICIAL -2
 
 class GameSocket {
 protected:
