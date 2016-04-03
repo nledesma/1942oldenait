@@ -31,7 +31,7 @@ Servidor * ServidorParser::deserializar(string ruta) {
 	
 	if (eResult != XML_NO_ERROR){
 		stringstream ss;
-		ss << "Error al cargar el mensaje. Código: " << eResult;
+		ss << "Error al cargar el xml de servidor. Código: " << eResult;
 		Logger::instance()->logInfo(ss.str());
 		doc.LoadFile("resources/xml/servidorDefault.xml");
 	}
