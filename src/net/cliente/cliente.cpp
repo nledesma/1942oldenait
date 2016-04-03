@@ -8,6 +8,7 @@
 #include "cliente.hpp"
 using namespace std;
 
+
 Cliente::Cliente(string ip, int port):GameSocket(){
 	this->ip = ip;
 	this->port = port;
@@ -77,4 +78,54 @@ int Cliente::getPort(){
 
 list <Mensaje*>& Cliente::getMensajes(){
   return this->listaMensajes;
+}
+
+int Cliente::enviarMensajePorId(int idMensaje) {
+		Mensaje * mensaje = this->encontrarMensajePorId(idMensaje);
+		if((mensaje != NULL)) {
+			int msj = GameSocket::enviarMensaje(mensaje, this->socketFd);
+			return msj;
+		} else {
+				Logger::instance()->logInfo("No existe un mensaje con id indicado");
+		}
+		return -1;
+}
+
+//El metodo devuelve el mensaje correspondiente y lo elimina de la coleccion de mensajes
+Mensaje * Cliente::encontrarMensajePorId(int idMensaje) {
+	bool mensajeEncontrado = false;
+	Mensaje * mensaje = NULL;
+	list<Mensaje*>::iterator iterador = listaMensajes.begin();
+	while(!mensajeEncontrado && (iterador != listaMensajes.end())){
+		if ((*iterador)->getId() == idMensaje) {
+			mensaje = (*iterador);
+			mensajeEncontrado = true;
+		}else {
+			iterador++;
+		}
+	}
+	return mensaje;
+}
+
+void Cliente::ciclarMensajes(int milisegundos) {
+	typedef std::chrono::high_resolution_clock Time;
+  typedef std::chrono::duration<float> fsec;
+	typedef std::chrono::milliseconds ms;
+	auto t0 = Time::now();
+	auto t1 = Time::now();
+	fsec fs = t1 - t0;
+	ms d = std::chrono::duration_cast<ms>(fs);
+	while(d.count()<milisegundos) {
+		list<Mensaje*>::iterator iterador;
+		for(iterador = listaMensajes.begin(); iterador != listaMensajes.end(); iterador++) {
+				GameSocket::enviarMensaje((*iterador), this->socketFd);
+				Mensaje * mensajeRecibido;
+				GameSocket::recibirMensaje(mensajeRecibido, this->socketFd);
+				cout<< "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
+				delete mensajeRecibido;
+		}
+		t1 = Time::now();
+		fs = t1 - t0;
+		d = chrono::duration_cast<ms>(fs);
+	}
 }

@@ -6,6 +6,12 @@
 #include <string>
 #include <errno.h>
 #include <stdexcept>
+#include <queue>
+#include <pthread.h>
+#include <time.h>
+#include <math.h>
+#include <unistd.h>
+#include <chrono>
 using namespace std;
 
 class Cliente: public GameSocket{
@@ -13,6 +19,8 @@ private:
     string ip;
     int port;
     list <Mensaje*> listaMensajes;
+    Mensaje * encontrarMensajePorId(int idMensaje);
+
 
 public:
 	Cliente(string ip, int port);
@@ -24,6 +32,8 @@ public:
   string recibir(int longitudMensaje);
   string getIP();
   int getPort();
+  int enviarMensajePorId(int idMensaje);
+  void ciclarMensajes(int milisegundos);
   list <Mensaje*>& getMensajes();
 
 };

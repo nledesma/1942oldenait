@@ -7,5 +7,10 @@
       <tipo>string</tipo>
       <valor>Mensaje por default.</valor>
     </mensaje>
+    <mensaje>
+      <id>2</id>
+      <tipo>int</tipo>
+      <valor>12345</valor>
+    </mensaje>
   </mensajes>
 </cliente>
