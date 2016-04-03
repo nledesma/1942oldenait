@@ -1,5 +1,7 @@
 #include "../src/net/cliente/cliente.hpp"
 #include "../src/net/mensaje/mensaje.hpp"
+#include "../src/net/mensaje/mensajeString.hpp"
+#include "../src/net/mensaje/mensajeInt.hpp"
 #include "../src/net/servidor/servidorParser.hpp"
 #include <string>
 #include <pthread.h>
@@ -24,6 +26,12 @@ int main(int argc, char *argv[]){
     pthread_t threadCliente1, threadCliente2;
     Cliente cliente1("127.0.0.1", 8080);
     Cliente cliente2("127.0.0.1", 8080);
+
+    MensajeString m1(1,"hola! Esto es un mensaje!");
+    MensajeInt m2(2,"2048");
+    cliente1.agregarMensaje(&m1);
+    cliente2.agregarMensaje(&m2);
+
     // Se crea el servidor.
     ServidorParser servidorParser;
     servidor = servidorParser.deserializar("servidorPrueba.xml");

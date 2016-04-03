@@ -36,6 +36,8 @@ private:
 	queue < pair<int, Mensaje*> > colaDeMensajes;
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
 	pthread_mutex_t mutexCola = PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_t mutexDesencolar = PTHREAD_MUTEX_INITIALIZER;
+	pthread_cond_t condDesencolar = PTHREAD_COND_INITIALIZER;
 	int cantidadMaximaDeClientes;
 	int puerto;
 	bool servidorActivado;
@@ -56,10 +58,12 @@ public:
 	void quitarCliente(int fdCliente);
 	static void *atenderCliente(void* THIS);
 	static void *cicloAceptar(void* THIS);
+	static void *cicloDesencolar(void* THIS);
 	void esperar();
 	void desactivarServidor();
 	bool servidorActivo();
 	void encolarMensaje(pair <int, Mensaje*> clienteMensaje);
+	void desencolar();
 };
 
 #endif

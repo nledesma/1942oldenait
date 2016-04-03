@@ -132,9 +132,12 @@ void Servidor::desactivarServidor() {
 }
 
 void Servidor::encolarMensaje(pair <int, Mensaje*> clienteMensaje){
+    pthread_mutex_lock(&mutexDesencolar);
     pthread_mutex_lock(&mutexCola);
     this->colaDeMensajes.push(clienteMensaje);
+    pthread_cond_signal(&condDesencolar);
     pthread_mutex_unlock(&mutexCola);
+    pthread_mutex_unlock(&mutexDesencolar);
 }
 
 void Servidor::agregarCliente(int fdCliente, pthread_t thread) {
@@ -160,4 +163,28 @@ void Servidor::quitarCliente(int clientfd){
     string tmp(direccionCliente);
     Logger::instance()->logInfo("Cliente en la dirección " + tmp + " desconectado.");
     this->clientes.erase (clientfd);
+}
+
+void * Servidor::cicloDesencolar(void *THIS){
+    Servidor * servidor = (Servidor * ) THIS;
+    while(servidor->servidorActivo()){
+      servidor->desencolar();
+    }
+    pthread_exit(NULL);
+}
+
+void Servidor::desencolar(){
+    pthread_mutex_lock(&mutexDesencolar);
+    while (colaDeMensajes.empty()){
+        pthread_cond_wait(&condDesencolar, &mutexDesencolar);
+    }
+    pthread_mutex_unlock(&mutexDesencolar);
+
+    pthread_mutex_lock(&mutexCola);
+    pair<int, Mensaje*> msg = colaDeMensajes.front();
+    colaDeMensajes.pop();
+    pthread_mutex_unlock(&mutexCola);
+
+    Logger::instance()->logInfo("Mensaje desencolado del cliente " + std::to_string(msg.first)
+        + " con valor '" + msg.second->strValor() +"'");
 }

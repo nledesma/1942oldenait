@@ -49,8 +49,8 @@
 *CMakeLists.txt
 
 # Binarios
-*servidor
-*program
+*servidor$
+*program$
 
 # Logs
 
