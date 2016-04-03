@@ -37,8 +37,10 @@ void Servidor::setAddress(int port) {
 }
 
 void Servidor::pasivar() {
-    if (listen(this->socketFd, this->cantidadMaximaDeClientes) == -1) {
-        throw runtime_error("LISTEN_EXCEPTION");
+  int resultadoListen = listen(this->socketFd, this->cantidadMaximaDeClientes);
+  cout << "ESTE ES EL RESULTADO DEL LISTEN: " << resultadoListen << endl;
+  if (resultadoListen == -1) {
+      throw runtime_error("LISTEN_EXCEPTION");
     }
     servidorActivado = true;
     pthread_create(&this->cicloAceptaciones, NULL, cicloAceptar, (void *) this);

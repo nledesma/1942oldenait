@@ -8,13 +8,13 @@ DEBUG = -g -O0
 CC = g++ -std=c++11
 COMPILED_FILES = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o clienteParser.o
 
-all: program mainServidorViejo mainCliente mainMenu clean
+all: program mainServidor mainCliente mainMenu clean
 
 program: main.o $(COMPILED_FILES)
 	$(CC) $(WAR) main.o $(COMPILED_FILES) -o program  $(LIBS)
 
-mainServidorViejo: mainServidorViejo.o $(COMPILED_FILES)
-	$(CC) $(DEBUG) $(WAR) mainServidorViejo.o $(COMPILED_FILES) -o servidor $(LIBS)
+mainServidor: mainServidor.o $(COMPILED_FILES)
+	$(CC) $(DEBUG) $(WAR) mainServidor.o $(COMPILED_FILES) -o servidor $(LIBS)
 
 mainCliente: mainCliente.o $(COMPILED_FILES)
 	$(CC) $(DEBUG) $(WAR) mainCliente.o $(COMPILED_FILES) -o cliente $(LIBS)
@@ -22,8 +22,8 @@ mainCliente: mainCliente.o $(COMPILED_FILES)
 mainMenu: mainMenu.o $(COMPILED_FILES)
 	$(CC) $(DEBUG) $(WAR) mainMenu.o $(COMPILED_FILES) -o mainMenu $(LIBS)
 
-mainServidorViejo.o: app/mainServidorViejo.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
-	$(CC) $(DEBUG) -o mainServidorViejo.o app/mainServidorViejo.cpp $(DIRS) -c
+mainServidor.o: app/mainServidor.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
+	$(CC) $(DEBUG) -o mainServidor.o app/mainServidor.cpp $(DIRS) -c
 
 main.o: app/main.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
 	$(CC) $(DEBUG) -c -o main.o app/main.cpp $(DIRS)

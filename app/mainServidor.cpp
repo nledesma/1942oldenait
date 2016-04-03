@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
   /* Se crea el servidor. */
   Servidor * servidor;
   ServidorParser servidorParser;
-  servidor = servidorParser.deserializar("servidorPrueba.xml");
+  servidor = servidorParser.deserializar("resources/xml/servidorDefault.xml");
 
   // Servidor aceptando conexiones
   try{
@@ -20,5 +20,5 @@ int main(int argc, char *argv[]){
   //servidor->esperar();
   //servidor->cerrar();
 
-  return 0;
+  pthread_exit(NULL);
 }
