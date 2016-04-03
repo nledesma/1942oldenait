@@ -45,13 +45,13 @@ void Servidor::pasivar() {
 
 void *Servidor::cicloAceptar(void *THIS) {
     Servidor *servidor = (Servidor *) THIS;
-	int idCliente;
+	int fdCliente;
     while (servidor->servidorActivo()) {
 		try{
-    	idCliente = servidor->aceptar();
+    	fdCliente = servidor->aceptar();
 			pthread_t atender;
 			pthread_create(&atender, NULL, atenderCliente, NULL);
-			servidor->agregarCliente(idCliente, atender);
+			servidor->agregarCliente(fdCliente, atender);
 	  }
 		catch(runtime_error &e){
 			Logger::instance()->logError(errno,"Se produjo un error en el ACCEPT");
@@ -68,13 +68,11 @@ void *Servidor::atenderCliente(void *arg) {
 }
 
 int Servidor::aceptar() {
-	struct sockaddr_in client_addr;
- 	int client_addr_len = sizeof(client_addr);
-	int resulAccept = accept(socketFd, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
+
+	int resulAccept = accept(socketFd,0,0);
 	if(resulAccept == -1){
 		throw runtime_error("ACCEPT_EXCEPTION");
 	}
-	cout << inet_ntoa(client_addr.sin_addr) << endl;
 	return resulAccept;
 }
 
@@ -86,6 +84,7 @@ void Servidor::cerrar() {
         shutdown(clienteActual, 0);
         close(clienteActual);
     }
+
     cerrarSocket();
 
     cout << "Servidor cerrado" << endl;
@@ -114,8 +113,24 @@ void Servidor::desactivarServidor() {
     servidorActivado = false;
 }
 
-void Servidor::agregarCliente(int idCliente, pthread_t thread) {
-    pthread_mutex_lock(&mutexAgregar);
-    clientes.insert(pair<int, pthread_t>(idCliente, thread));
+void Servidor::agregarCliente(int fdCliente, pthread_t thread) {
+	struct sockaddr_in client_addr;
+	int client_addr_len = sizeof(client_addr);
+	getpeername(fdCliente, (sockaddr*) &client_addr, (socklen_t*) &client_addr_len);
+	int port = ntohs(client_addr.sin_port); //
+	char* clientAddress = inet_ntoa(client_addr.sin_addr);
+
+	stringstream ss;
+	ss << "Conectado a un cliente en el puerto: " << clientAddress << ":" << port;
+	const std::string tmp = ss.str();
+	const char* cstr = tmp.c_str();
+
+	Logger::instance()->logInfo(cstr);
+
+//	clientAddress = strcat(clientAddress, &portSeparador);
+//	clientAddress = strcat(clientAddress, pchar);
+//	cout << clientAddress << endl;
+	pthread_mutex_lock(&mutexAgregar);
+    clientes.insert(pair<int, pthread_t>(fdCliente, thread));
     pthread_mutex_unlock(&mutexAgregar);
 }

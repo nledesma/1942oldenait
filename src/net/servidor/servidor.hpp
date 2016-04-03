@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <errno.h>
 #include <cstdlib>
+#include <sstream>
 
 // #include "../../Thread/thread.hpp"
 // #include "../../Thread/threadAtender.hpp"
@@ -26,7 +27,7 @@ using namespace std;
 class Servidor: public GameSocket{
 private:
 	map <int, pthread_t> clientes;
-  struct sockaddr_in addr_info;
+  	struct sockaddr_in addr_info;
 	queue <Mensaje*> colaDeMensajes;
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
 	int cantidadMaximaDeClientes;
