@@ -51,7 +51,12 @@ const char * MensajeString::codificar(){
 	pushearInt(bytes, id);
 
 	bytes += valor;
+	cout << "El mensaje actualmente tiene "<< bytes.length() << " bytes" << endl;
+	imprimirBytes(bytes.c_str(), bytes.length());
 
 	return bytes.c_str();
+}
 
+int MensajeString::lengthValor() {
+	return valor.length();
 }

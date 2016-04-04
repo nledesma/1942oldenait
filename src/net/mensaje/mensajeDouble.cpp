@@ -62,3 +62,7 @@ const char * MensajeDouble::codificar(){
 	return bytes.c_str();
 
 }
+
+int MensajeDouble::lengthValor() {
+	return DOUBLE_SIZE;
+}

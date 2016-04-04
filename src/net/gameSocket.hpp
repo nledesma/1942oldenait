@@ -27,5 +27,4 @@ protected:
 public:
   GameSocket();
 };
-
 #endif // GAME_SOCKET_H

@@ -56,3 +56,7 @@ const char * MensajeChar::codificar(){
 
 	return bytes.c_str();
 }
+
+int MensajeChar::lengthValor() {
+	return 1;
+}

@@ -59,3 +59,7 @@ const char * MensajeInt::codificar(){
 	return bytes.c_str();
 
 }
+
+int MensajeInt::lengthValor() {
+	return INT_SIZE;
+}
