@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <stdio.h>
 
 #define T_STRING 0
 #define T_INT 1
@@ -13,8 +14,6 @@
 #define INT_SIZE 4
 #define DOUBLE_SIZE 8
 #define MENSAJEOK 1
-
-#include <stdio.h>
 
 struct infoMensaje {
     int id;

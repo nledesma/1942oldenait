@@ -5,7 +5,7 @@
 #include <sstream>
 #include "servidor.hpp"
 #include "../../../resources/lib/tinyxml2.h"
-#include "../../logger.hpp"
+#include "../../logger/logger.hpp"
 using namespace std;
 
 class ServidorParser{

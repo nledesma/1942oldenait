@@ -87,7 +87,7 @@ Cliente * ClienteParser::deserializador(string ruta){
 		stringstream ss;
 		ss << "Error al cargar el mensaje. Código: " << eResult;
 		Logger::instance()->logInfo(ss.str());
-		doc.LoadFile("resources/xml/clienteDefault.xml");
+		doc.LoadFile("../../resources/xml/clienteDefault.xml");
 	}
 
 	XMLNode * pRoot = doc.FirstChild();

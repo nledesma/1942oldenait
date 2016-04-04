@@ -43,8 +43,8 @@ void Mensaje::pushearDouble(string &str, int n){
 infoMensaje Mensaje::decodificarInfo(char * pInfoMensaje){
 	infoMensaje informacion;
 	informacion.tipo = (int) pInfoMensaje[0];
-	informacion.longitud = (pInfoMensaje[1] << 24) + (pInfoMensaje[2] << 16) + (pInfoMensaje[3] << 8) + pInfoMensaje[4];
-	informacion.id = (pInfoMensaje[5] << 24) + (pInfoMensaje[6] << 16) + (pInfoMensaje[7] << 8) + pInfoMensaje[8];
+	memcpy(&informacion.longitud, pInfoMensaje + 1, INT_SIZE);
+	memcpy(&informacion.id, pInfoMensaje +1 + INT_SIZE, INT_SIZE);
 	return informacion;
 }
 

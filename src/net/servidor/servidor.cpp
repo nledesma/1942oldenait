@@ -37,10 +37,10 @@ void Servidor::setAddress(int port) {
 }
 
 void Servidor::pasivar() {
-  int resultadoListen = listen(this->socketFd, this->cantidadMaximaDeClientes);
-  cout << "ESTE ES EL RESULTADO DEL LISTEN: " << resultadoListen << endl;
-  if (resultadoListen == -1) {
-      throw runtime_error("LISTEN_EXCEPTION");
+    int resultadoListen = listen(this->socketFd, this->cantidadMaximaDeClientes);
+    cout << "ESTE ES EL RESULTADO DEL LISTEN: " << resultadoListen << endl;
+    if (resultadoListen == -1) {
+        throw runtime_error("LISTEN_EXCEPTION");
     }
     servidorActivado = true;
     pthread_create(&this->cicloAceptaciones, NULL, cicloAceptar, (void *) this);
@@ -54,7 +54,7 @@ void *Servidor::cicloAceptar(void *THIS) {
             // Agregar funcion que checkea clientes cerrados
             fdCliente = servidor->aceptar();
             pthread_t atender;
-            pair <Servidor*, int> arg(servidor, fdCliente);
+            pair<Servidor *, int> arg(servidor, fdCliente);
             pthread_create(&atender, NULL, atenderCliente, &arg);
             servidor->agregarCliente(fdCliente, atender);
         }
@@ -68,19 +68,19 @@ void *Servidor::cicloAceptar(void *THIS) {
 }
 
 void *Servidor::atenderCliente(void *arg) {
-    pair <Servidor*, int>* parServidorCliente = (pair <Servidor*, int>*) arg;
-    Servidor* servidor = parServidorCliente->first;
+    pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
+    Servidor *servidor = parServidorCliente->first;
     int clientfd = parServidorCliente->second;
     cout << "Atendiendo un cliente" << endl;
     int recieveResult = ESTADO_INICIAL;
-    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR){
-        Mensaje* mensajeCliente;
+    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR) {
+        Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
         string mensajeString = mensajeCliente->strValor();
         stringstream ss;
         ss << "Se recibió el mensaje '" << mensajeString << "'";
         Logger::instance()->logInfo(ss.str());
-        pair <int, Mensaje*> clienteMensaje(clientfd, mensajeCliente);
+        pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
         servidor->encolarMensaje(clienteMensaje);
     }
     servidor->quitarCliente(clientfd);
@@ -133,7 +133,7 @@ void Servidor::desactivarServidor() {
     servidorActivado = false;
 }
 
-void Servidor::encolarMensaje(pair <int, Mensaje*> clienteMensaje){
+void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {
     pthread_mutex_lock(&mutexDesencolar);
     pthread_mutex_lock(&mutexCola);
     this->colaDeMensajes.push(clienteMensaje);
@@ -160,33 +160,33 @@ void Servidor::agregarCliente(int fdCliente, pthread_t thread) {
     pthread_mutex_unlock(&mutexAgregar);
 }
 
-void Servidor::quitarCliente(int clientfd){
-    const char* direccionCliente = this->clientes.find(clientfd)->second.dir;
+void Servidor::quitarCliente(int clientfd) {
+    const char *direccionCliente = this->clientes.find(clientfd)->second.dir;
     string tmp(direccionCliente);
     Logger::instance()->logInfo("Cliente en la dirección " + tmp + " desconectado.");
-    this->clientes.erase (clientfd);
+    this->clientes.erase(clientfd);
 }
 
-void * Servidor::cicloDesencolar(void *THIS){
-    Servidor * servidor = (Servidor * ) THIS;
-    while(servidor->servidorActivo()){
-      servidor->desencolar();
+void *Servidor::cicloDesencolar(void *THIS) {
+    Servidor *servidor = (Servidor *) THIS;
+    while (servidor->servidorActivo()) {
+        servidor->desencolar();
     }
     pthread_exit(NULL);
 }
 
-void Servidor::desencolar(){
+void Servidor::desencolar() {
     pthread_mutex_lock(&mutexDesencolar);
-    while (colaDeMensajes.empty()){
+    while (colaDeMensajes.empty()) {
         pthread_cond_wait(&condDesencolar, &mutexDesencolar);
     }
     pthread_mutex_unlock(&mutexDesencolar);
 
     pthread_mutex_lock(&mutexCola);
-    pair<int, Mensaje*> msg = colaDeMensajes.front();
+    pair<int, Mensaje *> msg = colaDeMensajes.front();
     colaDeMensajes.pop();
     pthread_mutex_unlock(&mutexCola);
 
     Logger::instance()->logInfo("Mensaje desencolado del cliente " + std::to_string(msg.first)
-        + " con valor '" + msg.second->strValor() +"'");
+                                + " con valor '" + msg.second->strValor() + "'");
 }

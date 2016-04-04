@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
   /* Se crea el servidor. */
   Servidor * servidor;
   ServidorParser servidorParser;
-  servidor = servidorParser.deserializar("resources/xml/servidorDefault.xml");
+  servidor = servidorParser.deserializar("../../resources/xml/servidorDefault.xml");
 
   // Servidor aceptando conexiones
   try{

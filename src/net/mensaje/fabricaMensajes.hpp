@@ -6,7 +6,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "../../logger.hpp"
+#include "../../logger/logger.hpp"
 using namespace std;
 
 class FabricaMensajes {

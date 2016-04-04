@@ -16,7 +16,7 @@ MensajeDouble::MensajeDouble(infoMensaje datos, char * unValor):Mensaje() {
 	id = datos.id;
 	tipo = datos.tipo;
 	double valorDecodificado;
-	memcpy( &valorDecodificado , unValor , sizeof( double ) );
+	memcpy( &valorDecodificado , unValor , DOUBLE_SIZE );
 	valor = valorDecodificado;
 }
 

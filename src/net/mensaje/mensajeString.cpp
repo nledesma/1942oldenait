@@ -15,6 +15,7 @@ MensajeString::MensajeString(infoMensaje datos, char * unValor):Mensaje() {
 	id = datos.id;
 	tipo = datos.tipo;
 	valor = string(unValor);
+	cout << valor << endl;
 }
 
 void MensajeString::setValor(string unValor) {

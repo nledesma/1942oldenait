@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <iostream>
 #include "mensaje/mensaje.hpp"
-#include "../logger.hpp"
+#include "../logger/logger.hpp"
 using namespace std;
 
 #define PEER_DESCONECTADO 0

@@ -32,7 +32,7 @@ Servidor * ServidorParser::deserializar(string ruta) {
 	if (eResult != XML_NO_ERROR){
 		Logger::instance()->logError(eResult, "Error al cargar el xml de servidor.");
 		Logger::instance()->logInfo("Cargando XML de servidor por defecto.");
-		doc.LoadFile("resources/xml/servidorDefault.xml");
+		doc.LoadFile("../../resources/xml/servidorDefault.xml");
 	}
 
 	XMLNode * pRoot = doc.FirstChildElement();

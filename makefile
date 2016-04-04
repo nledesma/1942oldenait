@@ -3,8 +3,11 @@ DIRS = -Inet -IThread
 WAR = -Wall -pedantic
 NET_PATH = src/net/
 THREAD_PATH = src/Thread/
-LOGGER_PATH = src/
+LOGGER_PATH = src/logger/
 DEBUG = -g -O0
+BIN = bin/
+CLIENTE = $(BIN)/cliente/
+SERVIDOR = $(BIN)/servidor/
 CC = g++ -std=c++11
 COMPILED_FILES = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o clienteParser.o
 
@@ -14,13 +17,10 @@ program: main.o $(COMPILED_FILES)
 	$(CC) $(WAR) main.o $(COMPILED_FILES) -o program  $(LIBS)
 
 mainServidor: mainServidor.o $(COMPILED_FILES)
-	$(CC) $(DEBUG) $(WAR) mainServidor.o $(COMPILED_FILES) -o servidor $(LIBS)
+	$(CC) $(DEBUG) $(WAR) mainServidor.o $(COMPILED_FILES) -o $(SERVIDOR)servidor $(LIBS)
 
 mainCliente: mainCliente.o $(COMPILED_FILES)
-	$(CC) $(DEBUG) $(WAR) mainCliente.o $(COMPILED_FILES) -o cliente $(LIBS)
-
-mainMenu: mainMenu.o $(COMPILED_FILES)
-	$(CC) $(DEBUG) $(WAR) mainMenu.o $(COMPILED_FILES) -o mainMenu $(LIBS)
+	$(CC) $(DEBUG) $(WAR) mainCliente.o $(COMPILED_FILES) -o $(CLIENTE)cliente $(LIBS)
 
 mainServidor.o: app/mainServidor.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
 	$(CC) $(DEBUG) -o mainServidor.o app/mainServidor.cpp $(DIRS) -c
@@ -30,9 +30,6 @@ main.o: app/main.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente
 
 mainCliente.o: app/mainCliente.cpp $(NET_PATH)cliente/cliente.cpp $(NET_PATH)cliente/clienteParser.cpp $(NET_PATH)gameSocket.cpp
 	$(CC) $(DEBUG) -c -o mainCliente.o app/mainCliente.cpp
-
-mainMenu.o: app/mainMenu.cpp $(NET_PATH)cliente/cliente.cpp $(NET_PATH)cliente/clienteParser.cpp
-	$(CC) $(DEBUG) -c -o mainMenu.o app/mainMenu.cpp
 
 cliente.o: $(NET_PATH)cliente/cliente.cpp src/net/gameSocket.cpp $(NET_PATH)mensaje/mensaje.cpp $(LOGGER_PATH)logger.cpp
 	$(CC) $(DEBUG) $(WAR) -c -o cliente.o $(NET_PATH)cliente/cliente.cpp
