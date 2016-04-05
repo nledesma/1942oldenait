@@ -11,10 +11,7 @@ SERVIDOR = $(BIN)/servidor/
 CC = g++ -std=c++11
 COMPILED_FILES = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o clienteParser.o
 
-all: program mainServidor mainCliente mainMenu clean
-
-program: main.o $(COMPILED_FILES)
-	$(CC) $(WAR) main.o $(COMPILED_FILES) -o program  $(LIBS)
+all: mainServidor mainCliente clean
 
 mainServidor: mainServidor.o $(COMPILED_FILES)
 	$(CC) $(DEBUG) $(WAR) mainServidor.o $(COMPILED_FILES) -o $(SERVIDOR)servidor $(LIBS)
@@ -24,9 +21,6 @@ mainCliente: mainCliente.o $(COMPILED_FILES)
 
 mainServidor.o: app/mainServidor.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
 	$(CC) $(DEBUG) -o mainServidor.o app/mainServidor.cpp $(DIRS) -c
-
-main.o: app/main.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
-	$(CC) $(DEBUG) -c -o main.o app/main.cpp $(DIRS)
 
 mainCliente.o: app/mainCliente.cpp $(NET_PATH)cliente/cliente.cpp $(NET_PATH)cliente/clienteParser.cpp $(NET_PATH)gameSocket.cpp
 	$(CC) $(DEBUG) -c -o mainCliente.o app/mainCliente.cpp
