@@ -72,7 +72,7 @@ int GameSocket::enviarMensaje(Mensaje *mensaje, int fdReceptor) {
 
 }
 
-int GameSocket::recibirMensaje(Mensaje *mensaje, int fdEmisor) {
+int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     char pInfoMensaje[LONG_INFO_MENSAJE];
     int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
     if (resultado == MENSAJEOK) {
