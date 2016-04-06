@@ -63,7 +63,8 @@ void menuPrincipal(Cliente * cliente) {
 
 int main(){
     ClienteParser * clienteParser = new ClienteParser();
-    string url = "../../resources/xml/clienteDefault.xml";
+    // TODO Esto debería pasarse por argv y argc.
+    string url = "../../resources/xml/cliente.xml";
     Cliente * cliente = clienteParser->deserializador(url);
     menuPrincipal(cliente);
     return 0;
