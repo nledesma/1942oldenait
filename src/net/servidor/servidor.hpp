@@ -64,6 +64,7 @@ public:
 	bool servidorActivo();
 	void encolarMensaje(pair <int, Mensaje*> clienteMensaje);
 	void desencolar();
+	void revisarClienteConectado(int fdCliente);
 };
 
 #endif

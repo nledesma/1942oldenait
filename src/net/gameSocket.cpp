@@ -47,8 +47,8 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
                              0); // Recv retorna la cantidad de bytes recibidos.
 
         bytesRecibidos += bytesActuales;
+        cout << "Recibidos " << bytesRecibidos << " bytes:" << endl;
         imprimirBytes(pMensaje, bytesRecibidos);
-        cout << "recibidos " << bytesRecibidos << " bytes" << endl;
     }
     if (bytesActuales == -1) {
         Logger::instance()->logInfo("Error al recibir bytes (socket).");
@@ -62,8 +62,15 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
 }
 
 void GameSocket::cerrarSocket() {
-    shutdown(socketFd, 0); //Dejo de transmitir datos
-    close(socketFd);
+    int cerrado = shutdown(socketFd, 0); //Dejo de transmitir datos
+
+    if(cerrado == 0){
+        cout << "Se cerró la conexión con el servidor" << endl;
+        close(socketFd);
+    } else {
+        cout << "Hubo un error al cerrar la conexion (shutdown error)" << endl;
+        Logger::instance()->logError(errno,"Error al cerrar la conexion"); //TODO
+    }
 }
 
 int GameSocket::enviarMensaje(Mensaje *mensaje, int fdReceptor) {

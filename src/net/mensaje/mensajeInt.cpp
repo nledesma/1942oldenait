@@ -1,8 +1,3 @@
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <sstream>
 #include "mensajeInt.hpp"
 using namespace std;
 
@@ -14,7 +9,8 @@ MensajeInt::MensajeInt(int unId, string unValor):Mensaje() {
 MensajeInt::MensajeInt(infoMensaje datos, char * unValor):Mensaje() {
 	id = datos.id;
 	tipo = datos.tipo;
-	valor = (unValor[0] << 24) + (unValor[1] << 16) + (unValor[2] << 8) + unValor[3];
+
+	memcpy((void*) &valor,(void*) unValor, INT_SIZE);
 }
 
 void MensajeInt::setValor(int unValor) {

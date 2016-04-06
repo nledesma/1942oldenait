@@ -2,8 +2,10 @@
 #define MENSAJE_H
 
 #include <string>
+#include <cstring>
 #include <iostream>
 #include <stdio.h>
+
 
 #define T_STRING 0
 #define T_INT 1

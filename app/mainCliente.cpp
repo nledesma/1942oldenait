@@ -8,11 +8,12 @@ void menuMensajes(Cliente * cliente);
 void menuPrincipal(Cliente * cliente);
 
 void menuMensajes(Cliente * cliente) {
-    cout << "Elija el mensaje que desea enviar. Para volver al menú anterior, presione 0: " <<endl;
+    cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
     list<Mensaje*>::iterator iterador;
     int indice = 1;
     for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
         cout << indice << ". Mensaje ID = " << (*iterador)->getId() << endl;
+        ++indice;
     }
     int opcionElegida;
     cin >> opcionElegida;
@@ -63,7 +64,8 @@ void menuPrincipal(Cliente * cliente) {
 
 int main(){
     ClienteParser * clienteParser = new ClienteParser();
-    string url = "../../resources/xml/clienteDefault.xml";
+    // TODO Esto debería pasarse por argv y argc.
+    string url = "../../resources/xml/cliente.xml";
     Cliente * cliente = clienteParser->deserializador(url);
     menuPrincipal(cliente);
     return 0;

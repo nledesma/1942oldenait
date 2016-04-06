@@ -12,6 +12,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <chrono>
+#include <sstream>
 using namespace std;
 
 class Cliente: public GameSocket{

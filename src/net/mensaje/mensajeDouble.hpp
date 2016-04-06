@@ -3,6 +3,12 @@
 
 #include "mensaje.hpp"
 #include <string>
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cstdlib>
+#include <sstream>
 
 using namespace std;
 

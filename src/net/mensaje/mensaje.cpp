@@ -43,13 +43,14 @@ void Mensaje::pushearDouble(string &str, int n){
 infoMensaje Mensaje::decodificarInfo(char * pInfoMensaje){
 	infoMensaje informacion;
 	informacion.tipo = (int) pInfoMensaje[0];
-	memcpy(&informacion.longitud, pInfoMensaje + 1, INT_SIZE);
-	memcpy(&informacion.id, pInfoMensaje +1 + INT_SIZE, INT_SIZE);
+	memcpy(& informacion.longitud, pInfoMensaje + 1, INT_SIZE);
+	memcpy(& informacion.id, pInfoMensaje + 1 + INT_SIZE, INT_SIZE);
 	return informacion;
 }
 
 void imprimirBytes(const char *bytes, int n){
 	for (int i = 0; i < n; i++){
-		cout << (int) bytes[i] << endl;
+		cout << (int) bytes[i] << " ";
 	}
+	cout << endl;
 }

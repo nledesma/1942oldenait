@@ -1,9 +1,3 @@
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <cstdlib>
-#include <sstream>
 #include "mensajeDouble.hpp"
 using namespace std;
 
