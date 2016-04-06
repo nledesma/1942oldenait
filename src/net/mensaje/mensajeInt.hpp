@@ -1,6 +1,11 @@
 #ifndef MENSAJE_INT_H
 #define MENSAJE_INT_H
 
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <sstream>
 #include "mensaje.hpp"
 #include <string>
 

@@ -1,7 +1,3 @@
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <cstdlib>
 #include "mensajeChar.hpp"
 
 using namespace std;
