@@ -93,7 +93,10 @@ int Cliente::enviarMensajePorId(int idMensaje) {
 			int msj = GameSocket::enviarMensaje(mensaje, this->socketFd);
 			return msj;
 		} else {
-				Logger::instance()->logInfo("No existe un mensaje con id indicado");
+				stringstream ss;
+				ss << "No existe un mensaje con el id indicado (" << idMensaje << ")";
+				Logger::instance()->logInfo(ss.str());
+				cout << ss.str() << endl;
 		}
 		return -1;
 }

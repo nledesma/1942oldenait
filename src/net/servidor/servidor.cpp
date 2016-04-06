@@ -80,14 +80,15 @@ void *Servidor::atenderCliente(void *arg) {
     while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR) {
         Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
-        if(recieveResult < 0) { //Es menor que 0 porque el valor de exito es -1 porque el sorete que codeo esto flasheo los codigos al reves 
-            string mensajeString = mensajeCliente->strValor();
-            stringstream ss;
-            ss << "Se recibió el mensaje '" << mensajeString << "'";
-            Logger::instance()->logInfo(ss.str());
+        if(recieveResult == MENSAJEOK) {
+            string ss = "Se recibió el mensaje '" + mensajeCliente->strValor() + "'.";
+            cout << ss << endl;
+            Logger::instance()->logInfo(ss);
             pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
-            servidor->encolarMensaje(clienteMensaje);            
-        } 
+            servidor->encolarMensaje(clienteMensaje);
+        } else {
+          cout << "Error al recibir mensaje." << endl;
+        }
     } //TODO : No llega hasta acá (al quitarCliente)... revisar
     servidor->quitarCliente(clientfd);
     pthread_exit(NULL);
@@ -140,6 +141,7 @@ void Servidor::desactivarServidor() {
 }
 
 void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {
+    cout << "Encolando mensaje de id " << clienteMensaje.second->getId() << endl;
     pthread_mutex_lock(&mutexDesencolar);
     pthread_mutex_lock(&mutexCola);
     this->colaDeMensajes.push(clienteMensaje);

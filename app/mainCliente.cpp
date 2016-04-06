@@ -8,11 +8,12 @@ void menuMensajes(Cliente * cliente);
 void menuPrincipal(Cliente * cliente);
 
 void menuMensajes(Cliente * cliente) {
-    cout << "Elija el mensaje que desea enviar. Para volver al menú anterior, presione 0: " <<endl;
+    cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
     list<Mensaje*>::iterator iterador;
     int indice = 1;
     for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
         cout << indice << ". Mensaje ID = " << (*iterador)->getId() << endl;
+        ++indice;
     }
     int opcionElegida;
     cin >> opcionElegida;
