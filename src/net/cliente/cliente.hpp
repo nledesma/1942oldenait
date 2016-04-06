@@ -36,6 +36,7 @@ public:
   int enviarMensajePorId(int idMensaje);
   void ciclarMensajes(int milisegundos);
   list <Mensaje*>& getMensajes();
+  void recibirMensaje(Mensaje * &mensaje);
 
 };
 #endif // CLIENTE_H

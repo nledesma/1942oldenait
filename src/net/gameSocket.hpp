@@ -23,6 +23,7 @@ protected:
   int recibirMensaje(Mensaje* &mensaje, int fdEmisor);
   void cerrarSocket();
   struct sockaddr_in addr_info;
+  void iniciarSocket();
 
 public:
   GameSocket();

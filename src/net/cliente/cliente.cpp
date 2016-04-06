@@ -32,10 +32,15 @@ void Cliente::setAddress(string serverAddress, int port){
 
 int Cliente::conectar(){
 	// Me conecto a la direccion.
+	iniciarSocket();
 	int conexion;
 	try {
 		int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
 		conexion = connected;
+		if(connected == 0) {
+			Logger::instance()->logInfo("Conexión exitosa");
+			cout << "Conexión exitosa" << endl;
+		}
 		if (connected == -1){
     		cout << "La conexión falló, error " << errno << endl;
 			throw runtime_error("CLIENTE_EXCEPTION");
@@ -139,3 +144,7 @@ void Cliente::ciclarMensajes(int milisegundos) {
 		d = chrono::duration_cast<ms>(fs);
 	}
 }
+
+ void Cliente::recibirMensaje(Mensaje * &mensaje) {
+		GameSocket::recibirMensaje(mensaje, this->socketFd);
+ }

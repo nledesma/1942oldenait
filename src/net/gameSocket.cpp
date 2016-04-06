@@ -12,6 +12,9 @@ using namespace std;
 
 GameSocket::GameSocket() {
     // Se inicializa el socket para dominios IPv4, tipo de conexión SOCK_STREAM (TCP), y protocolo a definir
+}
+
+void GameSocket::iniciarSocket() {
     this->socketFd = socket(PF_INET, SOCK_STREAM, 0);
 }
 

@@ -42,6 +42,7 @@ private:
 	int puerto;
 	bool servidorActivado;
 	pthread_t cicloAceptaciones;
+	pthread_t cicloDesencolaciones;
 
 public:
 	Servidor(int port, int cantidadDeClientes);
