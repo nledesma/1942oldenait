@@ -38,7 +38,7 @@ void Servidor::setAddress(int port) {
 
 void Servidor::pasivar() {
     int resultadoListen = listen(this->socketFd, this->cantidadMaximaDeClientes);
-    cout << "ESTE ES EL RESULTADO DEL LISTEN: " << resultadoListen << endl;
+    cout << "Esperando conexión ... " << endl;
     if (resultadoListen == -1) {
         throw runtime_error("LISTEN_EXCEPTION");
     }
@@ -51,7 +51,6 @@ void *Servidor::cicloAceptar(void *THIS) {
     int fdCliente;
     while (servidor->servidorActivo()) {
         try {
-            // Agregar funcion que checkea clientes cerrados
             fdCliente = servidor->aceptar();
             pthread_t atender;
             pair<Servidor *, int> arg(servidor, fdCliente);
@@ -67,6 +66,11 @@ void *Servidor::cicloAceptar(void *THIS) {
     pthread_exit(NULL);
 }
 
+void Servidor::revisarClienteConectado(int fdCliente){
+    int transmitiendo = recv(fdCliente,NULL,0,0);
+    cout << "Resultado de transmitiendo: " << transmitiendo << endl;
+}
+
 void *Servidor::atenderCliente(void *arg) {
     pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
     Servidor *servidor = parServidorCliente->first;
@@ -76,13 +80,15 @@ void *Servidor::atenderCliente(void *arg) {
     while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR) {
         Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
-        string mensajeString = mensajeCliente->strValor();
-        stringstream ss;
-        ss << "Se recibió el mensaje '" << mensajeString << "'";
-        Logger::instance()->logInfo(ss.str());
-        pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
-        servidor->encolarMensaje(clienteMensaje);
-    }
+        if(recieveResult < 0) { //Es menor que 0 porque el valor de exito es -1 porque el sorete que codeo esto flasheo los codigos al reves 
+            string mensajeString = mensajeCliente->strValor();
+            stringstream ss;
+            ss << "Se recibió el mensaje '" << mensajeString << "'";
+            Logger::instance()->logInfo(ss.str());
+            pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
+            servidor->encolarMensaje(clienteMensaje);            
+        } 
+    } //TODO : No llega hasta acá (al quitarCliente)... revisar
     servidor->quitarCliente(clientfd);
     pthread_exit(NULL);
 }

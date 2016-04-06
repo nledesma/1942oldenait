@@ -32,15 +32,22 @@ void Cliente::setAddress(string serverAddress, int port){
 
 int Cliente::conectar(){
 	// Me conecto a la direccion.
-	int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
-  if (connected == -1){
-    cout << "La conexión falló, error" << errno << endl;
-		throw runtime_error("CLIENTE_EXCEPTION");
-  }
-  return connected;
+	int conexion;
+	try {
+		int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
+		conexion = connected;
+		if (connected == -1){
+    		cout << "La conexión falló, error " << errno << endl;
+			throw runtime_error("CLIENTE_EXCEPTION");
+  		}
+  	} catch(runtime_error &e){
+        Logger::instance()->logError(errno,"Se produjo un error en el connect");
+    }
+    return conexion;
 }
 
 void Cliente::cerrar(){
+	cout << "Estamos por cerrar el socket ameo" << endl;
 	cerrarSocket();
 }
 
