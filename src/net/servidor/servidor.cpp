@@ -4,6 +4,7 @@ using namespace std;
 
 Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     try {
+        iniciarSocket();
         inicializar(port);
     } catch (runtime_error &e) {
         Logger::instance()->logError(errno, "Se produjo un error en el BIND");
@@ -44,6 +45,7 @@ void Servidor::pasivar() {
     }
     servidorActivado = true;
     pthread_create(&this->cicloAceptaciones, NULL, cicloAceptar, (void *) this);
+    pthread_create(&this->cicloDesencolaciones, NULL, cicloDesencolar, (void *) this );
 }
 
 void *Servidor::cicloAceptar(void *THIS) {
@@ -59,7 +61,6 @@ void *Servidor::cicloAceptar(void *THIS) {
         }
         catch (runtime_error &e) {
             Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
-            cout << "La conexión falló, por favor intente nuevamente conectarse" << endl;
             //TODO llamar mainMenu()
         }
     }
@@ -194,7 +195,8 @@ void Servidor::desencolar() {
     pair<int, Mensaje *> msg = colaDeMensajes.front();
     colaDeMensajes.pop();
     pthread_mutex_unlock(&mutexCola);
-
+    enviarMensaje(msg.second, msg.first);
+    delete msg.second;
     Logger::instance()->logInfo("Mensaje desencolado del cliente " + std::to_string(msg.first)
                                 + " con valor '" + msg.second->strValor() + "'");
 }
