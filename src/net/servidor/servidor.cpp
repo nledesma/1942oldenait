@@ -58,7 +58,7 @@ void *Servidor::cicloAceptar(void *THIS) {
             pair<Servidor *, int> arg(servidor, fdCliente);
             pthread_create(&atender, NULL, atenderCliente, &arg);
             pthread_create(&responder, NULL, responderCliente, &arg);
-            servidor->agregarCliente(fdCliente, atender);
+            servidor->agregarCliente(fdCliente, atender, responder);
         } catch (runtime_error &e) {
             Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
         }
@@ -85,6 +85,7 @@ void *Servidor::atenderCliente(void *arg) {
             cout << ss << endl;
             Logger::instance()->logInfo(ss);
             pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
+            cout << "Encolando mensaje de id " << clienteMensaje.second->getId() << endl;
             servidor->encolarMensaje(clienteMensaje);
         } else {
           cout << "Error al recibir mensaje." << endl;
@@ -94,7 +95,7 @@ void *Servidor::atenderCliente(void *arg) {
     pthread_exit(NULL);
 }
 
-
+// Ciclo que desencola la salida para cada cliente.
 void * Servidor::responderCliente(void* arg){
     pair <Servidor *, int> *servidorPar = (pair <Servidor *, int>*) arg;
     Servidor * servidor = servidorPar->first;
@@ -108,24 +109,14 @@ void * Servidor::responderCliente(void* arg){
 }
 
 void Servidor::desencolarSalidaCliente(int clienteFd){
-    queue<Mensaje*> *colaSalida = &(clientes[clienteFd].colaSalida);
-
-    pthread_mutex_lock(&mutexColaSalida);
-    while (colaSalida->empty()) {
-      pthread_cond_wait(&condDesencolar, &mutexColaSalida);
-    }
-    pthread_mutex_unlock(&mutexColaSalida);
-
-    pthread_mutex_lock(&mutexColaSalida);
-    Mensaje * mensaje = colaSalida->front();
-    colaSalida->pop();
-    pthread_mutex_unlock(&mutexColaSalida);
-
+    ColaConcurrente<Mensaje*> *colaSalida = &(clientes[clienteFd].colaSalida);
+    Mensaje* mensaje = colaSalida->pop();
     procesarMensaje(mensaje);
 }
 
-void procesarMensaje(Mensaje* mensaje){
+void Servidor::procesarMensaje(Mensaje* mensaje){
   //TODO TODO TODO URGENTE.
+  //HOLA
 }
 
 int Servidor::aceptar() {
@@ -176,16 +167,10 @@ void Servidor::desactivarServidor() {
 }
 
 void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {
-    cout << "Encolando mensaje de id " << clienteMensaje.second->getId() << endl;
-    pthread_mutex_lock(&mutexDesencolar);
-    pthread_mutex_lock(&mutexCola);
     this->colaDeMensajes.push(clienteMensaje);
-    pthread_cond_signal(&condDesencolar);
-    pthread_mutex_unlock(&mutexCola);
-    pthread_mutex_unlock(&mutexDesencolar);
 }
 
-void Servidor::agregarCliente(int fdCliente, pthread_t thread) {
+void Servidor::agregarCliente(int fdCliente, pthread_t threadEntrada, pthread_t threadSalida) {
     struct sockaddr_in client_addr;
     int client_addr_len = sizeof(client_addr);
     getpeername(fdCliente, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
@@ -194,7 +179,11 @@ void Servidor::agregarCliente(int fdCliente, pthread_t thread) {
 
     stringstream direccionCliente;
     direccionCliente << clientAddress << ":" << port;
-    datosCliente datos = {.th_entrada = thread, .dir = direccionCliente.str().c_str()};
+    datosCliente datos = {
+      .th_entrada = threadEntrada,
+      .th_salida = threadSalida,
+      .dir = direccionCliente.str().c_str()
+    };
 
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
 
@@ -219,29 +208,13 @@ void *Servidor::cicloDesencolar(void *THIS) {
 }
 
 void Servidor::encolarSalida(int clienteFd, Mensaje* mensaje){
-    queue<Mensaje*> * colaSalida = &(clientes[clienteFd].colaSalida);
-    // TODO si estalla todo agregar más mutex. Se agregarían en el struct.
-    pthread_mutex_lock(&mutexColaSalida);
-    colaSalida->push(mensaje);
-    pthread_mutex_unlock(&mutexColaSalida);
+    clientes[clienteFd].colaSalida.push(mensaje);
 }
 
 void Servidor::desencolar() {
-    pthread_mutex_lock(&mutexDesencolar);
-    while (colaDeMensajes.empty()) {
-        pthread_cond_wait(&condDesencolar, &mutexDesencolar);
-    }
-    pthread_mutex_unlock(&mutexDesencolar);
-
-    pthread_mutex_lock(&mutexCola);
-    pair<int, Mensaje *> msg = colaDeMensajes.front();
-    colaDeMensajes.pop();
-    pthread_mutex_unlock(&mutexCola);
+    pair<int, Mensaje*> clienteMensaje = colaDeMensajes.pop();
     // Mandar a la variable de salida y darle una señal al thread de salida.
-
-    delete msg.second;
-
-
-    //Logger::instance()->logInfo("Mensaje desencolado del cliente " + std::to_string(msg.first)
-    //                            + " con valor '" + msg.second->strValor() + "'");
+    encolarSalida(clienteMensaje.first, clienteMensaje.second);
+    // TODO Esto se borra acá?
+    delete clienteMensaje.second;
 }

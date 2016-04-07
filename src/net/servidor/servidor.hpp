@@ -17,30 +17,23 @@
 #include <errno.h>
 #include <cstdlib>
 #include <sstream>
+#include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 
-// #include "../../Thread/thread.hpp"
-// #include "../../Thread/threadAtender.hpp"
-// #include "../../Thread/threadAceptar.hpp"
 using namespace std;
-// class Thread;
 
 struct datosCliente{
 	pthread_t th_entrada;
 	pthread_t th_salida;
 	const char* dir;
-	queue<Mensaje *> colaSalida;
+	ColaConcurrente<Mensaje *> colaSalida;
 };
 
 class Servidor: public GameSocket{
 private:
 	map <int, datosCliente> clientes;
   	struct sockaddr_in addr_info;
-	queue < pair<int, Mensaje*> > colaDeMensajes;
+	ColaConcurrente < pair<int, Mensaje*> > colaDeMensajes;
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
-	pthread_mutex_t mutexCola = PTHREAD_MUTEX_INITIALIZER;
-	pthread_mutex_t mutexDesencolar = PTHREAD_MUTEX_INITIALIZER;
-	pthread_mutex_t mutexColaSalida = PTHREAD_MUTEX_INITIALIZER;
-	pthread_cond_t condDesencolar = PTHREAD_COND_INITIALIZER;
 	int cantidadMaximaDeClientes;
 	int puerto;
 	bool servidorActivado;
@@ -60,7 +53,7 @@ public:
 	void cerrar();
 	int getPuerto();
 	void setPuerto(int unPuerto);
-	void agregarCliente(int idCliente, pthread_t thread);
+	void agregarCliente(int idCliente, pthread_t threadEntrada, pthread_t threadSalida);
 	void quitarCliente(int fdCliente);
 	static void *atenderCliente(void* arg);
 	static void *responderCliente(void* arg);

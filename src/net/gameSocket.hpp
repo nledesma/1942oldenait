@@ -8,6 +8,7 @@
 #include <iostream>
 #include "mensaje/mensaje.hpp"
 #include "../logger/logger.hpp"
+#include "../accesorios/colaConcurrente/colaConcurrente.hpp"
 using namespace std;
 
 #define PEER_DESCONECTADO 0
