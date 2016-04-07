@@ -1,56 +1,89 @@
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <cstring>
 #include "mensaje.hpp"
-
-using namespace std;
-
-Mensaje::Mensaje(){}
-
-void Mensaje::setId(int unId) {
-	id = unId;
+// POR ahí podría recibir char array, que viene del xml.
+Mensaje::Mensaje(int tipo, string id, string valor){
+  set(tipo, id, valor);
 }
 
-int Mensaje::getId() {
-	return id;
+void Mensaje::set(int tipo, string id, string valor){
+  this->tipo = tipo;
+  this->id = id;
+  this->valor = valor;
 }
 
-// TODO por qué no se puede descomentar esto?
-Mensaje::~Mensaje(){}
-
-void Mensaje::pushearInt(string &str, int n){
-	char bytes[INT_SIZE];
-	//memcopy
-	memcpy((void*)bytes, (void*)&n, INT_SIZE);
-
-	for (unsigned int i = 0 ; i < INT_SIZE; i++){
-		str += bytes[i];
-	}
+Mensaje::Mensaje(infoMensaje datos, char* contenido){
+  set(datos, contenido);
 }
 
-void Mensaje::pushearDouble(string &str, int n){
-	char bytes[DOUBLE_SIZE];
-	//memcopy
-	memcpy((void*)bytes, (void*)&n, DOUBLE_SIZE);
+void Mensaje::set(infoMensaje datos, char* contenido){
+  // El contenido el id y el valor concatenados.
+  tipo = datos.tipo;
+  // Ahora separamos el contenido.
+  string id(contenido, datos.longitudId);
+  string valor(contenido, datos.longitudId, datos.longitudValor);
 
-	for (unsigned int i = 0 ; i < DOUBLE_SIZE; i++){
-		str += bytes[i];
-	}
+  this->id = id;
+  this->valor = valor;
 }
 
-infoMensaje Mensaje::decodificarInfo(char * pInfoMensaje){
-	infoMensaje informacion;
+string Mensaje::getId(){
+  return id;
+}
+
+string Mensaje::getValor(){
+  return valor;
+}
+
+string Mensaje::strTipo(){
+  if (tipo == T_STRING) return "string";
+  if (tipo == T_CHAR) return "char";
+  if (tipo == T_INT) return "int";
+  if (tipo == T_DOUBLE) return "double";
+  return "ERROR";
+}
+
+const char *Mensaje::codificar(){
+  string bytes = "";
+  bytes += (char) tipo;
+  pushearInt(bytes, tipo);
+  pushearInt(bytes, id.length());
+  pushearInt(bytes, valor.length());
+  bytes += id + valor;
+  return bytes.c_str();
+}
+
+
+infoMensaje Mensaje::decodificarInfo(char *pInfoMensaje){
+  infoMensaje informacion;
 	informacion.tipo = (int) pInfoMensaje[0];
-	memcpy(& informacion.longitud, pInfoMensaje + 1, INT_SIZE);
-	memcpy(& informacion.id, pInfoMensaje + 1 + INT_SIZE, INT_SIZE);
+	memcpy(& informacion.longitudId, pInfoMensaje + 1, INT_SIZE);
+	memcpy(& informacion.longitudValor, pInfoMensaje + 1 + INT_SIZE, INT_SIZE);
 	return informacion;
 }
 
-void imprimirBytes(const char *bytes, int n){
-	for (int i = 0; i < n; i++){
-		cout << (int) bytes[i] << " ";
-	}
-	cout << endl;
+// TODO sacar estas dos funciones de mensaje.
+void Mensaje::pushearInt(string &str, int n){
+  char bytes[INT_SIZE];
+  //memcopy
+  memcpy((void*)bytes, (void*)&n, INT_SIZE);
+
+  for (unsigned int i = 0 ; i < INT_SIZE; i++){
+    str += bytes[i];
+  }
 }
+
+int Mensaje::lengthId(){
+  return id.length();
+}
+
+int Mensaje::lengthValor(){
+  return valor.length();
+}
+
+void Mensaje::imprimirBytes(const char *bytes, int n){
+  for (int i = 0; i < n; i++){
+    cout << (int) bytes[i] << " ";
+  }
+  cout << endl;
+}
+
+Mensaje::~Mensaje(){}

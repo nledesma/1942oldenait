@@ -1,12 +1,4 @@
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <cstring> // Necesario para el memset.
-#include <cstdio>
-#include <iostream>
 #include "gameSocket.hpp"
-#include "mensaje/mensaje.hpp"
-#include "mensaje/fabricaMensajes.hpp"
 
 using namespace std;
 
@@ -51,7 +43,7 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
 
         bytesRecibidos += bytesActuales;
         cout << "Recibidos " << bytesRecibidos << " bytes:" << endl;
-        imprimirBytes(pMensaje, bytesRecibidos);
+        Mensaje::imprimirBytes(pMensaje, bytesRecibidos);
     }
     if (bytesActuales == -1) {
         Logger::instance()->logInfo("Error al recibir bytes (socket).");
@@ -78,8 +70,7 @@ void GameSocket::cerrarSocket() {
 
 int GameSocket::enviarMensaje(Mensaje *mensaje, int fdReceptor) {
     const char *pMensaje = mensaje->codificar();
-    return enviarBytes((char *) pMensaje, 9 + mensaje->lengthValor(), fdReceptor);
-
+    return enviarBytes((char *) pMensaje, 9 + mensaje->lengthValor() + mensaje->lengthId(), fdReceptor);
 }
 
 int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
@@ -87,14 +78,15 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
     if (resultado == MENSAJEOK) {
         infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
-        char *pMensaje = new char[datos.longitud];
-        if (recibirBytes(pMensaje, datos.longitud, fdEmisor) == MENSAJEOK) {
-            mensaje = FabricaMensajes::fabricarMensaje(datos, pMensaje);
+        // TODO ver qué onda las incumbencias.
+        char *pMensaje = new char[datos.longitudId + datos.longitudValor];
+        if (recibirBytes(pMensaje, datos.longitudId + datos.longitudValor, fdEmisor) == MENSAJEOK) {
+            mensaje = new Mensaje(datos, pMensaje);
             delete[] pMensaje;
             return MENSAJEOK;
         } else {
             stringstream ss;
-            ss << "Error al recibir bytes del mensaje con id " << datos.id << " de tipo " << datos.tipo;
+            ss << "Error al recibir bytes del mensaje de tipo" << datos.tipo;
             cout << ss.str() << endl;
             Logger::instance()->logInfo(ss.str());
             delete[] pMensaje;

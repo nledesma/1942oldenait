@@ -81,7 +81,7 @@ void *Servidor::atenderCliente(void *arg) {
         Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
         if(recieveResult == MENSAJEOK) {
-            string ss = "Se recibió el mensaje '" + mensajeCliente->strValor() + "'.";
+            string ss = "Se recibió el mensaje '" + mensajeCliente->getValor() + "'.";
             cout << ss << endl;
             Logger::instance()->logInfo(ss);
             pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);

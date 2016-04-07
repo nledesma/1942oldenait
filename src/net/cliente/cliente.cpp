@@ -92,7 +92,7 @@ list <Mensaje*>& Cliente::getMensajes(){
   return this->listaMensajes;
 }
 
-int Cliente::enviarMensajePorId(int idMensaje) {
+int Cliente::enviarMensajePorId(string idMensaje) {
 		Mensaje * mensaje = this->encontrarMensajePorId(idMensaje);
 		if((mensaje != NULL)) {
 			int msj = GameSocket::enviarMensaje(mensaje, this->socketFd);
@@ -107,7 +107,7 @@ int Cliente::enviarMensajePorId(int idMensaje) {
 }
 
 //El metodo devuelve el mensaje correspondiente y lo elimina de la coleccion de mensajes
-Mensaje * Cliente::encontrarMensajePorId(int idMensaje) {
+Mensaje * Cliente::encontrarMensajePorId(string idMensaje) {
 	bool mensajeEncontrado = false;
 	Mensaje * mensaje = NULL;
 	list<Mensaje*>::iterator iterador = listaMensajes.begin();
@@ -134,7 +134,7 @@ void Cliente::ciclarMensajes(int milisegundos) {
 		list<Mensaje*>::iterator iterador;
 		for(iterador = listaMensajes.begin(); iterador != listaMensajes.end(); iterador++) {
 				GameSocket::enviarMensaje((*iterador), this->socketFd);
-				Mensaje * mensajeRecibido;
+				Mensaje *mensajeRecibido;
 				GameSocket::recibirMensaje(mensajeRecibido, this->socketFd);
 				cout<< "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
 				delete mensajeRecibido;
@@ -145,6 +145,6 @@ void Cliente::ciclarMensajes(int milisegundos) {
 	}
 }
 
- void Cliente::recibirMensaje(Mensaje * &mensaje) {
+ void Cliente::recibirMensaje(Mensaje* &mensaje) {
 		GameSocket::recibirMensaje(mensaje, this->socketFd);
  }

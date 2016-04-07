@@ -20,8 +20,7 @@ private:
     string ip;
     int port;
     list <Mensaje*> listaMensajes;
-    Mensaje * encontrarMensajePorId(int idMensaje);
-
+    Mensaje * encontrarMensajePorId(string idMensaje);
 
 public:
 	Cliente(string ip, int port);
@@ -33,10 +32,10 @@ public:
   string recibir(int longitudMensaje);
   string getIP();
   int getPort();
-  int enviarMensajePorId(int idMensaje);
+  int enviarMensajePorId(string idMensaje);
   void ciclarMensajes(int milisegundos);
   list <Mensaje*>& getMensajes();
-  void recibirMensaje(Mensaje * &mensaje);
+  void recibirMensaje(Mensaje* &mensaje);
 
 };
 #endif // CLIENTE_H
