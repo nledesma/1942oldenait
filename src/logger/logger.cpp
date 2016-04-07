@@ -46,3 +46,17 @@ void Logger::logError(int numError, string mensaje){
   arch << "[ERROR]: " << buffer << mensaje << " " << "Error:" << numError << endl;
   pthread_mutex_unlock(&mutexLog);
 }
+
+void Logger::logWarning(string str){
+  time_t rawtime;
+  tm* timeinfo;
+  char buffer [80];
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+  strftime(buffer, 80, "[%Y/%m/%d - %H:%M:%S]:", timeinfo);
+
+  pthread_mutex_lock(&mutexLog);
+  arch << "[WARNING]: " << buffer << str << endl;
+  pthread_mutex_unlock(&mutexLog);
+
+}
