@@ -23,6 +23,7 @@ public:
   static Logger * instance();
   void logInfo(string mensaje);
   void logError(int numError, string error);
+  void logWarning(string str);
   void cerrar();
 };
 
