@@ -46,6 +46,7 @@ $(DIR_OBJS)/%.o: %.cpp
 
 makeDirs:
 	mkdir -p $(CLIENTE) $(SERVIDOR)
+	mkdir -p $(DIR_OBJS)
 
 clean:
 	# Borrado de objetos y ejecutables, si los hay.
