@@ -9,7 +9,7 @@ BIN = bin/
 CLIENTE = $(BIN)/cliente/
 SERVIDOR = $(BIN)/servidor/
 CC = g++ -std=c++11
-COMPILED_FILES&DIR = $(OBJS)tinyxml2.o $(OBJS)cliente.o $(OBJS)servidor.o $(OBJS)servidorParser.o $(OBJS)gameSocket.o $(OBJS)mensajeString.o $(OBJS)mensajeInt.o $(OBJS)mensajeChar.o $(OBJS)mensajeDouble.o $(OBJS)mensaje.o $(OBJS)fabricaMensajes.o $(OBJS)logger.o $(OBJS)clienteParser.o
+COMPILED_FILES&DIR = $(addprefix $(OBJS),$(COMPILED_FILES))
 COMPILED_FILES = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o clienteParser.o
 
 OBJS = compilados/
