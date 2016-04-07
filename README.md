@@ -3,6 +3,7 @@
 
 ## Pendientes
 - Crear una cola (y un thread, es concurrente) de salida por cliente para desencolar ahí.
+- Arreglar que se está cerrando el servidor cuando se cierra el cliente "violentamente".
 - Validaciones.
     - Pruebas de conectividad: desconectar a un cliente de repente.
     - Memoria.

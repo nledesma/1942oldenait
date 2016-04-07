@@ -6,6 +6,7 @@ using namespace std;
 
 void menuMensajes(Cliente * cliente);
 void menuPrincipal(Cliente * cliente);
+void menuXml(Cliente * cliente);
 
 void menuMensajes(Cliente * cliente) {
     cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
@@ -66,12 +67,20 @@ void menuPrincipal(Cliente * cliente) {
     }
 }
 
+void menuXml() {
+  cout<<"Ingrese la ruta donde se encuenta la ruta de configuracion del cliente" << endl;
+  string filePath;
+  cin >> filePath;
+  ClienteParser clienteParser;
+  cout << "Aca llega" << endl;
+  Cliente * cliente = clienteParser.deserializador(filePath);
+  menuPrincipal(cliente);
+  delete cliente;
+}
+
 int main(){
-    ClienteParser clienteParser;
+    cout << "Aca llega" << endl;
     // TODO Esto debería pasarse por argv y argc.
-    string url = "../../resources/xml/cliente.xml";
-    Cliente * cliente = clienteParser.deserializador(url);
-    menuPrincipal(cliente);
-    delete cliente;
+    menuXml();
     return 0;
 }

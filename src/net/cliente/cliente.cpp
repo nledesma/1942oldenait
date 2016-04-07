@@ -130,18 +130,22 @@ void Cliente::ciclarMensajes(int milisegundos) {
 	auto t1 = Time::now();
 	fsec fs = t1 - t0;
 	ms d = std::chrono::duration_cast<ms>(fs);
+	list<Mensaje*>::iterator iterador = listaMensajes.begin();
 	while(d.count()<milisegundos) {
-		list<Mensaje*>::iterator iterador;
-		for(iterador = listaMensajes.begin(); iterador != listaMensajes.end(); iterador++) {
-				GameSocket::enviarMensaje((*iterador), this->socketFd);
-				Mensaje * mensajeRecibido;
-				GameSocket::recibirMensaje(mensajeRecibido, this->socketFd);
-				cout<< "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
-				delete mensajeRecibido;
+		if(iterador == listaMensajes.end()) {
+			iterador = listaMensajes.begin();
 		}
+		GameSocket::enviarMensaje((*iterador), this->socketFd);
+		Mensaje * mensajeRecibido;
+		this->recibirMensaje(mensajeRecibido);
+		cout<< "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
+		delete mensajeRecibido;
 		t1 = Time::now();
 		fs = t1 - t0;
+
 		d = chrono::duration_cast<ms>(fs);
+		cout << d.count() << endl;
+		iterador++;
 	}
 }
 
