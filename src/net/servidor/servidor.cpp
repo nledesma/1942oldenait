@@ -111,12 +111,34 @@ void * Servidor::responderCliente(void* arg){
 void Servidor::desencolarSalidaCliente(int clienteFd){
     ColaConcurrente<Mensaje*> *colaSalida = &(clientes[clienteFd].colaSalida);
     Mensaje* mensaje = colaSalida->pop();
-    procesarMensaje(mensaje);
+    int result = procesarMensaje(mensaje);
+    if (result == MENSAJE_OK){
+        enviarMensaje(mensaje, clienteFd);
+    } else {
+        Mensaje* mensajeError = new Mensaje(T_STRING, mensaje->getId()+"_ERR", "Mensaje erróneo");
+        enviarMensaje(mensajeError, clienteFd);
+        delete mensajeError;
+    }
 }
 
-void Servidor::procesarMensaje(Mensaje* mensaje){
-  //TODO TODO TODO URGENTE.
-  //HOLA
+int Servidor::procesarMensaje(Mensaje* mensaje){
+    int result;
+    string valor = mensaje->getValor();
+    int tipo = mensaje->getTipo();
+    bool mensajeValido = validarTipo(tipo, valor);
+    if (mensajeValido){
+        string info = "Se recibió el mensaje con id = "+mensaje->getId()+" : '" + valor + "' de tipo" + mensaje->strTipo();
+        Logger::instance()->logInfo(info);
+        cout << info << endl;
+        result = MENSAJE_OK;
+    } else {
+        string error = "El mensaje recibido con id = "+mensaje->getId()+" : '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
+        Logger::instance()->logError(INCONSISTENCIA_TIPO_VALOR, error);
+        cout << error << endl;
+        result = INCONSISTENCIA_TIPO_VALOR;
+    }
+    return result;
+
 }
 
 int Servidor::aceptar() {
@@ -217,4 +239,48 @@ void Servidor::desencolar() {
     encolarSalida(clienteMensaje.first, clienteMensaje.second);
     // TODO Esto se borra acá?
     delete clienteMensaje.second;
+}
+
+bool Servidor::validarChar(string valor) {
+    return (valor.length() == 1);
+}
+
+bool Servidor::validarInt(string valor) {
+    if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
+        return false;
+    char * p ;
+    strtol(valor.c_str(), &p, 10) ;
+
+    return (*p == 0) ;
+}
+
+bool Servidor::validarDouble(string valor) {
+    if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
+        return false;
+    char * p ;
+    strtod(valor.c_str(), &p) ;
+
+    return (*p == 0) ;
+}
+
+bool Servidor::validarTipo(int tipo, string valor) {
+
+    bool esValido;
+    switch (tipo) {
+        case T_STRING:
+            esValido = true;
+            break;
+        case T_CHAR:
+            esValido = validarChar(valor);
+            break;
+        case T_INT:
+            esValido = validarInt(valor);
+            break;
+        case T_DOUBLE:
+            esValido = validarDouble(valor);
+            break;
+        default:
+            esValido = false;
+    }
+    return esValido;
 }
