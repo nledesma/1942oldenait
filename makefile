@@ -1,80 +1,54 @@
-LIBS = -lpthread
-DIRS = -Inet -IThread
-WAR = -Wall -pedantic
-NET_PATH = src/net/
-THREAD_PATH = src/Thread/
-LOGGER_PATH = src/logger/
+# Cosas del compilador.
+CXX = g++ -std=c++11
 DEBUG = -g -O0
-BIN = bin/
-CLIENTE = $(BIN)/cliente/
-SERVIDOR = $(BIN)/servidor/
-CC = g++ -std=c++11
-COMPILED_FILES&DIR = $(addprefix $(OBJS),$(COMPILED_FILES))
-COMPILED_FILES = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o fabricaMensajes.o logger.o clienteParser.o
+WAR = -Wall -pedantic
+CXXFLAGS = $(DEBUG) $(WAR)
 
-OBJS = compilados/
+# Librerias.
+LIBS = -lpthread
 
-all: mainServidor mainCliente
+# Directorios de código fuente.
+NET_PATH = src/net
+LOGGER_PATH = src/logger
+COLA_PATH = src/accesorios/colaConcurrente
+XML_PATH = resources/lib
 
-mainServidor: mainServidor.o $(COMPILED_FILES)
-	$(CC) $(DEBUG) $(WAR) $(OBJS)mainServidor.o $(COMPILED_FILES&DIR) -o $(SERVIDOR)servidor $(LIBS)
+SRC = app:$(NET_PATH):$(NET_PATH)/cliente:$(NET_PATH)/servidor:\
+	$(NET_PATH)/mensaje:$(COLA_PATH):$(LOGGER_PATH):$(XML_PATH)
+vpath %.cpp $(SRC)
 
-mainCliente: mainCliente.o $(COMPILED_FILES)
-	$(CC) $(DEBUG) $(WAR) $(OBJS)mainCliente.o $(COMPILED_FILES&DIR) -o $(CLIENTE)cliente $(LIBS)
+# Compilados.
+OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
+	mensajeString.o mensajeInt.o mensajeChar.o mensajeDouble.o mensaje.o \
+	fabricaMensajes.o logger.o clienteParser.o colaConcurrente.o
+DIR_OBJS = compilados
+OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 
-mainServidor.o: app/mainServidor.cpp $(NET_PATH)servidor/servidor.cpp $(NET_PATH)cliente/cliente.cpp
-	$(CC) $(DEBUG) -o $(OBJS)mainServidor.o app/mainServidor.cpp $(DIRS) -c
+# Binarios.
+BIN = bin
+CLIENTE = $(BIN)/cliente
+SERVIDOR = $(BIN)/servidor
 
-mainCliente.o: app/mainCliente.cpp $(NET_PATH)cliente/cliente.cpp $(NET_PATH)cliente/clienteParser.cpp $(NET_PATH)gameSocket.cpp
-	$(CC) $(DEBUG) -c -o $(OBJS)mainCliente.o app/mainCliente.cpp
+# Reglas:
+all: makeDirs $(SERVIDOR)/mainServidor $(CLIENTE)/mainCliente
 
-cliente.o: $(NET_PATH)cliente/cliente.cpp src/net/gameSocket.cpp $(NET_PATH)mensaje/mensaje.cpp $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)cliente.o $(NET_PATH)cliente/cliente.cpp
+$(SERVIDOR)/mainServidor: mainServidor.o $(OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
-gameSocket.o: $(NET_PATH)gameSocket.cpp $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)gameSocket.o $(NET_PATH)gameSocket.cpp
+$(CLIENTE)/mainCliente: mainCliente.o $(OBJS)
+	$(CXX) $(CXXFLAGS) $^  $(COMPILED_FILES&DIR) -o $@ $(LIBS)
 
-clienteParser.o: $(NET_PATH)cliente/clienteParser.cpp resources/lib/tinyxml2.cpp $(NET_PATH)mensaje/fabricaMensajes.cpp $(NET_PATH)cliente/cliente.cpp $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)clienteParser.o $(NET_PATH)cliente/clienteParser.cpp
+# Compilación de todos los .o, que es igual.
+$(DIR_OBJS)/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $^ -o $@
 
-fabricaMensajes.o: $(NET_PATH)mensaje/fabricaMensajes.cpp $(NET_PATH)mensaje/mensaje.cpp $(NET_PATH)mensaje/mensajeInt.cpp $(NET_PATH)mensaje/mensajeString.cpp $(NET_PATH)mensaje/mensajeChar.cpp $(NET_PATH)mensaje/mensajeDouble.cpp $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)fabricaMensajes.o $(NET_PATH)mensaje/fabricaMensajes.cpp
+.PHONY: makeDirs clean
 
-mensaje.o: $(NET_PATH)mensaje/mensaje.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)mensaje.o $(NET_PATH)mensaje/mensaje.cpp
-
-mensajeChar.o: $(NET_PATH)mensaje/mensajeChar.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)mensajeChar.o $(NET_PATH)mensaje/mensajeChar.cpp
-
-mensajeDouble.o: $(NET_PATH)mensaje/mensajeDouble.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)mensajeDouble.o $(NET_PATH)mensaje/mensajeDouble.cpp
-
-mensajeInt.o: $(NET_PATH)mensaje/mensajeInt.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)mensajeInt.o $(NET_PATH)mensaje/mensajeInt.cpp
-
-mensajeString.o: $(NET_PATH)mensaje/mensajeString.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)mensajeString.o $(NET_PATH)mensaje/mensajeString.cpp
-
-servidor.o: $(NET_PATH)servidor/servidor.cpp $(NET_PATH)gameSocket.cpp $(NET_PATH)mensaje/mensaje.cpp $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)servidor.o $(NET_PATH)servidor/servidor.cpp
-
-servidorParser.o: $(NET_PATH)servidor/servidorParser.cpp resources/lib/tinyxml2.cpp $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)servidorParser.o $(NET_PATH)servidor/servidorParser.cpp
-
-tinyxml2.o: resources/lib/tinyxml2.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)tinyxml2.o resources/lib/tinyxml2.cpp
-
-thread.o: $(THREAD_PATH)thread.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)thread.o $(THREAD_PATH)thread.cpp
-
-threadAtender.o: $(THREAD_PATH)threadAtender.cpp $(NET_PATH)servidor/servidor.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)threadAtender.o $(THREAD_PATH)threadAtender.cpp
-
-threadAceptar.o: $(THREAD_PATH)threadAceptar.cpp $(NET_PATH)servidor/servidor.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)threadAceptar.o $(THREAD_PATH)threadAceptar.cpp
-
-logger.o: $(LOGGER_PATH)logger.cpp
-	$(CC) $(DEBUG) $(WAR) -c -o $(OBJS)logger.o $(LOGGER_PATH)logger.cpp
+makeDirs:
+	mkdir -p $(CLIENTE) $(SERVIDOR)
 
 clean:
-	rm $(OBJS)*.o
+	# Borrado de objetos y ejecutables, si los hay.
+	rm -f $(OBJS)/*.o
+	rm -f $(CLIENTE)/cliente
+	rm -f $(SERVIDOR)/servidor
