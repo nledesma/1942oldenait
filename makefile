@@ -36,7 +36,7 @@ $(SERVIDOR)/mainServidor: mainServidor.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
 $(CLIENTE)/mainCliente: mainCliente.o $(OBJS)
-	$(CXX) $(CXXFLAGS) $^  $(COMPILED_FILES&DIR) -o $@ $(LIBS)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
 # Compilación de todos los .o, que es igual.
 $(DIR_OBJS)/%.o: %.cpp
