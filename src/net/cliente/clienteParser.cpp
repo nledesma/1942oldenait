@@ -48,7 +48,7 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 
 		// ID del mensaje.
 		XMLElement * pId = doc.NewElement("id");
-		pId-> SetText(mensaje->getId());
+		pId-> SetText(mensaje->getId().c_str());
 		pMensaje ->InsertEndChild(pId);
 
 		// Tipo de datos del mensaje.
@@ -58,7 +58,7 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 
 		// Valor del mensaje.
 		XMLElement * pValor = doc.NewElement("valor");
-		pValor -> SetText(mensaje->strValor().c_str());
+		pValor -> SetText(mensaje->getValor().c_str());
 		pMensaje->InsertEndChild(pValor);
 
 		// Agrego el mensaje a la lista en el xml.
@@ -111,7 +111,7 @@ Cliente * ClienteParser::deserializador(string ruta){
 		tipo = pMensaje->FirstChildElement("tipo")->GetText();
 		valor = pMensaje->FirstChildElement("valor")->GetText();
 
-		cliente->agregarMensaje(FabricaMensajes::fabricarMensaje(id, tipo, valor));
+		cliente->agregarMensaje(new Mensaje(id, tipo, valor));
 
 		pMensaje = pMensaje -> NextSiblingElement("mensaje");
 	}

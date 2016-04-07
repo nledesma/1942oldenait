@@ -13,18 +13,16 @@ void menuMensajes(Cliente * cliente) {
     list<Mensaje*>::iterator iterador;
     int indice = 1;
     for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
-        cout << indice << ". Mensaje ID = " << (*iterador)->getId() << endl;
+        cout << ". Mensaje ID = " << (*iterador)->getId() << endl;
         ++indice;
     }
-    int opcionElegida;
+    string opcionElegida;
     cin >> opcionElegida;
-    if (opcionElegida != 0) {
-        iterador = cliente->getMensajes().begin();
-        advance (iterador,opcionElegida - 1);
+    if (opcionElegida != "0") {
         cliente->enviarMensajePorId(opcionElegida);
         Mensaje * unMensaje;
         cliente->recibirMensaje(unMensaje);
-        cout<<"Recibi el mensaje" << unMensaje->strValor() << endl;
+        cout<<"Recibi el mensaje" << unMensaje->getValor() << endl;
         delete unMensaje;
     } else {
         menuPrincipal(cliente);

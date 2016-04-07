@@ -4,7 +4,6 @@
 #include "cliente.hpp"
 #include "../../../resources/lib/tinyxml2.h"
 #include "../../logger/logger.hpp"
-#include "../mensaje/fabricaMensajes.hpp"
 #include <sstream>
 
 class ClienteParser {
