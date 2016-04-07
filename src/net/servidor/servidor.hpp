@@ -25,8 +25,10 @@ using namespace std;
 // class Thread;
 
 struct datosCliente{
-	pthread_t th;
+	pthread_t th_entrada;
+	pthread_t th_salida;
 	const char* dir;
+	queue<Mensaje *> colaSalida;
 };
 
 class Servidor: public GameSocket{
@@ -37,12 +39,15 @@ private:
 	pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
 	pthread_mutex_t mutexCola = PTHREAD_MUTEX_INITIALIZER;
 	pthread_mutex_t mutexDesencolar = PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_t mutexColaSalida = PTHREAD_MUTEX_INITIALIZER;
 	pthread_cond_t condDesencolar = PTHREAD_COND_INITIALIZER;
 	int cantidadMaximaDeClientes;
 	int puerto;
 	bool servidorActivado;
 	pthread_t cicloAceptaciones;
 	pthread_t cicloDesencolaciones;
+	void desencolarSalidaCliente(int clienteFd);
+	void procesarMensaje(Mensaje* mensaje);
 
 public:
 	Servidor(int port, int cantidadDeClientes);
@@ -57,7 +62,8 @@ public:
 	void setPuerto(int unPuerto);
 	void agregarCliente(int idCliente, pthread_t thread);
 	void quitarCliente(int fdCliente);
-	static void *atenderCliente(void* THIS);
+	static void *atenderCliente(void* arg);
+	static void *responderCliente(void* arg);
 	static void *cicloAceptar(void* THIS);
 	static void *cicloDesencolar(void* THIS);
 	void esperar();
@@ -66,6 +72,7 @@ public:
 	void encolarMensaje(pair <int, Mensaje*> clienteMensaje);
 	void desencolar();
 	void revisarClienteConectado(int fdCliente);
+	void encolarSalida(int clienteFd, Mensaje* mensaje);
 };
 
 #endif
