@@ -6,6 +6,10 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+
+#define LOG_INFO 1
+#define LOG_ERROR 2
+#define LOG_WARN 3
 using namespace std;
 
 class Logger {
@@ -21,6 +25,7 @@ private:
   pthread_mutex_t mutexLog = PTHREAD_MUTEX_INITIALIZER;
 public:
   static Logger * instance();
+  void log(int tipoLog, string str, int error);
   void logInfo(string mensaje);
   void logError(int numError, string error);
   void logWarning(string str);
