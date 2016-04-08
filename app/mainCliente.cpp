@@ -78,18 +78,20 @@ void menuPrincipal(Cliente * cliente) {
     }
 }
 
-void menuXml() {
-    cout << "Ingrese la ruta donde se encuenta la ruta de configuracion del cliente" << endl;
-    string filePath;
-    cin >> filePath;
+void menuXml(string rutaXML) {
     ClienteParser clienteParser;
-    Cliente * cliente = clienteParser.deserializador(filePath);
+    Cliente * cliente = clienteParser.deserializador(rutaXML);
     menuPrincipal(cliente);
     delete cliente;
 }
 
-int main(){
-    // TODO Esto debería pasarse por argv y argc.
-    menuXml();
+int main(int argc, char* argv[]){
+    if (argc < 2){
+        cout << "Argumentos insuficientes." << endl;
+        cout << "Uso: ./cliente archivo.xml" << endl;
+    } else {
+        string rutaXML = argv[1];
+        menuXml(rutaXML);
+    }
     return 0;
 }
