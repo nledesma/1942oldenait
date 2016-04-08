@@ -2,6 +2,8 @@
 #include "../src/net/cliente/cliente.hpp"
 #include "../src/net/cliente/clienteParser.hpp"
 
+#define DEFAULT_XML "../../resources/xml/clienteDefault.xml"
+
 using namespace std;
 
 void menuMensajes(Cliente * cliente);
@@ -86,12 +88,16 @@ void menuXml(string rutaXML) {
 }
 
 int main(int argc, char* argv[]){
+    string rutaXMLCliente;
+
     if (argc < 2){
-        cout << "Argumentos insuficientes." << endl;
-        cout << "Uso: ./cliente archivo.xml" << endl;
+        cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
+        Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el cliente con el XML por defecto");
+        rutaXMLCliente = (DEFAULT_XML);
     } else {
-        string rutaXML = argv[1];
-        menuXml(rutaXML);
+        rutaXMLCliente = argv[1];
     }
+
+    menuXml(rutaXMLCliente);
     return 0;
 }
