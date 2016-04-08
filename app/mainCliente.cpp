@@ -70,14 +70,12 @@ void menuXml() {
   string filePath;
   cin >> filePath;
   ClienteParser clienteParser;
-  cout << "Aca llega" << endl;
   Cliente * cliente = clienteParser.deserializador(filePath);
   menuPrincipal(cliente);
   delete cliente;
 }
 
 int main(){
-    cout << "Aca llega" << endl;
     // TODO Esto debería pasarse por argv y argc.
     menuXml();
     return 0;

@@ -7,6 +7,10 @@
 #include <sstream>
 
 class ClienteParser {
+private:
+	bool tipoValido(string valor, int  &tipo);
+	bool idValido(list<string> &ids, string id);
+	Cliente * cargarConfiguracionPorDefecto();
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
 	public:
 		void serializador(Cliente *cliente,string ruta);
