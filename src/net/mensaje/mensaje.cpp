@@ -33,11 +33,15 @@ string Mensaje::getValor(){
   return valor;
 }
 
+int Mensaje::getTipo(){
+  return tipo;
+}
+
 string Mensaje::strTipo(){
-  if (tipo == T_STRING) return "string";
-  if (tipo == T_CHAR) return "char";
-  if (tipo == T_INT) return "int";
-  if (tipo == T_DOUBLE) return "double";
+  if (tipo == T_STRING) return "STRING";
+  if (tipo == T_CHAR) return "CHAR";
+  if (tipo == T_INT) return "INT";
+  if (tipo == T_DOUBLE) return "DOUBLE";
   return "ERROR";
 }
 
