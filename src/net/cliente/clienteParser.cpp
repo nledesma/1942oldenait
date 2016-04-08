@@ -86,8 +86,10 @@ Cliente * ClienteParser::deserializador(string ruta){
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	cout <<"Error : "<< eResult << endl;
 	if (eResult != XML_NO_ERROR){
-		cout << "Error al cargar el mensaje. Código: "<< eResult << endl;
+		string ss = "Error al cargar el archivo. Código: ";
+		cout << ss << eResult << endl;
 		//TODO log Warning!!!!
+		Logger::instance()->logError(eResult, ss);
 		return cargarConfiguracionPorDefecto();
 	}
 
@@ -174,6 +176,7 @@ Cliente * ClienteParser::deserializador(string ruta){
 			tipo = pMensaje->FirstChildElement("tipo")->GetText();
 			transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
 			int codTipo;
+			tipoValido(tipo, codTipo);
 			valor = pMensaje->FirstChildElement("valor")->GetText();
 			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
 			pMensaje = pMensaje -> NextSiblingElement("mensaje");

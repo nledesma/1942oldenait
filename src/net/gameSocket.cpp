@@ -78,6 +78,11 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
     if (resultado == MENSAJEOK) {
         infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
+        cout << "ESTO ES EL INFOMENSAJE, tipo" << datos.tipo << endl;
+        cout << "ESTO ES EL INFOMENSAJE, longitudId" << datos.longitudId << endl;
+        cout << "ESTO ES EL INFOMENSAJE, longitudValor" << datos.longitudValor << endl;
+
+
         // TODO ver qué onda las incumbencias.
         char *pMensaje = new char[datos.longitudId + datos.longitudValor];
         if (recibirBytes(pMensaje, datos.longitudId + datos.longitudValor, fdEmisor) == MENSAJEOK) {

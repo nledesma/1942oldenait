@@ -24,9 +24,9 @@ void menuMensajes(Cliente * cliente) {
         cliente->recibirMensaje(unMensaje);
         cout<<"Recibi el mensaje" << unMensaje->getValor() << endl;
         delete unMensaje;
-    } else {
-        menuPrincipal(cliente);
     }
+        menuPrincipal(cliente);
+    
 }
 
 void menuPrincipal(Cliente * cliente) {
