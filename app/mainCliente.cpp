@@ -9,70 +9,83 @@ void menuPrincipal(Cliente * cliente);
 void menuXml(Cliente * cliente);
 
 void menuMensajes(Cliente * cliente) {
-    cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
-    list<Mensaje*>::iterator iterador;
-    int indice = 1;
-    for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
-        cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
-        ++indice;
-    }
     string opcionElegida;
-    cin >> opcionElegida;
-    if (opcionElegida != "0") {
-        cliente->enviarMensajePorId(opcionElegida);
-        Mensaje * unMensaje;
-        cliente->recibirMensaje(unMensaje);
-        cout<<"Recibi el mensaje " << unMensaje->getValor() << endl;
-        delete unMensaje;
-    }
-        menuPrincipal(cliente);
+    do {
+        // Impresión de mensajes a elegir.
+        cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
+        list<Mensaje*>::iterator iterador;
+        for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
+            cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
+        }
 
+        cin >> opcionElegida;
+
+        // Envío de mensaje.
+        // TODO chequear que la opción corresponde a un id existente, porque muere.
+        if (opcionElegida != "0") {
+            cliente->enviarMensajePorId(opcionElegida);
+            Mensaje * unMensaje;
+            cliente->recibirMensaje(unMensaje);
+            cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
+            delete unMensaje;
+        }
+    } while (opcionElegida != "0");
 }
 
 void menuPrincipal(Cliente * cliente) {
     int opcion = -1;
     while (opcion != 3){
+        cout << "-----------------------------------------------------" << endl;
         cout << "Bienvenido, Elija la opcion que desee:" << endl;
         cout << "1. Conectar" << endl;
         cout << "2. Desconectar" << endl;
         cout << "3. Salir" << endl;
         cout << "4. Enviar mensaje <id>" << endl;
         cout << "5. Ciclar " << endl;
+        cout << "-----------------------------------------------------" << endl;
         cin >> opcion;
         switch (opcion) {
             case 1:
-                cliente->conectar();
+                if (cliente->conectado()){
+                    cout << "El cliente ya está conectado." << endl;
+                } else {
+                    cliente->conectar();
+                }
                 break;
             case 2:
-                cliente->cerrar();
+                if (cliente->conectado()){
+                    cliente->cerrar();
+                } else {
+                    cout << "El cliente no está conectado." << endl;
+                }
                 break;
             case 3:
                 break;
             case 4:
-                //Por cada uno de los mensajes que hay en el archivo de configuracion, es decir deberia
-                //existir un for que envie cada mensaje ...
                 menuMensajes(cliente);
                 break;
-            case 5:
+                case 5:
                 int tiempo;
-                //Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
+                // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
                 cout << "Ingrese el tiempo (ms): " << endl;
                 cin >> tiempo;
                 cliente->ciclarMensajes(tiempo);
                 break;
-            default: cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
+            default:
+                cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
+                break;
         }
     }
 }
 
 void menuXml() {
-  cout<<"Ingrese la ruta donde se encuenta la ruta de configuracion del cliente" << endl;
-  string filePath;
-  cin >> filePath;
-  ClienteParser clienteParser;
-  Cliente * cliente = clienteParser.deserializador(filePath);
-  menuPrincipal(cliente);
-  delete cliente;
+    cout << "Ingrese la ruta donde se encuenta la ruta de configuracion del cliente" << endl;
+    string filePath;
+    cin >> filePath;
+    ClienteParser clienteParser;
+    Cliente * cliente = clienteParser.deserializador(filePath);
+    menuPrincipal(cliente);
+    delete cliente;
 }
 
 int main(){
