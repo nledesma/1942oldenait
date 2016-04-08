@@ -13,7 +13,7 @@ void menuMensajes(Cliente * cliente) {
     list<Mensaje*>::iterator iterador;
     int indice = 1;
     for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
-        cout << ". Mensaje ID = " << (*iterador)->getId() << endl;
+        cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
         ++indice;
     }
     string opcionElegida;
@@ -22,11 +22,11 @@ void menuMensajes(Cliente * cliente) {
         cliente->enviarMensajePorId(opcionElegida);
         Mensaje * unMensaje;
         cliente->recibirMensaje(unMensaje);
-        cout<<"Recibi el mensaje" << unMensaje->getValor() << endl;
+        cout<<"Recibi el mensaje " << unMensaje->getValor() << endl;
         delete unMensaje;
     }
         menuPrincipal(cliente);
-    
+
 }
 
 void menuPrincipal(Cliente * cliente) {

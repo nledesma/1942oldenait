@@ -114,6 +114,7 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
     int result = procesarMensaje(mensaje);
     if (result == MENSAJE_OK){
         enviarMensaje(mensaje, clienteFd);
+        delete mensaje;
     } else {
         Mensaje* mensajeError = new Mensaje(T_STRING, mensaje->getId()+"_ERR", "Mensaje erróneo");
         enviarMensaje(mensajeError, clienteFd);
@@ -235,10 +236,7 @@ void Servidor::encolarSalida(int clienteFd, Mensaje* mensaje){
 
 void Servidor::desencolar() {
     pair<int, Mensaje*> clienteMensaje = colaDeMensajes.pop();
-    // Mandar a la variable de salida y darle una señal al thread de salida.
     encolarSalida(clienteMensaje.first, clienteMensaje.second);
-    // TODO Esto se borra acá?
-    delete clienteMensaje.second;
 }
 
 bool Servidor::validarChar(string valor) {
