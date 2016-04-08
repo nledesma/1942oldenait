@@ -48,7 +48,6 @@ string Mensaje::strTipo(){
 const char *Mensaje::codificar(){
   string bytes = "";
   bytes += (char) tipo;
-  pushearInt(bytes, tipo);
   pushearInt(bytes, id.length());
   pushearInt(bytes, valor.length());
   bytes += id + valor;

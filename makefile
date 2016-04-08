@@ -31,11 +31,11 @@ SERVIDOR = $(BIN)/servidor
 # Reglas:
 all: makeDirs $(SERVIDOR)/mainServidor $(CLIENTE)/mainCliente
 
-$(SERVIDOR)/mainServidor: mainServidor.o $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
+$(SERVIDOR)/mainServidor: $(DIR_OBJS)/mainServidor.o $(OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $(SERVIDOR)/servidor $(LIBS)
 
-$(CLIENTE)/mainCliente: mainCliente.o $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
+$(CLIENTE)/mainCliente: $(DIR_OBJS)/mainCliente.o $(OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $(CLIENTE)/cliente $(LIBS)
 
 # Compilación de todos los .o, que es igual.
 $(DIR_OBJS)/%.o: %.cpp
