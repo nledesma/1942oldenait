@@ -22,6 +22,7 @@ private:
     list <Mensaje*> listaMensajes;
     Mensaje * encontrarMensajePorId(string idMensaje);
     bool cliente_conectado;
+    bool hayLugar();
 public:
     Cliente(string ip, int port);
     void inicializar(string serverAddress ,int port);

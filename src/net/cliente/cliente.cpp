@@ -43,6 +43,11 @@ int Cliente::conectar(){
 			Logger::instance()->logInfo("Conexión exitosa");
 			cliente_conectado = true;
 			cout << "Conexión exitosa" << endl;
+			if (!hayLugar()) {
+				cout << "No hay lugar en el servidor" << endl;
+				Logger::instance()->logInfo("No hay lugar en el servidor.");
+				cerrar();
+			}
 		} else {
 			if (connected == -1){
 				cliente_conectado = false;
@@ -156,4 +161,16 @@ void Cliente::ciclarMensajes(int milisegundos) {
 
 void Cliente::recibirMensaje(Mensaje* &mensaje) {
 	GameSocket::recibirMensaje(mensaje, this->socketFd);
+}
+
+bool Cliente::hayLugar(){
+	Mensaje * mensajeRecibido;
+	GameSocket::recibirMensaje(mensajeRecibido, socketFd);
+	if (mensajeRecibido->getValor() == "OK"){
+		delete mensajeRecibido;
+		return true;
+	} else {
+		delete mensajeRecibido;
+		return false;
+	}
 }

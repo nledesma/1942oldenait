@@ -44,6 +44,7 @@ void menuPrincipal(Cliente * cliente) {
         cout << "5. Ciclar " << endl;
         cout << "-----------------------------------------------------" << endl;
         cin >> opcion;
+        cout << "-----------------------------------------------------" << endl;
         switch (opcion) {
             case 1:
                 if (cliente->conectado()){
