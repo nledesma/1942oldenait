@@ -1,6 +1,5 @@
 #include "servidorParser.hpp"
 
-#define DEFAULT_XML "../../resources/xml/servidorDefault.xml"
 
 using namespace std;
 using namespace tinyxml2;
@@ -33,7 +32,6 @@ Servidor * ServidorParser::deserializar(string ruta) {
 	if (eResult != XML_NO_ERROR){
 		Logger::instance()->logError(eResult, "Error al cargar el xml de servidor.");
 		Logger::instance()->logInfo("Cargando XML de servidor por defecto.");
-		cout << "La ruta del XML ingresada no es válida. Se inicializará con el XML por defecto" << endl;
 		doc.LoadFile("../../resources/xml/servidorDefault.xml");
 	}
 

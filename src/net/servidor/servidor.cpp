@@ -56,21 +56,19 @@ void *Servidor::cicloAceptar(void *THIS) {
             fdCliente = servidor->aceptar();
             pthread_t atender, responder;
             pair<Servidor *, int> arg(servidor, fdCliente);
-            if (servidor->hayLugar()){
-                Mensaje mensaje(T_STRING, "", "OK");
-                servidor->enviarMensaje(&mensaje, fdCliente);
-                pthread_create(&atender, NULL, atenderCliente, &arg);
-                pthread_create(&responder, NULL, responderCliente, &arg);
-                servidor->agregarCliente(fdCliente, atender, responder);
-            } else {
-                Mensaje mensaje(T_STRING, "", "NO");
-                servidor->enviarMensaje(&mensaje, fdCliente);
-            }
+            pthread_create(&atender, NULL, atenderCliente, &arg);
+            pthread_create(&responder, NULL, responderCliente, &arg);
+            servidor->agregarCliente(fdCliente, atender, responder);
         } catch (runtime_error &e) {
             Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
         }
     }
     pthread_exit(NULL);
+}
+
+void Servidor::revisarClienteConectado(int fdCliente){
+    int transmitiendo = recv(fdCliente,NULL,0,0);
+    cout << "Resultado de transmitiendo: " << transmitiendo << endl;
 }
 
 void *Servidor::atenderCliente(void *arg) {
@@ -83,16 +81,16 @@ void *Servidor::atenderCliente(void *arg) {
         Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
         if(recieveResult == MENSAJEOK) {
-            string ss = "Se recibió el mensaje: '" + mensajeCliente->getValor() + "'.";
+            string ss = "Se recibió el mensaje '" + mensajeCliente->getValor() + "'.";
             cout << ss << endl;
             Logger::instance()->logInfo(ss);
             pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
-            cout << "Encolando mensaje de id: " << clienteMensaje.second->getId() << endl;
+            cout << "Encolando mensaje de id " << clienteMensaje.second->getId() << endl;
             servidor->encolarMensaje(clienteMensaje);
         } else {
-          cout << "Cliente desconectado." << endl;
+          cout << "Error al recibir mensaje." << endl;
         }
-    }
+    } //TODO : No llega hasta acá (al quitarCliente)... revisar
     servidor->quitarCliente(clientfd);
     pthread_exit(NULL);
 }
@@ -130,12 +128,12 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
     int tipo = mensaje->getTipo();
     bool mensajeValido = validarTipo(tipo, valor);
     if (mensajeValido){
-        string info = "Se recibió el mensaje con id = "+mensaje->getId()+": '" + valor + "' de tipo " + mensaje->strTipo();
+        string info = "Se recibió el mensaje con id = "+mensaje->getId()+" : '" + valor + "' de tipo" + mensaje->strTipo();
         Logger::instance()->logInfo(info);
         cout << info << endl;
         result = MENSAJE_OK;
     } else {
-        string error = "El mensaje recibido con id = "+mensaje->getId()+": '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
+        string error = "El mensaje recibido con id = "+mensaje->getId()+" : '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
         Logger::instance()->logError(INCONSISTENCIA_TIPO_VALOR, error);
         cout << error << endl;
         result = INCONSISTENCIA_TIPO_VALOR;
@@ -147,7 +145,6 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
 int Servidor::aceptar() {
 
     int resulAccept = accept(socketFd, 0, 0);
-    Logger::instance()->logInfo("La conexión ha sido aceptada");
     if (resulAccept == -1) {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
@@ -166,7 +163,6 @@ void Servidor::cerrar() {
     cerrarSocket();
 
     cout << "Servidor cerrado" << endl;
-    Logger::instance()->logInfo("El servidor ha sido cerrado");
 }
 
 void Servidor::setPuerto(int unPuerto) {
@@ -206,21 +202,24 @@ void Servidor::agregarCliente(int fdCliente, pthread_t threadEntrada, pthread_t 
 
     stringstream direccionCliente;
     direccionCliente << clientAddress << ":" << port;
-    datosCliente datos;
-    datos.th_entrada = threadEntrada;
-    datos.th_salida = threadSalida;
+    datosCliente datos = {
+      .th_entrada = threadEntrada,
+      .th_salida = threadSalida,
+      .dir = direccionCliente.str().c_str()
+    };
+
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
-    direcciones.insert(pair<int, string>(fdCliente, direccionCliente.str()));
+
     pthread_mutex_lock(&mutexAgregar);
     clientes.insert(pair<int, datosCliente>(fdCliente, datos));
     pthread_mutex_unlock(&mutexAgregar);
 }
 
 void Servidor::quitarCliente(int clientfd) {
-    string direccionCliente = direcciones[clientfd];
-    Logger::instance()->logInfo("Cliente en la dirección " + direccionCliente + " desconectado.");
+    const char *direccionCliente = this->clientes.find(clientfd)->second.dir;
+    string tmp(direccionCliente);
+    Logger::instance()->logInfo("Cliente en la dirección " + tmp + " desconectado.");
     this->clientes.erase(clientfd);
-
 }
 
 void *Servidor::cicloDesencolar(void *THIS) {
@@ -282,12 +281,4 @@ bool Servidor::validarTipo(int tipo, string valor) {
             esValido = false;
     }
     return esValido;
-}
-
-bool Servidor::hayLugar(){
-    int clientesActuales;
-    pthread_mutex_lock(&mutexAgregar);
-    clientesActuales = clientes.size();
-    pthread_mutex_unlock(&mutexAgregar);
-    return clientesActuales < cantidadMaximaDeClientes;
 }

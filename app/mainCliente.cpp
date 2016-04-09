@@ -2,8 +2,6 @@
 #include "../src/net/cliente/cliente.hpp"
 #include "../src/net/cliente/clienteParser.hpp"
 
-#define DEFAULT_XML "../../resources/xml/clienteDefault.xml"
-
 using namespace std;
 
 void menuMensajes(Cliente * cliente);
@@ -11,99 +9,74 @@ void menuPrincipal(Cliente * cliente);
 void menuXml(Cliente * cliente);
 
 void menuMensajes(Cliente * cliente) {
+    cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
+    list<Mensaje*>::iterator iterador;
+    int indice = 1;
+    for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
+        cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
+        ++indice;
+    }
     string opcionElegida;
-    do {
-        // Impresión de mensajes a elegir.
-        cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
-        list<Mensaje*>::iterator iterador;
-        for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
-            cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
-        }
+    cin >> opcionElegida;
+    if (opcionElegida != "0") {
+        cliente->enviarMensajePorId(opcionElegida);
+        Mensaje * unMensaje;
+        cliente->recibirMensaje(unMensaje);
+        cout<<"Recibi el mensaje " << unMensaje->getValor() << endl;
+        delete unMensaje;
+    }
+        menuPrincipal(cliente);
 
-        cin >> opcionElegida;
-
-        // Envío de mensaje.
-        // TODO chequear que la opción corresponde a un id existente, porque muere.
-        if (opcionElegida != "0") {
-            cliente->enviarMensajePorId(opcionElegida);
-            Mensaje * unMensaje;
-            cliente->recibirMensaje(unMensaje);
-            cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
-            delete unMensaje;
-        }
-    } while (opcionElegida != "0");
 }
 
 void menuPrincipal(Cliente * cliente) {
     int opcion = -1;
     while (opcion != 3){
-        cout << "-----------------------------------------------------" << endl;
         cout << "Bienvenido, Elija la opcion que desee:" << endl;
         cout << "1. Conectar" << endl;
         cout << "2. Desconectar" << endl;
         cout << "3. Salir" << endl;
         cout << "4. Enviar mensaje <id>" << endl;
         cout << "5. Ciclar " << endl;
-        cout << "-----------------------------------------------------" << endl;
         cin >> opcion;
-        cout << "-----------------------------------------------------" << endl;
         switch (opcion) {
             case 1:
-                if (cliente->conectado()){
-                    cout << "El cliente ya está conectado." << endl;
-                } else {
-                    cliente->conectar();
-                }
+                cliente->conectar();
                 break;
             case 2:
-                if (cliente->conectado()){
-                    cliente->cerrar();
-                } else {
-                    cout << "El cliente no está conectado." << endl;
-                }
+                cliente->cerrar();
                 break;
             case 3:
                 break;
             case 4:
-                if (cliente->conectado()){
-                  menuMensajes(cliente);
-                } else {
-                    Logger::instance()->logWarning("No se pueden enviar mensajes sin haber establecido una conexión previamente");
-                    cout << "No se ha podido enviar mensajes pues el cliente no se encuentra conectado" << endl;
-                }
+                //Por cada uno de los mensajes que hay en el archivo de configuracion, es decir deberia
+                //existir un for que envie cada mensaje ...
+                menuMensajes(cliente);
                 break;
-                case 5:
+            case 5:
                 int tiempo;
-                // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
+                //Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
                 cout << "Ingrese el tiempo (ms): " << endl;
                 cin >> tiempo;
                 cliente->ciclarMensajes(tiempo);
                 break;
-            default:
-                cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
-                break;
+            default: cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
         }
     }
 }
 
-void menuXml(string rutaXML) {
-    ClienteParser clienteParser;
-    Cliente * cliente = clienteParser.deserializador(rutaXML);
-    menuPrincipal(cliente);
-    delete cliente;
+void menuXml() {
+  cout<<"Ingrese la ruta donde se encuenta la ruta de configuracion del cliente" << endl;
+  string filePath;
+  cin >> filePath;
+  ClienteParser clienteParser;
+  Cliente * cliente = clienteParser.deserializador(filePath);
+  menuPrincipal(cliente);
+  delete cliente;
 }
 
-int main(int argc, char* argv[]){
-    string rutaXMLCliente;
-
-    if (argc < 2){
-        cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
-        Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el cliente con el XML por defecto");
-        rutaXMLCliente = (DEFAULT_XML);
-    } else {
-        rutaXMLCliente = argv[1];
-    }
-
-    menuXml(rutaXMLCliente);
+int main(){
+    // TODO Esto debería pasarse por argv y argc.
+    menuXml();
     return 0;
 }
