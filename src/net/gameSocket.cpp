@@ -8,6 +8,10 @@ GameSocket::GameSocket() {
 
 void GameSocket::iniciarSocket() {
     this->socketFd = socket(PF_INET, SOCK_STREAM, 0);
+
+    //int enable = 1;
+    //if (setsockopt(this->socketFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+    //Logger::instance()->logError(errno, "Socket en uso");
 }
 
 int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor) {
@@ -80,10 +84,6 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
     if (resultado == MENSAJEOK) {
         infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
-        cout << "ESTO ES EL INFOMENSAJE, tipo" << datos.tipo << endl;
-        cout << "ESTO ES EL INFOMENSAJE, longitudId" << datos.longitudId << endl;
-        cout << "ESTO ES EL INFOMENSAJE, longitudValor" << datos.longitudValor << endl;
-
 
         // TODO ver qué onda las incumbencias.
         char *pMensaje = new char[datos.longitudId + datos.longitudValor];
@@ -93,7 +93,7 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
             return MENSAJEOK;
         } else {
             stringstream ss;
-            ss << "Error al recibir bytes del mensaje de tipo" << datos.tipo;
+            ss << "Error al recibir bytes del mensaje de tipo " << datos.tipo;
             cout << ss.str() << endl;
             Logger::instance()->logInfo(ss.str());
             delete[] pMensaje;

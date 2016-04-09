@@ -84,12 +84,10 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 Cliente * ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
-	cout <<"Error : "<< eResult << endl;
 	if (eResult != XML_NO_ERROR){
-		string ss = "Error al cargar el archivo. Código: ";
-		cout << ss << eResult << endl;
-		//TODO log Warning!!!!
-		Logger::instance()->logError(eResult, ss);
+		string ss = "Se produjo un error al cargar el archivo. Se utilizó el XML por defecto";
+		cout << ss << endl;
+		Logger::instance()->logWarning(ss);
 		return cargarConfiguracionPorDefecto();
 	}
 
@@ -119,7 +117,6 @@ Cliente * ClienteParser::deserializador(string ruta){
 		transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
 		int codTipo;
 		if(this->tipoValido(tipo, codTipo)){
-			cout << "Cod tipo: "<< codTipo << endl;
 			valor = pMensaje->FirstChildElement("valor")->GetText();
 			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
 		} else {

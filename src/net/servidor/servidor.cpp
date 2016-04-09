@@ -73,11 +73,6 @@ void *Servidor::cicloAceptar(void *THIS) {
     pthread_exit(NULL);
 }
 
-void Servidor::revisarClienteConectado(int fdCliente){
-    int transmitiendo = recv(fdCliente,NULL,0,0);
-    cout << "Resultado de transmitiendo: " << transmitiendo << endl;
-}
-
 void *Servidor::atenderCliente(void *arg) {
     pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
     Servidor *servidor = parServidorCliente->first;
@@ -88,11 +83,11 @@ void *Servidor::atenderCliente(void *arg) {
         Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
         if(recieveResult == MENSAJEOK) {
-            string ss = "Se recibió el mensaje '" + mensajeCliente->getValor() + "'.";
+            string ss = "Se recibió el mensaje: '" + mensajeCliente->getValor() + "'.";
             cout << ss << endl;
             Logger::instance()->logInfo(ss);
             pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
-            cout << "Encolando mensaje de id " << clienteMensaje.second->getId() << endl;
+            cout << "Encolando mensaje de id: " << clienteMensaje.second->getId() << endl;
             servidor->encolarMensaje(clienteMensaje);
         } else {
           cout << "Cliente desconectado." << endl;
@@ -135,12 +130,12 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
     int tipo = mensaje->getTipo();
     bool mensajeValido = validarTipo(tipo, valor);
     if (mensajeValido){
-        string info = "Se recibió el mensaje con id = "+mensaje->getId()+" : '" + valor + "' de tipo" + mensaje->strTipo();
+        string info = "Se recibió el mensaje con id = "+mensaje->getId()+": '" + valor + "' de tipo " + mensaje->strTipo();
         Logger::instance()->logInfo(info);
         cout << info << endl;
         result = MENSAJE_OK;
     } else {
-        string error = "El mensaje recibido con id = "+mensaje->getId()+" : '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
+        string error = "El mensaje recibido con id = "+mensaje->getId()+": '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
         Logger::instance()->logError(INCONSISTENCIA_TIPO_VALOR, error);
         cout << error << endl;
         result = INCONSISTENCIA_TIPO_VALOR;
@@ -152,6 +147,7 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
 int Servidor::aceptar() {
 
     int resulAccept = accept(socketFd, 0, 0);
+    Logger::instance()->logInfo("La conexión ha sido aceptada");
     if (resulAccept == -1) {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
@@ -170,6 +166,7 @@ void Servidor::cerrar() {
     cerrarSocket();
 
     cout << "Servidor cerrado" << endl;
+    Logger::instance()->logInfo("El servidor ha sido cerrado");
 }
 
 void Servidor::setPuerto(int unPuerto) {

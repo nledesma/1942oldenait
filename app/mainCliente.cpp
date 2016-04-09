@@ -65,7 +65,12 @@ void menuPrincipal(Cliente * cliente) {
             case 3:
                 break;
             case 4:
-                menuMensajes(cliente);
+                if (cliente->conectado()){
+                  menuMensajes(cliente);
+                } else {
+                    Logger::instance()->logWarning("No se pueden enviar mensajes sin haber establecido una conexión previamente");
+                    cout << "No se ha podido enviar mensajes pues el cliente no se encuentra conectado" << endl;
+                }
                 break;
                 case 5:
                 int tiempo;
