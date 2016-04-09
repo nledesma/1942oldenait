@@ -39,7 +39,9 @@ void menuMensajes(Cliente * cliente) {
                   Mensaje * unMensaje;
                   resultado = cliente->recibirMensaje(unMensaje);
                   if (resultado != PEER_ERROR && resultado != PEER_DESCONECTADO){
-                      cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
+                      string msj =  "Recibi el mensaje: " + unMensaje->getValor();
+                      cout << msj << endl;
+                      Logger::instance()->logInfo(msj);
                       delete unMensaje;
                   } else if (resultado == PEER_DESCONECTADO) {
                       cout << "Falló la recepción porque el servidor se desconectó. Se procede a desconectar del servidor" << endl;

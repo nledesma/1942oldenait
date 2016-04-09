@@ -17,9 +17,8 @@ void* apagarServidor(void* servidor){
   if((caracter == 's')||(caracter == 'S')){
     servidor1->cerrar();
     cout << "El servidor ha sido cerrado" << endl;
-    pthread_exit(NULL);
   }
-  return 0;
+  pthread_exit(NULL);
 }
 
 int main(int argc, char *argv[]){
@@ -27,6 +26,8 @@ int main(int argc, char *argv[]){
   string rutaXMLServidor;
 
   if (argc < 2){
+    //TODO me parece que no esta entrando aca! REVISAR.
+    cout << "HOLAAA" << endl;
     cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
     Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el servidor con el XML por defecto");
     rutaXMLServidor = (DEFAULT_XML);
