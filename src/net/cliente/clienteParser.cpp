@@ -85,49 +85,112 @@ Cliente * ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	if (eResult != XML_NO_ERROR){
-		string ss = "Se produjo un error al cargar el archivo. Se utilizó el XML por defecto";
-		cout << ss << endl;
-		Logger::instance()->logWarning(ss);
-		return cargarConfiguracionPorDefecto();
-	}
-
-	XMLNode * pRoot = doc.FirstChild();
-	XMLNode * pNodeConexion = pRoot -> FirstChild();
-	XMLElement * pElement = pNodeConexion -> FirstChildElement("ip");
-	string ip = pElement -> GetText();
-
-	pElement = pNodeConexion -> FirstChildElement("port");
-	int puerto;
-	eResult = pElement -> QueryIntText(&puerto);
-	Cliente * cliente = new Cliente(ip, puerto);
-
-	XMLElement * pMensajes = pRoot -> FirstChildElement("mensajes");
-	XMLElement * pMensaje = pMensajes -> FirstChildElement("mensaje");
-	list<string>  ids;
-	while(pMensaje != NULL){
-		string id;
-		string tipo, valor;
-		id = pMensaje -> FirstChildElement("id") -> GetText();
-		// if (!idValido(ids, id)) {
-			// cout << "Ids repetidos, se utilizará la configuración por defecto" << endl;
-			// TODO log warning!!
-			// return cargarConfiguracionPorDefecto();
-		// }
-		tipo = pMensaje->FirstChildElement("tipo")->GetText();
-		transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
-		int codTipo;
-		if(this->tipoValido(tipo, codTipo)){
-			valor = pMensaje->FirstChildElement("valor")->GetText();
-			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
-		} else {
-			cout << " Se intento ingresar un mensaje con un tipo invalido, se utilizará la configuracion por defecto" << endl;
-			//TODO log Warning!!!
-			return cargarConfiguracionPorDefecto();
+		if(eResult == 16){
+			cout << "El archivo xml provisto no es válido. Se prosigue con la configuración por defecto." << endl;
+			Logger::instance()->logWarning("Archivo " + ruta + " invalido. Se prosigue con la configuración por defecto.");
+		}else {
+			cout << "Ruta inválida. Se prosigue con la configuración por defecto." << endl;
+			Logger::instance()->logWarning("Ruta " + ruta + " inválida. Se prosigue con la configuración por defecto.");
 		}
-		pMensaje = pMensaje -> NextSiblingElement("mensaje");
+		//TODO log Warning!!!!
+		return deserializador(DEFAULT_XML);
 	}
+	XMLNode * pRoot = doc.FirstChild();
+	string ip;
+	int puerto;
+	if(!nodoConexionValido(ip, puerto, pRoot)){
+		cout <<"Error en los elementos del archivo xml. Se cargará la configuración por defecto" << endl;
+		Logger::instance()->logWarning("Incoveniente en el nodo 'conexion' del xml provisto. Se prosigue con la configuración por defecto.");
+		return deserializador(DEFAULT_XML);
+	}
+	Cliente * cliente = new Cliente(ip, puerto);
+	if(!mensajesValidos(cliente, pRoot)){
+		cout <<"Error en los elementos del archivo xml. Se cargará la configuración por defecto." << endl;
+		Logger::instance()->logWarning("Incoveniente con los mensajes del archivo provisto. Se prosigue con la configuración por defecto.");
+		delete cliente;
+		return deserializador(DEFAULT_XML);
+	};
 	return cliente;
 }
+
+	bool ClienteParser::mensajesValidos(Cliente * cliente, XMLNode * pRoot) {
+		XMLNode * pNodoMensajes = pRoot -> FirstChild()-> NextSibling();
+		if(string(pNodoMensajes->Value()) != "mensajes") {
+			return false;
+		}
+		XMLNode * pNodoMensaje = pNodoMensajes -> FirstChild();
+		list<string>  ids;
+		while(pNodoMensaje != NULL){
+			if(string(pNodoMensaje->Value()) != "mensaje"){
+				return false;
+			}
+			string id;
+			string tipo, valor;
+			XMLNode * pNodoId = pNodoMensaje->FirstChild();
+			if(string(pNodoId->Value()) != "id") {
+				return false;
+			}
+			id = pNodoId -> ToElement() -> GetText();
+			if(!idValido(ids, id)) {
+				Logger::instance()->logWarning("Id" + id + " duplicado.");
+				return false;
+			}
+			XMLNode * pNodoTipo = pNodoId -> NextSibling();
+			if(string(pNodoTipo->Value()) != "tipo") {
+				return false;
+			}
+			tipo = pNodoTipo -> ToElement() -> GetText();
+			transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
+			int codTipo;
+			if(!this->tipoValido(tipo, codTipo)){
+				return false;
+			}
+			XMLNode * pNodoValor = pNodoTipo -> NextSibling();
+			if (string(pNodoValor->Value()) != "valor") {
+				return false;
+			}
+			valor = pNodoValor->ToElement()->GetText();
+			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
+			pNodoMensaje = pNodoMensaje -> NextSibling();
+		}
+		return true;
+	}
+
+
+	bool ClienteParser::nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot) {
+
+		XMLNode * pNodoConexion = pRoot -> FirstChild();
+		if(string(pNodoConexion->Value()) != "conexion"){
+			return false;
+		}
+		XMLNode * pNodoIp = pNodoConexion -> FirstChild();
+		if(string(pNodoIp->Value()) != "IP") {
+			return false;
+		}
+		XMLNode * pNodoPuerto = pNodoIp -> NextSibling();
+		if(string(pNodoPuerto->Value()) != "puerto"){
+			return false;
+		}
+		if(pNodoPuerto->NextSibling() != 0){
+			return false;
+		}
+		ip = pNodoIp->ToElement()->GetText();
+		puerto = pNodoPuerto->ToElement()->QueryIntText(&puerto);
+		return true;
+	}
+
+
+
+
+	bool ClienteParser::idValido(list<string> &ids, string id){
+		for(list<string>::iterator it=ids.begin(); it != ids.end(); it++){
+			if(it->c_str() == id){
+				return false;
+			}
+		}
+		ids.push_back(id);
+		return true;
+	}
 
 	bool ClienteParser::tipoValido(string tipo, int &codTipo) {
 		if(tipo == "STRING") {
@@ -148,46 +211,3 @@ Cliente * ClienteParser::deserializador(string ruta){
 		}
 		return false;
 	}
-
-	Cliente * ClienteParser::cargarConfiguracionPorDefecto() {
-		XMLDocument doc;
-		doc.LoadFile(DEFAULT_XML);
-		XMLNode * pRoot = doc.FirstChild();
-
-		XMLNode * pNodeConexion = pRoot -> FirstChild();
-		XMLElement * pElement = pNodeConexion -> FirstChildElement("ip");
-		string ip = pElement -> GetText();
-
-		pElement = pNodeConexion -> FirstChildElement("port");
-		int puerto;
-		pElement -> QueryIntText(&puerto);
-
-		Cliente * cliente = new Cliente(ip, puerto);
-
-		XMLElement * pMensajes = pRoot -> FirstChildElement("mensajes");
-		XMLElement * pMensaje = pMensajes -> FirstChildElement("mensaje");
-		while(pMensaje != NULL){
-			string id;
-			string tipo, valor;
-			id = pMensaje -> FirstChildElement("id") -> GetText();
-			tipo = pMensaje->FirstChildElement("tipo")->GetText();
-			transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
-			int codTipo;
-			tipoValido(tipo, codTipo);
-			valor = pMensaje->FirstChildElement("valor")->GetText();
-			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
-			pMensaje = pMensaje -> NextSiblingElement("mensaje");
-		}
-		return cliente;
-	}
-
-//TODO Falla el iterador, arreglar
-	// bool ClienteParser::idValido(list<string> &ids, string id){
-	// 	for(list<string>::iterator it=ids.begin(); it != ids.end(); it++){
-	// 		if(&it.c_str() == id){
-	// 			return false;
-	// 		}
-	// 	}
-	// 	ids.push_back(id);
-	// 	return true;
-	// }

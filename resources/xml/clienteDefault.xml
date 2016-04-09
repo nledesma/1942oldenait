@@ -1,7 +1,7 @@
 <cliente>
   <conexion>
-    <ip>127.0.0.1</ip>
-    <port>8080</port>
+    <IP>127.0.0.1</IP>
+    <puerto>8080</puerto>
   </conexion>
   <mensajes>
     <mensaje>
