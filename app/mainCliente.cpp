@@ -10,39 +10,49 @@ void menuMensajes(Cliente * cliente);
 void menuPrincipal(Cliente * cliente);
 void menuXml(Cliente * cliente);
 
+void mostrarMensajes(Cliente * cliente){
+
+  list<Mensaje*>::iterator iterador;
+  for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
+      cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
+  }
+}
 void menuMensajes(Cliente * cliente) {
-    string opcionElegida;
+    string opcionElegida = "";
     do {
         // Impresión de mensajes a elegir.
+        cout << "-----------------------------------------------------" << endl;
         cout << "Ingrese el id del mensaje que desea enviar. Para volver al menú anterior, ingrese 0: " <<endl;
-        list<Mensaje*>::iterator iterador;
-        for (iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); iterador++ ) {
-            cout << "ID = " << (*iterador)->getId() << " - Mensaje: " << (*iterador)->getValor() << endl;
-        }
-
+        mostrarMensajes(cliente);
+        cout << "-----------------------------------------------------" << endl;
         cin >> opcionElegida;
-
         // Envío de mensaje.
-        // TODO chequear que la opción corresponde a un id existente, porque muere.
         if (opcionElegida != "0") {
             int resultado = cliente->enviarMensajePorId(opcionElegida);
-            if (resultado != PEER_ERROR){
-                Mensaje * unMensaje;
-                resultado = cliente->recibirMensaje(unMensaje);
-                if (resultado != PEER_ERROR && resultado != PEER_DESCONECTADO){
-                    cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
-                    delete unMensaje;
-                } else if (resultado == PEER_DESCONECTADO) {
-                    cout << "Falló la recepción porque el servidor se desconectó. Se procede a desconectar del servidor" << endl;
-                    opcionElegida = "0";
-                } else {
-                    cout << "Falló la recepción porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
-                    opcionElegida = "0";
-                }
-            } else {
-                cout << "Falló el envío porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
-                opcionElegida = "0";
+            if(resultado == MENSAJE_INEXISTENTE){
+              cout << "El id ingresado es incorrecto, seleccione nuevamente: " << endl;
+              opcionElegida = "0";
+              menuMensajes(cliente);
             }
+            if(resultado != MENSAJE_INEXISTENTE){
+              if (resultado != PEER_ERROR) {
+                  Mensaje * unMensaje;
+                  resultado = cliente->recibirMensaje(unMensaje);
+                  if (resultado != PEER_ERROR && resultado != PEER_DESCONECTADO){
+                      cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
+                      delete unMensaje;
+                  } else if (resultado == PEER_DESCONECTADO) {
+                      cout << "Falló la recepción porque el servidor se desconectó. Se procede a desconectar del servidor" << endl;
+                      opcionElegida = "0";
+                  } else {
+                      cout << "Falló la recepción porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
+                      opcionElegida = "0";
+                  }
+                  } else {
+                    cout << "Falló el envío porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
+                    opcionElegida = "0";
+                  }
+              }
         }
     } while (opcionElegida != "0");
 }
@@ -60,6 +70,7 @@ void menuPrincipal(Cliente * cliente) {
         cout << "-----------------------------------------------------" << endl;
         cin >> opcion;
         cout << "-----------------------------------------------------" << endl;
+        cout << "Opción elegida: " << opcion << endl;
         int result;
         switch (opcion) {
             case 1:
