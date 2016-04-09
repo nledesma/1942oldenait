@@ -175,7 +175,7 @@ Cliente * ClienteParser::deserializador(string ruta){
 			return false;
 		}
 		ip = pNodoIp->ToElement()->GetText();
-		puerto = pNodoPuerto->ToElement()->QueryIntText(&puerto);
+		pNodoPuerto->ToElement()->QueryIntText(&puerto);
 		return true;
 	}
 
