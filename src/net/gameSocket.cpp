@@ -51,10 +51,10 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
             Mensaje::imprimirBytes(pMensaje, bytesRecibidos);
         }
     }
-    if (bytesActuales == -1) {
+    if (bytesActuales == PEER_ERROR) {
         Logger::instance()->logInfo("Error al recibir bytes (socket).");
-        return -1;
-    } else if (bytesActuales == 0) {
+        return PEER_ERROR;
+    } else if (bytesActuales == PEER_DESCONECTADO) {
         Logger::instance()->logInfo("El peer se desconectó.");
         return PEER_DESCONECTADO;
     } else {

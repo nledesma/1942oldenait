@@ -6,8 +6,24 @@
 
 using namespace std;
 
-int main(int argc, char *argv[]){
+void* apagarServidor(void* servidor){
 
+  char caracter;
+
+  Servidor *servidor1 = (Servidor *) servidor;
+  cout << "Presione 'S' para salir" << endl;
+  cin >> caracter;
+
+  if((caracter == 's')||(caracter == 'S')){
+    servidor1->cerrar();
+    cout << "El servidor ha sido cerrado" << endl;
+    pthread_exit(NULL);
+  }
+  return 0;
+}
+
+int main(int argc, char *argv[]){
+  pthread_t apagar;
   string rutaXMLServidor;
 
   if (argc < 2){
@@ -16,21 +32,24 @@ int main(int argc, char *argv[]){
     rutaXMLServidor = (DEFAULT_XML);
   } else {
     rutaXMLServidor = argv[1];
-  }  
-    /* Se crea el servidor. */
-    Servidor * servidor;
-    ServidorParser servidorParser;
-    servidor = servidorParser.deserializar(rutaXMLServidor);
-  
-    // Servidor aceptando conexiones
-    try{
-      servidor->pasivar();
-    }catch(runtime_error &e){
-      Logger::instance()->logError(errno,"Se produjo un error en el listen");
-    }
-  
-    //servidor->esperar();
-    //servidor->cerrar();
-  
-    pthread_exit(NULL);
+  }
+  /* Se crea el servidor. */
+  Servidor * servidor;
+  ServidorParser servidorParser;
+  servidor = servidorParser.deserializar(rutaXMLServidor);
+
+  //void* unServidor = (void*) servidor;
+  pthread_create(&apagar,NULL,apagarServidor,servidor);
+
+  // Servidor aceptando conexiones
+  try{
+    servidor->pasivar();
+  }catch(runtime_error &e){
+    Logger::instance()->logError(errno,"Se produjo un error en el listen");
+  }
+
+  //servidor->esperar();
+  //servidor->cerrar();
+
+  pthread_exit(NULL);
 }
