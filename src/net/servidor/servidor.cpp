@@ -88,9 +88,9 @@ void *Servidor::atenderCliente(void *arg) {
             cout << "Encolando mensaje de id " << clienteMensaje.second->getId() << endl;
             servidor->encolarMensaje(clienteMensaje);
         } else {
-          cout << "Error al recibir mensaje." << endl;
+          cout << "Cliente desconectado." << endl;
         }
-    } //TODO : No llega hasta acá (al quitarCliente)... revisar
+    }
     servidor->quitarCliente(clientfd);
     pthread_exit(NULL);
 }
@@ -202,24 +202,21 @@ void Servidor::agregarCliente(int fdCliente, pthread_t threadEntrada, pthread_t 
 
     stringstream direccionCliente;
     direccionCliente << clientAddress << ":" << port;
-    datosCliente datos = {
-      .th_entrada = threadEntrada,
-      .th_salida = threadSalida,
-      .dir = direccionCliente.str().c_str()
-    };
-
+    datosCliente datos;
+    datos.th_entrada = threadEntrada;
+    datos.th_salida = threadSalida;
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
-
+    direcciones.insert(pair<int, string>(fdCliente, direccionCliente.str()));
     pthread_mutex_lock(&mutexAgregar);
     clientes.insert(pair<int, datosCliente>(fdCliente, datos));
     pthread_mutex_unlock(&mutexAgregar);
 }
 
 void Servidor::quitarCliente(int clientfd) {
-    const char *direccionCliente = this->clientes.find(clientfd)->second.dir;
-    string tmp(direccionCliente);
-    Logger::instance()->logInfo("Cliente en la dirección " + tmp + " desconectado.");
+    string direccionCliente = direcciones[clientfd];
+    Logger::instance()->logInfo("Cliente en la dirección " + direccionCliente + " desconectado.");
     this->clientes.erase(clientfd);
+
 }
 
 void *Servidor::cicloDesencolar(void *THIS) {

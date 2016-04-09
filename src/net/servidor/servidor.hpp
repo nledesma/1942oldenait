@@ -25,13 +25,13 @@ using namespace std;
 struct datosCliente {
     pthread_t th_entrada;
     pthread_t th_salida;
-    const char *dir;
     ColaConcurrente<Mensaje *> colaSalida;
 };
 
 class Servidor : public GameSocket {
 private:
     map<int, datosCliente> clientes;
+    map<int , string> direcciones;
     struct sockaddr_in addr_info;
     ColaConcurrente<pair<int, Mensaje *> > colaDeMensajes;
     pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
