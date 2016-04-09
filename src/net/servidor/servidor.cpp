@@ -56,9 +56,16 @@ void *Servidor::cicloAceptar(void *THIS) {
             fdCliente = servidor->aceptar();
             pthread_t atender, responder;
             pair<Servidor *, int> arg(servidor, fdCliente);
-            pthread_create(&atender, NULL, atenderCliente, &arg);
-            pthread_create(&responder, NULL, responderCliente, &arg);
-            servidor->agregarCliente(fdCliente, atender, responder);
+            if (servidor->hayLugar()){
+                Mensaje mensaje(T_STRING, "", "OK");
+                servidor->enviarMensaje(&mensaje, fdCliente);
+                pthread_create(&atender, NULL, atenderCliente, &arg);
+                pthread_create(&responder, NULL, responderCliente, &arg);
+                servidor->agregarCliente(fdCliente, atender, responder);
+            } else {
+                Mensaje mensaje(T_STRING, "", "NO");
+                servidor->enviarMensaje(&mensaje, fdCliente);
+            }
         } catch (runtime_error &e) {
             Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
         }
@@ -278,4 +285,12 @@ bool Servidor::validarTipo(int tipo, string valor) {
             esValido = false;
     }
     return esValido;
+}
+
+bool Servidor::hayLugar(){
+    int clientesActuales;
+    pthread_mutex_lock(&mutexAgregar);
+    clientesActuales = clientes.size();
+    pthread_mutex_unlock(&mutexAgregar);
+    return clientesActuales < cantidadMaximaDeClientes;
 }
