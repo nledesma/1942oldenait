@@ -6,11 +6,15 @@
 #include "../../logger/logger.hpp"
 #include <sstream>
 
+using namespace tinyxml2;
+
 class ClienteParser {
 private:
 	bool tipoValido(string valor, int  &tipo);
 	bool idValido(list<string> &ids, string id);
 	Cliente * cargarConfiguracionPorDefecto();
+	bool nodoConexionValido(string &ip, int &puerto, XMLNode * pNodoConexion);
+	bool mensajesValidos(Cliente * cliente, XMLNode * pRoot);
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
 	public:
 		void serializador(Cliente *cliente,string ruta);
