@@ -9,29 +9,33 @@ GameSocket::GameSocket() {
 void GameSocket::iniciarSocket() {
     this->socketFd = socket(PF_INET, SOCK_STREAM, 0);
 
-    //int enable = 1;
-    //if (setsockopt(this->socketFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
-    //Logger::instance()->logError(errno, "Socket en uso");
+    int enable = 1;
+    if (setsockopt(this->socketFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+        Logger::instance()->logError(errno, "Socket en uso");
 }
 
 int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor) {
     int bytesEnviados = 0;
-    int bytesActuales = 0;
+    int bytesActuales = ESTADO_INICIAL;
 
     cout << "Enviando datos" << endl;
-    while (bytesEnviados < longitudMensaje && bytesActuales != -1) {
+    while (bytesEnviados < longitudMensaje && validarEstadoConexion(bytesActuales)) {
         // Agrego offsets si es que no se envía todo el mensaje
         bytesActuales = send(fdReceptor, pMensaje + bytesEnviados, longitudMensaje - bytesEnviados,
                              MSG_NOSIGNAL); // Send retorna la cantidad de byes enviados
         bytesEnviados += bytesActuales;
-        cout << "Enviado " << bytesEnviados << " bytes" << endl;
+
+        if (validarEstadoConexion(bytesActuales)){
+            cout << "Enviado " << bytesEnviados << " bytes" << endl;
+        }
     }
-    cout << "Datos enviados" << endl;
-    if (bytesActuales == -1) {
-        Logger::instance()->logInfo("Error al enviar bytes(socket).");
-        return -1;
+    if (bytesActuales == PEER_ERROR) {
+        Logger::instance()->logError(errno,"Error al enviar bytes(socket).");
+        return PEER_ERROR;
+    } else {
+        cout << "Datos enviados" << endl;
+        return MENSAJEOK;
     }
-    return MENSAJEOK;
 }
 
 
@@ -40,19 +44,19 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
     int bytesRecibidos = 0;
     int bytesActuales = ESTADO_INICIAL;
 
-    while (bytesRecibidos < longitudMensaje && bytesActuales != PEER_ERROR && bytesActuales != PEER_DESCONECTADO) {
+    while (bytesRecibidos < longitudMensaje && validarEstadoConexion(bytesActuales)) {
         // Agrego offsets si es que no se envía todo el mensaje
         bytesActuales = recv(fdEmisor, pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos,
                              0); // Recv retorna la cantidad de bytes recibidos.
 
         bytesRecibidos += bytesActuales;
-        if (bytesActuales != PEER_DESCONECTADO && bytesActuales != PEER_ERROR){
+        if (validarEstadoConexion(bytesActuales)){
             cout << "Recibidos " << bytesRecibidos << " bytes:" << endl;
             Mensaje::imprimirBytes(pMensaje, bytesRecibidos);
         }
     }
     if (bytesActuales == PEER_ERROR) {
-        Logger::instance()->logInfo("Error al recibir bytes (socket).");
+        Logger::instance()->logError(errno,"Error al recibir bytes (socket).");
         return PEER_ERROR;
     } else if (bytesActuales == PEER_DESCONECTADO) {
         Logger::instance()->logInfo("El peer se desconectó.");
@@ -62,12 +66,17 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
     }
 }
 
+void GameSocket::cerrarSocketFd(){
+    close(socketFd);
+
+}
+
 void GameSocket::cerrarSocket() {
     int cerrado = shutdown(socketFd, 0); //Dejo de transmitir datos
 
     if(cerrado == 0){
         cout << "Se cerró la conexión con el servidor" << endl;
-        close(socketFd);
+        this->cerrarSocketFd();
     } else {
         cout << "Hubo un error al cerrar la conexion (shutdown error)" << endl;
         Logger::instance()->logError(errno,"Error al cerrar la conexion"); //TODO
@@ -104,4 +113,10 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
         Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
     }
     return -1;
+}
+
+bool GameSocket::validarEstadoConexion(int estadoConexion) {
+    if (estadoConexion != PEER_DESCONECTADO && estadoConexion != PEER_ERROR)
+        return true;
+    return false;
 }

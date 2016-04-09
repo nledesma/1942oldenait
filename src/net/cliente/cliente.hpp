@@ -13,7 +13,9 @@
 #include <unistd.h>
 #include <chrono>
 #include <sstream>
+
 using namespace std;
+#define MENSAJE_INEXISTENTE -2
 
 class Cliente: public GameSocket{
 private:
@@ -31,12 +33,11 @@ public:
     int conectar();
     bool conectado();
     void cerrar();
-    string recibir(int longitudMensaje);
     string getIP();
     int getPort();
     int enviarMensajePorId(string idMensaje);
-    void ciclarMensajes(int milisegundos);
+    int ciclarMensajes(int milisegundos);
     list <Mensaje*>& getMensajes();
-    void recibirMensaje(Mensaje* &mensaje);
+    int recibirMensaje(Mensaje* &mensaje);
 };
 #endif // CLIENTE_H

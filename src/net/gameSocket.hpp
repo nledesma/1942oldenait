@@ -26,10 +26,12 @@ protected:
   int enviarMensaje(Mensaje * mensaje, int fdReceptor);
   int recibirMensaje(Mensaje *&mensaje, int fdEmisor);
   void cerrarSocket();
+  void cerrarSocketFd();
   struct sockaddr_in addr_info;
   void iniciarSocket();
+  bool validarEstadoConexion(int estadoConexion);
 
 public:
-  GameSocket();
+    GameSocket();
 };
 #endif // GAME_SOCKET_H

@@ -71,29 +71,6 @@ void Cliente::cerrar(){
 	cerrarSocket();
 }
 
-string Cliente::recibir(int longitudMensaje){
-	char *mensaje = new char[longitudMensaje];
-	int recibidos = 0;
-	cout << "Recibiendo el mensaje... " << endl;
-
-	// Le envio los bytes al cliente
-	while (recibidos < longitudMensaje && recibidos != -1){
-		// Agrego offsets si es que no se envia todo el mensaje
-		recibidos += recv(socketFd, mensaje + recibidos, longitudMensaje - recibidos, 0);
-		if (recibidos == -1){
-			cout << "Error al recibir" << endl;
-		} else {
-			cout << "Recibido " << recibidos << " bytes" << endl;
-		}
-	}
-
-	mensaje[longitudMensaje - 1] = 0; // Cierro string
-
-	cout << "Recibo el mensaje: " << mensaje << endl;
-
-	return string(mensaje);
-}
-
 string Cliente::getIP(){
 	return this->ip;
 }
@@ -108,16 +85,20 @@ list <Mensaje*>& Cliente::getMensajes(){
 
 int Cliente::enviarMensajePorId(string idMensaje) {
 	Mensaje * mensaje = this->encontrarMensajePorId(idMensaje);
+	int estadoEnvio = ESTADO_INICIAL;
 	if(mensaje != NULL) {
-		int msj = GameSocket::enviarMensaje(mensaje, this->socketFd);
-		return msj;
+		estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
+		if (!validarEstadoConexion(estadoEnvio)){
+			this->cerrar();
+		}
 	} else {
+		estadoEnvio = MENSAJE_INEXISTENTE;
 		stringstream ss;
 		ss << "No existe un mensaje con el id indicado (" << idMensaje << ")";
 		Logger::instance()->logInfo(ss.str());
 		cout << ss.str() << endl;
 	}
-	return -1;
+	return estadoEnvio;
 }
 
 //El metodo devuelve el mensaje correspondiente y lo elimina de la coleccion de mensajes
@@ -136,31 +117,51 @@ Mensaje * Cliente::encontrarMensajePorId(string idMensaje) {
 	return mensaje;
 }
 
-void Cliente::ciclarMensajes(int milisegundos) {
+int Cliente::ciclarMensajes(int milisegundos) {
 	typedef std::chrono::high_resolution_clock Time;
 	typedef std::chrono::duration<float> fsec;
 	typedef std::chrono::milliseconds ms;
 	auto t0 = Time::now();
 	auto t1 = Time::now();
 	fsec fs = t1 - t0;
+	int estadoConexion = ESTADO_INICIAL;
 	ms d = std::chrono::duration_cast<ms>(fs);
-	while(d.count()<milisegundos) {
+	while(d.count()<milisegundos && validarEstadoConexion(estadoConexion)) {
 		list<Mensaje*>::iterator iterador;
 		for(iterador = listaMensajes.begin(); iterador != listaMensajes.end(); iterador++) {
-			GameSocket::enviarMensaje((*iterador), this->socketFd);
-			Mensaje *mensajeRecibido;
-			GameSocket::recibirMensaje(mensajeRecibido, this->socketFd);
-			cout<< "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
-			delete mensajeRecibido;
+			if (validarEstadoConexion(estadoConexion)) {
+				estadoConexion = GameSocket::enviarMensaje((*iterador), this->socketFd);
+				if (validarEstadoConexion(estadoConexion)) {
+					Mensaje *mensajeRecibido;
+					estadoConexion = GameSocket::recibirMensaje(mensajeRecibido, this->socketFd);
+					cout << "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
+					delete mensajeRecibido;
+				}
+			}
 		}
 		t1 = Time::now();
 		fs = t1 - t0;
 		d = chrono::duration_cast<ms>(fs);
 	}
+	if (estadoConexion == PEER_DESCONECTADO) {
+		this->cerrarSocketFd();
+		cliente_conectado = false;
+		return estadoConexion;
+	} else if (estadoConexion == PEER_ERROR){
+		this->cerrar();
+		return estadoConexion;
+	} else {
+		return MENSAJEOK;
+	}
 }
 
-void Cliente::recibirMensaje(Mensaje* &mensaje) {
-	GameSocket::recibirMensaje(mensaje, this->socketFd);
+int Cliente::recibirMensaje(Mensaje* &mensaje) {
+	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
+	if (!validarEstadoConexion(estadoRecepcion)){
+		this->cerrarSocketFd();
+		cliente_conectado = false;
+	}
+	return estadoRecepcion;
 }
 
 bool Cliente::hayLugar(){

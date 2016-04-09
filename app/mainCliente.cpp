@@ -25,11 +25,24 @@ void menuMensajes(Cliente * cliente) {
         // Envío de mensaje.
         // TODO chequear que la opción corresponde a un id existente, porque muere.
         if (opcionElegida != "0") {
-            cliente->enviarMensajePorId(opcionElegida);
-            Mensaje * unMensaje;
-            cliente->recibirMensaje(unMensaje);
-            cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
-            delete unMensaje;
+            int resultado = cliente->enviarMensajePorId(opcionElegida);
+            if (resultado != PEER_ERROR){
+                Mensaje * unMensaje;
+                resultado = cliente->recibirMensaje(unMensaje);
+                if (resultado != PEER_ERROR && resultado != PEER_DESCONECTADO){
+                    cout<< "Recibi el mensaje " << unMensaje->getValor() << endl;
+                    delete unMensaje;
+                } else if (resultado == PEER_DESCONECTADO) {
+                    cout << "Falló la recepción porque el servidor se desconectó. Se procede a desconectar del servidor" << endl;
+                    opcionElegida = "0";
+                } else {
+                    cout << "Falló la recepción porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
+                    opcionElegida = "0";
+                }
+            } else {
+                cout << "Falló el envío porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
+                opcionElegida = "0";
+            }
         }
     } while (opcionElegida != "0");
 }
@@ -47,6 +60,7 @@ void menuPrincipal(Cliente * cliente) {
         cout << "-----------------------------------------------------" << endl;
         cin >> opcion;
         cout << "-----------------------------------------------------" << endl;
+        int result;
         switch (opcion) {
             case 1:
                 if (cliente->conectado()){
@@ -77,7 +91,14 @@ void menuPrincipal(Cliente * cliente) {
                 // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
                 cout << "Ingrese el tiempo (ms): " << endl;
                 cin >> tiempo;
-                cliente->ciclarMensajes(tiempo);
+                result = cliente->ciclarMensajes(tiempo);
+                if (result == PEER_DESCONECTADO){
+                    cout << "La acción no pudo completarse porque el servidor se desconectó." << endl;
+                } else if (result == PEER_ERROR){
+                    cout << "La acción no pudo completarse porque hubo un error en la conexión. Se cierra la conexión con el servidor" << endl;
+                } else {
+                    cout << "Ciclo de envío de mensajes realizado exitosamente." << endl;
+                }
                 break;
             default:
                 cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
