@@ -109,8 +109,24 @@ Cliente * ClienteParser::deserializador(string ruta){
 		Logger::instance()->logWarning("Incoveniente con los mensajes del archivo provisto. Se prosigue con la configuración por defecto.");
 		delete cliente;
 		return deserializador(DEFAULT_XML);
-	};
+	}
 	return cliente;
+}
+
+bool ClienteParser::esIpValido(string ip){
+	unsigned int i = 0;
+	const char* ipAux = ip.c_str();
+	int cantidadPuntos = 0;
+	while(i < ip.length()){
+		if(ipAux[i] == '.'){
+			cantidadPuntos++;
+		}
+		i++;
+	}
+	if((cantidadPuntos == 3)&&(ip.length()>=5)){
+		return true;
+	}
+	return false;
 }
 
 	bool ClienteParser::mensajesValidos(Cliente * cliente, XMLNode * pRoot) {
@@ -130,7 +146,11 @@ Cliente * ClienteParser::deserializador(string ruta){
 			if(string(pNodoId->Value()) != "id") {
 				return false;
 			}
-			id = pNodoId -> ToElement() -> GetText();
+			if(pNodoId -> ToElement() -> GetText() == nullptr){
+				return false;
+			}else{
+				id = pNodoId -> ToElement() -> GetText();
+			}
 			if(!idValido(ids, id)) {
 				Logger::instance()->logWarning("Id" + id + " duplicado.");
 				return false;
@@ -139,7 +159,11 @@ Cliente * ClienteParser::deserializador(string ruta){
 			if(string(pNodoTipo->Value()) != "tipo") {
 				return false;
 			}
-			tipo = pNodoTipo -> ToElement() -> GetText();
+			if(pNodoTipo -> ToElement() -> GetText() == nullptr){
+				return false;
+			}else{
+				tipo = pNodoTipo -> ToElement() -> GetText();
+			}
 			transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
 			int codTipo;
 			if(!this->tipoValido(tipo, codTipo)){
@@ -149,13 +173,16 @@ Cliente * ClienteParser::deserializador(string ruta){
 			if (string(pNodoValor->Value()) != "valor") {
 				return false;
 			}
-			valor = pNodoValor->ToElement()->GetText();
+			if(pNodoValor->ToElement()->GetText() == nullptr){
+				return false;
+			}else{
+				valor = pNodoValor->ToElement()->GetText();
+			}
 			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
 			pNodoMensaje = pNodoMensaje -> NextSibling();
 		}
 		return true;
 	}
-
 
 	bool ClienteParser::nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot) {
 
@@ -163,10 +190,12 @@ Cliente * ClienteParser::deserializador(string ruta){
 		if(string(pNodoConexion->Value()) != "conexion"){
 			return false;
 		}
+
 		XMLNode * pNodoIp = pNodoConexion -> FirstChild();
 		if(string(pNodoIp->Value()) != "IP") {
 			return false;
 		}
+
 		XMLNode * pNodoPuerto = pNodoIp -> NextSibling();
 		if(string(pNodoPuerto->Value()) != "puerto"){
 			return false;
@@ -174,12 +203,29 @@ Cliente * ClienteParser::deserializador(string ruta){
 		if(pNodoPuerto->NextSibling() != 0){
 			return false;
 		}
-		ip = pNodoIp->ToElement()->GetText();
-		pNodoPuerto->ToElement()->QueryIntText(&puerto);
+		if(pNodoIp == NULL){
+			return false;
+		}
+		if (pNodoIp->ToElement()->GetText() == nullptr){
+			return false;
+		} else {
+			ip = pNodoIp->ToElement()->GetText();
+			if (!esIpValido(ip)) {
+				return false;
+			}
+		}
+		if (pNodoPuerto->ToElement()->GetText() == nullptr){
+			return false;
+		} else{
+			pNodoPuerto->ToElement()->QueryIntText(&puerto);
+			if ((puerto>=1024)&&(puerto<65535)){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		return true;
-	}
-
-
+}
 
 
 	bool ClienteParser::idValido(list<string> &ids, string id){

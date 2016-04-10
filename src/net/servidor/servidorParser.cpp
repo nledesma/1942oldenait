@@ -29,7 +29,7 @@ void ServidorParser::serializar(Servidor * servidor, string ruta) {
 Servidor * ServidorParser::deserializar(string ruta) {
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
-	
+
 	if (eResult != XML_NO_ERROR){
 		Logger::instance()->logError(eResult, "Error al cargar el xml de servidor.");
 		Logger::instance()->logInfo("Cargando XML de servidor por defecto.");

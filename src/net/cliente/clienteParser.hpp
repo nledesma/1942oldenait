@@ -14,6 +14,7 @@ private:
 	bool idValido(list<string> &ids, string id);
 	bool nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot);
 	bool mensajesValidos(Cliente * cliente, XMLNode * pRoot);
+	bool esIpValido(string ip);
 	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
 	public:
 		void serializador(Cliente *cliente, string ruta);
