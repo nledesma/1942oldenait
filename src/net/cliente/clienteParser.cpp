@@ -85,7 +85,7 @@ Cliente * ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	if (eResult != XML_NO_ERROR){
-		if(eResult == 16){
+		if(eResult >= 16){
 			cout << "El archivo xml provisto no es válido. Se prosigue con la configuración por defecto." << endl;
 			Logger::instance()->logWarning("Archivo " + ruta + " invalido. Se prosigue con la configuración por defecto.");
 		}else {

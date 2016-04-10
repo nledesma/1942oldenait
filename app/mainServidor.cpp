@@ -26,8 +26,6 @@ int main(int argc, char *argv[]){
   string rutaXMLServidor;
 
   if (argc < 2){
-    //TODO me parece que no esta entrando aca! REVISAR.
-    cout << "HOLAAA" << endl;
     cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
     Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el servidor con el XML por defecto");
     rutaXMLServidor = (DEFAULT_XML);
@@ -51,6 +49,5 @@ int main(int argc, char *argv[]){
 
   //servidor->esperar();
   //servidor->cerrar();
-
   pthread_exit(NULL);
 }

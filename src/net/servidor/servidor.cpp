@@ -90,7 +90,7 @@ void *Servidor::atenderCliente(void *arg) {
             cout << "Encolando mensaje de id: " << clienteMensaje.second->getId() << endl;
             servidor->encolarMensaje(clienteMensaje);
         } else {
-          cout << "Cliente desconectado." << endl;
+          cout << "Se ha desconectado un cliente" << endl;
         }
     }
     servidor->quitarCliente(clientfd);
@@ -218,7 +218,9 @@ void Servidor::agregarCliente(int fdCliente, pthread_t threadEntrada, pthread_t 
 
 void Servidor::quitarCliente(int clientfd) {
     string direccionCliente = direcciones[clientfd];
-    Logger::instance()->logInfo("Cliente en la dirección " + direccionCliente + " desconectado.");
+    string msj = "Cliente en la dirección " + direccionCliente + " desconectado.";
+    cout << msj << endl;
+    Logger::instance()->logInfo(msj);
     this->clientes.erase(clientfd);
 
 }
