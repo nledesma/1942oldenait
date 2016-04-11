@@ -13,6 +13,7 @@ private:
   pthread_mutex_t mutexCola = PTHREAD_MUTEX_INITIALIZER;
   pthread_mutex_t mutexDesencolar = PTHREAD_MUTEX_INITIALIZER;
   pthread_cond_t condDesencolar = PTHREAD_COND_INITIALIZER;
+  bool apagar = false;
 public:
   ColaConcurrente ();
   virtual ~ColaConcurrente ();
@@ -20,6 +21,7 @@ public:
   T pop();
   void push(T el);
   bool vacia();
+  void avisar();
 };
 
 #endif

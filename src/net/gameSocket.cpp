@@ -11,7 +11,7 @@ void GameSocket::iniciarSocket() {
 
     int enable = 1;
     if (setsockopt(this->socketFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
-        Logger::instance()->logError(errno, "Socket en uso");
+        Logger::instance()->logError(errno, "Socket en uso.");
 }
 
 int GameSocket::setTimeOut(int time){
@@ -25,7 +25,6 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
     int bytesEnviados = 0;
     int bytesActuales = ESTADO_INICIAL;
 
-    cout << "Enviando datos" << endl;
     while (bytesEnviados < longitudMensaje && validarEstadoConexion(bytesActuales)) {
         // Agrego offsets si es que no se envía todo el mensaje
         bytesActuales = send(fdReceptor, pMensaje + bytesEnviados, longitudMensaje - bytesEnviados,
@@ -33,14 +32,14 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
         bytesEnviados += bytesActuales;
 
         if (validarEstadoConexion(bytesActuales)){
-            cout << "Enviado " << bytesEnviados << " bytes" << endl;
+            cout << "Enviado " << bytesEnviados << " bytes." << endl;
         }
     }
+
     if (bytesActuales == PEER_ERROR) {
         Logger::instance()->logError(errno,"Error al enviar bytes(socket).");
         return PEER_ERROR;
     } else {
-        cout << "Datos enviados" << endl;
         return MENSAJEOK;
     }
 }
@@ -57,10 +56,11 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
                              0); // Recv retorna la cantidad de bytes recibidos.
 
         bytesRecibidos += bytesActuales;
-        if (validarEstadoConexion(bytesActuales)){
-            cout << "Recibidos " << bytesRecibidos << " bytes:" << endl;
-            Mensaje::imprimirBytes(pMensaje, bytesRecibidos);
-        }
+
+        // if (validarEstadoConexion(bytesActuales)){
+        //     cout << "Recibidos " << bytesRecibidos << " bytes:" << endl;
+        //     Mensaje::imprimirBytes(pMensaje, bytesRecibidos);
+        // }
     }
     if (bytesActuales == PEER_ERROR) {
         Logger::instance()->logError(errno,"Error al recibir bytes (socket).");
@@ -82,11 +82,11 @@ void GameSocket::cerrarSocket() {
     int cerrado = shutdown(socketFd, 0); //Dejo de transmitir datos
 
     if(cerrado == 0){
-        cout << "Se cerró la conexión con el servidor" << endl;
+        cout << "Se cerró la conexión." << endl;
         this->cerrarSocketFd();
     } else {
-        cout << "Hubo un error al cerrar la conexion (shutdown error)" << endl;
-        Logger::instance()->logError(errno,"Error al cerrar la conexion"); //TODO
+        cout << "Hubo un error al cerrar la conexion (shutdown error)." << endl;
+        Logger::instance()->logError(errno,"Error al cerrar la conexion.");
     }
 }
 
@@ -109,7 +109,7 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
             return MENSAJEOK;
         } else {
             stringstream ss;
-            ss << "Error al recibir bytes del mensaje de tipo " << datos.tipo;
+            ss << "Error al recibir bytes del mensaje de tipo." << datos.tipo;
             cout << ss.str() << endl;
             Logger::instance()->logInfo(ss.str());
             delete[] pMensaje;
