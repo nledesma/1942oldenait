@@ -188,17 +188,17 @@ bool ClienteParser::esIpValido(string ip){
 	bool ClienteParser::nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot) {
 
 		XMLNode * pNodoConexion = pRoot -> FirstChild();
-		if(string(pNodoConexion->Value()) != "conexion"){
+		if((pNodoConexion == 0) || (string(pNodoConexion->Value()) != "conexion")){
 			return false;
 		}
 
 		XMLNode * pNodoIp = pNodoConexion -> FirstChild();
-		if(string(pNodoIp->Value()) != "IP") {
+		if((pNodoIp == 0) (string(pNodoIp->Value()) != "IP")) {
 			return false;
 		}
 
 		XMLNode * pNodoPuerto = pNodoIp -> NextSibling();
-		if(string(pNodoPuerto->Value()) != "puerto"){
+		if((pNodoPuerto == 0) || (string(pNodoPuerto->Value()) != "puerto")){
 			return false;
 		}
 		if(pNodoPuerto->NextSibling() != 0){
