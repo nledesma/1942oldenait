@@ -76,7 +76,6 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
   }
 }
 
-//TODO refactorizar!!!
 Cliente * ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());

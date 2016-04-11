@@ -44,14 +44,14 @@ void menuMensajes(Cliente * cliente) {
                       Logger::instance()->logInfo(msj);
                       delete unMensaje;
                   } else if (resultado == PEER_DESCONECTADO) {
-                      cout << "Falló la recepción porque el servidor se desconectó. Se procede a desconectar del servidor" << endl;
+                      cout << "Falló la recepción porque el servidor se desconectó. Se procede a desconectar del servidor." << endl;
                       opcionElegida = "0";
                   } else {
-                      cout << "Falló la recepción porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
+                      cout << "Falló la recepción porque hubo un error de conexión. Se procede a desconectar del servidor." << endl;
                       opcionElegida = "0";
                   }
                   } else {
-                    cout << "Falló el envío porque hubo un error de conexión. Se procede a desconectar del servidor" << endl;
+                    cout << "Falló el envío porque hubo un error de conexión. Se procede a desconectar del servidor." << endl;
                     opcionElegida = "0";
                   }
               }
@@ -99,20 +99,25 @@ void menuPrincipal(Cliente * cliente) {
                     cout << "No se ha podido enviar mensajes pues el cliente no se encuentra conectado" << endl;
                 }
                 break;
-                case 5:
-                int tiempo;
-                // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
-                cout << "Ingrese el tiempo (ms): " << endl;
-                cin >> tiempo;
-                result = cliente->ciclarMensajes(tiempo);
-                if (result == PEER_DESCONECTADO){
-                    cout << "La acción no pudo completarse porque el servidor se desconectó." << endl;
-                } else if (result == PEER_ERROR){
-                    cout << "La acción no pudo completarse porque hubo un error en la conexión. Se cierra la conexión con el servidor" << endl;
-                } else {
-                    cout << "Ciclo de envío de mensajes realizado exitosamente." << endl;
+            case 5:
+                if (cliente->conectado()){
+                    int tiempo;
+                    // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
+                    cout << "Ingrese el tiempo (ms): " << endl;
+                    cin >> tiempo;
+                    result = cliente->ciclarMensajes(tiempo);
+                    if (result == PEER_DESCONECTADO){
+                        cout << "La acción no pudo completarse porque el servidor se desconectó." << endl;
+                    } else if (result == PEER_ERROR){
+                        cout << "La acción no pudo completarse porque hubo un error en la conexión. Se cierra la conexión con el servidor" << endl;
+                    } else {
+                        cout << "Ciclo de envío de mensajes realizado exitosamente." << endl;
+                    }
+                    break;
+                } else{
+                    Logger::instance()->logWarning("No se pueden enviar mensajes sin haber establecido una conexión previamente");
+                    cout << "No se ha podido enviar mensajes pues el cliente no se encuentra conectado" << endl;
                 }
-                break;
             default:
                 cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
                 break;
@@ -123,20 +128,24 @@ void menuPrincipal(Cliente * cliente) {
 void menuXml(string rutaXML) {
     ClienteParser clienteParser;
     Cliente * cliente = clienteParser.deserializador(rutaXML);
-    if(cliente == NULL) {
-      cout << "Error cargando el archivo provisto. Se procederá con la configuración por defecto." << endl;
-      cliente = clienteParser.deserializador(DEFAULT_XML);
-        if (cliente == NULL) {
-          cout << "Hubo un error al iniciar el programa. Presione cualquier tecla para cerrar" << endl;
-          cin.get();
-        } else {
-          menuPrincipal(cliente);
-          delete cliente;
-        }
-      } else {
+
+    if(cliente != NULL){
         menuPrincipal(cliente);
         delete cliente;
-      }
+        return;
+    }
+
+    cout << "Error cargando el archivo provisto. Se procederá con la configuración por defecto." << endl;
+    cliente = clienteParser.deserializador(DEFAULT_XML);
+
+    if(cliente != NULL){
+        menuPrincipal(cliente);
+        delete cliente;
+        return;
+    }
+
+    cout << "Hubo un error al iniciar el programa. Presione cualquier tecla para cerrar." << endl;
+    cin.get();
   }
 
 
@@ -145,8 +154,8 @@ int main(int argc, char* argv[]){
     string rutaXMLCliente;
 
     if (argc < 2){
-        cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
-        Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el cliente con el XML por defecto");
+        cout << "Argumentos insuficientes, se utilizará el XML por defecto." << endl;
+        Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el cliente con el XML por defecto.");
         rutaXMLCliente = (DEFAULT_XML);
     } else {
         rutaXMLCliente = argv[1];

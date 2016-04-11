@@ -30,10 +30,6 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
         bytesActuales = send(fdReceptor, pMensaje + bytesEnviados, longitudMensaje - bytesEnviados,
                              MSG_NOSIGNAL); // Send retorna la cantidad de byes enviados
         bytesEnviados += bytesActuales;
-
-        if (validarEstadoConexion(bytesActuales)){
-            cout << "Enviado " << bytesEnviados << " bytes." << endl;
-        }
     }
 
     if (bytesActuales == PEER_ERROR) {

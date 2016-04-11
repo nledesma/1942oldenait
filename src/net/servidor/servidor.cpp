@@ -56,7 +56,6 @@ void *Servidor::cicloAceptar(void *THIS) {
             fdCliente = servidor->aceptar();
             if (servidor->hayLugar()){
                 Mensaje mensaje(T_STRING, "", "OK");
-                cout << "Atenidendo a un cliente." << endl;
                 servidor->enviarMensaje(&mensaje, fdCliente);
                 servidor->agregarCliente(fdCliente);
             } else {
@@ -207,7 +206,7 @@ void Servidor::agregarCliente(int fdCliente) {
     struct sockaddr_in client_addr;
     int client_addr_len = sizeof(client_addr);
     getpeername(fdCliente, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
-    int port = ntohs(client_addr.sin_port); //
+    int port = ntohs(client_addr.sin_port);
     char *clientAddress = inet_ntoa(client_addr.sin_addr);
 
     stringstream direccionCliente;
@@ -216,6 +215,7 @@ void Servidor::agregarCliente(int fdCliente) {
     datosCliente datos;
     datos.conectado = true;
 
+    cout << "Conectado a un cliente en la dirección " + direccionCliente.str() << endl;
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
     direcciones.insert(pair<int, string>(fdCliente, direccionCliente.str()));
 
