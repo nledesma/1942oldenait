@@ -123,9 +123,23 @@ void menuPrincipal(Cliente * cliente) {
 void menuXml(string rutaXML) {
     ClienteParser clienteParser;
     Cliente * cliente = clienteParser.deserializador(rutaXML);
-    menuPrincipal(cliente);
-    delete cliente;
-}
+    if(cliente == NULL) {
+      cout << "Error cargando el archivo provisto. Se procederá con la configuración por defecto." << endl;
+      cliente = clienteParser.deserializador(DEFAULT_XML);
+        if (cliente == NULL) {
+          cout << "Hubo un error al iniciar el programa. Presione cualquier tecla para cerrar" << endl;
+          cin.get();
+        } else {
+          menuPrincipal(cliente);
+          delete cliente;
+        }
+      } else {
+        menuPrincipal(cliente);
+        delete cliente;
+      }
+  }
+
+
 
 int main(int argc, char* argv[]){
     string rutaXMLCliente;

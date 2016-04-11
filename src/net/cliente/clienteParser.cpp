@@ -82,34 +82,33 @@ Cliente * ClienteParser::deserializador(string ruta){
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	if (eResult != XML_NO_ERROR){
 		if(eResult >= 16){
-			cout << "El archivo xml provisto no es válido. Se prosigue con la configuración por defecto." << endl;
-			Logger::instance()->logWarning("Archivo " + ruta + " invalido. Se prosigue con la configuración por defecto.");
+			cout << "El archivo" + ruta +"  no es válido" << endl;
+			Logger::instance()->logWarning("Archivo " + ruta + " invalido.");
 		}else if (eResult == XML_ERROR_PARSING_ELEMENT || eResult == XML_ERROR_ELEMENT_MISMATCH || eResult == XML_ERROR_IDENTIFYING_TAG) {
-			cout << "El XML especificado está malformado. Se prosigue con la configuración por defecto." << endl;
-			Logger::instance()->logWarning(
-					"El XML especificado está malformado. Se prosigue con la configuración por defecto.");
+			cout << "El archivo " + ruta + " está malformado." << endl;
+			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
 		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
-			cout << "El XML especificado está malformado. Se prosigue con la configuración por defecto." << endl;
-			Logger::instance()->logWarning("El XML especificado está malformado. Se prosigue con la configuración por defecto.");
+			cout << "El archivo " + ruta + " está malformado." << endl;
+			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
 		} else if (eResult == XML_ERROR_FILE_NOT_FOUND)
-			cout << "Ruta inválida. Se prosigue con la configuración por defecto." << endl;
-			Logger::instance()->logWarning("Ruta " + ruta + " inválida. Se prosigue con la configuración por defecto.");
-		return deserializador(DEFAULT_XML);
+			cout << "Ruta " + ruta + " inválida." << endl;
+			Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
+		return NULL;
 	}
 	XMLNode * pRoot = doc.FirstChild();
 	string ip;
 	int puerto;
 	if(!nodoConexionValido(ip, puerto, pRoot)){
-		cout <<"Error en los elementos del archivo xml. Se cargará la configuración por defecto" << endl;
-		Logger::instance()->logWarning("Incoveniente en el nodo 'conexion' del xml provisto. Se prosigue con la configuración por defecto.");
-		return deserializador(DEFAULT_XML);
+		cout <<"Error en los elementos del archivo " + ruta  << endl;
+		Logger::instance()->logWarning("Incoveniente en el nodo 'conexion' del archivo " + ruta);
+		return NULL;
 	}
 	Cliente * cliente = new Cliente(ip, puerto);
 	if(!mensajesValidos(cliente, pRoot)){
-		cout <<"Error en los elementos del archivo xml. Se cargará la configuración por defecto." << endl;
-		Logger::instance()->logWarning("Incoveniente con los mensajes del archivo provisto. Se prosigue con la configuración por defecto.");
+		cout <<"Error en los elementos del archivo " + ruta << endl;
+		Logger::instance()->logWarning("Incoveniente con los mensajes del archivo " + ruta );
 		delete cliente;
-		return deserializador(DEFAULT_XML);
+		return NULL;
 	}
 	return cliente;
 }
@@ -193,7 +192,7 @@ bool ClienteParser::esIpValido(string ip){
 		}
 
 		XMLNode * pNodoIp = pNodoConexion -> FirstChild();
-		if((pNodoIp == 0) (string(pNodoIp->Value()) != "IP")) {
+		if((pNodoIp == 0) || (string(pNodoIp->Value()) != "IP")) {
 			return false;
 		}
 
