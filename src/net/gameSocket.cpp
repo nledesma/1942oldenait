@@ -14,6 +14,13 @@ void GameSocket::iniciarSocket() {
         Logger::instance()->logError(errno, "Socket en uso");
 }
 
+int GameSocket::setTimeOut(int time){
+    struct timeval tv;
+    tv.tv_sec = time;
+    tv.tv_usec = 0;  // Not init'ing this can cause strange errors
+    return setsockopt(this->socketFd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+}
+
 int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor) {
     int bytesEnviados = 0;
     int bytesActuales = ESTADO_INICIAL;

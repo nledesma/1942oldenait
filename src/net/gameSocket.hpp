@@ -25,6 +25,7 @@ protected:
   int recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor);
   int enviarMensaje(Mensaje * mensaje, int fdReceptor);
   int recibirMensaje(Mensaje *&mensaje, int fdEmisor);
+  int setTimeOut(int time);
   void cerrarSocket();
   void cerrarSocketFd();
   struct sockaddr_in addr_info;
