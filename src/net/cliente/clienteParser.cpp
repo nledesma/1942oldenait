@@ -1,10 +1,6 @@
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
 #include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <iostream>
-#include <string>
 #include <list>
 #include <iterator>
 #include <algorithm>
@@ -88,11 +84,16 @@ Cliente * ClienteParser::deserializador(string ruta){
 		if(eResult >= 16){
 			cout << "El archivo xml provisto no es válido. Se prosigue con la configuración por defecto." << endl;
 			Logger::instance()->logWarning("Archivo " + ruta + " invalido. Se prosigue con la configuración por defecto.");
-		}else {
+		}else if (eResult == XML_ERROR_PARSING_ELEMENT || eResult == XML_ERROR_ELEMENT_MISMATCH || eResult == XML_ERROR_IDENTIFYING_TAG) {
+			cout << "El XML especificado está malformado. Se prosigue con la configuración por defecto." << endl;
+			Logger::instance()->logWarning(
+					"El XML especificado está malformado. Se prosigue con la configuración por defecto.");
+		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
+			cout << "El XML especificado está malformado. Se prosigue con la configuración por defecto." << endl;
+			Logger::instance()->logWarning("El XML especificado está malformado. Se prosigue con la configuración por defecto.");
+		} else if (eResult == XML_ERROR_FILE_NOT_FOUND)
 			cout << "Ruta inválida. Se prosigue con la configuración por defecto." << endl;
 			Logger::instance()->logWarning("Ruta " + ruta + " inválida. Se prosigue con la configuración por defecto.");
-		}
-		//TODO log Warning!!!!
 		return deserializador(DEFAULT_XML);
 	}
 	XMLNode * pRoot = doc.FirstChild();
