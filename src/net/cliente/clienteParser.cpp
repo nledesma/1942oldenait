@@ -193,7 +193,7 @@ bool ClienteParser::esIpValido(string ip){
 		}
 
 		XMLNode * pNodoIp = pNodoConexion -> FirstChild();
-		if((pNodoIp == 0) (string(pNodoIp->Value()) != "IP")) {
+		if((pNodoIp == 0) || (string(pNodoIp->Value()) != "IP")) {
 			return false;
 		}
 
