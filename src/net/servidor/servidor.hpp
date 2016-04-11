@@ -22,9 +22,11 @@
 
 using namespace std;
 
+//TODO esto no convendría hacerlo un objeto?
 struct datosCliente {
     pthread_t th_entrada;
     pthread_t th_salida;
+    bool conectado;
     ColaConcurrente<Mensaje *> colaSalida;
 };
 
@@ -58,7 +60,7 @@ public:
     void cerrar();
     int getPuerto();
     void setPuerto(int unPuerto);
-    void agregarCliente(int idCliente, pthread_t threadEntrada, pthread_t threadSalida);
+    void agregarCliente(int idCliente);
     void quitarCliente(int fdCliente);
     static void *atenderCliente(void *arg);
     static void *responderCliente(void *arg);
@@ -70,6 +72,7 @@ public:
     void encolarMensaje(pair<int, Mensaje *> clienteMensaje);
     void desencolar();
     void encolarSalida(int clienteFd, Mensaje *mensaje);
+    bool clienteConectado(int clienteFd);
 };
 
 #endif

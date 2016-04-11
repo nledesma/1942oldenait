@@ -54,14 +54,11 @@ void *Servidor::cicloAceptar(void *THIS) {
     while (servidor->servidorActivo()) {
         try {
             fdCliente = servidor->aceptar();
-            pthread_t atender, responder;
-            pair<Servidor *, int> arg(servidor, fdCliente);
             if (servidor->hayLugar()){
                 Mensaje mensaje(T_STRING, "", "OK");
+                cout << "Atenidendo a un cliente." << endl;
                 servidor->enviarMensaje(&mensaje, fdCliente);
-                pthread_create(&atender, NULL, atenderCliente, &arg);
-                pthread_create(&responder, NULL, responderCliente, &arg);
-                servidor->agregarCliente(fdCliente, atender, responder);
+                servidor->agregarCliente(fdCliente);
             } else {
                 Mensaje mensaje(T_STRING, "", "NO");
                 servidor->enviarMensaje(&mensaje, fdCliente);
@@ -77,22 +74,19 @@ void *Servidor::atenderCliente(void *arg) {
     pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
     Servidor *servidor = parServidorCliente->first;
     int clientfd = parServidorCliente->second;
-    cout << "Atendiendo un cliente" << endl;
     int recieveResult = ESTADO_INICIAL;
-    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR) {
+    // Validar que esté conectado?
+    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR && servidor->clienteConectado(clientfd)) {
         Mensaje *mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
         if(recieveResult == MENSAJEOK) {
-            string ss = "Se recibió el mensaje: '" + mensajeCliente->getValor() + "'.";
-            cout << ss << endl;
-            Logger::instance()->logInfo(ss);
             pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
-            cout << "Encolando mensaje de id: " << clienteMensaje.second->getId() << endl;
             servidor->encolarMensaje(clienteMensaje);
         } else {
           cout << "Se ha desconectado un cliente" << endl;
         }
     }
+
     servidor->quitarCliente(clientfd);
     pthread_exit(NULL);
 }
@@ -103,16 +97,23 @@ void * Servidor::responderCliente(void* arg){
     Servidor * servidor = servidorPar->first;
     int clienteFd = servidorPar->second;
 
-    while (servidor->servidorActivo()){
+    while (servidor->servidorActivo() && servidor->clienteConectado(clienteFd)){
         servidor->desencolarSalidaCliente(clienteFd);
     }
-
     pthread_exit(NULL);
+}
+
+bool Servidor::clienteConectado(int clienteFd){
+    return clientes[clienteFd].conectado;
 }
 
 void Servidor::desencolarSalidaCliente(int clienteFd){
     ColaConcurrente<Mensaje*> *colaSalida = &(clientes[clienteFd].colaSalida);
     Mensaje* mensaje = colaSalida->pop();
+
+    // Por ahí desencola cuando ya cerró el servidor.
+    if (!servidorActivado || !clienteConectado(clienteFd)) return;
+
     int result = procesarMensaje(mensaje);
     if (result == MENSAJE_OK){
         enviarMensaje(mensaje, clienteFd);
@@ -155,15 +156,20 @@ int Servidor::aceptar() {
 }
 
 void Servidor::cerrar() {
+    // TODO MUTEX.
     this->desactivarServidor();
-//    pthread_join(this->cicloAceptaciones, NULL);
+
     for (map<int, datosCliente>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++) {
-        int clienteActual = (*iterador).first;
+        int clienteActual = iterador->first;
         shutdown(clienteActual, 0);
         close(clienteActual);
+        iterador->second.colaSalida.avisar();
     }
 
     cerrarSocket();
+
+    // Cerramos las colas. Por ahora solo la principal.
+    colaDeMensajes.avisar();
 
     cout << "Servidor cerrado" << endl;
     Logger::instance()->logInfo("El servidor ha sido cerrado");
@@ -197,7 +203,7 @@ void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {
     this->colaDeMensajes.push(clienteMensaje);
 }
 
-void Servidor::agregarCliente(int fdCliente, pthread_t threadEntrada, pthread_t threadSalida) {
+void Servidor::agregarCliente(int fdCliente) {
     struct sockaddr_in client_addr;
     int client_addr_len = sizeof(client_addr);
     getpeername(fdCliente, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
@@ -206,23 +212,34 @@ void Servidor::agregarCliente(int fdCliente, pthread_t threadEntrada, pthread_t 
 
     stringstream direccionCliente;
     direccionCliente << clientAddress << ":" << port;
+
     datosCliente datos;
-    datos.th_entrada = threadEntrada;
-    datos.th_salida = threadSalida;
+    datos.conectado = true;
+
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
     direcciones.insert(pair<int, string>(fdCliente, direccionCliente.str()));
+
     pthread_mutex_lock(&mutexAgregar);
     clientes.insert(pair<int, datosCliente>(fdCliente, datos));
     pthread_mutex_unlock(&mutexAgregar);
+
+    pair<Servidor *, int> arg(this, fdCliente);
+
+    pthread_create(&(clientes[fdCliente].th_entrada), NULL, atenderCliente, &arg);
+    pthread_create(&(clientes[fdCliente].th_salida), NULL, responderCliente, &arg);
 }
 
-void Servidor::quitarCliente(int clientfd) {
-    string direccionCliente = direcciones[clientfd];
-    string msj = "Cliente en la dirección " + direccionCliente + " desconectado.";
+void Servidor::quitarCliente(int clienteFd) {
+    // TODO puede que falte liberar algo acá.
+    clientes[clienteFd].conectado = false;
+    // TODO ver si se rompe el cliente.
+    clientes[clienteFd].colaSalida.avisar();
+    string msj = "Cliente en la dirección " + direcciones[clienteFd] + " desconectado.";
     cout << msj << endl;
     Logger::instance()->logInfo(msj);
-    this->clientes.erase(clientfd);
-
+    pthread_join(clientes[clienteFd].th_salida, NULL);
+    pthread_join(clientes[clienteFd].th_entrada, NULL);
+    this->clientes.erase(clienteFd);
 }
 
 void *Servidor::cicloDesencolar(void *THIS) {
@@ -239,6 +256,7 @@ void Servidor::encolarSalida(int clienteFd, Mensaje* mensaje){
 
 void Servidor::desencolar() {
     pair<int, Mensaje*> clienteMensaje = colaDeMensajes.pop();
+    if (!servidorActivado) return;
     encolarSalida(clienteMensaje.first, clienteMensaje.second);
 }
 
