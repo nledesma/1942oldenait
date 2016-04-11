@@ -1,6 +1,6 @@
 <cliente>
 	<conexion>
-      <IP>127.0.0.1</IP>
+      <IP>10.42.0.79</IP>
 	  <puerto>8080</puerto>
 	</conexion>
   <mensajes>

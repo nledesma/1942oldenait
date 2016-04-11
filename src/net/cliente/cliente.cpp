@@ -133,9 +133,11 @@ int Cliente::ciclarMensajes(int milisegundos) {
 				estadoConexion = GameSocket::enviarMensaje((*iterador), this->socketFd);
 				if (validarEstadoConexion(estadoConexion)) {
 					Mensaje *mensajeRecibido;
-					estadoConexion = GameSocket::recibirMensaje(mensajeRecibido, this->socketFd);
-					cout << "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
-					delete mensajeRecibido;
+					estadoConexion = this->recibirMensaje(mensajeRecibido);
+					if (estadoConexion == MENSAJEOK) {
+						cout << "Id mensaje recibido: " << mensajeRecibido->getId() << endl;
+						delete mensajeRecibido;
+					}
 				}
 			}
 		}
@@ -143,16 +145,7 @@ int Cliente::ciclarMensajes(int milisegundos) {
 		fs = t1 - t0;
 		d = chrono::duration_cast<ms>(fs);
 	}
-	if (estadoConexion == PEER_DESCONECTADO) {
-		this->cerrarSocketFd();
-		cliente_conectado = false;
-		return estadoConexion;
-	} else if (estadoConexion == PEER_ERROR){
-		this->cerrar();
-		return estadoConexion;
-	} else {
-		return MENSAJEOK;
-	}
+	return estadoConexion;
 }
 
 int Cliente::recibirMensaje(Mensaje* &mensaje) {
@@ -161,11 +154,16 @@ int Cliente::recibirMensaje(Mensaje* &mensaje) {
 		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + this->socketFd);
 	}
 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
-	if (!validarEstadoConexion(estadoRecepcion)){
+	if (estadoRecepcion == PEER_DESCONECTADO) {
 		this->cerrarSocketFd();
 		cliente_conectado = false;
+		return estadoRecepcion;
+	} else if (estadoRecepcion == PEER_ERROR){
+		this->cerrar();
+		return estadoRecepcion;
+	} else {
+		return MENSAJEOK;
 	}
-	return estadoRecepcion;
 }
 
 bool Cliente::hayLugar(){
