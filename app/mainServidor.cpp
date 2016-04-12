@@ -49,5 +49,7 @@ int main(int argc, char *argv[]){
     //servidor->esperar();
     //servidor->cerrar();
     pthread_join(apagar, NULL);
+    Logger::instance()->cerrar();
+    Logger::resetInstance();
     pthread_exit(NULL);
 }

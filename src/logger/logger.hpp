@@ -25,6 +25,7 @@ private:
   pthread_mutex_t mutexLog = PTHREAD_MUTEX_INITIALIZER;
 public:
   static Logger * instance();
+  static void resetInstance();
   void log(int tipoLog, string str, int error);
   void logInfo(string mensaje);
   void logError(int numError, string error);

@@ -22,11 +22,12 @@ private:
     string ip;
     int port;
     list <Mensaje*> listaMensajes;
-    Mensaje * encontrarMensajePorId(string idMensaje);
     bool cliente_conectado;
+    Mensaje * encontrarMensajePorId(string idMensaje);
     bool hayLugar();
 public:
     Cliente(string ip, int port);
+    ~Cliente();
     void inicializar(string serverAddress ,int port);
     void agregarMensaje(Mensaje* pMensaje);
     void setAddress(string serverAddress, int port);

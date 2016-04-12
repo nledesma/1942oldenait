@@ -18,8 +18,8 @@ void Mensaje::set(infoMensaje datos, char* contenido){
   // El contenido el id y el valor concatenados.
   tipo = datos.tipo;
   // Ahora separamos el contenido.
-  string id(contenido, datos.longitudId);
-  string valor(contenido, datos.longitudId, datos.longitudValor);
+  string id(contenido, (size_t)datos.longitudId);
+  string valor(contenido, (size_t)datos.longitudId, (size_t)datos.longitudValor);
 
   this->id = id;
   this->valor = valor;
@@ -48,8 +48,8 @@ string Mensaje::strTipo(){
 const char *Mensaje::codificar(){
   string bytes = "";
   bytes += (char) tipo;
-  pushearInt(bytes, id.length());
-  pushearInt(bytes, valor.length());
+  pushearInt(bytes, this->lengthId());
+  pushearInt(bytes, this->lengthValor());
   bytes += id + valor;
   return bytes.c_str();
 }
@@ -75,11 +75,11 @@ void Mensaje::pushearInt(string &str, int n){
 }
 
 int Mensaje::lengthId(){
-  return id.length();
+  return (int)id.length();
 }
 
 int Mensaje::lengthValor(){
-  return valor.length();
+  return (int)valor.length();
 }
 
 void Mensaje::imprimirBytes(const char *bytes, int n){

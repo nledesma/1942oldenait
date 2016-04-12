@@ -13,6 +13,11 @@ Logger* Logger::instance(){
   return pInstance;
 }
 
+void Logger::resetInstance() {
+  delete pInstance;
+  pInstance = NULL;
+}
+
 Logger::Logger(){
   arch.open(LOG);
 }

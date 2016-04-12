@@ -132,6 +132,8 @@ void menuXml(string rutaXML) {
     if(cliente != NULL){
         menuPrincipal(cliente);
         delete cliente;
+        Logger::instance()->cerrar();
+        Logger::resetInstance();
         return;
     }
 
@@ -141,6 +143,8 @@ void menuXml(string rutaXML) {
     if(cliente != NULL){
         menuPrincipal(cliente);
         delete cliente;
+        Logger::instance()->cerrar();
+        Logger::resetInstance();
         return;
     }
 

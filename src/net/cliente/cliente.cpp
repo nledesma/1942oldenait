@@ -177,3 +177,7 @@ bool Cliente::hayLugar(){
 		return false;
 	}
 }
+
+Cliente::~Cliente() {
+	while(!this->listaMensajes.empty()) delete this->listaMensajes.front(), this->listaMensajes.pop_front();
+}
