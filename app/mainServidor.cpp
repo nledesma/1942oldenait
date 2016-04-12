@@ -35,6 +35,10 @@ int main(int argc, char *argv[]){
     Servidor * servidor;
     ServidorParser servidorParser;
     servidor = servidorParser.deserializar(rutaXMLServidor);
+    if(servidor == NULL){
+     cout << "Error cargando el archivo provisto. Se procederá con la configuración por defecto." << endl;
+     servidor = servidorParser.deserializar(DEFAULT_XML);
+    }
 
     //void* unServidor = (void*) servidor;
     pthread_create(&apagar,NULL,apagarServidor,servidor);
@@ -50,6 +54,6 @@ int main(int argc, char *argv[]){
     //servidor->cerrar();
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
-    Logger::resetInstance();
+    //Logger::resetInstance();
     pthread_exit(NULL);
 }

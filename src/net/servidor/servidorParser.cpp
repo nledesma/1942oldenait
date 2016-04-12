@@ -28,25 +28,62 @@ void ServidorParser::serializar(Servidor * servidor, string ruta) {
 
 Servidor * ServidorParser::deserializar(string ruta) {
 	XMLDocument doc;
-	XMLError eResult = doc.LoadFile(ruta.c_str());
+		XMLError eResult = doc.LoadFile(ruta.c_str());
+		if (eResult != XML_NO_ERROR){
+			if(eResult >= 16){
+				cout << "El archivo" + ruta +"  no es válido" << endl;
+				Logger::instance()->logWarning("Archivo " + ruta + " invalido.");
+		}else if (eResult == XML_ERROR_PARSING_ELEMENT || eResult == XML_ERROR_ELEMENT_MISMATCH || eResult == XML_ERROR_IDENTIFYING_TAG) {
+				cout << "El archivo " + ruta + " está malformado." << endl;
+				Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
+		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
+				cout << "El archivo " + ruta + " está malformado." << endl;
+				Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
+		} else if (eResult == XML_ERROR_FILE_NOT_FOUND)
+				cout << "Ruta " + ruta + " inválida." << endl;
+				Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
+			return NULL;
+		}
 
-	if (eResult != XML_NO_ERROR){
-		Logger::instance()->logError(eResult, "Error al cargar el xml de servidor.");
-		Logger::instance()->logInfo("Cargando XML de servidor por defecto.");
-		cout << "La ruta del XML ingresada no es válida. Se inicializará con el XML por defecto" << endl;
-		doc.LoadFile("../../resources/xml/servidorDefault.xml");
+
+		XMLNode * pRoot = doc.FirstChildElement();
+		XMLNode * pNodoCantidadMaximaDeClientes = pRoot -> FirstChild();
+		int cantidadMaximaDeClientes;
+		if((pNodoCantidadMaximaDeClientes == 0) || (string(pNodoCantidadMaximaDeClientes -> Value()) != "cantidadMaximaDeClientes") || (!laCantidadEsValida(pNodoCantidadMaximaDeClientes, cantidadMaximaDeClientes))) {
+			cout <<"Error en los elementos del archivo " + ruta  << endl;
+			Logger::instance()->logWarning("Incoveniente en la cantidad de clientes del archivo " + ruta);
+			Logger::instance()->logInfo("Se procede a cargar el archivo por defecto");
+			return NULL;
+		}
+
+		XMLNode * pNodoPuerto =  pNodoCantidadMaximaDeClientes -> NextSibling();
+
+		int unPuerto;
+
+		if((pNodoPuerto == 0) || (string(pNodoPuerto -> Value()) != "puerto") || (!elPuertoEsValido(pNodoPuerto, unPuerto))) {
+			cout <<"Error en los elementos del archivo " + ruta  << endl;
+			Logger::instance()->logWarning("Incoveniente en el puerto del archivo " + ruta);
+			Logger::instance()->logInfo("Se procede a cargar el archivo por defecto");
+			return NULL;
+		}
+		Servidor* servidor = new Servidor(unPuerto, cantidadMaximaDeClientes);
+		return servidor;
 	}
 
-	XMLNode * pRoot = doc.FirstChildElement();
-	XMLElement * pElement = pRoot -> FirstChildElement("cantidadMaximaDeClientes");
+	bool ServidorParser::elPuertoEsValido(XMLNode * pNodoPuerto, int &unPuerto) {
+		if (!(pNodoPuerto->ToElement()->GetText() == nullptr)) {
+				pNodoPuerto ->ToElement() -> QueryIntText(&unPuerto);
+				return((unPuerto>=1024)&&(unPuerto<65535));
+		} else {
+			return false;
+		}
+	}
 
-	int unaCantidadDeClientes;
-	eResult = pElement -> QueryIntText(&unaCantidadDeClientes);
-
-	pElement = pRoot -> FirstChildElement("puerto");
-
-	int unPuerto;
-	eResult = pElement -> QueryIntText(&unPuerto);
-
-	return new Servidor(unPuerto, unaCantidadDeClientes);
-}
+	bool ServidorParser::laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &cantidadDeClientes) {
+		if(!(pNodoCantidadClientes -> ToElement() -> GetText() == nullptr)) {
+			pNodoCantidadClientes -> ToElement() -> QueryIntText(&cantidadDeClientes);
+			return(cantidadDeClientes > 0);
+		} else {
+			return false;
+		}
+	}
