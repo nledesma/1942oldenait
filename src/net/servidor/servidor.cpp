@@ -115,8 +115,9 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
 
     int result = procesarMensaje(mensaje);
     if (result == MENSAJE_OK){
-        enviarMensaje(mensaje, clienteFd);
-        delete mensaje;
+      Mensaje * mensajeRespuesta = new Mensaje(T_STRING,mensaje -> getId() + "_OK" ," El mensaje enviado es correcto");
+      enviarMensaje(mensajeRespuesta, clienteFd);
+      delete mensajeRespuesta;
     } else {
         Mensaje* mensajeError = new Mensaje(T_STRING, mensaje->getId()+"_ERR", "Mensaje erróneo");
         enviarMensaje(mensajeError, clienteFd);
