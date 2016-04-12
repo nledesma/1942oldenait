@@ -60,7 +60,7 @@ int main(int argc, char *argv[]){
         return 0;
     }
     
-    Logger::instance()->logWarning("Error cargando el archivo provisto. Se procederá con la configuración por defecto.")
+    Logger::instance()->logWarning("Error cargando el archivo provisto. Se procederá con la configuración por defecto.");
     cout << "Error cargando el archivo provisto. Se procederá con la configuración por defecto." << endl;
     servidor = servidorParser.deserializar(DEFAULT_XML);
 
