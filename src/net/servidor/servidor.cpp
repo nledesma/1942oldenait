@@ -63,7 +63,10 @@ void *Servidor::cicloAceptar(void *THIS) {
                 servidor->enviarMensaje(&mensaje, fdCliente);
             }
         } catch (runtime_error &e) {
-            Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
+            if(servidor->servidorActivo()) {
+                Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");    
+            }
+            
         }
     }
     pthread_exit(NULL);
@@ -149,7 +152,10 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
 int Servidor::aceptar() {
 
     int resulAccept = accept(socketFd, 0, 0);
-    Logger::instance()->logInfo("La conexión ha sido aceptada");
+    if(this->servidorActivado) {
+        Logger::instance()->logInfo("La conexión ha sido aceptada");
+    }
+    
     if (resulAccept == -1) {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
@@ -157,9 +163,8 @@ int Servidor::aceptar() {
 }
 
 void Servidor::cerrar() {
-    // TODO MUTEX.
+    //TODO MUTEX.
     this->desactivarServidor();
-
     for (map<int, datosCliente>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++) {
         int clienteActual = iterador->first;
         shutdown(clienteActual, 0);
