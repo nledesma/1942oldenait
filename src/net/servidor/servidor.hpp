@@ -37,6 +37,7 @@ private:
     struct sockaddr_in addr_info;
     ColaConcurrente<pair<int, Mensaje *> > colaDeMensajes;
     pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexActivarServidor = PTHREAD_MUTEX_INITIALIZER;
     int cantidadMaximaDeClientes;
     int puerto;
     bool servidorActivado;

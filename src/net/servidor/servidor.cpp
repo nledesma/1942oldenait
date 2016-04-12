@@ -10,7 +10,7 @@ Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
         Logger::instance()->logError(errno, "Se produjo un error en el BIND");
     }
     setCantidadMaximaDeClientes(cantidadDeClientes);
-    servidorActivado = false;
+    desactivarServidor();
 }
 
 void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
@@ -64,9 +64,9 @@ void *Servidor::cicloAceptar(void *THIS) {
             }
         } catch (runtime_error &e) {
             if(servidor->servidorActivo()) {
-                Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");    
+                Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
             }
-            
+
         }
     }
     pthread_exit(NULL);
@@ -155,7 +155,7 @@ int Servidor::aceptar() {
     if(this->servidorActivado) {
         Logger::instance()->logInfo("La conexión ha sido aceptada");
     }
-    
+
     if (resulAccept == -1) {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
@@ -202,7 +202,10 @@ bool Servidor::servidorActivo() {
 }
 
 void Servidor::desactivarServidor() {
-    servidorActivado = false;
+  pthread_mutex_lock(&mutexActivarServidor);
+  servidorActivado = false;
+  pthread_mutex_unlock(&mutexActivarServidor);
+
 }
 
 void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {

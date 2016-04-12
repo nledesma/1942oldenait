@@ -60,8 +60,8 @@ void menuMensajes(Cliente * cliente) {
 }
 
 void menuPrincipal(Cliente * cliente) {
-    int opcion = -1;
-    while (opcion != 3){
+    char opcion = '-';
+    while (opcion != '3'){
         cout << "-----------------------------------------------------" << endl;
         cout << "Bienvenido, Elija la opcion que desee:" << endl;
         cout << "1. Conectar" << endl;
@@ -75,23 +75,23 @@ void menuPrincipal(Cliente * cliente) {
         cout << "Opción elegida: " << opcion << endl;
         int result;
         switch (opcion) {
-            case 1:
+            case '1':
                 if (cliente->conectado()){
                     cout << "El cliente ya está conectado." << endl;
                 } else {
                     cliente->conectar();
                 }
                 break;
-            case 2:
+            case '2':
                 if (cliente->conectado()){
                     cliente->cerrar();
                 } else {
                     cout << "El cliente no está conectado." << endl;
                 }
                 break;
-            case 3:
+            case '3':
                 break;
-            case 4:
+            case '4':
                 if (cliente->conectado()){
                   menuMensajes(cliente);
                 } else {
@@ -99,7 +99,7 @@ void menuPrincipal(Cliente * cliente) {
                     cout << "No se ha podido enviar mensajes pues el cliente no se encuentra conectado" << endl;
                 }
                 break;
-            case 5:
+            case '5':
                 if (cliente->conectado()){
                     int tiempo;
                     // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
@@ -119,7 +119,7 @@ void menuPrincipal(Cliente * cliente) {
                     cout << "No se ha podido enviar mensajes pues el cliente no se encuentra conectado" << endl;
                 }
             default:
-                cout<< "Opcion invalida. Pulse ENTER para continuar y volver a elegir" << endl;
+                cout<< "Opcion invalida. Seleccione una opción válida y pulse ENTER para continuar." << endl;
                 break;
         }
     }

@@ -11,8 +11,10 @@ void* apagarServidor(void* servidor){
     char caracter;
 
     Servidor *servidor1 = (Servidor *) servidor;
-    cout << "Presione 'S' para salir" << endl;
-    cin >> caracter;
+    do{
+      cout << "Presione 'S' para salir" << endl;
+      cin >> caracter;
+    }while((caracter != 's')&&(caracter != 'S'));
 
     if((caracter == 's')||(caracter == 'S')){
         servidor1->cerrar();
@@ -37,7 +39,7 @@ void ejecutar(Servidor* servidor){
     Logger::instance()->cerrar();
     //Logger::resetInstance();
     pthread_exit(NULL);
-}    
+}
 
 int main(int argc, char *argv[]){
     string rutaXMLServidor;
@@ -59,7 +61,7 @@ int main(int argc, char *argv[]){
         delete servidor;
         return 0;
     }
-    
+
     Logger::instance()->logWarning("Error cargando el archivo provisto. Se procederá con la configuración por defecto.");
     cout << "Error cargando el archivo provisto. Se procederá con la configuración por defecto." << endl;
     servidor = servidorParser.deserializar(DEFAULT_XML);
@@ -73,8 +75,6 @@ int main(int argc, char *argv[]){
     Logger::instance()->logWarning("Hubo un error al inicializar el servidor desde el archivo XML por default");
     cout << "Hubo un error al iniciar el servidor. Presione cualquier tecla para finalizar el programa" << endl;
     cin.get();
-    
+
     return 0;
 }
-
-
