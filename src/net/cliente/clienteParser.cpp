@@ -80,22 +80,16 @@ Cliente * ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	if (eResult != XML_NO_ERROR){
-		cout << "ESTE ES EL ERESULT " << eResult << endl;
-		cout << "ESTE ES EL XML_ERROR_FILE_NOT_FOUND " << XML_ERROR_FILE_NOT_FOUND << endl;
-		cout << "ESTE ES EL XML_ERROR_PARSING_ELEMENT " << XML_ERROR_PARSING_ELEMENT << endl;
 		if(eResult >= 16){
 			cout << "El archivo" + ruta +"  no es válido" << endl;
 			Logger::instance()->logWarning("Archivo " + ruta + " invalido.");
 		}else if (eResult == XML_ERROR_PARSING_ELEMENT || eResult == XML_ERROR_ELEMENT_MISMATCH || eResult == XML_ERROR_IDENTIFYING_TAG) {
-			cout << "ENTRO AL PRIMER ELSE IF" << endl;
 			cout << "El archivo " + ruta + " está malformado." << endl;
 			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
 		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
-			cout << "ENTRO AL SEGUNDO ELSE IF" << endl;
 			cout << "El archivo " + ruta + " está malformado." << endl;
 			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
 		} else if (eResult == XML_ERROR_FILE_NOT_FOUND){
-			cout << "ENTRO AL TERCER ELSE IF" << endl;
 			cout << "Ruta " + ruta + " inválida." << endl;
 			Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
 		}

@@ -153,7 +153,7 @@ int Cliente::ciclarMensajes(int milisegundos) {
 int Cliente::recibirMensaje(Mensaje* &mensaje) {
 	int result = this->setTimeOut(3);
 	if (result < 0){
-		//Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + this->socketFd);
+		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + this->socketFd);
 	}
 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
 	if (estadoRecepcion == PEER_DESCONECTADO) {
