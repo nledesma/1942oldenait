@@ -88,6 +88,8 @@ int Cliente::enviarMensajePorId(string idMensaje) {
 	int estadoEnvio = ESTADO_INICIAL;
 	if(mensaje != NULL) {
 		estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
+		string info = "Se ha recibido correctamente el mensaje '" + mensaje->getValor()+ "' de tipo " + mensaje->strTipo();
+		Logger::instance()->logInfo(info);
 		if (!validarEstadoConexion(estadoEnvio)){
 			this->cerrar();
 		}
@@ -153,7 +155,11 @@ int Cliente::ciclarMensajes(int milisegundos) {
 int Cliente::recibirMensaje(Mensaje* &mensaje) {
 	int result = this->setTimeOut(3);
 	if (result < 0){
-		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + this->socketFd);
+		string msj;
+		ostringstream msjInfo;
+		msjInfo << this->socketFd;
+		msj = msjInfo.str();
+		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + msj);
 	}
 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
 	if (estadoRecepcion == PEER_DESCONECTADO) {
