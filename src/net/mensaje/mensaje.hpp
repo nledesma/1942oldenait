@@ -69,7 +69,6 @@ public:
 
     void set(infoMensaje datos, char *pMensaje);
 
-    // Estas dos cosas habría que meterlas en otro lado.
     static void imprimirBytes(const char *bytes, int n);
 
     void pushearInt(string &str, int n);

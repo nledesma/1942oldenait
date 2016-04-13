@@ -65,7 +65,6 @@ infoMensaje Mensaje::decodificarInfo(char *pInfoMensaje){
 
 void Mensaje::pushearInt(string &str, int n){
   char bytes[INT_SIZE];
-  //memcopy
   memcpy((void*)bytes, (void*)&n, INT_SIZE);
 
   for (unsigned int i = 0 ; i < INT_SIZE; i++){

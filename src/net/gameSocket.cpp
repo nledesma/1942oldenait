@@ -17,7 +17,7 @@ void GameSocket::iniciarSocket() {
 int GameSocket::setTimeOut(int time){
     struct timeval tv;
     tv.tv_sec = time;
-    tv.tv_usec = 0;  // Not init'ing this can cause strange errors
+    tv.tv_usec = 0;
     return setsockopt(this->socketFd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 }
 

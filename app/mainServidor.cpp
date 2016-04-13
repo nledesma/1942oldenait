@@ -73,6 +73,7 @@ int main(int argc, char *argv[]){
     Logger::instance()->logWarning("Hubo un error al inicializar el servidor desde el archivo XML por default");
     cout << "Hubo un error al iniciar el servidor. Presione cualquier tecla para finalizar el programa" << endl;
     cin.get();
+    Logger::instance()->cerrar();
 
     return 0;
 }

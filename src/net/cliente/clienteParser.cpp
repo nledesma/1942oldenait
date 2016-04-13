@@ -89,9 +89,11 @@ Cliente * ClienteParser::deserializador(string ruta){
 		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
 			cout << "El archivo " + ruta + " está malformado." << endl;
 			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
-		} else if (eResult == XML_ERROR_FILE_NOT_FOUND)
+		} else if (eResult == XML_ERROR_FILE_NOT_FOUND){
 			cout << "Ruta " + ruta + " inválida." << endl;
 			Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
+		}
+
 		return NULL;
 	}
 	XMLNode * pRoot = doc.FirstChild();
@@ -142,7 +144,7 @@ bool ClienteParser::esIpValido(string ip){
 			string id;
 			string tipo, valor;
 			XMLNode * pNodoId = pNodoMensaje->FirstChild();
-			if(string(pNodoId->Value()) != "id") {
+			if((pNodoId == 0) || string(pNodoId->Value()) != "id") {
 				return false;
 			}
 			if(pNodoId -> ToElement() -> GetText() == nullptr){
@@ -155,7 +157,7 @@ bool ClienteParser::esIpValido(string ip){
 				return false;
 			}
 			XMLNode * pNodoTipo = pNodoId -> NextSibling();
-			if(string(pNodoTipo->Value()) != "tipo") {
+			if((pNodoTipo == 0) || string(pNodoTipo->Value()) != "tipo") {
 				return false;
 			}
 			if(pNodoTipo -> ToElement() -> GetText() == nullptr){
@@ -169,7 +171,7 @@ bool ClienteParser::esIpValido(string ip){
 				return false;
 			}
 			XMLNode * pNodoValor = pNodoTipo -> NextSibling();
-			if (string(pNodoValor->Value()) != "valor") {
+			if ((pNodoValor == 0) || string(pNodoValor->Value()) != "valor") {
 				return false;
 			}
 			if(pNodoValor->ToElement()->GetText() == nullptr){
