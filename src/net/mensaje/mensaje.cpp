@@ -1,5 +1,5 @@
 #include "mensaje.hpp"
-// POR ahí podría recibir char array, que viene del xml.
+
 Mensaje::Mensaje(int tipo, string id, string valor){
   set(tipo, id, valor);
 }
@@ -63,7 +63,6 @@ infoMensaje Mensaje::decodificarInfo(char *pInfoMensaje){
 	return informacion;
 }
 
-// TODO sacar estas dos funciones de mensaje.
 void Mensaje::pushearInt(string &str, int n){
   char bytes[INT_SIZE];
   //memcopy

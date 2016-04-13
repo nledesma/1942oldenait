@@ -38,8 +38,7 @@ bool ColaConcurrente<T>::vacia(){
 
 template<class T>
 void ColaConcurrente<T>::avisar(){
-    // Encolamos algo ficticio para que pueda destrabarse desencolando (!).
-    // Por ahí hay un mejor método.
+    // Encolamos algo ficticio para que pueda destrabarse desencolando.
     T t;
     push(t);
 }

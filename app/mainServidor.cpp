@@ -25,7 +25,6 @@ void* apagarServidor(void* servidor){
 void ejecutar(Servidor* servidor){
     pthread_t apagar;
 
-    //void* unServidor = (void*) servidor;
     pthread_create(&apagar,NULL,apagarServidor,servidor);
     // Servidor aceptando conexiones
     try{
@@ -33,8 +32,7 @@ void ejecutar(Servidor* servidor){
     }catch(runtime_error &e){
         Logger::instance()->logError(errno,"Se produjo un error en el listen");
     }
-    //servidor->esperar();
-    //servidor->cerrar();
+
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
     Logger::resetInstance();

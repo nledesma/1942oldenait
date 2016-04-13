@@ -22,7 +22,6 @@
 
 using namespace std;
 
-//TODO esto no convendría hacerlo un objeto?
 struct datosCliente {
     pthread_t th_entrada;
     pthread_t th_salida;

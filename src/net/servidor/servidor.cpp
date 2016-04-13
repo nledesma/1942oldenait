@@ -163,7 +163,6 @@ int Servidor::aceptar() {
 }
 
 void Servidor::cerrar() {
-    //TODO MUTEX.
     this->desactivarServidor();
     for (map<int, datosCliente>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++) {
         int clienteActual = iterador->first;
@@ -174,7 +173,7 @@ void Servidor::cerrar() {
 
     cerrarSocket();
 
-    // Cerramos las colas. Por ahora solo la principal.
+    // Cerramos las colas.
     colaDeMensajes.avisar();
 
     cout << "Servidor cerrado" << endl;
@@ -240,9 +239,7 @@ void Servidor::agregarCliente(int fdCliente) {
 }
 
 void Servidor::quitarCliente(int clienteFd) {
-    // TODO puede que falte liberar algo acá.
     clientes[clienteFd].conectado = false;
-    // TODO ver si se rompe el cliente.
     clientes[clienteFd].colaSalida.avisar();
     string msj = "Cliente en la dirección " + direcciones[clienteFd] + " desconectado.";
     cout << msj << endl;

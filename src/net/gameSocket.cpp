@@ -3,10 +3,10 @@
 using namespace std;
 
 GameSocket::GameSocket() {
-    // Se inicializa el socket para dominios IPv4, tipo de conexión SOCK_STREAM (TCP), y protocolo a definir
 }
 
 void GameSocket::iniciarSocket() {
+  // Se inicializa el socket para dominios IPv4, tipo de conexión SOCK_STREAM (TCP), y protocolo a definir
     this->socketFd = socket(PF_INET, SOCK_STREAM, 0);
 
     int enable = 1;
@@ -53,10 +53,6 @@ int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) 
 
         bytesRecibidos += bytesActuales;
 
-        // if (validarEstadoConexion(bytesActuales)){
-        //     cout << "Recibidos " << bytesRecibidos << " bytes:" << endl;
-        //     Mensaje::imprimirBytes(pMensaje, bytesRecibidos);
-        // }
     }
     if (bytesActuales == PEER_ERROR) {
         Logger::instance()->logError(errno,"Error al recibir bytes (socket).");
@@ -97,7 +93,6 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     if (resultado == MENSAJEOK) {
         infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
 
-        // TODO ver qué onda las incumbencias.
         char *pMensaje = new char[datos.longitudId + datos.longitudValor];
         if (recibirBytes(pMensaje, datos.longitudId + datos.longitudValor, fdEmisor) == MENSAJEOK) {
             mensaje = new Mensaje(datos, pMensaje);
