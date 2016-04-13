@@ -37,7 +37,7 @@ void ejecutar(Servidor* servidor){
     //servidor->cerrar();
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
-    //Logger::resetInstance();
+    Logger::resetInstance();
     pthread_exit(NULL);
 }
 
