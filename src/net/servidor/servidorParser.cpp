@@ -39,9 +39,10 @@ Servidor * ServidorParser::deserializar(string ruta) {
 		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
 				cout << "El archivo " + ruta + " está malformado." << endl;
 				Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
-		} else if (eResult == XML_ERROR_FILE_NOT_FOUND)
+		} else if (eResult == XML_ERROR_FILE_NOT_FOUND){
 				cout << "Ruta " + ruta + " inválida." << endl;
 				Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
+		}
 			return NULL;
 		}
 

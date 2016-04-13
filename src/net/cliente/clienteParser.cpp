@@ -80,18 +80,26 @@ Cliente * ClienteParser::deserializador(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	if (eResult != XML_NO_ERROR){
+		cout << "ESTE ES EL ERESULT " << eResult << endl;
+		cout << "ESTE ES EL XML_ERROR_FILE_NOT_FOUND " << XML_ERROR_FILE_NOT_FOUND << endl;
+		cout << "ESTE ES EL XML_ERROR_PARSING_ELEMENT " << XML_ERROR_PARSING_ELEMENT << endl;
 		if(eResult >= 16){
 			cout << "El archivo" + ruta +"  no es válido" << endl;
 			Logger::instance()->logWarning("Archivo " + ruta + " invalido.");
 		}else if (eResult == XML_ERROR_PARSING_ELEMENT || eResult == XML_ERROR_ELEMENT_MISMATCH || eResult == XML_ERROR_IDENTIFYING_TAG) {
+			cout << "ENTRO AL PRIMER ELSE IF" << endl;
 			cout << "El archivo " + ruta + " está malformado." << endl;
 			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
 		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
+			cout << "ENTRO AL SEGUNDO ELSE IF" << endl;
 			cout << "El archivo " + ruta + " está malformado." << endl;
 			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
-		} else if (eResult == XML_ERROR_FILE_NOT_FOUND)
+		} else if (eResult == XML_ERROR_FILE_NOT_FOUND){
+			cout << "ENTRO AL TERCER ELSE IF" << endl;
 			cout << "Ruta " + ruta + " inválida." << endl;
 			Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
+		}
+
 		return NULL;
 	}
 	XMLNode * pRoot = doc.FirstChild();
@@ -142,7 +150,7 @@ bool ClienteParser::esIpValido(string ip){
 			string id;
 			string tipo, valor;
 			XMLNode * pNodoId = pNodoMensaje->FirstChild();
-			if(string(pNodoId->Value()) != "id") {
+			if((pNodoId == 0) || string(pNodoId->Value()) != "id") {
 				return false;
 			}
 			if(pNodoId -> ToElement() -> GetText() == nullptr){
@@ -155,7 +163,7 @@ bool ClienteParser::esIpValido(string ip){
 				return false;
 			}
 			XMLNode * pNodoTipo = pNodoId -> NextSibling();
-			if(string(pNodoTipo->Value()) != "tipo") {
+			if((pNodoTipo == 0) || string(pNodoTipo->Value()) != "tipo") {
 				return false;
 			}
 			if(pNodoTipo -> ToElement() -> GetText() == nullptr){
@@ -169,7 +177,7 @@ bool ClienteParser::esIpValido(string ip){
 				return false;
 			}
 			XMLNode * pNodoValor = pNodoTipo -> NextSibling();
-			if (string(pNodoValor->Value()) != "valor") {
+			if ((pNodoValor == 0) || string(pNodoValor->Value()) != "valor") {
 				return false;
 			}
 			if(pNodoValor->ToElement()->GetText() == nullptr){
