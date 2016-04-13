@@ -105,6 +105,12 @@ void menuPrincipal(Cliente * cliente) {
                     // Envia mensajes en forma iterativa durante una cantiadad determinada de milisegundos.
                     cout << "Ingrese el tiempo (ms): " << endl;
                     cin >> tiempo;
+                    while(cin.fail()) {
+                      cin.clear();
+                      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                      cout << "Valor ingresado incorrecto, intente nuevamente" << endl;
+                      cin >> tiempo;
+                    }
                     result = cliente->ciclarMensajes(tiempo);
                     if (result == PEER_DESCONECTADO){
                         cout << "La acción no pudo completarse porque el servidor se desconectó." << endl;
