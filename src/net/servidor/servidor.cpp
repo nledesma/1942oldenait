@@ -152,6 +152,10 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
 int Servidor::aceptar() {
 
     int resulAccept = accept(socketFd, 0, 0);
+    struct timeval tv;
+    tv.tv_sec = 90;
+    tv.tv_usec = 0;
+    setsockopt(resulAccept, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
     if(this->servidorActivado) {
         Logger::instance()->logInfo("La conexión ha sido aceptada");
     }
@@ -161,6 +165,7 @@ int Servidor::aceptar() {
     }
     return resulAccept;
 }
+
 
 void Servidor::cerrar() {
     this->desactivarServidor();
