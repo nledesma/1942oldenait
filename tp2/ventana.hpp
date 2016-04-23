@@ -1,3 +1,6 @@
+#ifndef VENTANA_HPP
+#define VENTANA_HPP
+
 #include <iostream>
 #include <list>
 #include <SDL2/SDL.h>
@@ -27,3 +30,5 @@ class Ventana{
 		void agregarElemento(Elemento elemento);
 
 };
+
+#endif

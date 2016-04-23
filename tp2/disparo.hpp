@@ -1,10 +1,13 @@
+#ifndef DISPARO_HPP
+#define DISPARO_HPP
+
 #include <SDL2/SDL.h>
 #include <iostream>
 
 using namespace std;
 
 class Disparo {
-private: 
+private:
 	string tipo;
 	int velocidad;
 	string idSprite;
@@ -18,3 +21,4 @@ public:
 	void setIdSprite(string idSprite);
 	string getIdSprite();
 };
+#endif

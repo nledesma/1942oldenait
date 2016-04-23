@@ -1,3 +1,6 @@
+#ifndef ESCENARIO_HPP
+#define ESCENARIO_HPP
+
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <string>
@@ -28,3 +31,5 @@ class Escenario{
 		list<Avion*> getAviones();
 		void agregarAvion(Avion* avion);
 };
+
+#endif
