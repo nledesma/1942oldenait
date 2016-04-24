@@ -2,8 +2,10 @@
 #define AVION_HPP
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include "disparo.hpp"
+#include "contenedorTextura.hpp"
 //TODO estas constantes estaban definidas para el tuto.
 #define SCREEN_WIDTH = 640;
 #define SCREEN_HEIGHT = 480;
@@ -22,10 +24,12 @@ private:
   float posY;
   float velocidadX;
   float velocidadY;
+	SDL_Renderer* gAvionRenderer;
+	ContenedorTextura gAvionTextura;
 
 public:
-
 	Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion, Disparo unDisparo);
+	Avion();
 	~Avion();
 	void setDisparo(Disparo unDisparo);
 	Disparo getDisparo();
@@ -40,6 +44,10 @@ public:
 	void disparar();
 	float getVelocidadX();
 	float getVelocidadY();
+	bool cargarImagen();
+	void cerrar();
+	SDL_Renderer* getAvionRenderer();
+	ContenedorTextura getAvionTextura();
 };
 
 #endif

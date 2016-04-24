@@ -9,6 +9,9 @@ Avion::Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacio
 	this->disparo = unDisparo;
 }
 
+Avion::Avion(){
+
+}
 Avion::~Avion(){
 
 }
@@ -44,6 +47,26 @@ void Avion::setDisparo(Disparo unDisparo) {
 	this->disparo = unDisparo;
 }
 
-void Avion::mover(int tecla){
+bool Avion::cargarImagen(){
+	//Loading success flag
+	bool success = true;
+	//Load Foo' texture
+	if(!gAvionTextura.loadFromFile("foo.png")){
+		cout << "Failed" << endl;
+		//TODO usar una excepcion
+		success = false;
+	}
+	return success;
 }
 
+void Avion::cerrar(){
+	gAvionTextura.free();
+}
+
+SDL_Renderer* Avion::getAvionRenderer(){
+	return this->gAvionRenderer;
+}
+
+ContenedorTextura Avion::getAvionTextura(){
+	return this->gAvionTextura;
+}

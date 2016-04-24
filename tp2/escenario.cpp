@@ -1,7 +1,7 @@
 #include "escenario.hpp"
 using namespace std;
 
-Escenario::Escenario(int ancho, int alto, Ventana ventana){
+Escenario::Escenario(int ancho, int alto, Ventana* ventana){
 	this->ancho = ancho;
 	this->alto = alto;
 	this->ventana = ventana;
@@ -17,7 +17,7 @@ int Escenario::getAlto(){
 	return this->alto;
 }
 
-Ventana Escenario::getVentana(){
+Ventana* Escenario::getVentana(){
 	return this->ventana;
 }
 

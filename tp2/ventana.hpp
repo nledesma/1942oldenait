@@ -4,6 +4,10 @@
 #include <iostream>
 #include <list>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include "contenedorTextura.hpp"
 using namespace std;
 struct Elemento{
 	int posX;
@@ -21,6 +25,8 @@ class Ventana{
 		SDL_Window* window = NULL;
 		SDL_Surface* screenSurface = NULL;
 		SDL_Surface* imagenFondo = NULL;
+		SDL_Renderer* gVentanaRenderer = NULL;
+		ContenedorTextura gTexturaVentana;
 
 	public:
 		Ventana(int ancho, int alto);
@@ -36,6 +42,8 @@ class Ventana{
 		void setAlto(int alto);
 		list <Elemento> getElementos();
 		void agregarElemento(Elemento elemento);
+		SDL_Renderer* getVentanaRenderer();
+		ContenedorTextura getVentanaTextura();
 
 };
 

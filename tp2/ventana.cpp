@@ -20,22 +20,38 @@ Ventana::Ventana(int ancho, int alto){
 			screenSurface = SDL_GetWindowSurface(window);
 		}
 	}
+	//TODO todo esto deberia estar encapsulado en alguna funcion o algo, porque sino aparece muchas veces!
+	gVentanaRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if(gVentanaRenderer == NULL){
+		cout << "No se pudo crear el renderer de la ventana, SDL Error: " <<  SDL_GetError() << endl;
+	}else{
+		//Initialize renderer color
+		SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	}
 }
 
 bool Ventana::cargarImagenDeFondo(){
 	//Loading success flag
 	bool success = true;
 	//Load splash image
-	imagenFondo = SDL_LoadBMP("espacio.bmp");
+	/*imagenFondo = SDL_LoadBMP("espacio.bmp");
 	if(imagenFondo == NULL){
 		cout << "No se ha podido cargar la imagen " << SDL_GetError() << endl;
 		//TODO aca tambien habria que usar una excepcion
 		success = false;
+	}*/
+	//Load background texture
+	if(!gTexturaVentana.loadFromFile("espacio.bmp")){
+		cout << "Failed to load background texture image!" << endl;
+		success = false;
 	}
+
 	return success;
 }
 
 void Ventana::cerrar(){
+	gTexturaVentana.free();
+	SDL_DestroyRenderer(gVentanaRenderer);
 	//Deallocate surface
 	SDL_FreeSurface(imagenFondo);
 	imagenFondo = NULL;
@@ -55,7 +71,7 @@ int Ventana::iniciar(){
 	}else{
 		//Load media
 		if(!this->cargarImagenDeFondo()){
-			cout << "Fallo el load media" << endl;
+			cout << "Fallo el cargar imagen de fondo" << endl;
 			return 0;
 		}else{
 			//Main loop flag
@@ -113,4 +129,12 @@ list <Elemento> Ventana::getElementos(){
 
 void Ventana::agregarElemento(Elemento elemento){
 	this->elementos.push_back(elemento);
+}
+
+SDL_Renderer* Ventana::getVentanaRenderer(){
+	return this->gVentanaRenderer;
+}
+
+ContenedorTextura Ventana::getVentanaTextura(){
+	return this->gTexturaVentana;
 }

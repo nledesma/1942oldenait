@@ -6,6 +6,7 @@
 #include <string>
 #include "avion.hpp"
 #include "ventana.hpp"
+#include "contenedorTextura.hpp"
 
 using namespace std;
 
@@ -19,15 +20,15 @@ class Escenario{
 	private:
 		int ancho;
 		int alto;
-		Ventana ventana;
+		Ventana* ventana;
 		list<Avion*> aviones;
 
 	public:
-		Escenario(int ancho, int alto, Ventana ventana);
+		Escenario(int ancho, int alto, Ventana* ventana);
 		~Escenario();
 		int getAncho();
 		int getAlto();
-		Ventana getVentana();
+		Ventana* getVentana();
 		list<Avion*> getAviones();
 		void agregarAvion(Avion* avion);
 };
