@@ -10,6 +10,11 @@ Ventana::Ventana(int ancho, int alto){
 		//TODO acá habría que loggear el error y agarrarlo con una excepcion
 	}
 	else{
+		//Set texture filtering to linear
+		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		{
+			printf( "Warning: Linear texture filtering not enabled!" );
+		}
 		//Se crea la ventana
 		window = SDL_CreateWindow( "1942", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->ancho, this->alto, SDL_WINDOW_SHOWN );
 		if(window == NULL){
@@ -29,6 +34,7 @@ Ventana::Ventana(int ancho, int alto){
 		SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	}
 }
+
 bool Ventana::iniciarElementos(){
 	bool success = true;
 	//TODO los parametros vienen del xml

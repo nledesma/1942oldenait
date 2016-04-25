@@ -4,8 +4,9 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <string>
+#include "ventana.hpp"
 #include "avion.hpp"
-#include "contenedorTextura.hpp"
+#include "Figura.hpp"
 #include <list>
 using namespace std;
 
@@ -19,19 +20,19 @@ class Escenario{
 	private:
 		int ancho;
 		int alto;
+		Ventana* ventana;
 		list<Avion*> aviones;
-		ContenedorTextura* gTexturaEscenario;
+		Figura* fondoEscenario;
 		string path;
-		SDL_Surface* imagenFondo = NULL;
 
 	public:
 		Escenario(int ancho, int alto);
 		~Escenario();
-		bool cargarImagenDeFondo(SDL_Renderer* renderer);
-		SDL_Surface* getImagenFondo();
+		bool cargarImagenDeFondo();
 		bool iniciar(SDL_Renderer* renderer, string path);
 		int getAncho();
 		int getAlto();
+		Ventana* getVentana();
 		list<Avion*> getAviones();
 		void agregarAvion(Avion* avion);
 };
