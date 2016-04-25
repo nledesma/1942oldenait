@@ -29,22 +29,20 @@ Ventana::Ventana(int ancho, int alto){
 		SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	}
 }
-
-bool Ventana::cargarImagenDeFondo(){
-	//Loading success flag
+bool Ventana::iniciarElementos(){
 	bool success = true;
-	//Load splash image
-	/*imagenFondo = SDL_LoadBMP("espacio.bmp");
-	if(imagenFondo == NULL){
-		cout << "No se ha podido cargar la imagen " << SDL_GetError() << endl;
-		//TODO aca tambien habria que usar una excepcion
-		success = false;
-	}*/
-	//Load background texture
-	if(!gTexturaVentana.loadFromFile("espacio.bmp")){
-		cout << "Failed to load background texture image!" << endl;
-		success = false;
-	}
+	//TODO los parametros vienen del xml
+	Escenario* escenario = new Escenario(800, 600);
+	//TODO a futuro deberia recibir las cosas del xml
+	//TODO habria que hacer un and de las demas cosas..
+	cout << "ESTOY POR LLEGAR A LEVANTAR LA PUTA IMAGEN" << endl;
+	success = escenario->iniciar(gVentanaRenderer, "espacio.bmp");
+	cout << "LEVANTE LA PUTA IMAGEN" << endl;
+	//Apply the image
+	cout << "ESTO ES EL FONDO " << escenario->getImagenFondo() << endl;
+	SDL_BlitSurface(escenario->getImagenFondo(), NULL, screenSurface, NULL );
+	//Update the surface
+	SDL_UpdateWindowSurface(window);
 
 	return success;
 }
@@ -62,7 +60,7 @@ void Ventana::cerrar(){
 	SDL_Quit();
 }
 
-int Ventana::iniciar(){
+/*int Ventana::iniciar(){
 	//Start up SDL and create window
 	if(this == NULL){
 		cout << "Hubo un error al crear la ventana" << endl;
@@ -97,7 +95,7 @@ int Ventana::iniciar(){
 	//Free resources and close SDL
 	this->cerrar();
 	return 1;
-}
+}*/
 
 string Ventana::getIdSpriteFondo(){
 	return this->idSpriteFondo;

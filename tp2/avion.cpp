@@ -49,14 +49,15 @@ void Avion::setDisparo(Disparo unDisparo) {
 
 bool Avion::cargarImagen(){
 	//Loading success flag
-	bool success = true;
+	//bool success = true;
 	//Load Foo' texture
-	if(!gAvionTextura.loadFromFile("foo.png")){
-		cout << "Failed" << endl;
+	//if(!gAvionTextura.loadFromFile("foo.png")){
+		//cout << "Failed" << endl;
 		//TODO usar una excepcion
-		success = false;
-	}
-	return success;
+		//success = false;
+	//}
+	//return success;
+	return true;
 }
 
 void Avion::cerrar(){
