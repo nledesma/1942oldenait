@@ -15,7 +15,7 @@ class ContenedorTextura{
 		//Deallocates memory
 		~ContenedorTextura();
 		//Loads image at specified path
-		bool loadFromFile(string path);
+		bool loadFromFile(string path, SDL_Renderer* renderer);
 		//Deallocates texture
 		void free();
 		//Renders texture at given point
@@ -23,6 +23,7 @@ class ContenedorTextura{
 		//Gets image dimensions
 		int getWidth();
 		int getHeight();
+		SDL_Renderer* getRenderer();
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;

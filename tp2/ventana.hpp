@@ -8,6 +8,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include "contenedorTextura.hpp"
+#include "escenario.hpp"
+
 using namespace std;
 struct Elemento{
 	int posX;
@@ -30,10 +32,10 @@ class Ventana{
 
 	public:
 		Ventana(int ancho, int alto);
-		bool cargarImagenDeFondo();
 		void cerrar();
 		/* Se retorna 1 en caso de éxito, 0 en caso de error */
 		int iniciar();
+		bool iniciarElementos();
 		string getIdSpriteFondo();
 		void setIdSpriteFondo(string id);
 		int getAncho();
@@ -44,7 +46,7 @@ class Ventana{
 		void agregarElemento(Elemento elemento);
 		SDL_Renderer* getVentanaRenderer();
 		ContenedorTextura getVentanaTextura();
-
+		SDL_Renderer* getRenderer();
 };
 
 #endif

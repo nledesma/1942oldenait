@@ -13,7 +13,9 @@ ContenedorTextura::~ContenedorTextura(){
 	free();
 }
 
-bool ContenedorTextura::loadFromFile(string path){
+bool ContenedorTextura::loadFromFile(string path, SDL_Renderer* renderer){
+	cout << "ESTO ES EL RENDERER " << renderer << endl; 
+	this->gRenderer = renderer;
 	//Get rid of preexisting texture
 	free();
 	//The final texture
@@ -27,7 +29,7 @@ bool ContenedorTextura::loadFromFile(string path){
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 		//Create texture from surface pixels
     newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-		if( newTexture == NULL ){
+		if(newTexture == NULL){
 			cout <<  "No se ha podido crear la textura " +  path <<  SDL_GetError() << endl;
 		}
 		else{
@@ -66,4 +68,8 @@ int ContenedorTextura::getWidth()
 int ContenedorTextura::getHeight()
 {
 	return mHeight;
+}
+
+SDL_Renderer* ContenedorTextura::getRenderer(){
+	return this->gRenderer;
 }
