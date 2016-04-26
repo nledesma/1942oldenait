@@ -11,11 +11,14 @@ Escenario::Escenario(int ancho, int alto){
 Escenario::~Escenario(){}
 
 int Escenario::iniciar(string path){
+	Avion* avion = new Avion();
 	this->ventana->iniciar();
-	SDL_Surface* surface = new SDL_Surface();
-	surface = SDL_GetWindowSurface(ventana->getSdlWindow());
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
-
+	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
+	SDL_RenderPresent(ventana->getVentanaRenderer());
+	cout << "ESTA POR CARGAR LA IMAGEN" << endl;
+	avion->cargarImagen("mario.bmp",ventana->getVentanaRenderer());
+	cout << "CARGO LA FORRA DE LA IMAGEN " << endl;
 	return 1;
 }
 
@@ -55,4 +58,8 @@ bool Escenario::cargarImagenes(string path){
 		success = false;
 	}*/
 	return success;
+}
+
+Figura* Escenario::getFondoEscenario(){
+	return this->fondoEscenario;
 }

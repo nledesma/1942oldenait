@@ -2,13 +2,14 @@
 #include "ventana.hpp"
 #include "avion.hpp"
 #include "escenario.hpp"
+#include "figura.hpp"
 using namespace std;
 
 int main(){
   //Avion* unAvion = new Avion();
   //cout << "ESTO ES EL RENDERER DE LA VENTANA " << ventana->getRenderer() << endl;
   Escenario* unEscenario = new Escenario(800,600);
-  unEscenario->iniciar("foo.png");
+  unEscenario->iniciar("espacio.bmp");
   SDL_Delay(2000);
   //Clear screen
   //SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);

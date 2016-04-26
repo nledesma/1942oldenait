@@ -32,7 +32,6 @@ int Ventana::iniciar(){
 		//Initialize renderer color
 		SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	}
-
 	return success;
 }
 

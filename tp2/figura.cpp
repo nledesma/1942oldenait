@@ -19,7 +19,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
 	//Se declara la textura que va a cargarse en la figura.
 	SDL_Texture* nuevaTextura = NULL;
 	//Se carga la imagen desde el path especificado.
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
 	if(loadedSurface == NULL){
 		cout << "No se ha podido cargar la imagen " + path << IMG_GetError() << endl;
 		return false;
@@ -42,7 +42,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
 	}
 	this->textura = nuevaTextura;
 	//Se retorna un valor de éxito
-	return true;
+	return textura!=NULL;
 }
 
 void Figura::free(){
