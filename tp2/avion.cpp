@@ -49,14 +49,14 @@ void Avion::mover(){
 //Move the dot left or right
     this->posX += this->velocidadX;
     //If the dot went too far to the left or right
-    if( ( this->posX < 0 ) /*|| ( this->posX + DOT_WIDTH > SCREEN_WIDTH )*/ ){
+    if( ( this->posX < 0 ) || ( this->posX + 25 > 800 )){
         //Move back
         this->posX -= this->velocidadX;
     }
     //Move the dot up or down
     this->posY += this->velocidadY;
     //If the dot went too far up or down
-    if( ( this->posY < 0 ) /*|| ( this->posY + DOT_HEIGHT > SCREEN_HEIGHT )*/ ){
+    if( ( this->posY < 0 ) || ( this->posY + 25 > 600 ) ){
         //Move back
         this->posY -= this->velocidadY;
     }
