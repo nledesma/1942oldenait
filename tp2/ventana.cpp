@@ -37,54 +37,13 @@ int Ventana::iniciar(){
 }
 
 void Ventana::cerrar(){
-	/*gTexturaVentana.free();
 	SDL_DestroyRenderer(gVentanaRenderer);
-	//Deallocate surface
-	SDL_FreeSurface(imagenFondo);
-	imagenFondo = NULL;
 	//Destroy window
 	SDL_DestroyWindow(sdlWindow);
 	sdlWindow = NULL;
 	//Quit SDL subsystems
-	SDL_Quit();*/
+	SDL_Quit();
 }
-
-/*int Ventana::iniciar(){
-	//Start up SDL and create window
-	if(this == NULL){
-		cout << "Hubo un error al crear la ventana" << endl;
-		//TODO excepcion
-		return 0;
-	}else{
-		//Load media
-		if(!this->cargarImagenDeFondo()){
-			cout << "Fallo el cargar imagen de fondo" << endl;
-			return 0;
-		}else{
-			//Main loop flag
-			bool salir = false;
-			//Event handler
-			SDL_Event eventoVentana;
-			//While application is running
-			while(!salir){
-				//Handle events on queue
-				while(SDL_PollEvent(&eventoVentana) != 0){
-					//User requests quit
-					if(eventoVentana.type == SDL_QUIT){
-						salir = true;
-					}
-				}
-				//Apply the image
-				SDL_BlitSurface(imagenFondo, NULL, screenSurface, NULL );
-				//Update the surface
-				SDL_UpdateWindowSurface(window);
-			}
-		}
-	}
-	//Free resources and close SDL
-	this->cerrar();
-	return 1;
-}*/
 
 int Ventana::getAncho(){
 	return this->ancho;
@@ -104,4 +63,8 @@ void Ventana::setAlto(int alto){
 
 SDL_Renderer* Ventana::getVentanaRenderer(){
 	return this->gVentanaRenderer;
+}
+
+SDL_Window* Ventana::getSdlWindow(){
+	return this->sdlWindow;
 }

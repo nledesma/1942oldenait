@@ -1,16 +1,15 @@
 #include <iostream>
 #include "ventana.hpp"
 #include "avion.hpp"
+#include "escenario.hpp"
 using namespace std;
 
 int main(){
-
-
-  //Por ahora para probar le paso estos valores, pero en realidad son los que deberian ser pasados por el XML
-  Ventana* ventana = new Ventana(800, 600);
   //Avion* unAvion = new Avion();
   //cout << "ESTO ES EL RENDERER DE LA VENTANA " << ventana->getRenderer() << endl;
-  ventana->iniciar();
+  Escenario* unEscenario = new Escenario(800,600);
+  unEscenario->iniciar("foo.png");
+  SDL_Delay(2000);
   //Clear screen
   //SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
 	//SDL_RenderClear(ventana->getVentanaRenderer());
@@ -21,7 +20,7 @@ int main(){
 	//Update screen
 	//SDL_RenderPresent(ventana->getVentanaRenderer());
   //Elimino la ventana
-  delete ventana;
+  delete unEscenario;
   //delete unAvion;
 
   return 0;

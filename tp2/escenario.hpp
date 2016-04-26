@@ -6,7 +6,7 @@
 #include <string>
 #include "ventana.hpp"
 #include "avion.hpp"
-#include "Figura.hpp"
+#include "figura.hpp"
 #include <list>
 using namespace std;
 
@@ -29,7 +29,7 @@ class Escenario{
 		Escenario(int ancho, int alto);
 		~Escenario();
 		bool cargarImagenDeFondo(SDL_Renderer* renderer);
-		bool iniciar(SDL_Renderer* renderer, string path);
+		int iniciar(string path);
 		int getAncho();
 		int getAlto();
 		bool cargarImagenes(string path);

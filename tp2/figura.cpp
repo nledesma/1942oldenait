@@ -1,4 +1,4 @@
-#include "Figura.hpp"
+#include "figura.hpp"
 #include "ventana.hpp"
 Figura::Figura(){
 	//Initialize

@@ -5,7 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include "disparo.hpp"
-#include "Figura.hpp"
+#include "figura.hpp"
 //TODO estas constantes estaban definidas para el tuto.
 #define SCREEN_WIDTH = 640;
 #define SCREEN_HEIGHT = 480;

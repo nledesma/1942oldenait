@@ -10,6 +10,15 @@ Escenario::Escenario(int ancho, int alto){
 
 Escenario::~Escenario(){}
 
+int Escenario::iniciar(string path){
+	this->ventana->iniciar();
+	SDL_Surface* surface = new SDL_Surface();
+	surface = SDL_GetWindowSurface(ventana->getSdlWindow());
+	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
+
+	return 1;
+}
+
 int Escenario::getAncho(){
 	return this->ancho;
 }
