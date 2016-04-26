@@ -13,7 +13,7 @@ Figura::~Figura(){
 }
 
 bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
-	cout << "ESTO ES EL RENDERER " << renderer << endl; 
+	cout << "ESTO ES EL RENDERER " << renderer << endl;
 	//Si existe una textura cargada de antes, se libera la memoria asociada a esa textura.
 	free();
 	//Se declara la textura que va a cargarse en la figura.
@@ -47,7 +47,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
 
 void Figura::free(){
 	//Se libera la textura si es necesario, y se redefinen los atributos por default.
-	if(mTexture != NULL){
+	if(textura != NULL){
 		SDL_DestroyTexture(this->textura);
 		this->textura = NULL;
 		this->mWidth = 0;
@@ -58,7 +58,7 @@ void Figura::free(){
 void Figura::render(int x, int y, SDL_Renderer* renderer){
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-	SDL_RenderCopy(renderer, mTexture, NULL, &renderQuad);
+	SDL_RenderCopy(renderer, textura, NULL, &renderQuad);
 }
 
 int Figura::getWidth()

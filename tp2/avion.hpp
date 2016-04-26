@@ -25,7 +25,7 @@ private:
   float velocidadX;
   float velocidadY;
 	SDL_Renderer* gAvionRenderer;
-	ContenedorTextura gAvionTextura;
+	Figura gAvionTextura;
 
 public:
 	Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion, Disparo unDisparo);
@@ -47,7 +47,7 @@ public:
 	bool cargarImagen();
 	void cerrar();
 	SDL_Renderer* getAvionRenderer();
-	ContenedorTextura getAvionTextura();
+	Figura getAvionTextura();
 };
 
 #endif

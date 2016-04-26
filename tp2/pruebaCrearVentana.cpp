@@ -10,7 +10,7 @@ int main(){
   Ventana* ventana = new Ventana(800, 600);
   //Avion* unAvion = new Avion();
   //cout << "ESTO ES EL RENDERER DE LA VENTANA " << ventana->getRenderer() << endl;
-  ventana->iniciarElementos();
+  ventana->iniciar();
   //Clear screen
   //SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
 	//SDL_RenderClear(ventana->getVentanaRenderer());

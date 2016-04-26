@@ -29,12 +29,12 @@ void Escenario::agregarAvion(Avion* avion){
 
 bool Escenario::cargarImagenDeFondo(SDL_Renderer* renderer){
 	bool success = true;
-	bool hola = gTexturaEscenario->loadFromFile(path, renderer);
+	/*bool hola = gTexturaEscenario->loadFromFile(path, renderer);
 	cout << "ESTO ES TEXTURA ESCENARIO " << hola << endl;
 	if(!hola){
 		cout << "Failed to load background texture image!" << endl;
 		success = false;
-	}
+	}*/
 	return success;
 }
 

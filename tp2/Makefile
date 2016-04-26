@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = ventana.cpp avion.cpp contenedorTextura.cpp escenario.cpp disparo.cpp pruebaCrearVentana.cpp
+OBJS = ventana.cpp avion.cpp Figura.cpp escenario.cpp disparo.cpp pruebaCrearVentana.cpp
 #CC specifies which compiler we're using
 CC = g++
 #COMPILER_FLAGS specifies the additional compilation options we're using # -w suppresses all warnings

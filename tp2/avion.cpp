@@ -68,6 +68,6 @@ SDL_Renderer* Avion::getAvionRenderer(){
 	return this->gAvionRenderer;
 }
 
-ContenedorTextura Avion::getAvionTextura(){
+Figura Avion::getAvionTextura(){
 	return this->gAvionTextura;
 }

@@ -16,17 +16,17 @@ Ventana::Ventana(int ancho, int alto){
 			printf( "Warning: Linear texture filtering not enabled!" );
 		}
 		//Se crea la ventana
-		window = SDL_CreateWindow( "1942", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->ancho, this->alto, SDL_WINDOW_SHOWN );
-		if(window == NULL){
+		sdlWindow = SDL_CreateWindow( "1942", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->ancho, this->alto, SDL_WINDOW_SHOWN );
+		if(sdlWindow == NULL){
 			cout << "Hubo un error: " << SDL_GetError() << endl;
 			//TODO acá habría que loggear el error y agarrarlo con una excepcion
 		}else{
 			//Superficie de la ventana
-			screenSurface = SDL_GetWindowSurface(window);
+			//screenSurface = SDL_GetWindowSurface(sdlWindow);
 		}
 	}
 	//TODO todo esto deberia estar encapsulado en alguna funcion o algo, porque sino aparece muchas veces!
-	gVentanaRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	gVentanaRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
 	if(gVentanaRenderer == NULL){
 		cout << "No se pudo crear el renderer de la ventana, SDL Error: " <<  SDL_GetError() << endl;
 	}else{
@@ -35,8 +35,8 @@ Ventana::Ventana(int ancho, int alto){
 	}
 }
 
-bool Ventana::iniciarElementos(){
-	bool success = true;
+int Ventana::iniciar(){
+	bool success = 1;
 	//TODO los parametros vienen del xml
 	Escenario* escenario = new Escenario(800, 600);
 	//TODO a futuro deberia recibir las cosas del xml
@@ -45,25 +45,25 @@ bool Ventana::iniciarElementos(){
 	success = escenario->iniciar(gVentanaRenderer, "espacio.bmp");
 	cout << "LEVANTE LA PUTA IMAGEN" << endl;
 	//Apply the image
-	cout << "ESTO ES EL FONDO " << escenario->getImagenFondo() << endl;
-	SDL_BlitSurface(escenario->getImagenFondo(), NULL, screenSurface, NULL );
+	//cout << "ESTO ES EL FONDO " << escenario->getImagenFondo() << endl;
+	//SDL_BlitSurface(escenario->getImagenFondo(), NULL, screenSurface, NULL );
 	//Update the surface
-	SDL_UpdateWindowSurface(window);
+	//SDL_UpdateWindowSurface(window);
 
 	return success;
 }
 
 void Ventana::cerrar(){
-	gTexturaVentana.free();
+	/*gTexturaVentana.free();
 	SDL_DestroyRenderer(gVentanaRenderer);
 	//Deallocate surface
 	SDL_FreeSurface(imagenFondo);
 	imagenFondo = NULL;
 	//Destroy window
-	SDL_DestroyWindow(window);
-	window = NULL;
+	SDL_DestroyWindow(sdlWindow);
+	sdlWindow = NULL;
 	//Quit SDL subsystems
-	SDL_Quit();
+	SDL_Quit();*/
 }
 
 /*int Ventana::iniciar(){
@@ -103,14 +103,6 @@ void Ventana::cerrar(){
 	return 1;
 }*/
 
-string Ventana::getIdSpriteFondo(){
-	return this->idSpriteFondo;
-}
-
-void Ventana::setIdSpriteFondo(string id){
-	this->idSpriteFondo = id;
-}
-
 int Ventana::getAncho(){
 	return this->ancho;
 }
@@ -127,18 +119,6 @@ void Ventana::setAlto(int alto){
 	this->alto = alto;
 }
 
-list <Elemento> Ventana::getElementos(){
-	return this->elementos;
-}
-
-void Ventana::agregarElemento(Elemento elemento){
-	this->elementos.push_back(elemento);
-}
-
 SDL_Renderer* Ventana::getVentanaRenderer(){
 	return this->gVentanaRenderer;
-}
-
-ContenedorTextura Ventana::getVentanaTextura(){
-	return this->gTexturaVentana;
 }

@@ -28,13 +28,15 @@ class Escenario{
 	public:
 		Escenario(int ancho, int alto);
 		~Escenario();
-		bool cargarImagenDeFondo();
+		bool cargarImagenDeFondo(SDL_Renderer* renderer);
 		bool iniciar(SDL_Renderer* renderer, string path);
 		int getAncho();
 		int getAlto();
-		Ventana* getVentana();
+		bool cargarImagenes(string path);
+		//Ventana* getVentana();
 		list<Avion*> getAviones();
 		void agregarAvion(Avion* avion);
+		SDL_Surface* getImagenFondo();
 };
 
 #endif
