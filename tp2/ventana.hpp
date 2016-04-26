@@ -8,7 +8,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include "Figura.hpp"
-#include "escenario.hpp"
 
 using namespace std;
 struct Elemento{

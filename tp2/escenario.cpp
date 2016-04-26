@@ -41,13 +41,9 @@ bool Escenario::cargarImagenDeFondo(SDL_Renderer* renderer){
 bool Escenario::cargarImagenes(string path){
 	this->path = path;
 	bool success = true;
-	if(!this->cargarImagenDeFondo(this->ventana->getVentanaRenderer())){
+	/*if(!this->getImagenFondo()->this->ventana->getVentanaRenderer()){
 		cout << "NO SE HA PODIDO CARGAR LA IMAGEN DE FONDO" << endl;
 		success = false;
-	}
+	}*/
 	return success;
-}
-
-SDL_Surface* Escenario::getImagenFondo(){
-	return this->imagenFondo;
 }
