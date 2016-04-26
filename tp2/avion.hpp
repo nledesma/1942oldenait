@@ -6,6 +6,7 @@
 #include <iostream>
 #include "disparo.hpp"
 #include "figura.hpp"
+
 //TODO estas constantes estaban definidas para el tuto.
 #define SCREEN_WIDTH = 640;
 #define SCREEN_HEIGHT = 480;
@@ -20,12 +21,13 @@ private:
 	Disparo disparo;
 	string idSpriteAnimacion;
 	string idSpriteDisparo;
-	float posX;
-  float posY;
+	int posX;
+  int posY;
   float velocidadX;
   float velocidadY;
 	SDL_Renderer* gAvionRenderer;
 	Figura* gAvionTextura;
+	float velocidad;
 
 public:
 	Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion, Disparo unDisparo);
@@ -42,12 +44,15 @@ public:
 	void mover(float timeStep);
 	void render();
 	void disparar();
-	float getVelocidadX();
-	float getVelocidadY();
+	int getVelocidadX();
+	int getVelocidadY();
 	int cargarImagen(string path, SDL_Renderer* renderer);
 	void cerrar();
 	SDL_Renderer* getAvionRenderer();
 	Figura* getAvionTextura();
+	void manejarEvento(SDL_Event evento);
+	void mover();
+	void render(SDL_Renderer* renderer);
 };
 
 #endif

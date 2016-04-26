@@ -16,9 +16,25 @@ int Escenario::iniciar(string path){
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
 	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
 	SDL_RenderPresent(ventana->getVentanaRenderer());
-	cout << "ESTA POR CARGAR LA IMAGEN" << endl;
-	avion->cargarImagen("mario.bmp",ventana->getVentanaRenderer());
-	cout << "CARGO LA FORRA DE LA IMAGEN " << endl;
+	avion->cargarImagen("honguito.bmp",ventana->getVentanaRenderer());
+	bool quit = false;
+	SDL_Event e;
+	while(!quit){
+		while( SDL_PollEvent( &e ) != 0 ){
+			if( e.type == SDL_QUIT )
+			{
+				quit = true;
+			}
+		}
+
+		//TODO VER LO DE RENDER PRESENT
+		avion->manejarEvento(e);
+		avion->mover();
+		SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear(ventana->getVentanaRenderer());
+		this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
+		avion->render(ventana->getVentanaRenderer());
+	}
 	return 1;
 }
 
@@ -37,7 +53,6 @@ list<Avion*> Escenario::getAviones(){
 void Escenario::agregarAvion(Avion* avion){
 	this->aviones.push_back(avion);
 }
-
 
 bool Escenario::cargarImagenDeFondo(SDL_Renderer* renderer){
 	bool success = true;

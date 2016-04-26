@@ -37,6 +37,7 @@ class Escenario{
 		list<Avion*> getAviones();
 		void agregarAvion(Avion* avion);
 		Figura* getFondoEscenario();
+		Avion* getAvion();
 };
 
 #endif
