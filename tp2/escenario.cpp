@@ -19,21 +19,25 @@ int Escenario::iniciar(string path){
 	avion->cargarImagen("honguito.bmp",ventana->getVentanaRenderer());
 	bool quit = false;
 	SDL_Event e;
+	Temporizador temporizador;
 	while(!quit){
 		while( SDL_PollEvent( &e ) != 0 ){
 			if( e.type == SDL_QUIT )
 			{
 				quit = true;
 			}
+			avion->manejarEvento(e);
 		}
 
+		float timeStep = temporizador.getTicks() / 1000.f;
 		//TODO VER LO DE RENDER PRESENT
-		avion->manejarEvento(e);
-		avion->mover();
+		avion->mover(timeStep);
+		temporizador.comenzar();
 		SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear(ventana->getVentanaRenderer());
 		this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
 		avion->render(ventana->getVentanaRenderer());
+		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 	return 1;
 }

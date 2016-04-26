@@ -11,21 +11,25 @@ Avion::Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacio
 
 Avion::Avion(){
 	this->gAvionTextura = new Figura();
+	this->posX = 400;
+	this->posY = 0;
 	this->velocidadX = 0;
 	this->velocidadY = 0;
-	this->velocidad = 1.4;
+	this->velocidad = 10;
 }
 Avion::~Avion(){
 
 }
 
 void Avion::manejarEvento(SDL_Event evento){
-if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
+	this->velocidadX = 0;
+	this->velocidadY = 0;
+	if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     {
         //Adjust the velocity
         switch( evento.key.keysym.sym )
         {
-            case SDLK_UP: this->velocidadX -= this->velocidad; break;
+            case SDLK_UP: this->velocidadY -= this->velocidad; break;
             case SDLK_DOWN: this->velocidadY += this->velocidad; break;
             case SDLK_LEFT: this->velocidadX -= this->velocidad; break;
             case SDLK_RIGHT: this->velocidadX += this->velocidad; break;
@@ -45,20 +49,24 @@ if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     }
 }
 
-void Avion::mover(){
+void Avion::mover(float timeStep){
 //Move the dot left or right
-    this->posX += this->velocidadX;
+    this->posX += this->velocidadX * timeStep;
     //If the dot went too far to the left or right
-    if( ( this->posX < 0 ) || ( this->posX + 25 > 800 )){
+    if( this->posX < 0 ){
+			this->posX = 0;
+		}else if( this->posX + 25 > 800){
         //Move back
-        this->posX -= this->velocidadX;
+        this->posX = 775;
     }
     //Move the dot up or down
-    this->posY += this->velocidadY;
+    this->posY += this->velocidadY * timeStep;
     //If the dot went too far up or down
-    if( ( this->posY < 0 ) || ( this->posY + 25 > 600 ) ){
+    if( this->posY < 0 ){
+			this->posY = 0;
+		} else if ( this->posY > 600 - 25 ){
         //Move back
-        this->posY -= this->velocidadY;
+        this->posY = 575;
     }
 }
 

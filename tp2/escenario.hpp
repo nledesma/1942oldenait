@@ -7,6 +7,7 @@
 #include "ventana.hpp"
 #include "avion.hpp"
 #include "figura.hpp"
+#include "temporizador.hpp"
 #include <list>
 using namespace std;
 
