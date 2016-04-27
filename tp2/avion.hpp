@@ -10,8 +10,8 @@
 //TODO estas constantes estaban definidas para el tuto.
 #define SCREEN_WIDTH = 640;
 #define SCREEN_HEIGHT = 480;
-#define AVION_ANCHO = 20;
-#define AVION_ALTO = 20;
+//#define AVION_ANCHO = 20;
+//#define AVION_ALTO = 20;
 using namespace std;
 
 class Avion{
@@ -21,8 +21,8 @@ private:
 	Disparo disparo;
 	string idSpriteAnimacion;
 	string idSpriteDisparo;
-	int posX;
-  int posY;
+	float posX;
+  float posY;
   float velocidadX;
   float velocidadY;
 	SDL_Renderer* gAvionRenderer;
@@ -30,6 +30,8 @@ private:
 	float velocidad;
 
 public:
+	static const int AVION_ANCHO = 20;
+	static const int AVION_ALTO= 20;
 	Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion, Disparo unDisparo);
 	Avion();
 	~Avion();
@@ -46,6 +48,8 @@ public:
 	void disparar();
 	int getVelocidadX();
 	int getVelocidadY();
+	float getPosicionX();
+	float getPosicionY();
 	int cargarImagen(string path, SDL_Renderer* renderer);
 	void cerrar();
 	SDL_Renderer* getAvionRenderer();
@@ -53,6 +57,8 @@ public:
 	void manejarEvento(SDL_Event evento);
 	void mover();
 	void render(SDL_Renderer* renderer);
+	int getAncho();
+	int getAlto();
 };
 
 #endif

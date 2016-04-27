@@ -15,15 +15,13 @@ Avion::Avion(){
 	this->posY = 0;
 	this->velocidadX = 0;
 	this->velocidadY = 0;
-	this->velocidad = 10;
+	this->velocidad = 500;
 }
 Avion::~Avion(){
 
 }
 
 void Avion::manejarEvento(SDL_Event evento){
-	this->velocidadX = 0;
-	this->velocidadY = 0;
 	if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     {
         //Adjust the velocity
@@ -112,7 +110,7 @@ int Avion::cargarImagen(string path, SDL_Renderer* renderer){
 }
 
 void Avion::render(SDL_Renderer* renderer){
-	this->gAvionTextura->render(this->posX, this->posY, renderer);
+	this->gAvionTextura->render((int)this->posX, (int)this->posY, renderer);
 	SDL_RenderPresent(renderer);
 }
 
@@ -126,4 +124,18 @@ SDL_Renderer* Avion::getAvionRenderer(){
 
 Figura* Avion::getAvionTextura(){
 	return this->gAvionTextura;
+}
+
+float Avion::getPosicionX(){
+	return this->posX;
+}
+float Avion::getPosicionY(){
+	return this->posY;
+}
+
+int Avion::getAncho(){
+	return AVION_ANCHO;
+}
+int Avion::getAlto(){
+	return AVION_ALTO;
 }

@@ -27,6 +27,8 @@ class Escenario{
 		string path;
 
 	public:
+		const int LEVEL_WIDTH = 1280;
+		const int LEVEL_HEIGHT = 960;
 		Escenario(int ancho, int alto);
 		~Escenario();
 		bool cargarImagenDeFondo(SDL_Renderer* renderer);
@@ -39,6 +41,7 @@ class Escenario{
 		void agregarAvion(Avion* avion);
 		Figura* getFondoEscenario();
 		Avion* getAvion();
+		void iniciarCamara(Avion* avion);
 };
 
 #endif

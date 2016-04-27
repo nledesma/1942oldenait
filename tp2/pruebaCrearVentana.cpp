@@ -9,7 +9,7 @@ int main(){
   //Avion* unAvion = new Avion();
   //cout << "ESTO ES EL RENDERER DE LA VENTANA " << ventana->getRenderer() << endl;
   Escenario* unEscenario = new Escenario(800,600);
-  unEscenario->iniciar("espacio.bmp");
+  unEscenario->iniciar("galaxia2.bmp");
   //SDL_Delay(6000);
   bool quit = false;
 

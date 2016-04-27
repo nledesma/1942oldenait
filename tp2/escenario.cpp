@@ -11,6 +11,7 @@ Escenario::Escenario(int ancho, int alto){
 Escenario::~Escenario(){}
 
 int Escenario::iniciar(string path){
+	int scrollingOffset = 0;
 	Avion* avion = new Avion();
 	this->ventana->iniciar();
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
@@ -28,18 +29,47 @@ int Escenario::iniciar(string path){
 			}
 			avion->manejarEvento(e);
 		}
-
+		//this->iniciarCamara(avion);
 		float timeStep = temporizador.getTicks() / 1000.f;
 		//TODO VER LO DE RENDER PRESENT
 		avion->mover(timeStep);
+		//Scroll background
+		++scrollingOffset;
+		if(scrollingOffset > this->fondoEscenario->getWidth()){
+			scrollingOffset = 0;
+		}
 		temporizador.comenzar();
 		SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear(ventana->getVentanaRenderer());
 		this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
+		//Render background
+		this->fondoEscenario->render(0, scrollingOffset, ventana->getVentanaRenderer());
+		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer());
 		avion->render(ventana->getVentanaRenderer());
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 	return 1;
+}
+
+void Escenario::iniciarCamara(Avion* avion){
+	SDL_Rect camara = { 0, 0, 800, 600};
+	//Center the camara over the dot
+	//TODO ver lo de pasar los numeros, que los devuelva un metodo
+	camara.x = (avion->getPosicionX() + Avion::AVION_ANCHO / 2 ) - 800 / 2;
+	camara.y = (avion->getPosicionY() + Avion::AVION_ALTO / 2 ) - 600 / 2;
+	//Keep the camara in bounds
+	if( camara.x < 0 ){
+		camara.x = 0;
+	}
+	if( camara.y < 0 ){
+		camara.y = 0;
+	}
+	if( camara.x > LEVEL_WIDTH - camara.w ){
+		camara.x = LEVEL_WIDTH - camara.w;
+	}
+	if( camara.y > LEVEL_HEIGHT - camara.h ){
+		camara.y = LEVEL_HEIGHT - camara.h;
+	}
 }
 
 int Escenario::getAncho(){
