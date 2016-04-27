@@ -111,7 +111,6 @@ int Avion::cargarImagen(string path, SDL_Renderer* renderer){
 
 void Avion::render(SDL_Renderer* renderer){
 	this->gAvionTextura->render((int)this->posX, (int)this->posY, renderer);
-	SDL_RenderPresent(renderer);
 }
 
 void Avion::cerrar(){

@@ -10,11 +10,6 @@
 #include "figura.hpp"
 
 using namespace std;
-struct Elemento{
-	int posX;
-	int posY;
-	string idSprite;
-};
 
 class Ventana{
 	private:
@@ -31,7 +26,6 @@ class Ventana{
 		void setAncho(int ancho);
 		int getAlto();
 		void setAlto(int alto);
-		void agregarElemento(Elemento elemento);
 		SDL_Renderer* getVentanaRenderer();
 		SDL_Window* getSdlWindow();
 };

@@ -13,11 +13,16 @@ Escenario::~Escenario(){}
 int Escenario::iniciar(string path){
 	int scrollingOffset = 0;
 	Avion* avion = new Avion();
+	Elemento* elemento = new Elemento(100, 300);
+	Elemento* elemento2 = new Elemento(600, 400);
 	this->ventana->iniciar();
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
 	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
 	SDL_RenderPresent(ventana->getVentanaRenderer());
 	avion->cargarImagen("honguito.bmp",ventana->getVentanaRenderer());
+	this->cargarElemento(elemento, ventana->getVentanaRenderer(), "planet.bmp");
+	this->cargarElemento(elemento2, ventana->getVentanaRenderer(), "asteroide.bmp");
+
 	bool quit = false;
 	SDL_Event e;
 	Temporizador temporizador;
@@ -29,10 +34,10 @@ int Escenario::iniciar(string path){
 			}
 			avion->manejarEvento(e);
 		}
+		//TODO ver lo de que avance con el tipo, esto parece que no hay que hacerlo ahora (?)
 		//this->iniciarCamara(avion);
 		float timeStep = temporizador.getTicks() / 1000.f;
 		//TODO VER LO DE RENDER PRESENT
-		avion->mover(timeStep);
 		//Scroll background
 		++scrollingOffset;
 		if(scrollingOffset > this->fondoEscenario->getWidth()){
@@ -45,10 +50,26 @@ int Escenario::iniciar(string path){
 		//Render background
 		this->fondoEscenario->render(0, scrollingOffset, ventana->getVentanaRenderer());
 		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer());
+
 		avion->render(ventana->getVentanaRenderer());
+		elemento->render(ventana->getVentanaRenderer());
+		elemento2->render(ventana->getVentanaRenderer());
+		avion->mover(timeStep);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 	return 1;
+}
+
+void Escenario::cargarElemento(Elemento* elemento, SDL_Renderer* renderer, string path){
+	this->agregarElemento(elemento);
+	elemento->cargarImagen(path ,renderer);
+
+}
+
+void Escenario::agregarElemento(Elemento* elemento){
+	//Agrega el elemento a la lista.
+	this->elementos.push_back(elemento);
+
 }
 
 void Escenario::iniciarCamara(Avion* avion){

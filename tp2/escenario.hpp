@@ -8,9 +8,9 @@
 #include "avion.hpp"
 #include "figura.hpp"
 #include "temporizador.hpp"
+#include "elemento.hpp"
 #include <list>
 using namespace std;
-
 struct fondo{
 	string idSpriteFondo;
 	int ancho;
@@ -23,6 +23,7 @@ class Escenario{
 		int alto;
 		Ventana* ventana;
 		list<Avion*> aviones;
+		list<Elemento*> elementos;
 		Figura* fondoEscenario;
 		string path;
 
@@ -32,13 +33,16 @@ class Escenario{
 		Escenario(int ancho, int alto);
 		~Escenario();
 		bool cargarImagenDeFondo(SDL_Renderer* renderer);
+		void cargarElemento(Elemento* elemento, SDL_Renderer* renderer, string path);
 		int iniciar(string path);
 		int getAncho();
 		int getAlto();
 		bool cargarImagenes(string path);
 		//Ventana* getVentana();
 		list<Avion*> getAviones();
+		list<Elemento*> getElementos();
 		void agregarAvion(Avion* avion);
+		void agregarElemento(Elemento* elemento);
 		Figura* getFondoEscenario();
 		Avion* getAvion();
 		void iniciarCamara(Avion* avion);
