@@ -11,15 +11,15 @@ Escenario::Escenario(int ancho, int alto){
 Escenario::~Escenario(){}
 
 int Escenario::iniciar(string path){
-	int scrollingOffset = 0;
+	float scrollingOffset = 0;
 	Avion* avion = new Avion();
 	Elemento* elemento = new Elemento(100, 300);
 	Elemento* elemento2 = new Elemento(600, 400);
 	this->ventana->iniciar();
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
-	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
+	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer(), NULL);
 	SDL_RenderPresent(ventana->getVentanaRenderer());
-	avion->cargarImagen("honguito.bmp",ventana->getVentanaRenderer());
+	avion->cargarImagen("millenium-sprite.bmp",ventana->getVentanaRenderer());
 	this->cargarElemento(elemento, ventana->getVentanaRenderer(), "planet.bmp");
 	this->cargarElemento(elemento2, ventana->getVentanaRenderer(), "asteroide.bmp");
 
@@ -39,21 +39,21 @@ int Escenario::iniciar(string path){
 		float timeStep = temporizador.getTicks() / 1000.f;
 		//TODO VER LO DE RENDER PRESENT
 		//Scroll background
-		++scrollingOffset;
+		scrollingOffset = scrollingOffset + 0.2;
 		if(scrollingOffset > this->fondoEscenario->getWidth()){
 			scrollingOffset = 0;
 		}
 		temporizador.comenzar();
 		SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear(ventana->getVentanaRenderer());
-		this->fondoEscenario->render(0,0,ventana->getVentanaRenderer());
+		this->fondoEscenario->render(0,0,ventana->getVentanaRenderer(), NULL);
 		//Render background
-		this->fondoEscenario->render(0, scrollingOffset, ventana->getVentanaRenderer());
-		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer());
+		this->fondoEscenario->render(0, scrollingOffset, ventana->getVentanaRenderer(), NULL);
+		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer(), NULL);
 
-		avion->render(ventana->getVentanaRenderer());
 		elemento->render(ventana->getVentanaRenderer());
 		elemento2->render(ventana->getVentanaRenderer());
+		avion->render(ventana->getVentanaRenderer());
 		avion->mover(timeStep);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}

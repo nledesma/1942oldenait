@@ -25,7 +25,7 @@ class Figura{
 		//Libera la memoria de la textura
 		void free();
 		//Renderiza la figura en el punto (x,y)
-		void render( int x, int y, SDL_Renderer* renderer);
+		void render( int x, int y, SDL_Renderer* renderer, SDL_Rect* clip = NULL);
 		//Getters
 		int getWidth();
 		int getHeight();

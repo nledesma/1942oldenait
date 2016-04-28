@@ -25,13 +25,15 @@ private:
   float posY;
   float velocidadX;
   float velocidadY;
+	SDL_Rect clipsAnimacion[3];
+	int estadoAnimacion;
 	SDL_Renderer* gAvionRenderer;
 	Figura* gAvionTextura;
 	float velocidad;
 
 public:
-	static const int AVION_ANCHO = 20;
-	static const int AVION_ALTO= 20;
+	static const int AVION_ANCHO = 80;
+	static const int AVION_ALTO= 80;
 	Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion, Disparo unDisparo);
 	Avion();
 	~Avion();

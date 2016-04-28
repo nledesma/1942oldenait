@@ -14,7 +14,7 @@ float Elemento::generarNumeroAleatorio(float a, float b) {
 }
 
 void Elemento::render(SDL_Renderer* renderer){
-	this->figuraElemento->render((int)this->posX, (int)this->posY, renderer);
+	this->figuraElemento->render((int)this->posX, (int)this->posY, renderer, NULL);
 }
 
 int Elemento::cargarImagen(string path, SDL_Renderer* renderer){
