@@ -133,3 +133,7 @@ bool Escenario::cargarImagenes(string path){
 Figura* Escenario::getFondoEscenario(){
 	return this->fondoEscenario;
 }
+
+Ventana* Escenario::getVentana(){
+	return this->ventana;
+}

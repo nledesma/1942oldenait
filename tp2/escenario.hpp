@@ -46,6 +46,7 @@ class Escenario{
 		Figura* getFondoEscenario();
 		Avion* getAvion();
 		void iniciarCamara(Avion* avion);
+		Ventana* getVentana();
 };
 
 #endif
