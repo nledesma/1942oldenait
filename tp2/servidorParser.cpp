@@ -71,10 +71,16 @@ Servidor * ServidorParser::deserializar(string ruta) {
 	int ancho;
 	XMLNode* pNodoAncho = pNodoVentana->FirstChild();
 	pNodoAncho -> ToElement() -> QueryIntText(&ancho);
+
 	//Alto
 	int alto;
 	XMLNode* pNodoAlto = pNodoVentana->FirstChild()->NextSibling();
 	pNodoAlto -> ToElement() -> QueryIntText(&alto);
 
-	return new Servidor(unPuerto, unaCantidadDeClientes);
+	Servidor* servidor = new Servidor(unPuerto,unaCantidadDeClientes);
+	Escenario* escenario = new Escenario(ancho,alto);
+	servidor->setEscenario(escenario); 
+	cout << "Se creo un escenario" << endl;
+
+	return servidor;
 }

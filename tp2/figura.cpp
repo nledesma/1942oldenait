@@ -13,7 +13,6 @@ Figura::~Figura(){
 }
 
 bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
-	cout << "ESTO ES EL RENDERER " << renderer << endl;
 	//Si existe una textura cargada de antes, se libera la memoria asociada a esa textura.
 	free();
 	//Se declara la textura que va a cargarse en la figura.

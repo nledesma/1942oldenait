@@ -33,9 +33,9 @@ public:
     void setAddress(int port);
     int getPuerto();
     void setPuerto(int unPuerto);
-    void iniciarEscenario();
+    void iniciarEscenario(/*int ancho, int alto*/);
     Escenario* getEscenario();
-
+    void setEscenario(Escenario* escenario);
 };
 
 #endif

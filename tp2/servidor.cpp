@@ -10,7 +10,7 @@ Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
         //Logger::instance()->logError(errno, "Se produjo un error en el BIND");
     }
     setCantidadMaximaDeClientes(cantidadDeClientes);
-    iniciarEscenario();
+    //iniciarEscenario(/*ancho,alto*/);
 }
 
 void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
@@ -45,11 +45,18 @@ int Servidor::getPuerto() {
     return puerto;
 }
 
+/*
 void Servidor::iniciarEscenario(){
   Escenario* escenario = new Escenario(800, 600);
   this->escenario = escenario;
+  cout << "Se creo el escenario" << endl;
 }
+*/
 
 Escenario* Servidor::getEscenario(){
   return this->escenario;
+}
+
+void Servidor::setEscenario(Escenario* unEscenario){
+    this->escenario = unEscenario;
 }
