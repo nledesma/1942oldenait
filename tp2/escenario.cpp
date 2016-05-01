@@ -13,24 +13,11 @@ Escenario::~Escenario(){}
 int Escenario::iniciar(string path){
 	float scrollingOffset = 0;
 	Avion* avion = new Avion();
-	//Elemento* elemento = new Elemento(100, 300, "planeta.bmp");
-	//Elemento* elemento2 = new Elemento(600, 400, "asteroide.bmp");
-	cout << "INICIO LA VENTANA " << endl;
 	this->ventana->iniciar();
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
-	cout << "CARGO EL ESCENARIO" << endl;
 	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer(), NULL);
-	cout << "RENDERIZO EL ESCENARIO" << endl;
 	SDL_RenderPresent(ventana->getVentanaRenderer());
-	cout << "HIZO UN RENDER PRESENT Y ESTA POR CARGAR LA IMAGEN DEL AVION" << endl;
 	avion->cargarImagen("millenium-sprite.bmp",ventana->getVentanaRenderer());
-	cout << "ESTA POR INCLUIR A LOS ELEMENTOS" << endl;
-	cout << "ESte es un path: " << getElementos().front() << endl;
-	cout << "ESTO ES EL SEGUNDO ELEMENTO: " << getElementos().back()<< endl;
-
-	//this->cargarElemento(this->getElementos().front(), ventana->getVentanaRenderer(),this->getElementos().front()->getSpriteId() + ".bmp");
-	//this->cargarElemento(this->getElementos().back(), ventana->getVentanaRenderer(),this->getElementos().back()->getSpriteId() + ".bmp");
-	//this->cargarElemento(elemento2, ventana->getVentanaRenderer(), "asteroide.bmp");
 	incluirElementos();
 
 	bool quit = false;
@@ -61,11 +48,7 @@ int Escenario::iniciar(string path){
 		this->fondoEscenario->render(0, scrollingOffset, ventana->getVentanaRenderer(), NULL);
 		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer(), NULL);
 
-		//this->getElementos().front()->render(ventana->getVentanaRenderer());
-		//this->getElementos().back()->render(ventana->getVentanaRenderer());
 		renderizarElementos(ventana->getVentanaRenderer());
-		//elemento->render(ventana->getVentanaRenderer());
-		//elemento2->render(ventana->getVentanaRenderer());
 		avion->render(ventana->getVentanaRenderer());
 		avion->mover(timeStep);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
@@ -74,11 +57,6 @@ int Escenario::iniciar(string path){
 }
 
 void Escenario::cargarElemento(Elemento* elemento, SDL_Renderer* renderer, string path){
-	string spriteId = elemento->getSpriteId();
-	//float posX = elemento->getPosX();
-	//float posY = elemento->getPosY();
-	//this->agregarElemento(spriteId, posX, posY);
-	cout << "ESTO ES EL PATH EN CARGAR ELEMENTO: " << path << endl;
 	elemento->cargarImagen(path ,renderer);
 
 }
@@ -86,11 +64,6 @@ void Escenario::cargarElemento(Elemento* elemento, SDL_Renderer* renderer, strin
 void Escenario::agregarElemento(string spriteId, float posX, float posY){
 	//Agrega el elemento a la lista.
 	Elemento* elemento = new Elemento(posX, posY, spriteId);
-	cout << "ESTA POR AGREGAR UN ELEMENTO" << endl;
-	cout << "ESTO SON LAS COSAS DEL ELEMENTO: " << endl;
-	cout << elemento->getSpriteId() << endl;
-	cout << elemento->getPosX() << endl;
-	cout << elemento->getPosY() << endl;
 	this->elementos.push_back(elemento);
 }
 
@@ -173,18 +146,15 @@ int Escenario::getAltoFondo(){
 	return this->alto;
 }
 
-list<Elemento*> Escenario::getElementos(){
+list<Elemento*>& Escenario::getElementos(){
 	return this->elementos;
 }
 
 void Escenario::incluirElementos(){
 	string path;
 	for(list<Elemento*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
-		cout << "ENTRO UNA VEZ AL FOR" << endl;
 		Elemento* elemento = *iterador;
-		cout << "elemento:" << elemento << endl;
 		path = (elemento->getSpriteId() + ".bmp").c_str();
-		cout << "ESTA POR CARGAR UN ELEMENTO: " << path << endl;
 		this->cargarElemento(elemento, ventana->getVentanaRenderer(),path);
 		//this->cargarElemento(elemento2, ventana->getVentanaRenderer(), "asteroide.bmp");
 	}

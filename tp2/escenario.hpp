@@ -42,7 +42,7 @@ class Escenario{
 		bool cargarImagenes(string path);
 		//Ventana* getVentana();
 		list<Avion*> getAviones();
-		list<Elemento*> getElementos();
+		list<Elemento*>& getElementos();
 		void agregarAvion(Avion* avion);
 		void agregarElemento(string spriteId, float posX, float posY);
 		Figura* getFondoEscenario();
