@@ -7,14 +7,16 @@
 using namespace std;
 class Elemento{
 private:
-  int spriteId;
+  string spriteId;
   float posX;
   float posY;
   Figura* figuraElemento;
 public:
-  Elemento(float posX, float posY);
-  int getSpriteId();
+  Elemento(float posX, float posY, string spriteId);
+  string getSpriteId();
   float generarNumeroAleatorio(float a, float b);
   int cargarImagen(string path, SDL_Renderer* renderer);
   void render(SDL_Renderer* renderer);
+  float getPosX();
+  float getPosY();
 };

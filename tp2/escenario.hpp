@@ -10,6 +10,8 @@
 #include "temporizador.hpp"
 #include "elemento.hpp"
 #include <list>
+#include <iterator>
+
 using namespace std;
 struct fondo{
 	string idSpriteFondo;
@@ -42,11 +44,16 @@ class Escenario{
 		list<Avion*> getAviones();
 		list<Elemento*> getElementos();
 		void agregarAvion(Avion* avion);
-		void agregarElemento(Elemento* elemento);
+		void agregarElemento(string spriteId, float posX, float posY);
 		Figura* getFondoEscenario();
 		Avion* getAvion();
 		void iniciarCamara(Avion* avion);
 		Ventana* getVentana();
+		const char* getFondoSprite();
+		int getAnchoFondo();
+		int getAltoFondo();
+		void incluirElementos();
+		void renderizarElementos(SDL_Renderer* renderer);
 };
 
 #endif

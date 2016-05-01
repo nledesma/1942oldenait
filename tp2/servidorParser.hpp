@@ -6,6 +6,8 @@
 #include "servidor.hpp"
 #include "tinyxml2.h"
 #include "logger.hpp"
+#include <iterator>
+
 using namespace std;
 using namespace tinyxml2;
 

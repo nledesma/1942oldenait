@@ -1,12 +1,25 @@
 # 1942oldenait
 _OL-DE-NAIT_
 
-## Pendientes
-
-- Validaciones.
-  - Memoria.
-  - XML:
-    - Incompleto: Eliminar todo un tag y eliminar un '<'.
-- Ver el problema de desconectarse y conectarse. Actualmente no es problema si se cierra el servidor en el medio. Esto indicaría que al cerrarse el servidor se cierran bien las conexiones, pero no así al desconectarse un cliente. Dicen las malas lenguas que hay que hacer set_socket_opts o algo así. (EL problema parece solucionado sin necesidad de usar esto... pero parece que habria que usarlo)
-- Verificar que el xml del servidor esta incompleto..
--Servidor cerrar de forma elegante (?)(no estaria funcionando el thread)
+## COSAS PARA HACER!!!
+###Desarrollar el cliente del programa: 
+-Incluir la posibilidad de agregar de 1 a 4 jugadores y comportamiento ante su conexión y desconexión.
+-Todos los clientes puedan ver los aviones de los demás.
+-Cuando un jugador se conecta poner nombre de usuario y servidor a conectarse (ip y puerto).
+-Ver comportamientos del jugador ante el servidor (ver enunciado)
+###Desarrollo del programa servidor:
+-Validar los datos del xml.
+-Levantar sprites del xml.
+-Levantar el default en el caso de que el xml no exista o no sea válido.
+-No necesita interfaz, levantar por linea de comandos.
+-Si el escenario (por el xml) acepta a cierta cantidad de jugadores, cuando se supera no puede acepta más.
+###Construcción de niveles (por ahora hay solo 1)
+###Interfaz gráfica
+-Movimiento de la cámara, que el avión se mueva junto con la cámara.
+###Escenario
+-El fondo que venga del xml.
+-Lista de elementos: cada elemento es un rectangulo y tiene sus coordenadas.
+###Control del avión:
+-Manejo del avión con las teclas (ver enunciado)
+###Agregar una tecla "X" para abortar la partida.
+###Agregar deletes!

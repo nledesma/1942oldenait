@@ -1,5 +1,6 @@
 #include "elemento.hpp"
-Elemento::Elemento(float posX, float posY){
+Elemento::Elemento(float posX, float posY, string spriteId){
+  this->spriteId = spriteId;
   this->posX = posX;//generarNumeroAleatorio(0,800);
   this->posY = posY;//generarNumeroAleatorio(0,600);
   this->figuraElemento = new Figura();
@@ -14,7 +15,7 @@ float Elemento::generarNumeroAleatorio(float a, float b) {
 }
 
 void Elemento::render(SDL_Renderer* renderer){
-	this->figuraElemento->render((int)this->posX, (int)this->posY, renderer, NULL);
+  this->figuraElemento->render((int)this->posX, (int)this->posY, renderer, NULL);
 }
 
 int Elemento::cargarImagen(string path, SDL_Renderer* renderer){
@@ -25,4 +26,16 @@ int Elemento::cargarImagen(string path, SDL_Renderer* renderer){
 	}
 	this->render(renderer);
 	return 1;
+}
+
+string Elemento::getSpriteId(){
+  return this->spriteId;
+}
+
+float Elemento::getPosX(){
+  return this->posX;
+}
+
+float Elemento::getPosY(){
+  return this->posY;
 }

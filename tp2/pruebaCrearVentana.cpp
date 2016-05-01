@@ -5,13 +5,15 @@
 #include "figura.hpp"
 #include "servidor.hpp"
 #include "servidorParser.hpp"
+#include <stdio.h>
 using namespace std;
 
 int main(){
   Servidor* servidor;
   ServidorParser parser;
-  servidor = parser.deserializar("servidor.xml");
-  servidor->getEscenario()->iniciar("galaxia2.bmp");
+  servidor = parser.deserializar("servidorCompleto.xml");
+  const char* path = servidor->getEscenario()-> getFondoSprite();
+  servidor->getEscenario()->iniciar(string(path) + ".bmp");
 
   bool quit = false;
   //Event handler
