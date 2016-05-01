@@ -26,11 +26,13 @@
         </elemento>
     </elementos>
 </escenario>
-<avion>
+<aviones>
+  <avion>
     <velocidadDesplazamiento>10</velocidadDesplazamiento>
     <velocidadDisparos>6</velocidadDisparos>
-    <avionSpriteId>avion</avionSpriteId>
-    <vueltaSpriteId>disparo</vueltaSpriteId>
-    <disparosSpriteId>vuelta</disparosSpriteId>
-</avion>
+    <avionSpriteId>millenium-sprite</avionSpriteId>
+    <vueltaSpriteId>vuelta</vueltaSpriteId>
+    <disparosSpriteId>disparos</disparosSpriteId>
+  </avion>
+</aviones>
 </configuracion>

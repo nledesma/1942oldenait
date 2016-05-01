@@ -17,7 +17,9 @@ using namespace std;
 class Avion{
 private:
 	string idSprite;
+	string idSpriteVuelta;
 	float velocidadDesplazamiento;
+	float velocidadDisparos;
 	Disparo disparo;
 	string idSpriteAnimacion;
 	string idSpriteDisparo;
@@ -34,8 +36,7 @@ private:
 public:
 	static const int AVION_ANCHO = 80;
 	static const int AVION_ALTO= 80;
-	Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion, Disparo unDisparo);
-	Avion();
+	Avion(float velocidadDesplazamiento, float velocidadDisparos, string avionSpriteId, string vueltaSpriteId, string disparosSpriteId/*Disparo disparo*/);
 	~Avion();
 	void setDisparo(Disparo unDisparo);
 	Disparo getDisparo();

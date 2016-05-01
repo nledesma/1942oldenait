@@ -9,7 +9,7 @@ _OL-DE-NAIT_
 -Ver comportamientos del jugador ante el servidor (ver enunciado)
 ###Desarrollo del programa servidor:
 -Validar los datos del xml.
--Levantar sprites del xml.
+-Levantar sprites del xml (revisar si hay que hacerlo, actualmente no lo tenemos en el xml para levantar)
 -Levantar el default en el caso de que el xml no exista o no sea válido.
 -No necesita interfaz, levantar por linea de comandos.
 -Si el escenario (por el xml) acepta a cierta cantidad de jugadores, cuando se supera no puede acepta más.
@@ -17,7 +17,6 @@ _OL-DE-NAIT_
 ###Interfaz gráfica
 -Movimiento de la cámara, que el avión se mueva junto con la cámara.
 ###Escenario
--El fondo que venga del xml.
 -Lista de elementos: cada elemento es un rectangulo y tiene sus coordenadas.
 ###Control del avión:
 -Manejo del avión con las teclas (ver enunciado)

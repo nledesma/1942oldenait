@@ -2,40 +2,20 @@
 
 using namespace std;
 
-Avion::Avion(string idSprite,int velocidadDesplazamiento,string idSpriteAnimacion,Disparo unDisparo){
-	this->idSprite = idSprite;
-	this->velocidadDesplazamiento = velocidadDesplazamiento;
-	this->idSpriteAnimacion = idSpriteAnimacion;
-	this->disparo = unDisparo;
-
-	//Avión en estado normal
-	this->clipsAnimacion[0].x = 0;
-	this->clipsAnimacion[0].y = 0;
-	this->clipsAnimacion[0].w = 80;
-	this->clipsAnimacion[0].h = 80;
-
-	//Avión moviéndose a la izquierda
-	this->clipsAnimacion[1].x = 80;
-	this->clipsAnimacion[1].y = 0;
-	this->clipsAnimacion[1].w = 80;
-	this->clipsAnimacion[1].h = 80;
-
-	//Avión moviéndose a la derecha
-	this->clipsAnimacion[2].x = 160;
-	this->clipsAnimacion[2].y = 0;
-	this->clipsAnimacion[2].w = 80;
-	this->clipsAnimacion[2].h = 80;
-
-	this->estadoAnimacion = 0;
-}
-
-Avion::Avion(){
+Avion::Avion(float velocidadDesplazamiento, float velocidadDisparos, string avionSpriteId, string vueltaSpriteId, string disparosSpriteId){
 	this->gAvionTextura = new Figura();
 	this->posX = 400;
 	this->posY = 0;
 	this->velocidadX = 0;
 	this->velocidadY = 0;
 	this->velocidad = 500;
+	this->idSprite = avionSpriteId;
+	this->idSpriteVuelta = vueltaSpriteId;
+	this->idSpriteDisparo = disparosSpriteId;
+	this->velocidadDesplazamiento = velocidadDesplazamiento;
+	this->velocidadDisparos = velocidadDisparos;
+	this->idSpriteAnimacion = idSpriteAnimacion;
+	//this->disparo = unDisparo;
 
 
 	//Avión en estado normal

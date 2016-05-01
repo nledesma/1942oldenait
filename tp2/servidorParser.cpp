@@ -151,7 +151,35 @@ Servidor * ServidorParser::deserializar(string ruta) {
 		servidor->getEscenario()->agregarElemento(spriteIdElemento, posx, posy);
 
 		pNodoElemento = pNodoElemento -> NextSiblingElement("elemento");
-}
+	}
+
+	//Lista de aviones
+	XMLNode* pNodoAviones = pRoot -> FirstChild()-> NextSibling()->NextSibling();
+	XMLNode* pNodoAvion = pNodoAviones->FirstChild();
+	while(pNodoAvion != NULL){
+		float velocidadDesplazamiento, velocidadDisparos;
+		string avionSpriteId, vueltaSpriteId, disparosSpriteId;
+		//Velocidad de desplazamiento
+		XMLNode* pVelocidadDesplazamiento = pNodoAvion->FirstChild();
+		pVelocidadDesplazamiento->ToElement()->QueryFloatText(&velocidadDesplazamiento);
+		//Velocidad Disparos
+		XMLNode* pVelocidadDisparos = pNodoAvion->FirstChild()->NextSibling();
+		pVelocidadDisparos->ToElement()->QueryFloatText(&velocidadDisparos);
+		//Avion ID Sprite
+		XMLNode* pNodoSpriteIdAvion = pVelocidadDisparos->NextSibling();
+		avionSpriteId = pNodoSpriteIdAvion -> ToElement() -> GetText();
+		//Avion ID Sprite Vuelta
+		XMLNode* pNodoSpriteIdAvionVuelta = pNodoSpriteIdAvion->NextSibling();
+		vueltaSpriteId = pNodoSpriteIdAvionVuelta -> ToElement() -> GetText();
+		//Avion ID Sprite Disparos
+		XMLNode* pNodoSpriteIdAvionDisparos = pNodoSpriteIdAvionVuelta->NextSibling();
+		disparosSpriteId = pNodoSpriteIdAvionDisparos -> ToElement() -> GetText();
+
+		servidor->getEscenario()->agregarAvion(velocidadDesplazamiento, velocidadDisparos, avionSpriteId, vueltaSpriteId, disparosSpriteId);
+
+		pNodoAvion = pNodoAvion -> NextSiblingElement("avion");
+	}
+
 
 	return servidor;
 }

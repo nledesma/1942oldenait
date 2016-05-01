@@ -12,12 +12,13 @@ Escenario::~Escenario(){}
 
 int Escenario::iniciar(string path){
 	float scrollingOffset = 0;
-	Avion* avion = new Avion();
+	//Avion* avion = new Avion();
 	this->ventana->iniciar();
 	this->fondoEscenario->loadFromFile(path, ventana->getVentanaRenderer());
 	this->fondoEscenario->render(0,0,ventana->getVentanaRenderer(), NULL);
 	SDL_RenderPresent(ventana->getVentanaRenderer());
-	avion->cargarImagen("millenium-sprite.bmp",ventana->getVentanaRenderer());
+	//avion->cargarImagen("millenium-sprite.bmp",ventana->getVentanaRenderer());
+	incluirAviones();
 	incluirElementos();
 
 	bool quit = false;
@@ -29,7 +30,8 @@ int Escenario::iniciar(string path){
 			{
 				quit = true;
 			}
-			avion->manejarEvento(e);
+
+			this->getAviones().front()->manejarEvento(e);
 		}
 		//TODO ver lo de que avance con el tipo, esto parece que no hay que hacerlo ahora (?)
 		//this->iniciarCamara(avion);
@@ -49,11 +51,26 @@ int Escenario::iniciar(string path){
 		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer(), NULL);
 
 		renderizarElementos(ventana->getVentanaRenderer());
-		avion->render(ventana->getVentanaRenderer());
-		avion->mover(timeStep);
+		renderizarAviones(ventana->getVentanaRenderer());
+		//avion->render(ventana->getVentanaRenderer());
+		this->getAviones().front()->mover(timeStep);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 	return 1;
+}
+
+void Escenario::incluirAviones(){
+	string path;
+	for(list<Avion*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
+		Avion* avion = *iterador;
+		path = (avion->getIdSprite() + ".bmp").c_str();
+		this->cargarAvion(avion, ventana->getVentanaRenderer(),path);
+	}
+
+}
+
+void Escenario::cargarAvion(Avion* avion, SDL_Renderer* renderer, string path){
+		avion->cargarImagen(path, renderer);
 }
 
 void Escenario::cargarElemento(Elemento* elemento, SDL_Renderer* renderer, string path){
@@ -96,11 +113,12 @@ int Escenario::getAlto(){
 	return this->alto;
 }
 
-list<Avion*> Escenario::getAviones(){
+list<Avion*>& Escenario::getAviones(){
 	return this->aviones;
 }
 
-void Escenario::agregarAvion(Avion* avion){
+void Escenario::agregarAvion(float velocidadDesplazamiento, float velocidadDisparos, string avionSpriteId, string vueltaSpriteId, string disparosSpriteId){
+	Avion* avion = new Avion(velocidadDesplazamiento, velocidadDisparos, avionSpriteId, vueltaSpriteId, disparosSpriteId /*unDisparo*/);
 	this->aviones.push_back(avion);
 }
 
@@ -164,5 +182,12 @@ void Escenario::renderizarElementos(SDL_Renderer* renderer){
 	for(list<Elemento*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
 		Elemento* elemento = *iterador;
 		elemento->render(renderer);
+	}
+}
+
+void Escenario::renderizarAviones(SDL_Renderer* renderer){
+	for(list<Avion*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
+		Avion* avion = *iterador;
+		avion->render(renderer);
 	}
 }

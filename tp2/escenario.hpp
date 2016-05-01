@@ -35,15 +35,16 @@ class Escenario{
 		Escenario(int ancho, int alto);
 		~Escenario();
 		bool cargarImagenDeFondo(SDL_Renderer* renderer);
+		void cargarAvion(Avion* avion, SDL_Renderer* renderer, string path);
 		void cargarElemento(Elemento* elemento, SDL_Renderer* renderer, string path);
 		int iniciar(string path);
 		int getAncho();
 		int getAlto();
 		bool cargarImagenes(string path);
 		//Ventana* getVentana();
-		list<Avion*> getAviones();
+		list<Avion*>& getAviones();
 		list<Elemento*>& getElementos();
-		void agregarAvion(Avion* avion);
+		void agregarAvion(float velocidadDesplazamiento, float velocidadDisparos, string avionSpriteId, string vueltaSpriteId, string disparosSpriteId);
 		void agregarElemento(string spriteId, float posX, float posY);
 		Figura* getFondoEscenario();
 		Avion* getAvion();
@@ -52,7 +53,9 @@ class Escenario{
 		const char* getFondoSprite();
 		int getAnchoFondo();
 		int getAltoFondo();
+		void incluirAviones();
 		void incluirElementos();
+		void renderizarAviones(SDL_Renderer* renderer);
 		void renderizarElementos(SDL_Renderer* renderer);
 };
 
