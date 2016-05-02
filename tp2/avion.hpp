@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include <list>
+#include <chrono>
 #include "disparo.hpp"
 #include "figura.hpp"
 
@@ -26,11 +27,12 @@ private:
 	float posY;
   float velocidadX;
   float velocidadY;
-	SDL_Rect clipsAnimacion[5];
+	SDL_Rect clipsAnimacion[6];
 	int estadoAnimacion;
 	SDL_Renderer* gAvionRenderer;
 	Figura* gAvionTextura;
 	float velocidad;
+	int contador;
 
 public:
 	static const int AVION_ANCHO = 80;
@@ -66,7 +68,7 @@ public:
 	int getAlto();
 	int getAnchoDisparo();
 	int getAltoDisparo();
-	void vuelta();
+	void vuelta(SDL_Renderer * renderer);
 	};
 
 #endif

@@ -15,6 +15,7 @@ Avion::Avion(float velocidadDesplazamiento, float velocidadDisparos, string avio
 	this->velocidadDesplazamiento = velocidadDesplazamiento;
 	this->velocidadDisparos = velocidadDisparos;
 	this->idSpriteAnimacion = idSpriteAnimacion;
+	this->contador = 150;
 
 
 	//Avión en estado normal
@@ -41,10 +42,16 @@ Avion::Avion(float velocidadDesplazamiento, float velocidadDisparos, string avio
 	this->clipsAnimacion[3].w = AVION_ANCHO;
 	this->clipsAnimacion[3].h = AVION_ALTO;
 
+	//Segundo sprite vuelta
 	this->clipsAnimacion[4].x = 0 + AVION_ANCHO * 4;
 	this->clipsAnimacion[4].y = 0;
 	this->clipsAnimacion[4].w = AVION_ANCHO;
 	this->clipsAnimacion[4].h = AVION_ALTO;
+
+	this->clipsAnimacion[5].x = 0;
+	this->clipsAnimacion[5].y = 0 + AVION_ALTO;
+	this->clipsAnimacion[5].w = AVION_ANCHO;
+	this->clipsAnimacion[5].h = AVION_ALTO;
 
 	this->estadoAnimacion = 0;
 }
@@ -56,7 +63,7 @@ void Avion::manejarEvento(SDL_Event evento, SDL_Renderer * renderer){
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     {
-        //Adjust the velocity
+			if((this->estadoAnimacion < 3)){
         switch( evento.key.keysym.sym )
         {
             case SDLK_UP:
@@ -75,14 +82,16 @@ void Avion::manejarEvento(SDL_Event evento, SDL_Renderer * renderer){
 				break;
 						case SDLK_SPACE:
 				this->disparos.push_front(new Disparo(this->posX + (this->getAncho() / 2.f) - (this->getAnchoDisparo() / 2.f), this->posY - this->getAltoDisparo(), this->velocidadDisparos, this->idSpriteDisparo, renderer));
+				break;
 				case SDLK_RETURN:
-					this->vuelta();
+					this->estadoAnimacion = 3;
+					break;
 				}
+			}
     }
     //If a key was released
     else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 )
     {
-        //Adjust the velocity
         switch( evento.key.keysym.sym )
         {
             case SDLK_UP:
@@ -106,25 +115,33 @@ void Avion::manejarEvento(SDL_Event evento, SDL_Renderer * renderer){
 }
 
 void Avion::mover(float timeStep){
-//Move the dot left or right
-    this->posX += this->velocidadX * timeStep;
-    //If the dot went too far to the left or right
-    if( this->posX < 0 ){
-			this->posX = 0;
-		}else if( this->posX + 80 > 800){
-        //Move back
-        this->posX = 720;
-    }
-    //Move the dot up or down
-    this->posY += this->velocidadY * timeStep;
-    //If the dot went too far up or down
-    if( this->posY < 0 ){
-			this->posY = 0;
-		} else if ( this->posY + 80 > 800){
-        //Move back
-        this->posY = 720;
-    }
+		if(this->estadoAnimacion < 3) {
+				this->posX += this->velocidadX * timeStep;
+				if( this->posX < 0 ){
+					this->posX = 0;
+				}else if( this->posX + 80 > 800){
+						this->posX = 720;
+				}
+				this->posY += this->velocidadY * timeStep;
+				if( this->posY < 0 ){
+					this->posY = 0;
+				} else if ( this->posY + 80 > 800){
+						this->posY = 720;
+				}
+		} else {
+				if(this->contador > 0) {
+					this->contador --;
+				} else {
+					this->contador = 150;
+					if(this->estadoAnimacion == 5) {
+						this->estadoAnimacion = 0;
+					} else {
+						this->estadoAnimacion ++;
+					}
+				}
+		}
 }
+
 
 void Avion::moverDisparos(float timeStep){
 	if(this->disparos.size() > 0){
@@ -222,8 +239,4 @@ int Avion::getAnchoDisparo(){
 
 int Avion::getAltoDisparo(){
 	return DISPARO_ALTO;
-}
-
-void Avion::vuelta(){
-
 }
