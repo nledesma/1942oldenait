@@ -4,6 +4,7 @@ using namespace std;
 Escenario::Escenario(int ancho, int alto){
 	this->ancho = ancho;
 	this->alto = alto;
+	cout << "ancho: " << ancho << " alto: " << alto << endl;
 	this->ventana = new Ventana(ancho, alto);
 	this->fondoEscenario = new Figura();
 }

@@ -6,12 +6,12 @@
   <escenario>
     <ventana>
       <ancho>800</ancho>
-      <alto>600</alto>
+      <alto>800</alto>
     </ventana>
       <fondo>
         <spriteIdFondo>galaxia</spriteIdFondo>
         <ancho>800</ancho>
-        <alto>600</alto>
+        <alto>800</alto>
     </fondo>
     <elementos>
         <elemento>

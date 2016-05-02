@@ -43,6 +43,7 @@ Avion::~Avion(){
 }
 
 void Avion::manejarEvento(SDL_Event evento){
+	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     {
         //Adjust the velocity
@@ -78,11 +79,13 @@ void Avion::manejarEvento(SDL_Event evento){
 				break;
             case SDLK_LEFT:
 				this->velocidadX += this->velocidad;
-				this->estadoAnimacion = 0;
+				if( !currentKeyStates[ SDL_SCANCODE_RIGHT ])
+					this->estadoAnimacion = 0;
 				break;
             case SDLK_RIGHT:
 				this->velocidadX -= this->velocidad;
-				this->estadoAnimacion = 0;
+				if( !currentKeyStates[ SDL_SCANCODE_LEFT ])
+					this->estadoAnimacion = 0;
 				break;
         }
     }
@@ -103,9 +106,9 @@ void Avion::mover(float timeStep){
     //If the dot went too far up or down
     if( this->posY < 0 ){
 			this->posY = 0;
-		} else if ( this->posY > 600 - 80 ){
+		} else if ( this->posY + 80 > 800){
         //Move back
-        this->posY = 520;
+        this->posY = 720;
     }
 }
 
