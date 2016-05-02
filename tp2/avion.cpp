@@ -64,7 +64,9 @@ void Avion::manejarEvento(SDL_Event evento, SDL_Renderer * renderer){
 				break;
 						case SDLK_SPACE:
 				this->disparos.push_front(new Disparo(this->posX + (this->getAncho() / 2.f) - (this->getAnchoDisparo() / 2.f), this->posY - this->getAltoDisparo(), this->velocidadDisparos, this->idSpriteDisparo, renderer));
-        }
+				case SDLK_RETURN:
+					this->estadoAnimacion = 3;
+				}
     }
     //If a key was released
     else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 )
@@ -117,6 +119,7 @@ void Avion::moverDisparos(float timeStep){
 	if(this->disparos.size() > 0){
 		for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++){
 			if((*iterador)->mover(timeStep) == 0){
+				delete (*iterador);
 				iterador = disparos.erase(iterador);
 			}
 		}
