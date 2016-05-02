@@ -163,7 +163,7 @@ void Avion::setDisparos(list<Disparo*> unosDisparos) {
 }
 
 int Avion::cargarImagen(string path, SDL_Renderer* renderer){
-	if(!this->gAvionTextura->loadFromFile(path, renderer)){
+	if(!this->gAvionTextura->loadFromFile(path, renderer, 1)){
 		cout << "Failed" << endl;
 		//TODO usar una excepcion
 		return 0;

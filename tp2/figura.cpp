@@ -5,6 +5,10 @@ Figura::Figura(){
 	this->textura = NULL;
 	this->mWidth = 0;
 	this->mHeight = 0;
+	this->COLOR_BASE = {255,255,255};
+	this->COLOR_AZUL = {100,100,255};
+	this->COLOR_ROJO = {255,100,100};
+	this->COLOR_VERDE = {100,255,100};
 }
 
 Figura::~Figura(){
@@ -12,7 +16,7 @@ Figura::~Figura(){
 	free();
 }
 
-bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
+bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
 	//Si existe una textura cargada de antes, se libera la memoria asociada a esa textura.
 	free();
 	//Se declara la textura que va a cargarse en la figura.
@@ -25,14 +29,31 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer){
 	}else{
 		//Color key image
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+
 		//Se crea la textura a partir de la SDL_Surface
-    nuevaTextura = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+    	nuevaTextura = SDL_CreateTextureFromSurface(renderer, loadedSurface);
 		if(nuevaTextura == NULL){
 			cout <<  "No se ha podido crear la textura " +  path <<  SDL_GetError() << endl;
 			return false;
 		}
 		else{
 			//Se obtienen las dimensiones de la superficie, y se setean a la figura
+			switch (color) {
+				case 0:
+					SDL_SetTextureColorMod( nuevaTextura, this->COLOR_BASE[0], this->COLOR_BASE[1], this->COLOR_BASE[2] );
+					break;
+				case 1:
+					SDL_SetTextureColorMod( nuevaTextura, this->COLOR_AZUL[0], this->COLOR_AZUL[1], this->COLOR_AZUL[2] );
+					break;
+				case 2:
+					SDL_SetTextureColorMod( nuevaTextura, this->COLOR_ROJO[0], this->COLOR_ROJO[1], this->COLOR_ROJO[2] );
+					break;
+				case 3:
+					SDL_SetTextureColorMod( nuevaTextura, this->COLOR_VERDE[0], this->COLOR_VERDE[1], this->COLOR_VERDE[2] );
+					break;
+				default:
+					SDL_SetTextureColorMod( nuevaTextura, this->COLOR_BASE[0], this->COLOR_BASE[1], this->COLOR_BASE[2] );
+			}
 			this->mWidth = loadedSurface->w;
 			this->mHeight = loadedSurface->h;
 		}
