@@ -35,6 +35,17 @@ Avion::Avion(float velocidadDesplazamiento, float velocidadDisparos, string avio
 	this->clipsAnimacion[2].w = AVION_ANCHO;
 	this->clipsAnimacion[2].h = AVION_ALTO;
 
+	//Primer sprite vuelta
+	this->clipsAnimacion[3].x = 0 + AVION_ANCHO * 3;
+	this->clipsAnimacion[3].y = 0;
+	this->clipsAnimacion[3].w = AVION_ANCHO;
+	this->clipsAnimacion[3].h = AVION_ALTO;
+
+	this->clipsAnimacion[4].x = 0 + AVION_ANCHO * 4;
+	this->clipsAnimacion[4].y = 0;
+	this->clipsAnimacion[4].w = AVION_ANCHO;
+	this->clipsAnimacion[4].h = AVION_ALTO;
+
 	this->estadoAnimacion = 0;
 }
 Avion::~Avion(){
@@ -65,7 +76,7 @@ void Avion::manejarEvento(SDL_Event evento, SDL_Renderer * renderer){
 						case SDLK_SPACE:
 				this->disparos.push_front(new Disparo(this->posX + (this->getAncho() / 2.f) - (this->getAnchoDisparo() / 2.f), this->posY - this->getAltoDisparo(), this->velocidadDisparos, this->idSpriteDisparo, renderer));
 				case SDLK_RETURN:
-					this->estadoAnimacion = 3;
+					this->vuelta();
 				}
     }
     //If a key was released
@@ -208,6 +219,11 @@ int Avion::getAlto(){
 int Avion::getAnchoDisparo(){
 	return DISPARO_ANCHO;
 }
+
 int Avion::getAltoDisparo(){
 	return DISPARO_ALTO;
+}
+
+void Avion::vuelta(){
+
 }

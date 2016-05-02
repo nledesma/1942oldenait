@@ -24,9 +24,9 @@ private:
 	float velocidadDisparos;
 	float posX;
 	float posY;
-  	float velocidadX;
-  	float velocidadY;
-	SDL_Rect clipsAnimacion[3];
+  float velocidadX;
+  float velocidadY;
+	SDL_Rect clipsAnimacion[5];
 	int estadoAnimacion;
 	SDL_Renderer* gAvionRenderer;
 	Figura* gAvionTextura;
@@ -66,6 +66,7 @@ public:
 	int getAlto();
 	int getAnchoDisparo();
 	int getAltoDisparo();
+	void vuelta();
 	};
 
 #endif
