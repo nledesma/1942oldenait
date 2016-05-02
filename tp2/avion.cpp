@@ -5,7 +5,7 @@ using namespace std;
 Avion::Avion(float velocidadDesplazamiento, float velocidadDisparos, string avionSpriteId, string vueltaSpriteId, string disparosSpriteId){
 	this->gAvionTextura = new Figura();
 	this->posX = 400;
-	this->posY = 0;
+	this->posY = 600;
 	this->velocidadX = 0;
 	this->velocidadY = 0;
 	this->velocidad = 500;
@@ -15,7 +15,6 @@ Avion::Avion(float velocidadDesplazamiento, float velocidadDisparos, string avio
 	this->velocidadDesplazamiento = velocidadDesplazamiento;
 	this->velocidadDisparos = velocidadDisparos;
 	this->idSpriteAnimacion = idSpriteAnimacion;
-	//this->disparo = unDisparo;
 
 
 	//Avión en estado normal
@@ -42,7 +41,7 @@ Avion::~Avion(){
 
 }
 
-void Avion::manejarEvento(SDL_Event evento){
+void Avion::manejarEvento(SDL_Event evento, SDL_Renderer * renderer){
 	if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     {
         //Adjust the velocity
@@ -62,6 +61,8 @@ void Avion::manejarEvento(SDL_Event evento){
 				this->estadoAnimacion = 2;
 				this->velocidadX += this->velocidad;
 				break;
+						case SDLK_SPACE:
+				this->disparos.push_front(new Disparo(this->posX, this->posY - 280, this->velocidadDisparos, this->idSpriteDisparo, renderer));
         }
     }
     //If a key was released
@@ -109,6 +110,24 @@ void Avion::mover(float timeStep){
     }
 }
 
+void Avion::moverDisparos(float timeStep){
+	if(this->disparos.size() > 0){
+		for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++){
+			if((*iterador)->mover(timeStep) == 0){
+				iterador = disparos.erase(iterador);
+			}
+		}
+	}
+}
+
+void Avion::renderDisparos(SDL_Renderer * renderer){
+	if(disparos.size() > 0 ){
+		for(list<Disparo*>::iterator iterator = disparos.begin(); iterator != disparos.end(); iterator++){
+			(*iterator)->render(renderer);
+		}
+	}
+}
+
 string Avion::getIdSprite(){
 	return this->idSprite;
 }
@@ -132,12 +151,12 @@ string Avion::getIdSpriteAnimacion(){
 void Avion::setIdSpriteAnimacion(string idSpriteAnimacion){
 	this->idSpriteAnimacion = idSpriteAnimacion;
 }
-Disparo Avion::getDisparo() {
-	return this->disparo;
+list<Disparo*> Avion::getDisparos() {
+	return this->disparos;
 }
 
-void Avion::setDisparo(Disparo unDisparo) {
-	this->disparo = unDisparo;
+void Avion::setDisparos(list<Disparo*> unosDisparos) {
+	this->disparos = unosDisparos;
 }
 
 int Avion::cargarImagen(string path, SDL_Renderer* renderer){
