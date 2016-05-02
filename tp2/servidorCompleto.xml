@@ -29,10 +29,10 @@
 <aviones>
   <avion>
     <velocidadDesplazamiento>10</velocidadDesplazamiento>
-    <velocidadDisparos>6</velocidadDisparos>
+    <velocidadDisparos>500</velocidadDisparos>
     <avionSpriteId>millenium-sprite</avionSpriteId>
     <vueltaSpriteId>vuelta</vueltaSpriteId>
-    <disparosSpriteId>disparos</disparosSpriteId>
+    <disparosSpriteId>redLaserRay</disparosSpriteId>
   </avion>
 </aviones>
 </configuracion>

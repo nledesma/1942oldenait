@@ -32,7 +32,7 @@ int Escenario::iniciar(string path){
 				quit = true;
 			}
 
-			this->getAviones().front()->manejarEvento(e);
+			this->getAviones().front()->manejarEvento(e, ventana->getVentanaRenderer());
 		}
 		//TODO ver lo de que avance con el tipo, esto parece que no hay que hacerlo ahora (?)
 		//this->iniciarCamara(avion);
@@ -55,6 +55,8 @@ int Escenario::iniciar(string path){
 		renderizarAviones(ventana->getVentanaRenderer());
 		//avion->render(ventana->getVentanaRenderer());
 		this->getAviones().front()->mover(timeStep);
+		this->getAviones().front()->renderDisparos(ventana->getVentanaRenderer());
+		this->getAviones().front()->moverDisparos(timeStep);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 	return 1;
@@ -119,7 +121,7 @@ list<Avion*>& Escenario::getAviones(){
 }
 
 void Escenario::agregarAvion(float velocidadDesplazamiento, float velocidadDisparos, string avionSpriteId, string vueltaSpriteId, string disparosSpriteId){
-	Avion* avion = new Avion(velocidadDesplazamiento, velocidadDisparos, avionSpriteId, vueltaSpriteId, disparosSpriteId /*unDisparo*/);
+	Avion* avion = new Avion(velocidadDesplazamiento, velocidadDisparos, avionSpriteId, vueltaSpriteId, "redLaserRay.bmp");
 	this->aviones.push_back(avion);
 }
 
