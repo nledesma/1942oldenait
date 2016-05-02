@@ -23,6 +23,8 @@ class Escenario{
 	private:
 		int ancho;
 		int alto;
+		float posicionY = 0;
+		float velocidadDesplazamientoY;
 		Ventana* ventana;
 		list<Avion*> aviones;
 		list<Elemento*> elementos;
@@ -32,7 +34,7 @@ class Escenario{
 	public:
 		const int LEVEL_WIDTH = 1280;
 		const int LEVEL_HEIGHT = 960;
-		Escenario(int ancho, int alto);
+		Escenario(int ancho, int alto, float velocidadDesplazamientoY);
 		~Escenario();
 		bool cargarImagenDeFondo(SDL_Renderer* renderer);
 		void cargarAvion(Avion* avion, SDL_Renderer* renderer, string path);
@@ -40,6 +42,7 @@ class Escenario{
 		int iniciar(string path);
 		int getAncho();
 		int getAlto();
+		float getVelocidadDesplazamientoY();
 		bool cargarImagenes(string path);
 		//Ventana* getVentana();
 		list<Avion*>& getAviones();
@@ -57,6 +60,8 @@ class Escenario{
 		void incluirElementos();
 		void renderizarAviones(SDL_Renderer* renderer);
 		void renderizarElementos(SDL_Renderer* renderer);
+		void moverAviones(float timestep);
+		void moverElementos(float timestep);
 };
 
 #endif

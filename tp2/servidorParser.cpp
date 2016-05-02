@@ -22,10 +22,10 @@ void ServidorParser::serializar(Servidor * servidor, string ruta) {
 	pServidor->InsertEndChild(pNodoPuerto);
 
 	//Escenario
-  XMLElement * pNodoEscenario = doc.NewElement("escenario");
+  	XMLElement * pNodoEscenario = doc.NewElement("escenario");
 	pConfiguracion -> InsertEndChild(pNodoEscenario);
 	//Ventana
-  XMLElement* pNodoVentana = doc.NewElement("ventana");
+  	XMLElement* pNodoVentana = doc.NewElement("ventana");
 
 	XMLElement * pNodoAncho = doc.NewElement("ancho");
 	pNodoAncho-> SetText(servidor -> getEscenario()->getVentana()->getAncho());
@@ -48,6 +48,10 @@ void ServidorParser::serializar(Servidor * servidor, string ruta) {
 
 	XMLElement* pNodoAltoFondo = doc.NewElement("alto");
 	pNodoAltoFondo->SetText(servidor->getEscenario()->getAltoFondo());
+	pNodoFondo->InsertEndChild(pNodoAltoFondo);
+
+	XMLElement* pdNodoVelocidadDesplazamientoY = doc.NewElement("velocidadDesplazamientoY");
+	pdNodoVelocidadDesplazamientoY->SetText(servidor->getEscenario()->getVelocidadDesplazamientoY());
 	pNodoFondo->InsertEndChild(pNodoAltoFondo);
 
 	XMLElement* pNodoElementos = doc.NewElement("elementos");
@@ -128,11 +132,16 @@ Servidor * ServidorParser::deserializar(string ruta) {
 	XMLNode* pNodoAltoFondo = pNodoFondo->FirstChild()->NextSibling()->NextSibling();
 	pNodoAltoFondo -> ToElement() -> QueryIntText(&altoFondo);
 
+	//Alto del fondo
+	float velocidadDesplazamientoY;
+	XMLNode* pdNodoVelocidadDesplazamientoYFondo = pNodoFondo->FirstChild()->NextSibling()->NextSibling()->NextSibling();
+	pdNodoVelocidadDesplazamientoYFondo ->ToElement() ->QueryFloatText(&velocidadDesplazamientoY);
+
 	//Nodo elementos
 	XMLNode* pNodoElementos = pNodoEscenario->FirstChild()->NextSibling()->NextSibling();
 
 	Servidor* servidor = new Servidor(unPuerto,unaCantidadDeClientes);
-	Escenario* escenario = new Escenario(ancho,alto);
+	Escenario* escenario = new Escenario(ancho,alto, velocidadDesplazamientoY);
 	servidor->setEscenario(escenario);
 	cout << "Se creo un escenario" << endl;
 
@@ -148,7 +157,7 @@ Servidor * ServidorParser::deserializar(string ruta) {
 		pNodoPosX->ToElement()->QueryFloatText(&posx);
 		XMLNode* pNodoPosY = pNodoElemento->FirstChild()->NextSibling()->NextSibling();
 		pNodoPosY->ToElement()->QueryFloatText(&posy);
-		servidor->getEscenario()->agregarElemento(spriteIdElemento, posx, posy);
+		servidor->getEscenario()->agregarElemento(spriteIdElemento, posx, alto - posy);
 
 		pNodoElemento = pNodoElemento -> NextSiblingElement("elemento");
 	}

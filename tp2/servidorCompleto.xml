@@ -12,6 +12,7 @@
         <spriteIdFondo>galaxia</spriteIdFondo>
         <ancho>800</ancho>
         <alto>800</alto>
+        <velocidadDesplazamientoY>200</velocidadDesplazamientoY>
     </fondo>
     <elementos>
         <elemento>
@@ -22,7 +23,7 @@
         <elemento>
             <spriteIdElemento>planeta</spriteIdElemento>
                 <posx>600</posx>
-                <posy>400</posy>
+                <posy>1000</posy>
         </elemento>
     </elementos>
 </escenario>

@@ -1,10 +1,11 @@
 #include "escenario.hpp"
 using namespace std;
 
-Escenario::Escenario(int ancho, int alto){
+Escenario::Escenario(int ancho, int alto, float velocidadDesplazamientoY){
 	this->ancho = ancho;
 	this->alto = alto;
 	this->ventana = new Ventana(ancho, alto);
+	this->velocidadDesplazamientoY = velocidadDesplazamientoY;
 	this->fondoEscenario = new Figura();
 }
 
@@ -38,24 +39,25 @@ int Escenario::iniciar(string path){
 		float timeStep = temporizador.getTicks() / 1000.f;
 		//TODO VER LO DE RENDER PRESENT
 		//Scroll background
-		scrollingOffset = scrollingOffset + 0.2;
+ 		scrollingOffset = scrollingOffset + timeStep * this->velocidadDesplazamientoY;
+		this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
+
 		if(scrollingOffset > this->fondoEscenario->getWidth()){
 			scrollingOffset = 0;
 		}
 		temporizador.comenzar();
 		SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-    SDL_RenderClear(ventana->getVentanaRenderer());
+    	SDL_RenderClear(ventana->getVentanaRenderer());
 		this->fondoEscenario->render(0,0,ventana->getVentanaRenderer(), NULL);
 		//Render background
 		this->fondoEscenario->render(0, scrollingOffset, ventana->getVentanaRenderer(), NULL);
 		this->fondoEscenario->render(0, scrollingOffset - this->fondoEscenario->getWidth(), ventana->getVentanaRenderer(), NULL);
 
-		renderizarElementos(ventana->getVentanaRenderer());
-		renderizarAviones(ventana->getVentanaRenderer());
+		this->renderizarElementos(ventana->getVentanaRenderer());
+		this->renderizarAviones(ventana->getVentanaRenderer());
+		this->moverAviones(timeStep);
+		this->moverElementos(timeStep);
 		//avion->render(ventana->getVentanaRenderer());
-		this->getAviones().front()->mover(timeStep);
-		this->getAviones().front()->renderDisparos(ventana->getVentanaRenderer());
-		this->getAviones().front()->moverDisparos(timeStep);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 	return 1;
@@ -82,7 +84,7 @@ void Escenario::cargarElemento(Elemento* elemento, SDL_Renderer* renderer, strin
 
 void Escenario::agregarElemento(string spriteId, float posX, float posY){
 	//Agrega el elemento a la lista.
-	Elemento* elemento = new Elemento(posX, posY, spriteId);
+	Elemento* elemento = new Elemento(posX, posY, this->velocidadDesplazamientoY ,spriteId);
 	this->elementos.push_back(elemento);
 }
 
@@ -113,6 +115,10 @@ int Escenario::getAncho(){
 
 int Escenario::getAlto(){
 	return this->alto;
+}
+
+float Escenario::getVelocidadDesplazamientoY() {
+	return this->velocidadDesplazamientoY;
 }
 
 list<Avion*>& Escenario::getAviones(){
@@ -191,5 +197,21 @@ void Escenario::renderizarAviones(SDL_Renderer* renderer){
 	for(list<Avion*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
 		Avion* avion = *iterador;
 		avion->render(renderer);
+		avion->renderDisparos(renderer);
+	}
+}
+
+void Escenario::moverAviones(float timeStep){
+	for(list<Avion*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
+		Avion* avion = *iterador;
+		avion->mover(timeStep);
+		avion->moverDisparos(timeStep);
+	}
+}
+
+void Escenario::moverElementos(float timeStep){
+	for(list<Elemento*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
+		Elemento* elemento = *iterador;
+		elemento->mover(timeStep);
 	}
 }

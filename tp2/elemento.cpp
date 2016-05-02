@@ -1,8 +1,9 @@
 #include "elemento.hpp"
-Elemento::Elemento(float posX, float posY, string spriteId){
+Elemento::Elemento(float posX, float posY, float velocidadDesplazamientoY,string spriteId){
   this->spriteId = spriteId;
   this->posX = posX;//generarNumeroAleatorio(0,800);
   this->posY = posY;//generarNumeroAleatorio(0,600);
+  this->velocidadDesplazamientoY = velocidadDesplazamientoY;
   this->figuraElemento = new Figura();
 }
 
@@ -39,3 +40,12 @@ float Elemento::getPosX(){
 float Elemento::getPosY(){
   return this->posY;
 }
+
+float Elemento::getVelocidadDesplazamientoY() {
+  return this->velocidadDesplazamientoY;
+}
+
+void Elemento::mover(float timeStep){
+    this->posY += this->velocidadDesplazamientoY * timeStep;
+}
+
