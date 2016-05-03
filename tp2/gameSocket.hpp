@@ -8,8 +8,9 @@
 #include <cstdio>
 #include <iostream>
 #include <sstream>
-#include "errno.h"
+#include "mensaje.hpp"
 #include "logger.hpp"
+#include "colaConcurrente.hpp"
 
 using namespace std;
 
@@ -20,10 +21,16 @@ using namespace std;
 class GameSocket {
 protected:
   int socketFd;
+  int enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor);
+  int recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor);
+  int enviarMensaje(Mensaje * mensaje, int fdReceptor);
+  int recibirMensaje(Mensaje *&mensaje, int fdEmisor);
+  int setTimeOut(int time);
   void cerrarSocket();
   void cerrarSocketFd();
   struct sockaddr_in addr_info;
   void iniciarSocket();
+  bool validarEstadoConexion(int estadoConexion);
 
 public:
     GameSocket();

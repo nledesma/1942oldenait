@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = tinyxml2.cpp gameSocket.cpp servidor.cpp servidorParser.cpp logger.cpp elemento.cpp escenario.cpp ventana.cpp avion.cpp figura.cpp disparo.cpp pruebaCrearVentana.cpp temporizador.cpp
+OBJS = tinyxml2.cpp gameSocket.cpp cliente.cpp servidor.cpp colaConcurrente.cpp mensaje.cpp servidorParser.cpp logger.cpp elemento.cpp escenario.cpp ventana.cpp avion.cpp figura.cpp disparo.cpp pruebaCrearVentana.cpp temporizador.cpp
 #CC specifies which compiler we're using
 CC = g++ -std=c++11
 #COMPILER_FLAGS specifies the additional compilation options we're using # -w suppresses all warnings

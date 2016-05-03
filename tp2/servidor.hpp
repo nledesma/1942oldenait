@@ -8,34 +8,78 @@
 #include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <list>
+#include "mensaje.hpp"
 #include "gameSocket.hpp"
-#include "escenario.hpp"
+#include <queue>
+#include <pthread.h>
+#include <map>
 #include <stdexcept>
 #include <errno.h>
 #include <cstdlib>
 #include <sstream>
-#include "errno.h"
+#include "colaConcurrente.hpp"
+#include "codigoRespuesta.hpp"
+#include "escenario.hpp"
 
 using namespace std;
 
+struct datosCliente {
+    pthread_t th_entrada;
+    pthread_t th_salida;
+    bool conectado;
+    ColaConcurrente<Mensaje *> colaSalida;
+};
+
 class Servidor : public GameSocket {
 private:
+    map<int, datosCliente> clientes;
+    map<int , string> direcciones;
     struct sockaddr_in addr_info;
+    ColaConcurrente<pair<int, Mensaje *> > colaDeMensajes;
+    pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexActivarServidor = PTHREAD_MUTEX_INITIALIZER;
     int cantidadMaximaDeClientes;
     int puerto;
+    bool servidorActivado;
+    pthread_t cicloAceptaciones;
+    pthread_t cicloDesencolaciones;
+    void desencolarSalidaCliente(int clienteFd);
+    int procesarMensaje(Mensaje *mensaje);
+    bool validarTipo(int tipo, string valor);
+    bool validarInt(string valor);
+    bool validarChar(string valor);
+    bool validarDouble(string valor);
     Escenario* escenario;
 
 public:
+    bool hayLugar();
     Servidor(int port, int cantidadDeClientes);
     int getCantidadMaximaDeClientes();
     void setCantidadMaximaDeClientes(int unaCantidadDeClientes);
     void inicializar(int port);
     void setAddress(int port);
+    void pasivar();
+    int aceptar();
+    void cerrar();
     int getPuerto();
     void setPuerto(int unPuerto);
-    void iniciarEscenario(/*int ancho, int alto*/);
+    void agregarCliente(int idCliente);
+    void quitarCliente(int fdCliente);
+    static void *atenderCliente(void *arg);
+    static void *responderCliente(void *arg);
+    static void *cicloAceptar(void *THIS);
+    static void *cicloDesencolar(void *THIS);
+    void esperar();
+    void desactivarServidor();
+    bool servidorActivo();
+    void encolarMensaje(pair<int, Mensaje *> clienteMensaje);
+    void desencolar();
+    void encolarSalida(int clienteFd, Mensaje *mensaje);
+    bool clienteConectado(int clienteFd);
+    void iniciarEscenario();
     Escenario* getEscenario();
-    void setEscenario(Escenario* escenario);
+    void setEscenario(Escenario* unEscenario);
+    int hayClientesConectados();
 };
 
 #endif
