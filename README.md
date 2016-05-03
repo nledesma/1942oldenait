@@ -15,13 +15,8 @@ _OL-DE-NAIT_
 - No necesita interfaz, levantar por linea de comandos.
 - Si el escenario (por el xml) acepta a cierta cantidad de jugadores, cuando se supera no puede acepta más.
 
-###Construcción de niveles (por ahora hay solo 1)
-
-###Interfaz gráfica
-- Movimiento de la cámara, que el avión se mueva junto con la cámara.
-
-###Escenario
-- Lista de elementos: cada elemento es un rectangulo y tiene sus coordenadas.
+###Envio y recepcion de mensajes
+- Todavia no tenemos nada!!!
 
 ###Control del avión:
 - Manejo del avión con las teclas (ver enunciado)

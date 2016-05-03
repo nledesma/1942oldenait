@@ -24,11 +24,35 @@ void* apagarServidor(void* servidor){
     pthread_exit(NULL);
 }
 
+bool archivoExiste (const string& archivo) {
+    if (FILE *file = fopen(archivo.c_str(), "r")) {
+        fclose(file);
+        return true;
+    } else {
+        return false;
+    }   
+}
 
-int main(){
+int main(int argc, char *argv[]){
+    string rutaXMLServidor;
+
+    if (argc < 2){
+        cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
+        Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el servidor con el XML por defecto.");
+        rutaXMLServidor = "servidorCompleto.xml";
+    } else {
+        if (archivoExiste(argv[1])){
+          rutaXMLServidor = argv[1];  
+        } else {
+          rutaXMLServidor = "servidorCompleto.xml";
+          cout << "El parámetro ingresado no es válido. Se inicializa el servidor con el XML por defecto" << endl;
+          Logger::instance()->logWarning("El parámetro ingresado no es válido. Se inicializa el servidor con el XML por defecto.");
+        }
+    }
+
   Servidor* servidor;
   ServidorParser parser;
-  servidor = parser.deserializar("servidorCompleto.xml");
+  servidor = parser.deserializar(rutaXMLServidor);
 
   pthread_t apagar;
   pthread_create(&apagar,NULL,apagarServidor,servidor);
