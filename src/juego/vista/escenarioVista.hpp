@@ -1,0 +1,14 @@
+//
+// Created by nico on 5/4/16.
+//
+
+#ifndef INC_1942OLDENAIT_ESCENARIOVISTA_HPP
+#define INC_1942OLDENAIT_ESCENARIOVISTA_HPP
+
+
+class escenarioVista {
+
+};
+
+
+#endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP
