@@ -17,55 +17,44 @@ Avion::~Avion(){
 }
 
 void Avion::manejarEvento(int evento){
-    const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-    if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
-    {
-        if((this->estadoAnimacion < LOOP_ETAPA_1)){
-            switch( evento )
-            {
-                case ARRIBA_PRESIONA:
-                    this->velocidadY -= this->velocidad;
-                    break;
-                case ABAJO_PRESIONA:
-                    this->velocidadY += this->velocidad;
-                    break;
-                case IZQUIERDA_PRESIONA:
-                    this->velocidadX -= this->velocidad;
-                    this->estadoAnimacion = GIRANDO_IZQUIERDA;
-                    break;
-                case DERECHA_PRESIONA:
-                    this->estadoAnimacion = GIRANDO_DERECHA;
-                    this->velocidadX += this->velocidad;
-                    break;
-                case PRESIONA_ESPACIO:
-                    this->disparos.push_front(new Disparo(this->posX + (this->getAncho() / 2.f) - (this->getAnchoDisparo() / 2.f), this->posY - this->getAltoDisparo(), this->velocidadDisparos, this->idSpriteDisparo, renderer));
-                    break;
-                case SDLK_RETURN:
-                    this->estadoAnimacion = 3;
-                    break;
-            }
-        }
-    }
-        //If a key was released
-    else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 )
-    {
-        switch( evento.key.keysym.sym )
-        {
-            case SDLK_UP:
-                this->velocidadY += this->velocidad;
-                break;
-            case SDLK_DOWN:
+    /* Se realizan acciones de avión si el mismo no esta loopeando */
+    if((this->estadoAnimacion < LOOP_ETAPA_1)) {
+        switch (evento) {
+            case ARRIBA_PRESIONA:
                 this->velocidadY -= this->velocidad;
                 break;
-            case SDLK_LEFT:
-                this->velocidadX += this->velocidad;
-                if( !currentKeyStates[ SDL_SCANCODE_RIGHT ])
-                    this->estadoAnimacion = 0;
+            case ABAJO_PRESIONA:
+                this->velocidadY += this->velocidad;
                 break;
-            case SDLK_RIGHT:
+            case IZQUIERDA_PRESIONA:
                 this->velocidadX -= this->velocidad;
-                if( !currentKeyStates[ SDL_SCANCODE_LEFT ])
-                    this->estadoAnimacion = 0;
+                this->estadoAnimacion = GIRANDO_IZQUIERDA;
+                break;
+            case DERECHA_PRESIONA:
+                this->estadoAnimacion = GIRANDO_DERECHA;
+                this->velocidadX += this->velocidad;
+                break;
+            case PRESIONA_ESPACIO:
+                this->disparar();
+                break;
+            case PRESIONA_ENTER:
+                this->estadoAnimacion = LOOP_ETAPA_1;
+                break;
+            case ARRIBA_SUELTA:
+                this->velocidadY += this->velocidad;
+                break;
+            case ABAJO_SUELTA:
+                this->velocidadY -= this->velocidad;
+                break;
+            case IZQUIERDA_SUELTA:
+                this->velocidadX += this->velocidad;
+                if (this->estadoAnimacion != GIRANDO_DERECHA)
+                    this->estadoAnimacion = ESTADO_NORMAL;
+                break;
+            case DERECHA_SUELTA:
+                this->velocidadX -= this->velocidad;
+                if (this->estadoAnimacion != GIRANDO_IZQUIERDA)
+                    this->estadoAnimacion = ESTADO_NORMAL;
                 break;
         }
     }
@@ -76,14 +65,14 @@ void Avion::mover(float timeStep){
         this->posX += this->velocidadX * timeStep;
         if( this->posX < 0 ){
             this->posX = 0;
-        }else if( this->posX + 80 > 800){
-            this->posX = 720;
+        }else if( this->posX + this->getAncho() > ANCHO_ESCENARIO){
+            this->posX = ANCHO_ESCENARIO - this->getAncho();
         }
         this->posY += this->velocidadY * timeStep;
         if( this->posY < 0 ){
             this->posY = 0;
-        } else if ( this->posY + 80 > 800){
-            this->posY = 720;
+        } else if ( this->posY + this->getAlto() > ALTO_ESCENARIO){
+            this->posY = ALTO_ESCENARIO - this->getAlto();
         }
     } else {
         if(this->contador > 0) {

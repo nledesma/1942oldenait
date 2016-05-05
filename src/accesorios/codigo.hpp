@@ -3,10 +3,17 @@
 
 /* Colores */
 
-#define BASE 0
-#define AZUL 1
-#define ROJO 2
-#define VERDE 3
+#define BASE 1
+#define AZUL 2
+#define ROJO 3
+#define VERDE 4
+
+/* Colores */
+
+#define JUGADOR_1 BASE
+#define JUGADOR_2 AZUL
+#define JUGADOR_3 ROJO
+#define JUGADOR_4 VERDE
 
 /* Eventos */
 
@@ -20,7 +27,7 @@
 #define DERECHA_PRESIONA 7
 #define DERECHA_SUELTA 8
 #define PRESIONA_ESPACIO 9
-#define PARESIONA_ENTER 10
+#define PRESIONA_ENTER 10
 #define PRESIONA_R 11
 #define PRESIONA_X 12
 
@@ -30,6 +37,8 @@
 #define ALTO_ESCENARIO 800
 #define ANCHO_AVION_COMUN 80
 #define ALTO_AVION_COMUN 80
+#define ANCHO_DISPARO_COMUN 20
+#define ALTO_DISPARO_COMUN 40
 
 /* Estados avion */
 

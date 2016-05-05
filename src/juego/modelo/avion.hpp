@@ -14,7 +14,7 @@
 #define SCREEN_HEIGHT = 800;
 using namespace std;
 
-class Avion{
+class Avion {
 private:
     float velocidadDisparos;
     float posX;
@@ -24,32 +24,57 @@ private:
     int estadoAnimacion;
     float velocidad;
     int contador;
+    EscenarioJuego escenarioJuego;
 
 public:
-    static const int AVION_ANCHO = 80;
-    static const int AVION_ALTO= 80;
+    static const int AVION_ANCHO = ANCHO_AVION_COMUN;
+    static const int AVION_ALTO = ALTO_AVION_COMUN;
     static const int DISPARO_ANCHO = 20;
     static const int DISPARO_ALTO = 40;
+
     Avion(float posX, float posY, float velocidad, float velocidadDisparos);
+
     ~Avion();
+
     void manejarEvento(int evento);
-    Disparo* disparar();
+
+    void disparar();
+
     float getVelocidad();
+
     float getVelocidadX();
+
     float getVelocidadY();
+
     float getPosicionX();
+
     float getPosicionY();
-    float setVelocidad();
-    float setVelocidadX();
-    float setVelocidadY();
-    float setPosicionX();
-    float setPosicionY();
+
+    EscenarioJuego *getEscenarioJuego();
+
+    void setVelocidad();
+
+    void setVelocidadX();
+
+    void setVelocidadY();
+
+    void setPosicionX();
+
+    void setPosicionY();
+
+    void setEscenarioJuego(EscenarioJuego *escenarioJuego);
+
     void mover(float timeStep);
+
     int getAncho();
+
     int getAlto();
+
     int getAnchoDisparo();
+
     int getAltoDisparo();
-    void vuelta();
+
+    void loop();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP
