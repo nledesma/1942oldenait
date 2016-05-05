@@ -1,4 +1,4 @@
-### Estructura del Juego
+## Estructura del Juego
 
 - **resources**
   - lib *(librerías)*
@@ -27,21 +27,21 @@
     - **mensaje** *(mensaje y protocolo de comunicación del juego)*
     - **servidor** *(encargado del motor del juego, y de interpretar las interacciones de teclado de los clientes jugadores)*
 
-### Protocolo de los mensajes durante el juego
+## Protocolo de los mensajes durante el juego
 
-- #### Cliente a servidor
+- ### Cliente a servidor
 
   - *(A definir, es simple porque sólo comunica eventos de teclado)*
 
-- #### Servidor a cliente
+- ### Servidor a cliente
 
-  - ##### Etapa inicialización de escenario *(a definir)*
+  - #### Etapa inicialización de escenario
+  *(A definir)*
   - ##### Etapa de actualización de estados y posiciones
 
-    - **Primera lectura:** longitud del mensaje [int]
+    - Primera lectura: longitud del mensaje [int]
 
-    - **Segunda lectura:**
-       - ** *Orden del mensaje:* **
+    - Segunda lectura *(ordenada de la siguiente forma):*
 
         1. **[** escenario **]**
 
