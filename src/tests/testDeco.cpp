@@ -1,5 +1,7 @@
 #include "../net/decodificador.hpp"
 #include "../juego/modelo/elemento.hpp"
+#include "../juego/modelo/avion.hpp"
+#include "../juego/vista/elementoVista.hpp"
 #include <utility>
 #include <iostream>
 using namespace std;

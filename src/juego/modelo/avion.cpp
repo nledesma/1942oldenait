@@ -88,7 +88,7 @@ void Avion::mover(float timeStep){
     }
 }
 
-
+/*
 void Avion::moverDisparos(float timeStep){
     if(this->disparos.size() > 0){
         for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++){
@@ -164,7 +164,7 @@ SDL_Renderer* Avion::getAvionRenderer(){
 Figura* Avion::getAvionTextura(){
     return this->gAvionTextura;
 }
-
+*/
 float Avion::getPosicionX(){
     return this->posX;
 }
@@ -185,4 +185,8 @@ int Avion::getAnchoDisparo(){
 
 int Avion::getAltoDisparo(){
     return DISPARO_ALTO;
+}
+
+int Avion::getEstadoAnimacion(){
+    return this->estadoAnimacion;
 }

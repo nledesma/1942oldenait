@@ -8,7 +8,7 @@ ElementoVista::ElementoVista(int id, float posX, float posY){
 
 void ElementoVista::actualizar(string codigo){
     memcpy((void*)&(this->posX),(void*)&(codigo[0]), sizeof(float));
-    memcpy((void*)&(this->posY),(void*)&(codigo[4]), sizeof(float));
+    memcpy((void*)&(this->posY),(void*)&(codigo[sizeof(float)]), sizeof(float));
 }
 
 float ElementoVista::getPosX(){

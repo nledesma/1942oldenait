@@ -2,8 +2,11 @@
 #define INC_1942OLDENAIT_ESCENARIOJUEGO_HPP
 
 
-class escenarioJuego {
-
+class EscenarioJuego {
+private:
+public:
+    EscenarioJuego();
+    ~EscenarioJuego();
 };
 
 

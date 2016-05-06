@@ -3,8 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "figura.hpp"
-
+#include "../../accesorios/codigo.hpp"
 using namespace std;
 
 class Disparo {

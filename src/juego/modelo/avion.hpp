@@ -7,6 +7,7 @@
 #include <list>
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
+#include "escenarioJuego.hpp"
 #include "disparo.hpp"
 
 //TODO estas constantes estaban definidas para el tuto.
@@ -51,6 +52,8 @@ public:
     float getPosicionY();
 
     EscenarioJuego *getEscenarioJuego();
+
+    int getEstadoAnimacion();
 
     void setVelocidad();
 
