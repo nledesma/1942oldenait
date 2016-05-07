@@ -29,7 +29,7 @@ int EscenarioVista::iniciar(){
                 quit = true;
             }
 
-            this->getAviones().front()->manejarEvento(e, ventana->getVentanaRenderer());
+//            this->getAviones().front()->manejarEvento(e, ventana->getVentanaRenderer());
         }
         temporizador.comenzar();
         SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
@@ -77,8 +77,8 @@ void EscenarioVista::cargarVistasAviones(){
 void EscenarioVista::cargarVistasElementos(){
     string path;
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
-        path = (elementoVista->getSpriteId() + ".bmp").c_str();
-        this->cargarElementoVista(elementoVista, ventana->getVentanaRenderer(), path);
+//        path = (elementoVista->getSpriteId() + ".bmp").c_str();
+//        this->cargarElementoVista(elementoVista, ventana->getVentanaRenderer(), path);
     }
 }
 
@@ -91,7 +91,7 @@ void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer,
 }
 
 void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* renderer){
-    elementoVista->cargarImagen(renderer);
+//    elementoVista->cargarImagen(renderer);
 }
 
 /* Renderizaciones */
@@ -99,7 +99,7 @@ void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* 
 void EscenarioVista::renderizarElementos(){
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
         ElementoVista* elementoVista = *iterador;
-        elementoVista->render(this->ventana->getVentanaRenderer());
+//        elementoVista->render(this->ventana->getVentanaRenderer());
     }
 }
 
