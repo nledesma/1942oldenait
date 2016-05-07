@@ -3,30 +3,56 @@
 
 #include <string>
 #include <cstring>
+#include "figura.hpp"
+#include "../../accesorios/codigo.hpp"
+
+
 using namespace std;
 
 class AvionVista {
 private:
     float posX;
     float posY;
+    string pathSprite;
     int estadoAnimacion;
-    Cliente * cliente;
     SDL_Rect clipsAnimacion[6];
-    Figura * figuraAvion;
+    Figura *figura;
 public:
-    AvionVista(float posX, float posY, Cliente * cliente);
+    static const string AVION_POR_DEFECTO = "../../../resources/img/millenium-sprite.bmp";
+
+    AvionVista(float posX, float posY, string pathSprite);
+
     ~AvionVista();
-    float getPosX();
-    void setPosX(float posX);
-    float getPosY();
-    void setPosY(float posY);
+
     void manejarEvento(SDL_Event evento);
-    int cargarImagen(string path, SDL_Renderer* renderer);
-    void render(SDL_Renderer* renderer);
-    void cerrar();
+
+    void cargarImagen(SDL_Renderer *renderer, int color = BASE);
+
+    void render(SDL_Renderer *renderer);
+
     int getEstadoAnimacion();
+
+    Figura *getFigura();
+
+    float getPosX();
+
+    float getPosY();
+
+    int getAncho();
+
+    int getAlto();
+
+    void setPosX(float posX);
+
+    void setPosY(float posY);
+
+    void setFigura(Figura *figura);
+
     void setEstadoAnimacion(int estadoAnimacion);
+
     void actualizar(string codigo);
+
+    void cerrar();
 };
 
 
