@@ -1,13 +1,15 @@
-//
-// Created by nico on 5/4/16.
-//
-
 #ifndef INC_1942OLDENAIT_ESCENARIOVISTA_HPP
 #define INC_1942OLDENAIT_ESCENARIOVISTA_HPP
 
+#include <string>
+#include <cstring>
+using namespace std;
 
-class escenarioVista {
-
+class EscenarioVista {
+private:
+    float offset;
+public:
+    void actualizar(string codigo);
 };
 
 
