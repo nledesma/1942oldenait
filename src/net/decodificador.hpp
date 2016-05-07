@@ -22,7 +22,7 @@ public:
     static void push(string & codigo, Disparo *d);
     static void push(string & codigo, EscenarioJuego *e);
     /* Devuelve un par con el id y el código con el nuevo estado */
-    static pair<int,string> popElemento(string & codigo);
+    static string popElemento(string & codigo);
     static pair<int,string> popAvion(string & codigo);
     static string popEscenario(string & codigo);
     static string popDisparo(string & codigo);

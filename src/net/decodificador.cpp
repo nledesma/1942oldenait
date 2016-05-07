@@ -4,18 +4,13 @@
 
 /* Push y pop de Elementos del mapa. */
 void Decodificador::push(string & codigo, Elemento *e) {
-    // id (1 byte) | pos_x (1 float) | pos_y (1 float)
-    codigo += (char)(e->getId());
+    // pos_x (1 float) | pos_y (1 float)
     push(codigo, e->getPosX());
     push(codigo, e->getPosY());
 }
 
-pair<int,string> Decodificador::popElemento(string & codigo) {
-    pair<int,string> idCodigo;
-    string aux = popBytes(codigo, 2 * sizeof(float) + 1);
-    idCodigo.first = (int) aux[0];
-    idCodigo.second = aux.substr(1, aux.length() - 1);
-    return idCodigo;
+string Decodificador::popElemento(string & codigo) {
+    return popBytes(codigo, 2 * sizeof(float));
 }
 
 /* Push y pop de Aviones. */
