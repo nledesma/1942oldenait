@@ -23,11 +23,12 @@ int EscenarioVista::iniciar(pthread_mutex_t mutexEscritura){
     Temporizador temporizador;
     SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear(ventana->getVentanaRenderer());
+    this->setActivo();
     while(this->activo){
         temporizador.comenzar();
         pthread_mutex_lock(&mutexEscritura);
         this->renderizarFondo(this->scrollingOffset);
-        this->renderizarFondo(this->scrollingOffset - this->fondo->getWidth());
+        this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
         pthread_mutex_unlock(&mutexEscritura);
         this->renderizarElementos(mutexEscritura);
         this->renderizarAviones(mutexEscritura);
@@ -36,6 +37,15 @@ int EscenarioVista::iniciar(pthread_mutex_t mutexEscritura){
     }
     return 1;
 }
+
+void EscenarioVista::setActivo(){
+    this->activo = true;
+}
+
+void EscenarioVista::setInactivo(){
+    this->activo = false;
+}
+
 
 void EscenarioVista::setDisparos(list<disparo> disparosParam){
     this->disparos = disparosParam;

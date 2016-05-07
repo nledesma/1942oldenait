@@ -29,7 +29,7 @@ private:
     DisparoVista* disparoVista;
     list<disparo> disparos;
     Figura *fondo;
-    bool activo = true;
+    bool activo = false;
 
 public:
     /* Constructor y destructor */
@@ -43,6 +43,10 @@ public:
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
 
     int iniciar(pthread_mutex_t mutexEscritura);
+
+    void setActivo();
+
+    void setInactivo();
 
     void setDisparos(list<disparo> disparos);
 
