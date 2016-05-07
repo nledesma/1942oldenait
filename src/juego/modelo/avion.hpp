@@ -7,7 +7,6 @@
 #include <list>
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
-#include "escenarioJuego.hpp"
 #include "disparo.hpp"
 
 //TODO estas constantes estaban definidas para el tuto.
@@ -25,7 +24,6 @@ private:
     int estadoAnimacion;
     float velocidad;
     int contador;
-    EscenarioJuego escenarioJuego;
 
 public:
     static const int AVION_ANCHO = ANCHO_AVION_COMUN;
@@ -37,7 +35,7 @@ public:
 
     ~Avion();
 
-    void manejarEvento(int evento);
+    void manejarEvento(char evento);
 
     void disparar();
 
@@ -51,8 +49,6 @@ public:
 
     float getPosicionY();
 
-    EscenarioJuego *getEscenarioJuego();
-
     int getEstadoAnimacion();
 
     void setVelocidad(float velocidad);
@@ -64,8 +60,6 @@ public:
     void setPosicionX();
 
     void setPosicionY();
-
-    void setEscenarioJuego(EscenarioJuego *escenarioJuego);
 
     void mover(float timeStep);
 
