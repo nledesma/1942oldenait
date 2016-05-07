@@ -1,9 +1,11 @@
 #include "elementoVista.hpp"
 
-ElementoVista::ElementoVista(int id, float posX, float posY){
-    this->id = id;
+ElementoVista::ElementoVista(float posX, float posY, string pathSprite){
     this->posX = posX;
     this->posY = posY;
+    this->pathSprite = pathSprite;
+    this->figura = new Figura();
+
 }
 
 void ElementoVista::actualizar(string codigo){
@@ -19,8 +21,12 @@ float ElementoVista::getPosY(){
     return posY;
 }
 
-/*
-void ElementoVista::render(SDL_Renderer* renderer){
-  this->figuraElemento->render((int)this->posX, (int)this->posY, renderer, NULL);
+void ElementoVista::cargarImagen(SDL_Renderer* renderer){
+    if(!this->figura->loadFromFile(this->pathSprite, renderer)){
+        this->figura->loadFromFile((string) ElementoVista::ELEMENTO_POR_DEFECTO, renderer);
+    }
 }
-*/
+
+void ElementoVista::render(SDL_Renderer* renderer){
+  this->figura->render((int)this->posX, (int)this->posY, renderer, NULL);
+}

@@ -13,6 +13,7 @@
 #include "../../accesorios/temporizador.hpp"
 #include <list>
 #include <iterator>
+#include <pthread.h>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ private:
     DisparoVista* disparoVista;
     list<disparo> disparos;
     Figura *fondo;
+    bool activo = true;
 
 public:
     /* Constructor y destructor */
@@ -40,7 +42,9 @@ public:
 
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
 
-    int iniciar();
+    int iniciar(pthread_mutex_t mutexEscritura);
+
+    void setDisparos(list<disparo> disparos);
 
     int getAncho();
 
@@ -57,11 +61,13 @@ public:
 
     void agregarDisparoVista(string pathSprite);
 
-    void renderizarAviones();
+    void renderizarAviones(pthread_mutex_t mutexEscritura);
 
-    void renderizarElementos();
+    void renderizarElementos(pthread_mutex_t mutexEscritura);
 
     void renderizarFondo(float y);
+
+    void renderizarDisparos(pthread_mutex_t mutexEscritura);
 
     Figura *getFondo();
 

@@ -46,6 +46,12 @@ AvionVista::AvionVista(float posX, float posY, string pathSprite){
 
 }
 
+void AvionVista::actualizar(string codigo){
+    memcpy((void*) &(this->posX), (void*) &(codigo[0]), sizeof(float));
+    memcpy((void*) &(this->posY), (void*) &(codigo[sizeof(float)]), sizeof(float));
+    estadoAnimacion = (int) codigo[2*sizeof(float)];
+}
+
 void AvionVista::manejarEvento(SDL_Event evento){
     const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
     if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
@@ -95,18 +101,18 @@ void AvionVista::manejarEvento(SDL_Event evento){
 }
 
 void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
-    if(!this->figuraAvion->loadFromFile(this->pathSprite, renderer, color)){
+    if(!this->figura->loadFromFile(this->pathSprite, renderer, color)){
         cout << "Failed" << endl;
-        this->figuraAvion->loadFromFile((string) AvionVista::AVION_POR_DEFECTO, renderer, color);
+        this->figura->loadFromFile((string) AvionVista::AVION_POR_DEFECTO, renderer, color);
     }
 }
 
 void AvionVista::render(SDL_Renderer* renderer){
-    this->figuraAvion->render((int)this->posX, (int)this->posY, renderer, &this->clipsAnimacion[this->estadoAnimacion]);
+    this->figura->render((int)this->posX, (int)this->posY, renderer, &this->clipsAnimacion[this->estadoAnimacion]);
 }
 
 void AvionVista::cerrar(){
-    this->figuraAvion->free();
+    this->figura->free();
 }
 
 float AvionVista::getPosX(){

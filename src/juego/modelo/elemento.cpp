@@ -1,7 +1,6 @@
 #include "elemento.hpp"
 
-Elemento::Elemento(int id, float posX, float posY, float velocidadY){
-    this->id = id;
+Elemento::Elemento(float posX, float posY, float velocidadY){
     this->posX = posX;
     this->posY = posY;
     this->velocidadY = velocidadY;
@@ -21,8 +20,4 @@ float Elemento::getPosY(){
 
 float Elemento::getVelocidadY() {
     return this->velocidadY;
-}
-
-int Elemento::getId(){
-    return this->id;
 }
