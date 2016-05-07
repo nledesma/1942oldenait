@@ -11,38 +11,38 @@ AvionVista::AvionVista(float posX, float posY, string pathSprite){
     //Avión en estado normal
     this->clipsAnimacion[ESTADO_NORMAL].x = 0;
     this->clipsAnimacion[ESTADO_NORMAL].y = 0;
-    this->clipsAnimacion[ESTADO_NORMAL].w = AVION_ANCHO;
-    this->clipsAnimacion[ESTADO_NORMAL].h = AVION_ALTO;
+    this->clipsAnimacion[ESTADO_NORMAL].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[ESTADO_NORMAL].h = ALTO_AVION_COMUN;
 
     //Avión moviéndose a la izquierda
-    this->clipsAnimacion[GIRANDO_IZQUIERDA].x = 0 + AVION_ANCHO;
+    this->clipsAnimacion[GIRANDO_IZQUIERDA].x = 0 + ANCHO_AVION_COMUN;
     this->clipsAnimacion[GIRANDO_IZQUIERDA].y = 0;
-    this->clipsAnimacion[GIRANDO_IZQUIERDA].w = AVION_ANCHO;
-    this->clipsAnimacion[GIRANDO_IZQUIERDA].h = AVION_ALTO;
+    this->clipsAnimacion[GIRANDO_IZQUIERDA].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[GIRANDO_IZQUIERDA].h = ALTO_AVION_COMUN;
 
     //Avión moviéndose a la derecha
-    this->clipsAnimacion[GIRANDO_DERECHA].x = 0 + AVION_ANCHO * 2;
+    this->clipsAnimacion[GIRANDO_DERECHA].x = 0 + ANCHO_AVION_COMUN * 2;
     this->clipsAnimacion[GIRANDO_DERECHA].y = 0;
-    this->clipsAnimacion[GIRANDO_DERECHA].w = AVION_ANCHO;
-    this->clipsAnimacion[GIRANDO_DERECHA].h = AVION_ALTO;
+    this->clipsAnimacion[GIRANDO_DERECHA].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[GIRANDO_DERECHA].h = ALTO_AVION_COMUN;
 
     //Primer sprite vuelta
-    this->clipsAnimacion[LOOP_ETAPA_1].x = 0 + AVION_ANCHO * 3;
+    this->clipsAnimacion[LOOP_ETAPA_1].x = 0 + ANCHO_AVION_COMUN * 3;
     this->clipsAnimacion[LOOP_ETAPA_1].y = 0;
-    this->clipsAnimacion[LOOP_ETAPA_1].w = AVION_ANCHO;
-    this->clipsAnimacion[LOOP_ETAPA_1].h = AVION_ALTO;
+    this->clipsAnimacion[LOOP_ETAPA_1].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_1].h = ALTO_AVION_COMUN;
 
     //Segundo sprite vuelta
-    this->clipsAnimacion[LOOP_ETAPA_2].x = 0 + AVION_ANCHO * 4;
+    this->clipsAnimacion[LOOP_ETAPA_2].x = 0 + ANCHO_AVION_COMUN * 4;
     this->clipsAnimacion[LOOP_ETAPA_2].y = 0;
-    this->clipsAnimacion[LOOP_ETAPA_2].w = AVION_ANCHO;
-    this->clipsAnimacion[LOOP_ETAPA_2].h = AVION_ALTO;
+    this->clipsAnimacion[LOOP_ETAPA_2].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_2].h = ALTO_AVION_COMUN;
 
     //Tercer sprite vuelta
     this->clipsAnimacion[LOOP_ETAPA_3].x = 0;
-    this->clipsAnimacion[LOOP_ETAPA_3].y = 0 + AVION_ALTO;
-    this->clipsAnimacion[LOOP_ETAPA_3].w = AVION_ANCHO;
-    this->clipsAnimacion[LOOP_ETAPA_3].h = AVION_ALTO;
+    this->clipsAnimacion[LOOP_ETAPA_3].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_3].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_3].h = ALTO_AVION_COMUN;
 
 }
 

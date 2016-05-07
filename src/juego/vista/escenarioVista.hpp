@@ -8,8 +8,9 @@
 #include "ventana.hpp"
 #include "avionVista.hpp"
 #include "figura.hpp"
-#include "../../accesorios/temporizador.hpp"
 #include "elementoVista.hpp"
+#include "disparoVista.hpp"
+#include "../../accesorios/temporizador.hpp"
 #include <list>
 #include <iterator>
 
@@ -24,6 +25,8 @@ private:
     Ventana *ventana;
     list<AvionVista *> aviones;
     list<ElementoVista *> elementos;
+    DisparoVista* disparoVista;
+    list<disparo> disparos;
     Figura *fondo;
 
 public:
@@ -51,6 +54,8 @@ public:
     void agregarAvionVista(float posX, float posY, string pathSprite);
 
     void agregarElementoVista(float posX, float posY, string elementoSpriteId);
+
+    void agregarDisparoVista(string pathSprite);
 
     void renderizarAviones();
 
