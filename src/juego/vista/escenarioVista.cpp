@@ -1,24 +1,24 @@
 #include "escenarioVista.hpp"
 using namespace std;
 
-EscenarioVista::EscenarioVista(int ancho, int alto){
+EscenarioVista::EscenarioVista(int ancho, int alto, string pathImagen){
     this->ancho = ancho;
     this->alto = alto;
     this->ventana = new Ventana(ancho, alto);
     this->fondo = new Figura();
     this->scrollingOffset = 0;
+    this->pathImagen = pathImagen;
 }
 
 EscenarioVista::~EscenarioVista(){}
 
-int EscenarioVista::iniciar(string path){
+int EscenarioVista::iniciar(){
     this->ventana->iniciar();
-    this->fondo->loadFromFile(path, this->ventana->getVentanaRenderer());
-    this->fondo->render(0,0,this->ventana->getVentanaRenderer(), NULL);
+    this->cargarFondo();
+    this->renderizarFondo(this->scrollingOffset);
     SDL_RenderPresent(this->ventana->getVentanaRenderer());
-    incluirAviones();
-    incluirElementos();
-
+    this->cargarVistasAviones();
+    this->cargarVistasElementos();
     bool quit = false;
     SDL_Event e;
     Temporizador temporizador;
@@ -31,26 +31,16 @@ int EscenarioVista::iniciar(string path){
 
             this->getAviones().front()->manejarEvento(e, ventana->getVentanaRenderer());
         }
-
-        float timeStep = temporizador.getTicks() / 1000.f;
-
-        //Scroll background
-        this->scrollingOffset = scrollingOffset + timeStep * this->velocidadDesplazamientoY;
-        this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
-
-        if(scrollingOffset > this->fondo->getWidth()){
-            scrollingOffset = 0;
-        }
         temporizador.comenzar();
         SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear(ventana->getVentanaRenderer());
         this->fondo->render(0,0,ventana->getVentanaRenderer(), NULL);
         //Render background
-        this->fondo->render(0, scrollingOffset, ventana->getVentanaRenderer(), NULL);
-        this->fondo->render(0, scrollingOffset - this->fondo->getWidth(), ventana->getVentanaRenderer(), NULL);
+        this->renderizarFondo(this->scrollingOffset);
+        this->renderizarFondo(this->scrollingOffset - this->fondo->getWidth());
 
-        this->renderizarElementos(ventana->getVentanaRenderer());
-        this->renderizarAviones(ventana->getVentanaRenderer());
+        this->renderizarElementos();
+        this->renderizarAviones();
         SDL_RenderPresent(ventana->getVentanaRenderer());
     }
     return 1;
@@ -58,23 +48,24 @@ int EscenarioVista::iniciar(string path){
 
 /* Inicializacion de elementos internos del escenario */
 
-void EscenarioVista::agregarElementoVista(string spriteId, float posX, float posY){
+void EscenarioVista::agregarElementoVista(float posX, float posY, string elementoSpriteId){
     //Agrega el elemento a la lista.
-    Elemento* elemento = new Elemento(posX, posY, this->velocidadDesplazamientoY ,spriteId);
-    this->elementos.push_back(elemento);
+    ElementoVista* elementoVista = new ElementoVista(posX, posY, elementoSpriteId);
+    this->elementos.push_back(elementoVista);
 }
 
-void EscenarioVista::agregarAvionVista(string avionSpriteId, string disparosSpriteId){
-    AvionVista* avionVista = new AvionVista(avionSpriteId, "redLaserRay.bmp");
+void EscenarioVista::agregarAvionVista(float posX, float posY, string pathSprite){
+    AvionVista* avionVista = new AvionVista( posX, posY, pathSprite);
     this->aviones.push_back(avionVista);
 }
 
 void EscenarioVista::cargarVistasAviones(){
     string path;
+    int numeroJugador = 1;
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avionVista = *iterador;
-        path = (avionVista->getIdSprite() + ".bmp").c_str();
-        this->cargarAvionVista(avionVista, ventana->getVentanaRenderer(),path);
+        this->cargarAvion(avionVista, ventana->getVentanaRenderer(), numeroJugador);
+        numeroJugador++;
     }
 
 }
@@ -82,36 +73,41 @@ void EscenarioVista::cargarVistasAviones(){
 void EscenarioVista::cargarVistasElementos(){
     string path;
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
-        ElementoVista* elementoVista = *iterador;
-        path = (elemento->getSpriteId() + ".bmp").c_str();
-        this->cargarElemento(elemento, ventana->getVentanaRenderer(),path);
-        //this->cargarElemento(elemento2, ventana->getVentanaRenderer(), "asteroide.bmp");
+        path = (elementoVista->getSpriteId() + ".bmp").c_str();
+        this->cargarElementoVista(elementoVista, ventana->getVentanaRenderer(), path);
     }
 }
 
-void EscenarioVista::cargarAvionVista(AvionVista* avionVista, SDL_Renderer* renderer, string path){
-    avionVista->cargarImagen(path, renderer);
+void EscenarioVista::cargarFondo(){
+    this->fondo->loadFromFile(this->pathImagen, this->ventana->getVentanaRenderer());
 }
 
-void EscenarioVista::cargarElementoVista(ElementoVista* elementoVista, SDL_Renderer* renderer, string path){
-    elementoVista->cargarImagen(path ,renderer);
+void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){
+    avionVista->cargarImagen(renderer, numeroJugador);
+}
+
+void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* renderer){
+    elementoVista->cargarImagen(renderer);
 }
 
 /* Renderizaciones */
 
-void EscenarioVista::renderizarElementos(SDL_Renderer* renderer){
-    for(list<Elemento*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
-        Elemento* elemento = *iterador;
-        elemento->render(renderer);
+void EscenarioVista::renderizarElementos(){
+    for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
+        ElementoVista* elementoVista = *iterador;
+        elementoVista->render(this->ventana->getVentanaRenderer());
     }
 }
 
-void EscenarioVista::renderizarAviones(SDL_Renderer* renderer){
-    for(list<Avion*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
-        Avion* avion = *iterador;
-        avion->render(renderer);
-        avion->renderDisparos(renderer);
+void EscenarioVista::renderizarAviones(){
+    for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
+        AvionVista* avion = *iterador;
+        avion->render(this->ventana->getVentanaRenderer());
     }
+}
+
+void EscenarioVista::renderizarFondo(float y) {
+    this->fondo->render(0,(int)y,this->ventana->getVentanaRenderer(), NULL);
 }
 
 /* Getters */
@@ -138,9 +134,4 @@ Figura* EscenarioVista::getFondo(){
 
 Ventana* EscenarioVista::getVentana(){
     return this->ventana;
-}
-
-const char* EscenarioVista::getFondoSprite(){
-    const char* fondo = "galaxia";
-    return fondo;
 }

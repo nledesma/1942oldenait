@@ -17,7 +17,7 @@ class Figura{
 		int mWidth;
 		int mHeight;
 	public:
-		vector<int > COLOR_BASE;
+		vector<int> COLOR_BASE;
 		vector<int> COLOR_AZUL;
 		vector<int> COLOR_ROJO;
 		vector<int> COLOR_VERDE;

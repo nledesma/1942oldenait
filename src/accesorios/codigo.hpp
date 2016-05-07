@@ -42,7 +42,6 @@
 
 /* Estados avion */
 
-#define CONTADOR_INICIAL 150
 #define ESTADO_NORMAL 0
 #define GIRANDO_IZQUIERDA 1
 #define GIRANDO_DERECHA 2
@@ -54,5 +53,8 @@
 #define LOOP_ETAPA_6 8
 #define LOOP_ETAPA_7 9
 #define LOOP_ETAPA_8 10
+
+/* Contador Loop avion */
+#define CONTADOR_INICIAL 150
 
 #endif //INC_1942OLDENAIT_CODIGO_HPP

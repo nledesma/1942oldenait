@@ -13,17 +13,13 @@
 #include <iterator>
 
 using namespace std;
-struct fondo {
-    string imagenFondo;
-    int ancho;
-    int alto;
-};
 
 class EscenarioVista {
 private:
     int ancho;
     int alto;
     float scrollingOffset;
+    string pathImagen;
     Ventana *ventana;
     list<AvionVista *> aviones;
     list<ElementoVista *> elementos;
@@ -31,51 +27,43 @@ private:
 
 public:
     /* Constructor y destructor */
-    EscenarioVista(int ancho, int alto);
+    EscenarioVista(int ancho, int alto, string pathImagen);
     ~EscenarioVista();
 
-    bool cargarImagenDeFondo(SDL_Renderer *renderer);
+    void cargarFondo();
 
-    void cargarAvion(Avion *avion, SDL_Renderer *renderer, string path);
+    void cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador);
 
-    void cargarElemento(Elemento *elemento, SDL_Renderer *renderer, string path);
+    void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
 
-    int iniciar(string path);
+    int iniciar();
 
     int getAncho();
 
     int getAlto();
 
-    float getVelocidadDesplazamientoY();
-
     //Ventana* getVentana();
-    list<Avion *> &getAviones();
+    list<AvionVista *> &getAviones();
 
-    list<Elemento *> &getElementos();
+    list<ElementoVista *> &getElementos();
 
-    void agregarAvionVista(string avionSpriteId, string disparosSpriteId);
+    void agregarAvionVista(float posX, float posY, string pathSprite);
 
-    void agregarElementoVista(string spriteId, float posX, float posY);
+    void agregarElementoVista(float posX, float posY, string elementoSpriteId);
 
-    void renderizarVistasAviones(SDL_Renderer *renderer);
+    void renderizarAviones();
 
-    void renderizarVistasElementos(SDL_Renderer *renderer);
+    void renderizarElementos();
+
+    void renderizarFondo(float y);
 
     Figura *getFondo();
 
-    Avion *getAvion();
-
     Ventana *getVentana();
 
-    const char *getFondoSprite();
+    void cargarVistasAviones();
 
-    int getAnchoFondo();
-
-    int getAltoFondo();
-
-    void incluirAviones();
-
-    void incluirElementos();
+    void cargarVistasElementos();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

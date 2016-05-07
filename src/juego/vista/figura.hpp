@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <list>
+#include "../../accesorios/codigo.hpp"
 
 using namespace std;
 
@@ -17,16 +18,16 @@ private:
     int mWidth;
     int mHeight;
 public:
-    static const color_base = {255,255,255};
-    static const color_azul = {100,100,255};
-    static const color_rojo = {255,100,100};
-    static const color_verde = {100,255,100};
+    static const vector<int> color_base = {255,255,255};
+    static const vector<int> color_azul = {100,100,255};
+    static const vector<int> color_rojo = {255,100,100};
+    static const vector<int> color_verde = {100,255,100};
     //Constructor
     Figura();
     //Destructor
     ~Figura();
     //Carga la imagen desde el path especificado, utilizando el renderer pasado por parámetro
-    bool loadFromFile(string path, SDL_Renderer* renderer, int color = 0);
+    bool loadFromFile(string path, SDL_Renderer* renderer, int color = BASE);
     //Libera la memoria de la textura
     void free();
     //Renderiza la figura en el punto (x,y)
