@@ -12,45 +12,40 @@ EscenarioVista::EscenarioVista(int ancho, int alto, string pathImagen){
 
 EscenarioVista::~EscenarioVista(){}
 
-int EscenarioVista::iniciar(){
+int EscenarioVista::iniciar(pthread_mutex_t mutexEscritura){
     this->ventana->iniciar();
     this->cargarFondo();
     this->renderizarFondo(this->scrollingOffset);
     SDL_RenderPresent(this->ventana->getVentanaRenderer());
     this->cargarVistasAviones();
     this->cargarVistasElementos();
-    bool quit = false;
     SDL_Event e;
     Temporizador temporizador;
-    while(!quit){
-        while( SDL_PollEvent( &e ) != 0 ){
-            if( e.type == SDL_QUIT )
-            {
-                quit = true;
-            }
-
-//            this->getAviones().front()->manejarEvento(e, ventana->getVentanaRenderer());
-        }
+    SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear(ventana->getVentanaRenderer());
+    while(this->activo){
         temporizador.comenzar();
-        SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-        SDL_RenderClear(ventana->getVentanaRenderer());
-        this->fondo->render(0,0,ventana->getVentanaRenderer(), NULL);
-        //Render background
+        pthread_mutex_lock(&mutexEscritura);
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getWidth());
-
-        this->renderizarElementos();
-        this->renderizarAviones();
+        pthread_mutex_unlock(&mutexEscritura);
+        this->renderizarElementos(mutexEscritura);
+        this->renderizarAviones(mutexEscritura);
+        this->renderizarDisparos(mutexEscritura);
         SDL_RenderPresent(ventana->getVentanaRenderer());
     }
     return 1;
 }
 
+void EscenarioVista::setDisparos(list<disparo> disparosParam){
+    this->disparos = disparosParam;
+}
+
 /* Inicializacion de elementos internos del escenario */
 
-void EscenarioVista::agregarElementoVista(float posX, float posY, string elementoSpriteId){
+void EscenarioVista::agregarElementoVista(float posX, float posY, string pathSprite){
     //Agrega el elemento a la lista.
-    ElementoVista* elementoVista = new ElementoVista(posX, posY, elementoSpriteId);
+    ElementoVista* elementoVista = new ElementoVista(posX, posY, pathSprite);
     this->elementos.push_back(elementoVista);
 }
 
@@ -64,21 +59,18 @@ void EscenarioVista::agregarDisparoVista(string pathSprite){
 }
 
 void EscenarioVista::cargarVistasAviones(){
-    string path;
     int numeroJugador = 1;
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avionVista = *iterador;
         this->cargarAvion(avionVista, ventana->getVentanaRenderer(), numeroJugador);
         numeroJugador++;
     }
-
 }
 
 void EscenarioVista::cargarVistasElementos(){
-    string path;
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
-//        path = (elementoVista->getSpriteId() + ".bmp").c_str();
-//        this->cargarElementoVista(elementoVista, ventana->getVentanaRenderer(), path);
+        ElementoVista* elementoVista = *iterador;
+        this->cargarElemento(elementoVista, ventana->getVentanaRenderer());
     }
 }
 
@@ -91,27 +83,40 @@ void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer,
 }
 
 void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* renderer){
-//    elementoVista->cargarImagen(renderer);
+    elementoVista->cargarImagen(renderer);
 }
 
 /* Renderizaciones */
 
-void EscenarioVista::renderizarElementos(){
+void EscenarioVista::renderizarElementos(pthread_mutex_t mutexEscritura){
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
         ElementoVista* elementoVista = *iterador;
-//        elementoVista->render(this->ventana->getVentanaRenderer());
+        pthread_mutex_lock(&mutexEscritura);
+        elementoVista->render(this->ventana->getVentanaRenderer());
+        pthread_mutex_unlock(&mutexEscritura);
     }
 }
 
-void EscenarioVista::renderizarAviones(){
+void EscenarioVista::renderizarAviones(pthread_mutex_t mutexEscritura){
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avion = *iterador;
+        pthread_mutex_lock(&mutexEscritura);
         avion->render(this->ventana->getVentanaRenderer());
+        pthread_mutex_unlock(&mutexEscritura);
     }
 }
 
 void EscenarioVista::renderizarFondo(float y) {
     this->fondo->render(0,(int)y,this->ventana->getVentanaRenderer(), NULL);
+}
+
+void EscenarioVista::renderizarDisparos(pthread_mutex_t mutexEscritura){
+    pthread_mutex_lock(&mutexEscritura);
+    for(list<disparo>::iterator iterador = this->disparos.begin(); iterador != this->disparos.end(); ++iterador){
+        disparo disparo1 = *iterador;
+        disparoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
+    }
+    pthread_mutex_unlock(&mutexEscritura);
 }
 
 void EscenarioVista::actualizar(string codigo) {

@@ -6,17 +6,15 @@ using namespace std;
 
 class Elemento {
 private:
-    int id;
     float posX;
     float posY;
     float velocidadY;
 public:
-    Elemento(int id, float posX, float posY, float velocidadDesplazamientoY);
+    Elemento(float posX, float posY, float velocidadDesplazamientoY);
     void mover(float timeStep);
     float getPosX();
     float getPosY();
     float getVelocidadY();
-    int getId();
 };
 
 

@@ -4,18 +4,22 @@
 #include <string>
 #include <cstring>
 #include <SDL2/SDL.h>
+#include "figura.hpp"
 
 using namespace std;
 
 class ElementoVista {
-    int id;
     float posX;
     float posY;
-public:
-    ElementoVista(int id, float posX, float posY);
-    void actualizar(string codigo);
-    //void render(SDL_Renderer* renderer);
+    string pathSprite;
+    Figura* figura;
+    static const string ELEMENTO_POR_DEFECTO = "../../../resources/img/planeta.bmp";
 
+public:
+    ElementoVista(float posX, float posY, string pathSprite);
+    void actualizar(string codigo);
+    void render(SDL_Renderer* renderer);
+    void cargarImagen(SDL_Renderer* renderer);
     float getPosX();
     float getPosY();
 
