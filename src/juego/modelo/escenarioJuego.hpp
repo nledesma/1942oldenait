@@ -2,9 +2,11 @@
 #define INC_1942OLDENAIT_ESCENARIOJUEGO_HPP
 
 #include <list>
+#include <pthread.h>
 #include "avion.hpp"
 #include "elemento.hpp"
 #include "../../accesorios/temporizador.hpp"
+
 class EscenarioJuego {
 private:
     float offset;
@@ -15,13 +17,15 @@ private:
     Temporizador temporizador;
     float posicionY;
     float scrollingOffset;
+    pthread_t mainLoopThread;
 public:
     EscenarioJuego(float velocidadDesplazamientoY);
     ~EscenarioJuego();
     float getOffset();
     void manejarEvento(int nroAvion, char evento);
     void actualizarScrollingOffset(float timeStep);
-    static void *mainLoop(void* THIS);
+    void mainLoop();
+    static void *mainLoop_th(void* THIS);
     void moverAviones(float timestep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);

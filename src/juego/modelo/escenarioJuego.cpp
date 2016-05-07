@@ -23,7 +23,7 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
 }
 
-void* EscenarioJuego::mainLoop(void* THIS){
+void* EscenarioJuego::mainLoop_th(void* THIS){
     EscenarioJuego* escenario = (EscenarioJuego*) THIS;
     bool quit = false;
     Temporizador temporizador;
@@ -39,6 +39,10 @@ void* EscenarioJuego::mainLoop(void* THIS){
     }
 
     pthread_exit(NULL);
+}
+
+void EscenarioJuego::mainLoop(){
+    pthread_create(&mainLoopThread, NULL, mainLoop_th, (void*)this);
 }
 
 void EscenarioJuego::moverAviones(float timeStep){
