@@ -37,7 +37,7 @@ public:
 
     void manejarEvento(char evento);
 
-    void disparar();
+    Disparo* disparar();
 
     float getVelocidad();
 

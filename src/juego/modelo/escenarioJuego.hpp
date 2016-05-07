@@ -19,6 +19,7 @@ private:
     float scrollingOffset;
     pthread_t mainLoopThread;
 public:
+    void reset();
     EscenarioJuego(float velocidadDesplazamientoY);
     ~EscenarioJuego();
     float getOffset();
