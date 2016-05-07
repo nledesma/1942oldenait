@@ -114,6 +114,10 @@ void EscenarioVista::renderizarFondo(float y) {
     this->fondo->render(0,(int)y,this->ventana->getVentanaRenderer(), NULL);
 }
 
+void EscenarioVista::actualizar(string codigo) {
+    memcpy((void*) &(this->scrollingOffset), (void*) &codigo[0], sizeof(float));
+}
+
 /* Getters */
 
 int EscenarioVista::getAncho(){

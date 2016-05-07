@@ -3,6 +3,9 @@
 
 #include "../juego/modelo/elemento.hpp"
 #include "../juego/modelo/avion.hpp"
+#include "../juego/modelo/escenarioJuego.hpp"
+#include "../juego/modelo/disparo.hpp"
+
 #include "../accesorios/codigo.hpp"
 #include <utility> // pair
 #include <cstring> // memcpy
@@ -14,11 +17,15 @@ private:
     template<typename T> static void push(string & str, T e);
     static string popBytes(string & codigo, int cBytes);
 public:
-    static void push(string & str, Elemento *e);
-    static void push(string & str, Avion *a);
+    static void push(string & codigo, Elemento *e);
+    static void push(string & codigo, Avion *a, int nroAvion);
+    static void push(string & codigo, Disparo *d);
+    static void push(string & codigo, EscenarioJuego *e);
     /* Devuelve un par con el id y el código con el nuevo estado */
     static pair<int,string> popElemento(string & codigo);
     static pair<int,string> popAvion(string & codigo);
+    static string popEscenario(string & codigo);
+    static string popDisparo(string & codigo);
 
     static void imprimirBytes(string codigo);
 };

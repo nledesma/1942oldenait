@@ -18,10 +18,10 @@ private:
     int mWidth;
     int mHeight;
 public:
-    static const vector<int> color_base = {255,255,255};
-    static const vector<int> color_azul = {100,100,255};
-    static const vector<int> color_rojo = {255,100,100};
-    static const vector<int> color_verde = {100,255,100};
+    static const vector<int> color_base;
+    static const vector<int> color_azul;
+    static const vector<int> color_rojo;
+    static const vector<int> color_verde;
     //Constructor
     Figura();
     //Destructor

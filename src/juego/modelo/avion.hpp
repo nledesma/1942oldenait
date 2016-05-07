@@ -55,7 +55,7 @@ public:
 
     int getEstadoAnimacion();
 
-    void setVelocidad();
+    void setVelocidad(float velocidad);
 
     void setVelocidadX();
 

@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <cstring>
 #include <string>
 #include "ventana.hpp"
 #include "avionVista.hpp"
@@ -69,6 +70,8 @@ public:
     void cargarVistasAviones();
 
     void cargarVistasElementos();
+
+    void actualizar(string codigo);
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

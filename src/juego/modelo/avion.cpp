@@ -12,6 +12,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos){
     this->contador = CONTADOR_INICIAL;
     this->estadoAnimacion = ESTADO_NORMAL;
 }
+
 Avion::~Avion(){
 
 }
@@ -35,7 +36,7 @@ void Avion::manejarEvento(int evento){
                 this->velocidadX += this->velocidad;
                 break;
             case PRESIONA_ESPACIO:
-                this->disparar();
+                //this->disparar();
                 break;
             case PRESIONA_ENTER:
                 this->estadoAnimacion = LOOP_ETAPA_1;
@@ -88,83 +89,15 @@ void Avion::mover(float timeStep){
     }
 }
 
-/*
-void Avion::moverDisparos(float timeStep){
-    if(this->disparos.size() > 0){
-        for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++){
-            if((*iterador)->mover(timeStep) == 0){
-                delete (*iterador);
-                iterador = disparos.erase(iterador);
-            }
-        }
-    }
+
+float Avion::getVelocidad(){
+    return this->velocidad;
 }
 
-void Avion::renderDisparos(SDL_Renderer * renderer){
-    if(disparos.size() > 0 ){
-        for(list<Disparo*>::iterator iterator = disparos.begin(); iterator != disparos.end(); iterator++){
-            (*iterator)->render(renderer);
-        }
-    }
+void Avion::setVelocidad(float velocidad){
+    this->velocidad = velocidad;
 }
 
-string Avion::getIdSprite(){
-    return this->idSprite;
-}
-
-void Avion::setIdSprite(string idSprite){
-    this->idSprite = idSprite;
-}
-
-int Avion::getVelocidadDesplazamiento(){
-    return this->velocidadDesplazamiento;
-}
-
-void Avion::setVelocidadDesplazamiento(int velocidadDesplazamiento){
-    this->velocidadDesplazamiento = velocidadDesplazamiento;
-}
-
-string Avion::getIdSpriteAnimacion(){
-    return this->idSpriteAnimacion;
-}
-
-void Avion::setIdSpriteAnimacion(string idSpriteAnimacion){
-    this->idSpriteAnimacion = idSpriteAnimacion;
-}
-list<Disparo*> Avion::getDisparos() {
-    return this->disparos;
-}
-
-void Avion::setDisparos(list<Disparo*> unosDisparos) {
-    this->disparos = unosDisparos;
-}
-
-int Avion::cargarImagen(string path, SDL_Renderer* renderer){
-    if(!this->gAvionTextura->loadFromFile(path, renderer, 1)){
-        cout << "Failed" << endl;
-        //TODO usar una excepcion
-        return 0;
-    }
-    this->render(renderer);
-    return 1;
-}
-
-void Avion::render(SDL_Renderer* renderer){
-    this->gAvionTextura->render((int)this->posX, (int)this->posY, renderer, &this->clipsAnimacion[this->estadoAnimacion]);
-}
-
-void Avion::cerrar(){
-    this->gAvionTextura->free();
-}
-
-SDL_Renderer* Avion::getAvionRenderer(){
-    return this->gAvionRenderer;
-}
-
-Figura* Avion::getAvionTextura(){
-    return this->gAvionTextura;
-}
-*/
 float Avion::getPosicionX(){
     return this->posX;
 }

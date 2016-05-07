@@ -1,6 +1,13 @@
 #include "figura.hpp"
 #include "ventana.hpp"
 
+// Vectores
+
+const vector<int> color_base = {255,255,255};
+const vector<int> color_azul = {100,100,255};
+const vector<int> color_rojo = {255,100,100};
+const vector<int> color_verde = {100,255,100};
+
 Figura::Figura(){
     //Initialize
     this->textura = NULL;

@@ -3,14 +3,14 @@
 
 
 /* Push y pop de Elementos del mapa. */
-void Decodificador::push(string & codigo, Elemento *e){
+void Decodificador::push(string & codigo, Elemento *e) {
     // id (1 byte) | pos_x (1 float) | pos_y (1 float)
     codigo += (char)(e->getId());
     push(codigo, e->getPosX());
     push(codigo, e->getPosY());
 }
 
-pair<int,string> Decodificador::popElemento(string & codigo){
+pair<int,string> Decodificador::popElemento(string & codigo) {
     pair<int,string> idCodigo;
     string aux = popBytes(codigo, 2 * sizeof(float) + 1);
     idCodigo.first = (int) aux[0];
@@ -19,9 +19,9 @@ pair<int,string> Decodificador::popElemento(string & codigo){
 }
 
 /* Push y pop de Aviones. */
-void Decodificador::push(string & codigo, Avion* a, int nroAvion){
+void Decodificador::push(string & codigo, Avion* a, int nroAvion) {
     // Nro (1 byte) | posX, posY (2 floats) | estadoAnimacion (1 byte)
-    push((char) nroAvion);
+    push(codigo, (char) nroAvion);
     push(codigo, a->getPosicionX());
     push(codigo, a->getPosicionY());
     push(codigo, (char) a->getEstadoAnimacion());
@@ -35,8 +35,29 @@ pair<int,string> Decodificador::popAvion(string & codigo){
     return idCodigo;
 }
 
+/* Push y pop de disparo. */
+void Decodificador::push(string & codigo, Disparo *d) {
+    // posX, posY (2 floats)
+    push(codigo, d->getPosX());
+    push(codigo, d->getPosY());
+}
+
+string Decodificador::popDisparo(string & codigo) {
+    return popBytes(codigo, 2*sizeof(float));
+}
+
+/* Push y Pop del Escenario. */
+void Decodificador::push(string & codigo, EscenarioJuego *e) {
+    // Offset (float)
+    push(codigo, e->getOffset());
+}
+
+string Decodificador::popEscenario(string &codigo){
+    return popBytes(codigo, sizeof(float));
+}
+
 /* Generales para cualquier tipo */
-template<typename T> void Decodificador::push(string & str, T e){
+template<typename T> void Decodificador::push(string & str, T e) {
     int n = sizeof(e);
     char * bytes = new char[n];
     memcpy((void*)bytes, (void*) &e, n);
@@ -48,14 +69,14 @@ template<typename T> void Decodificador::push(string & str, T e){
     delete bytes;
 }
 
-string Decodificador::popBytes(string & codigo, int cBytes){
+string Decodificador::popBytes(string & codigo, int cBytes) {
     string ret = codigo.substr(0, cBytes);
     codigo.erase(0, cBytes);
     return ret;
 }
 
-void Decodificador::imprimirBytes(string codigo){
-    for (int i = 0; i < codigo.length(); ++i){
+void Decodificador::imprimirBytes(string codigo) {
+    for (int i = 0; i < codigo.length(); ++i) {
         cout << (int) codigo[i] << " ";
     }
     cout << endl;
