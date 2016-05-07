@@ -37,19 +37,19 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
             //Se obtienen las dimensiones de la superficie, y se setean a la figura
             switch (color) {
                 case BASE:
-                    SDL_SetTextureColorMod( nuevaTextura, Figura::color_base[0], Figura::color_base[1], Figura::color_base[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_base[0], (Uint8)Figura::color_base[1], (Uint8)Figura::color_base[2] );
                     break;
                 case AZUL:
-                    SDL_SetTextureColorMod( nuevaTextura, Figura::color_azul[0], Figura::color_azul[1], Figura::color_azul[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_azul[0], (Uint8)Figura::color_azul[1], (Uint8)Figura::color_azul[2] );
                     break;
                 case ROJO:
-                    SDL_SetTextureColorMod( nuevaTextura, Figura::color_rojo[0], Figura::color_rojo[1], Figura::color_rojo[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_rojo[0], (Uint8)Figura::color_rojo[1], (Uint8)Figura::color_rojo[2] );
                     break;
                 case VERDE:
-                    SDL_SetTextureColorMod( nuevaTextura, Figura::color_verde[0], Figura::color_verde[1], Figura::color_verde[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_verde[0], (Uint8)Figura::color_verde[1], (Uint8)Figura::color_verde[2] );
                     break;
                 default:
-                    SDL_SetTextureColorMod( nuevaTextura, Figura::color_base[0], Figura::color_base[1], Figura::color_base[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_base[0], (Uint8)Figura::color_base[1], (Uint8)Figura::color_base[2] );
             }
             this->mWidth = loadedSurface->w;
             this->mHeight = loadedSurface->h;

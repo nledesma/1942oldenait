@@ -59,6 +59,10 @@ void EscenarioVista::agregarAvionVista(float posX, float posY, string pathSprite
     this->aviones.push_back(avionVista);
 }
 
+void EscenarioVista::agregarDisparoVista(string pathSprite){
+    this->disparoVista = new DisparoVista(pathSprite);
+}
+
 void EscenarioVista::cargarVistasAviones(){
     string path;
     int numeroJugador = 1;
