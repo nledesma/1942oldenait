@@ -323,3 +323,19 @@ bool Servidor::hayLugar(){
     pthread_mutex_unlock(&mutexAgregar);
     return clientesActuales < cantidadMaximaDeClientes;
 }
+
+/*
+void Servidor::iniciarEscenario(){
+  Escenario* escenario = new Escenario(800, 600);
+  this->escenario = escenario;
+  cout << "Se creo el escenario" << endl;
+}
+*/
+
+EscenarioJuego* Servidor::getEscenario(){
+    return this->escenario;
+}
+
+void Servidor::setEscenario(EscenarioJuego* unEscenario){
+    this->escenario = unEscenario;
+}

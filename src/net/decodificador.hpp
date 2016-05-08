@@ -17,11 +17,13 @@ private:
     template<typename T> static void push(string & str, T e);
     static string popBytes(string & codigo, int cBytes);
 public:
+    static void push (string & codigo, string idImg);
     static void push(string & codigo, Elemento *e);
     static void push(string & codigo, Avion *a, int nroAvion);
     static void push(string & codigo, Disparo *d);
     static void push(string & codigo, EscenarioJuego *e);
     /* Devuelve un par con el id y el código con el nuevo estado */
+    static string popIdImg(string & codigo);
     static string popElemento(string & codigo);
     static pair<int,string> popAvion(string & codigo);
     static string popEscenario(string & codigo);

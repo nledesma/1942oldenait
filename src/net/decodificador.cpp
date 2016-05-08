@@ -1,6 +1,18 @@
 #include "decodificador.hpp"
 #include <iostream>
 
+/* Push y pop de Strings de ids de sprites e imágenes */
+
+void Decodificador::push(string &codigo, string idImg) {
+    push(codigo, (char) idImg.length());
+    codigo += idImg;
+}
+
+string Decodificador::popIdImg(string &codigo) {
+    string lengthString = popBytes(codigo, sizeof(char));
+    int length = (int) lengthString[0];
+    return popBytes(codigo, length);
+}
 
 /* Push y pop de Elementos del mapa. */
 void Decodificador::push(string & codigo, Elemento *e) {

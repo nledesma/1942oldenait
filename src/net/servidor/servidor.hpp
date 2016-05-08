@@ -19,6 +19,7 @@
 #include <sstream>
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../codigoRespuesta.hpp"
+#include "../../juego/modelo/escenarioJuego.hpp"
 
 using namespace std;
 
@@ -42,6 +43,9 @@ private:
     bool servidorActivado;
     pthread_t cicloAceptaciones;
     pthread_t cicloDesencolaciones;
+    EscenarioJuego* escenario;
+
+
     void desencolarSalidaCliente(int clienteFd);
     int procesarMensaje(Mensaje *mensaje);
     bool validarTipo(int tipo, string valor);
@@ -73,6 +77,10 @@ public:
     void desencolar();
     void encolarSalida(int clienteFd, Mensaje *mensaje);
     bool clienteConectado(int clienteFd);
+
+    void iniciarEscenario();
+    EscenarioJuego* getEscenario();
+    void setEscenario(EscenarioJuego* unEscenario);
 };
 
 #endif

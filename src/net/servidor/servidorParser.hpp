@@ -16,6 +16,7 @@ private:
 	bool nodoServidorValido(int &unaCantidadDeClientes, int &unPuerto, XMLNode * pRoot);
 public:
 	Servidor * deserializar(string ruta);
+	Servidor * deserializarEscenario(string ruta);
 	void serializar(Servidor *servidor, string ruta);
 };
 
