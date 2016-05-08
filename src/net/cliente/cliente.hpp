@@ -1,8 +1,10 @@
 #ifndef CLIENTE_H
 #define CLIENTE_H
 #include "../gameSocket.hpp"
-#include <list>
 #include "../mensaje/mensaje.hpp"
+#include "../decodificador.hpp"
+#include "../../juego/vista/escenarioVista.hpp"
+#include <list>
 #include <string>
 #include <errno.h>
 #include <stdexcept>
@@ -25,6 +27,9 @@ private:
     bool cliente_conectado;
     Mensaje * encontrarMensajePorId(string idMensaje);
     bool hayLugar();
+    EscenarioVista * escenarioVista;
+    Decodificador * decodificador;
+
 public:
     Cliente(string ip, int port);
     ~Cliente();
@@ -36,9 +41,12 @@ public:
     void cerrar();
     string getIP();
     int getPort();
+    int enviarEvento(int evento);
     int enviarMensajePorId(string idMensaje);
     int ciclarMensajes(int milisegundos);
     list <Mensaje*>& getMensajes();
     int recibirMensaje(Mensaje* &mensaje);
+    void iniciarEscenario();
+    void crearEscenario(char * infoEscenario);
 };
 #endif // CLIENTE_H

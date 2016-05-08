@@ -35,52 +35,31 @@ public:
     /* Constructor y destructor */
     EscenarioVista(int ancho, int alto, string pathImagen);
     ~EscenarioVista();
-
     void cargarFondo();
-
     void cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador);
-
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
-
     int iniciar(pthread_mutex_t mutexEscritura);
-
     void setActivo();
-
     void setInactivo();
-
     void setDisparos(list<disparo> disparos);
-
     int getAncho();
-
     int getAlto();
-
+    float getScrollingOffset();
+    void setScrollingOffset(float scrollingOffset);
     //Ventana* getVentana();
     list<AvionVista *> &getAviones();
-
     list<ElementoVista *> &getElementos();
-
     void agregarAvionVista(float posX, float posY, string pathSprite);
-
     void agregarElementoVista(float posX, float posY, string elementoSpriteId);
-
     void agregarDisparoVista(string pathSprite);
-
     void renderizarAviones(pthread_mutex_t mutexEscritura);
-
     void renderizarElementos(pthread_mutex_t mutexEscritura);
-
     void renderizarFondo(float y);
-
     void renderizarDisparos(pthread_mutex_t mutexEscritura);
-
     Figura *getFondo();
-
     Ventana *getVentana();
-
     void cargarVistasAviones();
-
     void cargarVistasElementos();
-
     void actualizar(string codigo);
 };
 

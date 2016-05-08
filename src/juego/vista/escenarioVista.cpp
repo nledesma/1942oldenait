@@ -51,6 +51,10 @@ void EscenarioVista::setDisparos(list<disparo> disparosParam){
     this->disparos = disparosParam;
 }
 
+void EscenarioVista::setScrollingOffset(float scrollingOffset){
+    this->scrollingOffset = scrollingOffset;
+}
+
 /* Inicializacion de elementos internos del escenario */
 
 void EscenarioVista::agregarElementoVista(float posX, float posY, string pathSprite){
@@ -157,4 +161,8 @@ Figura* EscenarioVista::getFondo(){
 
 Ventana* EscenarioVista::getVentana(){
     return this->ventana;
+}
+
+float EscenarioVista::getScrollingOffset(){
+    return this->scrollingOffset;
 }
