@@ -26,20 +26,15 @@ string Decodificador::popElemento(string & codigo) {
 }
 
 /* Push y pop de Aviones. */
-void Decodificador::push(string & codigo, Avion* a, int nroAvion) {
-    // Nro (1 byte) | posX, posY (2 floats) | estadoAnimacion (1 byte)
-    push(codigo, (char) nroAvion);
+void Decodificador::push(string & codigo, Avion* a) {
+    // posX, posY (2 floats) | estadoAnimacion (1 byte)
     push(codigo, a->getPosicionX());
     push(codigo, a->getPosicionY());
     push(codigo, (char) a->getEstadoAnimacion());
 }
 
-pair<int,string> Decodificador::popAvion(string & codigo){
-    pair<int,string> idCodigo;
-    string aux = popBytes(codigo, 2*sizeof(float) + 2);
-    idCodigo.first = (int) aux[0];
-    idCodigo.second = aux.substr(1, aux.length() - 1);
-    return idCodigo;
+string Decodificador::popAvion(string & codigo){
+    return popBytes(codigo, 2*sizeof(float) + 1);
 }
 
 /* Push y pop de disparo. */
@@ -88,3 +83,26 @@ void Decodificador::imprimirBytes(string codigo) {
     }
     cout << endl;
 }
+
+void Decodificador::pushInicial(string &codigo, Avion *a) {
+    push(codigo, a->getPosicionX());
+    push(codigo, a->getPosicionY());
+    push(codigo, a->getIdSprite());
+}
+
+void Decodificador::pushInicial(string &codigo, Elemento *e) {
+    push(codigo, e->getPosX());
+    push(codigo, e->getPosY());
+    push(codigo, e->getIdSprite());
+}
+
+void Decodificador::pushInicial(string &codigo, EscenarioJuego *e) {
+    push(codigo , e->getAncho());
+    push(codigo, e->getAlto());
+    push(codigo, e->getIdSprite());
+}
+
+void Decodificador::pushInicialDisparo(string &codigo, string idSpriteDisparo) {
+    push(codigo, idSpriteDisparo);
+}
+

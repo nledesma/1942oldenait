@@ -5,7 +5,6 @@
 #include "../juego/modelo/avion.hpp"
 #include "../juego/modelo/escenarioJuego.hpp"
 #include "../juego/modelo/disparo.hpp"
-
 #include "../accesorios/codigo.hpp"
 #include <utility> // pair
 #include <cstring> // memcpy
@@ -19,16 +18,19 @@ private:
 public:
     static void push (string & codigo, string idImg);
     static void push(string & codigo, Elemento *e);
-    static void push(string & codigo, Avion *a, int nroAvion);
+    static void push(string & codigo, Avion *a);
     static void push(string & codigo, Disparo *d);
     static void push(string & codigo, EscenarioJuego *e);
+    static void pushInicial(string & codigo, Avion *a);
+    static void pushInicial(string & codigo, Elemento *e);
+    static void pushInicial(string & codigo, EscenarioJuego *e);
+    static void pushInicialDisparo(string & codigo, string idSpriteDisparo);
     /* Devuelve un par con el id y el código con el nuevo estado */
     static string popIdImg(string & codigo);
     static string popElemento(string & codigo);
-    static pair<int,string> popAvion(string & codigo);
+    static string popAvion(string & codigo);
     static string popEscenario(string & codigo);
     static string popDisparo(string & codigo);
-
     static void imprimirBytes(string codigo);
 };
 
