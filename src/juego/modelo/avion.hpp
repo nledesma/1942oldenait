@@ -26,6 +26,8 @@ private:
     int contador;
     float posXInicial;
     float posYInicial;
+    string idSprite;
+    string idSpriteDisparos;
 
 public:
     static const int AVION_ANCHO = ANCHO_AVION_COMUN;
@@ -33,7 +35,7 @@ public:
     static const int DISPARO_ANCHO = 20;
     static const int DISPARO_ALTO = 40;
 
-    Avion(float posX, float posY, float velocidad, float velocidadDisparos);
+    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
 
     ~Avion();
 
@@ -76,6 +78,10 @@ public:
     void loop();
 
     void volverEstadoInicial();
+
+    string getIdSprite();
+
+    string getIdSpriteDisparos();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

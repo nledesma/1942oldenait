@@ -8,16 +8,16 @@ class Elemento {
 private:
     float posX;
     float posY;
-    float velocidadY;
     float posXInicial;
     float posYInicial;
+    string idSprite;
 public:
-    Elemento(float posX, float posY, float velocidadDesplazamientoY);
-    void mover(float timeStep);
+    Elemento(float posX, float posY, string idSprite);
+    void mover(float timeStep, float velocidadY);
     float getPosX();
     float getPosY();
-    float getVelocidadY();
     void volverEstadoInicial();
+    int getIdSprite();
 };
 
 

@@ -17,14 +17,17 @@ private:
     Temporizador temporizador;
     float posicionY;
     float scrollingOffset;
+    int alto;
+    int ancho;
+    string idSprite;
     pthread_t mainLoopThread;
 public:
     void reset();
-    EscenarioJuego(float velocidadDesplazamientoY);
+    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite);
     ~EscenarioJuego();
     float getOffset();
-    void agregarAvion(Avion * avion);
-    void agregarElemento(Elemento * elemento);
+    void agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    void agregarElemento(float posX, float posY, string idSprite);
     void manejarEvento(int nroAvion, char evento);
     void actualizarScrollingOffset(float timeStep);
     void mainLoop();
@@ -34,6 +37,9 @@ public:
     void moverDisparos(float timeStep);
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
+    int getAncho();
+    int getAlto();
+    string getIdSprite();
 };
 
 

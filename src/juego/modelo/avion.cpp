@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos){
+Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -13,6 +13,8 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos){
     this->velocidadDisparos = velocidadDisparos;
     this->contador = CONTADOR_INICIAL;
     this->estadoAnimacion = ESTADO_NORMAL;
+    this->idSprite = idSprite;
+    this->idSpriteDisparos = idSpriteDisparos;
 }
 
 Avion::~Avion(){
@@ -134,4 +136,9 @@ int Avion::disparar(){
 void Avion::volverEstadoInicial(){
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
+    this->estadoAnimacion = ESTADO_NORMAL;
+}
+
+string Avion::getIdSprite(){
+    return this->idSprite;
 }

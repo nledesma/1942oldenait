@@ -94,7 +94,7 @@ bool ServidorParser::laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &ca
 	}
 }
 
-Servidor * ServidorParser::deserializarEscenario(string ruta) {
+Servidor * ServidorParser::deserializarEscenario(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
 	XMLNode * pRoot = doc.FirstChildElement();
@@ -126,7 +126,7 @@ Servidor * ServidorParser::deserializarEscenario(string ruta) {
 	XMLNode* pNodoFondo = pNodoEscenario->FirstChild()->NextSibling();
 
 	//Id fondo sprite
-	const char* idSprite;
+	string idSprite;
 	XMLNode* pIdSpriteFondo = pNodoFondo->FirstChild();
 	idSprite = pIdSpriteFondo->ToElement()->GetText();
 
@@ -149,7 +149,7 @@ Servidor * ServidorParser::deserializarEscenario(string ruta) {
 	XMLNode* pNodoElementos = pNodoEscenario->FirstChild()->NextSibling()->NextSibling();
 
 	Servidor* servidor = new Servidor(unPuerto,unaCantidadDeClientes);
-	EscenarioJuego* escenario = new EscenarioJuego(ancho,alto, velocidadDesplazamientoY);
+	EscenarioJuego* escenario = new EscenarioJuego(velocidadDesplazamientoY, ancho, alto, idSprite);
 	servidor->setEscenario(escenario);
 	cout << "Se creo un escenario" << endl;
 
@@ -165,7 +165,7 @@ Servidor * ServidorParser::deserializarEscenario(string ruta) {
 		pNodoPosX->ToElement()->QueryFloatText(&posx);
 		XMLNode* pNodoPosY = pNodoElemento->FirstChild()->NextSibling()->NextSibling();
 		pNodoPosY->ToElement()->QueryFloatText(&posy);
-		servidor->getEscenario()->agregarElemento(spriteIdElemento, posx, alto - posy);
+		servidor->getEscenario()->agregarElemento(posx, alto - posy, spriteIdElemento);
 
 		pNodoElemento = pNodoElemento -> NextSiblingElement("elemento");
 	}
@@ -173,30 +173,24 @@ Servidor * ServidorParser::deserializarEscenario(string ruta) {
 	//Lista de aviones
 	XMLNode* pNodoAviones = pRoot -> FirstChild()-> NextSibling()->NextSibling();
 	XMLNode* pNodoAvion = pNodoAviones->FirstChild();
-	while(pNodoAvion != NULL){
-		float velocidadDesplazamiento, velocidadDisparos;
-		string avionSpriteId, vueltaSpriteId, disparosSpriteId;
-		//Velocidad de desplazamiento
-		XMLNode* pVelocidadDesplazamiento = pNodoAvion->FirstChild();
-		pVelocidadDesplazamiento->ToElement()->QueryFloatText(&velocidadDesplazamiento);
-		//Velocidad Disparos
-		XMLNode* pVelocidadDisparos = pNodoAvion->FirstChild()->NextSibling();
-		pVelocidadDisparos->ToElement()->QueryFloatText(&velocidadDisparos);
-		//Avion ID Sprite
-		XMLNode* pNodoSpriteIdAvion = pVelocidadDisparos->NextSibling();
-		avionSpriteId = pNodoSpriteIdAvion -> ToElement() -> GetText();
-		//Avion ID Sprite Vuelta
-		XMLNode* pNodoSpriteIdAvionVuelta = pNodoSpriteIdAvion->NextSibling();
-		vueltaSpriteId = pNodoSpriteIdAvionVuelta -> ToElement() -> GetText();
-		//Avion ID Sprite Disparos
-		XMLNode* pNodoSpriteIdAvionDisparos = pNodoSpriteIdAvionVuelta->NextSibling();
-		disparosSpriteId = pNodoSpriteIdAvionDisparos -> ToElement() -> GetText();
 
-		servidor->getEscenario()->agregarAvion(velocidadDesplazamiento, velocidadDisparos, avionSpriteId, vueltaSpriteId, disparosSpriteId);
+	float velocidadDesplazamiento, velocidadDisparos;
+	string avionSpriteId, vueltaSpriteId, disparosSpriteId;
+	//Velocidad de desplazamiento
+	XMLNode* pVelocidadDesplazamiento = pNodoAvion->FirstChild();
+	pVelocidadDesplazamiento->ToElement()->QueryFloatText(&velocidadDesplazamiento);
+	//Velocidad Disparos
+	XMLNode* pVelocidadDisparos = pNodoAvion->FirstChild()->NextSibling();
+	pVelocidadDisparos->ToElement()->QueryFloatText(&velocidadDisparos);
+	//Avion ID Sprite
+	XMLNode* pNodoSpriteIdAvion = pVelocidadDisparos->NextSibling();
+	avionSpriteId = pNodoSpriteIdAvion -> ToElement() -> GetText();
+	//Avion ID Sprite Disparos
+	XMLNode* pNodoSpriteIdAvionDisparos = pNodoSpriteIdAvion->NextSibling();
+	disparosSpriteId = pNodoSpriteIdAvionDisparos -> ToElement() -> GetText();
 
-		pNodoAvion = pNodoAvion -> NextSiblingElement("avion");
+	for (int i = 1; i <= unaCantidadDeClientes; i++){
+		servidor->getEscenario()->agregarAvion(40, 40, velocidadDesplazamiento, velocidadDisparos, avionSpriteId, disparosSpriteId);
 	}
-
-
 	return servidor;
 }

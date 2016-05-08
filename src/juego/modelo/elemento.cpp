@@ -1,13 +1,15 @@
 #include "elemento.hpp"
 
-Elemento::Elemento(float posX, float posY, float velocidadY){
+Elemento::Elemento(float posX, float posY, string idSprite){
     this->posX = posX;
     this->posY = posY;
-    this->velocidadY = velocidadY;
+    this->posXInicial = posX;
+    this->posYInicial = posY;
+    this->idSprite = idSprite;
 }
 
-void Elemento::mover(float timeStep){
-    this->posY += this->velocidadY * timeStep;
+void Elemento::mover(float timeStep, float velocidadY){
+    this->posY += velocidadY * timeStep;
 }
 
 float Elemento::getPosX(){
@@ -18,11 +20,11 @@ float Elemento::getPosY(){
     return this->posY;
 }
 
-float Elemento::getVelocidadY() {
-    return this->velocidadY;
-}
-
 void Elemento::volverEstadoInicial(){
     this->posX = posXInicial;
     this->posY = posYInicial;
+}
+
+string Elemento::getIdSprite(){
+    return this->idSprite;
 }

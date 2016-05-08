@@ -10,10 +10,13 @@ void EscenarioJuego::reset(){
 	}
 }
 
-EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY){
+EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite){
 	this->velocidadDesplazamientoY = velocidadDesplazamientoY;
     scrollingOffset = 0;
     posicionY = 0;
+	this->idSprite = idSprite;
+	this->ancho = ancho;
+	this->alto = alto;
 }
 
 EscenarioJuego::~EscenarioJuego(){}
@@ -22,12 +25,14 @@ float EscenarioJuego::getOffset() {
     return offset;
 }
 
-void EscenarioJuego::agregarAvion(Avion * avion){
+void EscenarioJuego::agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos){
+	Avion * avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
 	this->aviones.push_front(avion);
 }
 
-void EscenarioJuego::agregarEscenario(Escenario * escenario){
-	this->escenario.push_front(escenario);
+void EscenarioJuego::agregarElemento(float posX, float posY, string idSprite){
+	Elemento * elemento = new Elemento(posX, posY, idSprite);
+	this->elementos.push_front(elemento);
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, char evento) {
@@ -87,7 +92,7 @@ void EscenarioJuego::moverAviones(float timeStep){
 void EscenarioJuego::moverElementos(float timeStep){
 	for(list<Elemento*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
 		Elemento* elemento = *iterador;
-		elemento->mover(timeStep);
+		elemento->mover(timeStep, this->velocidadDesplazamientoY);
 	}
 }
 
@@ -110,4 +115,16 @@ list<Avion*>& EscenarioJuego::getAviones(){
 
 list<Elemento*>& EscenarioJuego::getElementos(){
 	return this->elementos;
+}
+
+string EscenarioJuego::getIdSprite(){
+	return this->idSprite;
+}
+
+int EscenarioJuego::getAncho(){
+	return this->ancho;
+}
+
+int EscenarioJuego::getAlto(){
+	return this->alto;
 }
