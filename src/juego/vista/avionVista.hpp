@@ -6,6 +6,7 @@
 #include "figura.hpp"
 #include "../../accesorios/codigo.hpp"
 
+#define AVION_POR_DEFECTO "../../../resources/img/millenium-sprite.bmp"
 
 using namespace std;
 
@@ -18,8 +19,6 @@ private:
     SDL_Rect clipsAnimacion[6];
     Figura *figura;
 public:
-    static const string AVION_POR_DEFECTO = "../../../resources/img/millenium-sprite.bmp";
-
     AvionVista(float posX, float posY, string pathSprite);
 
     ~AvionVista();

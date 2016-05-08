@@ -1,12 +1,12 @@
 #include <iostream>
-#include "avion.hpp"
-#include "escenario.hpp"
-#include "figura.hpp"
 #include "../src/net/servidor/servidor.hpp"
 #include "../src/net/servidor/servidorParser.hpp"
 #include "../src/logger/logger.hpp"
 #include <stdio.h>
 using namespace std;
+
+#define DEFAULT_XML "resources/xml/nivel_1.xml"
+
 
 void* apagarServidor(void* servidor){
 
@@ -39,12 +39,12 @@ int main(int argc, char *argv[]){
     if (argc < 2){
         cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
         Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el servidor con el XML por defecto.");
-        rutaXMLServidor = "servidorCompleto.xml";
+        rutaXMLServidor = (DEFAULT_XML);
     } else {
         if (archivoExiste(argv[1])){
             rutaXMLServidor = argv[1];
         } else {
-            rutaXMLServidor = "servidorCompleto.xml";
+            rutaXMLServidor = (DEFAULT_XML);
             cout << "El parámetro ingresado no es válido. Se inicializa el servidor con el XML por defecto" << endl;
             Logger::instance()->logWarning("El parámetro ingresado no es válido. Se inicializa el servidor con el XML por defecto.");
         }

@@ -6,7 +6,24 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <list>
+#include <string>
 #include "../../accesorios/codigo.hpp"
+
+#define COLOR_BASE_R 255
+#define COLOR_BASE_G 255
+#define COLOR_BASE_B 255
+
+#define COLOR_AZUL_R 100
+#define COLOR_AZUL_G 100
+#define COLOR_AZUL_B 255
+
+#define COLOR_ROJO_R 255
+#define COLOR_ROJO_G 100
+#define COLOR_ROJO_B 100
+
+#define COLOR_VERDE_R 100
+#define COLOR_VERDE_G 255
+#define COLOR_VERDE_B 100
 
 using namespace std;
 
@@ -18,10 +35,6 @@ private:
     int mWidth;
     int mHeight;
 public:
-    static const vector<int> color_base;
-    static const vector<int> color_azul;
-    static const vector<int> color_rojo;
-    static const vector<int> color_verde;
     //Constructor
     Figura();
     //Destructor

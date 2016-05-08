@@ -128,7 +128,7 @@ int Avion::getEstadoAnimacion(){
     return this->estadoAnimacion;
 }
 
-int Avion::disparar(){
+Disparo* Avion::disparar(){
     //Por ahora sale con la misma velocidad y posición que el avión.
     return new Disparo(posX, posY, velocidad);
 }

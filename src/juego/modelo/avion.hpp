@@ -8,10 +8,11 @@
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
 #include "disparo.hpp"
-
 //TODO estas constantes estaban definidas para el tuto.
-#define SCREEN_WIDTH = 800;
-#define SCREEN_HEIGHT = 800;
+#define AVION_ANCHO ANCHO_AVION_COMUN;
+#define AVION_ALTO ALTO_AVION_COMUN;
+#define DISPARO_ANCHO 20;
+#define DISPARO_ALTO 40;
 using namespace std;
 
 class Avion {
@@ -30,11 +31,6 @@ private:
     string idSpriteDisparos;
 
 public:
-    static const int AVION_ANCHO = ANCHO_AVION_COMUN;
-    static const int AVION_ALTO = ALTO_AVION_COMUN;
-    static const int DISPARO_ANCHO = 20;
-    static const int DISPARO_ALTO = 40;
-
     Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
 
     ~Avion();

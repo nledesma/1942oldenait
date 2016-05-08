@@ -17,7 +17,7 @@ public:
     float getPosX();
     float getPosY();
     void volverEstadoInicial();
-    int getIdSprite();
+    string getIdSprite();
 };
 
 

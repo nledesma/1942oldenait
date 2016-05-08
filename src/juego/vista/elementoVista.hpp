@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include "figura.hpp"
 
+#define ELEMENTO_POR_DEFECTO "../../../resources/img/planeta.bmp"
+
 using namespace std;
 
 class ElementoVista {
@@ -13,7 +15,6 @@ class ElementoVista {
     float posY;
     string pathSprite;
     Figura* figura;
-    static const string ELEMENTO_POR_DEFECTO = "../../../resources/img/planeta.bmp";
 
 public:
     ElementoVista(float posX, float posY, string pathSprite);

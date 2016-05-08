@@ -3,15 +3,16 @@
 #include "disparoVista.hpp"
 
 DisparoVista::DisparoVista(string pathSprite){
+
     this->figuraDisparo = new Figura();
     this->pathSprite = pathSprite;
 }
 
 DisparoVista::~DisparoVista(){ }
 
-int DisparoVista::cargarImagen(SDL_Renderer * renderer){
+void DisparoVista::cargarImagen(SDL_Renderer * renderer){
     if(!this->figuraDisparo->loadFromFile(this->pathSprite, renderer)){
-        this->figuraDisparo->loadFromFile(DisparoVista::DISPARO_POR_DEFECTO, renderer);
+        this->figuraDisparo->loadFromFile(DISPARO_POR_DEFECTO, renderer);
     }
 }
 

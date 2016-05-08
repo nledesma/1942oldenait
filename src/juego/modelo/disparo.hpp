@@ -13,8 +13,6 @@ private:
 	float posY;
 
 public:
-  	static const int DISPARO_ANCHO = ANCHO_DISPARO_COMUN;
-  	static const int DISPARO_ALTO = ALTO_DISPARO_COMUN;
 	Disparo(float posX, float posY, float velocidad);
 	~Disparo();
 	void setVelocidad(float velocidad);

@@ -97,6 +97,23 @@ bool ServidorParser::laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &ca
 Servidor * ServidorParser::deserializarEscenario(string ruta){
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(ruta.c_str());
+	if (eResult != XML_NO_ERROR){
+		if(eResult >= 16){
+			cout << "El archivo" + ruta +"  no es válido" << endl;
+			Logger::instance()->logWarning("Archivo " + ruta + " invalido.");
+		}else if (eResult == XML_ERROR_PARSING_ELEMENT || eResult == XML_ERROR_ELEMENT_MISMATCH || eResult == XML_ERROR_IDENTIFYING_TAG) {
+			cout << "El archivo " + ruta + " está malformado." << endl;
+			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
+		} else if (eResult == XML_ERROR_FILE_COULD_NOT_BE_OPENED || eResult == XML_ERROR_FILE_READ_ERROR) {
+			cout << "El archivo " + ruta + " está malformado." << endl;
+			Logger::instance()->logWarning("El archivo " + ruta + " está malformado.");
+		} else if (eResult == XML_ERROR_FILE_NOT_FOUND){
+			cout << "Ruta " + ruta + " inválida." << endl;
+			Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
+		}
+	}
+
+	cout << "pase por aca " << eResult << endl;
 	XMLNode * pRoot = doc.FirstChildElement();
 	//Nodo Servidor
 	XMLNode * pNodoServidor = pRoot -> FirstChild();

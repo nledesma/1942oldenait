@@ -3,11 +3,6 @@
 
 // Vectores
 
-const vector<int> color_base = {255,255,255};
-const vector<int> color_azul = {100,100,255};
-const vector<int> color_rojo = {255,100,100};
-const vector<int> color_verde = {100,255,100};
-
 Figura::Figura(){
     //Initialize
     this->textura = NULL;
@@ -44,19 +39,19 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
             //Se obtienen las dimensiones de la superficie, y se setean a la figura
             switch (color) {
                 case BASE:
-                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_base[0], (Uint8)Figura::color_base[1], (Uint8)Figura::color_base[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_BASE_R, (Uint8) COLOR_BASE_G, (Uint8) COLOR_BASE_B );
                     break;
                 case AZUL:
-                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_azul[0], (Uint8)Figura::color_azul[1], (Uint8)Figura::color_azul[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_AZUL_R, (Uint8)COLOR_AZUL_G, (Uint8)COLOR_AZUL_B );
                     break;
                 case ROJO:
-                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_rojo[0], (Uint8)Figura::color_rojo[1], (Uint8)Figura::color_rojo[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_ROJO_R, (Uint8)COLOR_ROJO_G, (Uint8)COLOR_ROJO_B );
                     break;
                 case VERDE:
-                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_verde[0], (Uint8)Figura::color_verde[1], (Uint8)Figura::color_verde[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_VERDE_R, (Uint8) COLOR_VERDE_G, (Uint8) COLOR_VERDE_B );
                     break;
                 default:
-                    SDL_SetTextureColorMod( nuevaTextura, (Uint8)Figura::color_base[0], (Uint8)Figura::color_base[1], (Uint8)Figura::color_base[2] );
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_BASE_R, (Uint8) COLOR_BASE_G, (Uint8) COLOR_BASE_B );
             }
             this->mWidth = loadedSurface->w;
             this->mHeight = loadedSurface->h;

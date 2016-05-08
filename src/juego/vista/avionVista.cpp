@@ -2,6 +2,7 @@
 
 //TODO ver de donde sacar las dimensiones del avion
 AvionVista::AvionVista(float posX, float posY, string pathSprite){
+
     this->posX = posX;
     this->posY = posY;
     this->estadoAnimacion = ESTADO_NORMAL;
@@ -43,8 +44,9 @@ AvionVista::AvionVista(float posX, float posY, string pathSprite){
     this->clipsAnimacion[LOOP_ETAPA_3].y = 0 + ALTO_AVION_COMUN;
     this->clipsAnimacion[LOOP_ETAPA_3].w = ANCHO_AVION_COMUN;
     this->clipsAnimacion[LOOP_ETAPA_3].h = ALTO_AVION_COMUN;
-
 }
+
+AvionVista::~AvionVista() { }
 
 void AvionVista::actualizar(string codigo){
     memcpy((void*) &(this->posX), (void*) &(codigo[0]), sizeof(float));
@@ -53,29 +55,28 @@ void AvionVista::actualizar(string codigo){
 }
 
 void AvionVista::manejarEvento(SDL_Event evento){
-    const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
     if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
     {
         if((this->estadoAnimacion < 3)){
             switch( evento.key.keysym.sym )
             {
                 case SDLK_UP:
-                    this->cliente->enviarEvento(ARRIBA_PRESIONA);
+//                    this->cliente->enviarEvento(ARRIBA_PRESIONA);
                     break;
                 case SDLK_DOWN:
-                    this->cliente->enviarEvento(ABAJO_PRESIONA);
+//                    this->cliente->enviarEvento(ABAJO_PRESIONA);
                     break;
                 case SDLK_LEFT:
-                    this->cliente->enviarEvento(IZQUIERDA_PRESIONA);
+//                    this->cliente->enviarEvento(IZQUIERDA_PRESIONA);
                     break;
                 case SDLK_RIGHT:
-                    this->cliente->enviarEvento(DERECHA_PRESIONA);
+//                    this->cliente->enviarEvento(DERECHA_PRESIONA);
                     break;
                 case SDLK_SPACE:
-                    this->cliente->enviarEvento(PRESIONA_ESPACIO);
+//                    this->cliente->enviarEvento(PRESIONA_ESPACIO);
                     break;
                 case SDLK_RETURN:
-                    this->cliente->enviarEvento(PRESIONA_ENTER);
+//                    this->cliente->enviarEvento(PRESIONA_ENTER);
                     break;
             }
         }
@@ -85,16 +86,16 @@ void AvionVista::manejarEvento(SDL_Event evento){
         switch( evento.key.keysym.sym )
         {
             case SDLK_UP:
-                this->cliente->enviarEvento(ARRIBA_SUELTA);
+//                this->cliente->enviarEvento(ARRIBA_SUELTA);
                 break;
             case SDLK_DOWN:
-                this->cliente->enviarEvento(ABAJO_SUELTA);
+//                this->cliente->enviarEvento(ABAJO_SUELTA);
                 break;
             case SDLK_LEFT:
-                this->cliente->enviarEvento(IZQUIERDA_SUELTA);
+//                this->cliente->enviarEvento(IZQUIERDA_SUELTA);
                 break;
             case SDLK_RIGHT:
-                this->cliente->enviarEvento(DERECHA_SUELTA);
+//                this->cliente->enviarEvento(DERECHA_SUELTA);
                 break;
         }
     }
@@ -103,7 +104,7 @@ void AvionVista::manejarEvento(SDL_Event evento){
 void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
     if(!this->figura->loadFromFile(this->pathSprite, renderer, color)){
         cout << "Failed" << endl;
-        this->figura->loadFromFile((string) AvionVista::AVION_POR_DEFECTO, renderer, color);
+        this->figura->loadFromFile( AVION_POR_DEFECTO, renderer, color);
     }
 }
 

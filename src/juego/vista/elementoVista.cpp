@@ -1,6 +1,8 @@
 #include "elementoVista.hpp"
 
+
 ElementoVista::ElementoVista(float posX, float posY, string pathSprite){
+
     this->posX = posX;
     this->posY = posY;
     this->pathSprite = pathSprite;
@@ -23,7 +25,7 @@ float ElementoVista::getPosY(){
 
 void ElementoVista::cargarImagen(SDL_Renderer* renderer){
     if(!this->figura->loadFromFile(this->pathSprite, renderer)){
-        this->figura->loadFromFile((string) ElementoVista::ELEMENTO_POR_DEFECTO, renderer);
+        this->figura->loadFromFile((string) ELEMENTO_POR_DEFECTO, renderer);
     }
 }
 

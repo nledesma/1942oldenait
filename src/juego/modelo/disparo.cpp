@@ -1,6 +1,7 @@
 #include "disparo.hpp"
 
 Disparo::Disparo(float posX, float posY, float velocidad){
+
     this->posX = posX;
     this->posY = posY;
 	this->velocidad = velocidad;
@@ -21,7 +22,7 @@ float Disparo::getVelocidad(){
 int Disparo::mover(float timeStep){
 	this->posY -= this->velocidad * timeStep;
 	//If the dot went too far to the left or right
-	if( this->posY < - DISPARO_ALTO){
+	if( this->posY < - ALTO_DISPARO_COMUN){
 			//Move back
 			return 0;
 	}
@@ -45,9 +46,9 @@ float Disparo::getPosX(){
 }
 
 int Disparo::getAlto(){
-    return DISPARO_ALTO;
+    return ALTO_DISPARO_COMUN;
 }
 
 int Disparo::getAncho(){
-    return DISPARO_ANCHO;
+    return ANCHO_DISPARO_COMUN;
 }

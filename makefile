@@ -5,21 +5,27 @@ WAR = -Wall -pedantic
 CXXFLAGS = $(DEBUG) $(WAR)
 
 # Librerias.
-LIBS = -lpthread
+LIBS = -lpthread -lSDL2 -lSDL2_image
 
 # Directorios de código fuente.
 NET_PATH = src/net
 LOGGER_PATH = src/logger
 COLA_PATH = src/accesorios/colaConcurrente
+TEMPORIZADOR_PATH = src/accesorios
 XML_PATH = resources/lib
+JUEGO_MODELO_PATH = src/juego/modelo
+JUEGO_VISTA_PATH = src/juego/vista
 
 SRC = app:$(NET_PATH):$(NET_PATH)/cliente:$(NET_PATH)/servidor:\
-	$(NET_PATH)/mensaje:$(COLA_PATH):$(LOGGER_PATH):$(XML_PATH)
+	$(NET_PATH)/mensaje:$(COLA_PATH):$(LOGGER_PATH):$(XML_PATH): \
+	$(JUEGO_MODELO_PATH):$(JUEGO_VISTA_PATH):$(TEMPORIZADOR_PATH)
 vpath %.cpp $(SRC)
 
 # Compilados.
 OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
-	mensaje.o logger.o clienteParser.o colaConcurrente.o
+	mensaje.o logger.o clienteParser.o colaConcurrente.o avion.o disparo.o \
+	elemento.o escenarioJuego.o avionVista.o disparoVista.o elementoVista.o \
+	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 
@@ -29,9 +35,9 @@ CLIENTE = $(BIN)/cliente
 SERVIDOR = $(BIN)/servidor
 
 # Reglas:
-all: makeDirs $(SERVIDOR)/mainServidor $(CLIENTE)/mainCliente
+all: makeDirs $(SERVIDOR)/mainServidorJuego $(CLIENTE)/mainCliente
 
-$(SERVIDOR)/mainServidor: $(DIR_OBJS)/mainServidor.o $(OBJS)
+$(SERVIDOR)/mainServidorJuego: $(DIR_OBJS)/mainServidorJuego.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $(SERVIDOR)/servidor $(LIBS)
 
 $(CLIENTE)/mainCliente: $(DIR_OBJS)/mainCliente.o $(OBJS)
