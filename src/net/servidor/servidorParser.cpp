@@ -113,7 +113,6 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 		}
 	}
 
-	cout << "pase por aca " << eResult << endl;
 	XMLNode * pRoot = doc.FirstChildElement();
 	//Nodo Servidor
 	XMLNode * pNodoServidor = pRoot -> FirstChild();
