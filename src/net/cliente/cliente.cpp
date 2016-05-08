@@ -224,7 +224,7 @@ Cliente::~Cliente() {
 int Cliente::enviarEvento(int evento){
 	string mensaje;
 	int estadoEnvio = ESTADO_INICIAL;
-	Decodificador::push(mensaje, evento);
+	Decodificador::pushEvento(mensaje, evento);
 	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
 	string info = "Se ha enviado correctamente el evento";
 	Logger::instance()->logInfo(info);

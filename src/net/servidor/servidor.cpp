@@ -54,6 +54,7 @@ void *Servidor::cicloAceptar(void *THIS) {
     while (servidor->servidorActivo()) {
         try {
             fdCliente = servidor->aceptar();
+            // Si hay lugar se lo agrega. Sino, se le avisa que no hay lugar.
             if (servidor->hayLugar()){
                 Mensaje mensaje(T_STRING, "", "OK");
                 servidor->enviarMensaje(&mensaje, fdCliente);
@@ -66,30 +67,40 @@ void *Servidor::cicloAceptar(void *THIS) {
             if(servidor->servidorActivo()) {
                 Logger::instance()->logError(errno, "Se produjo un error en el ACCEPT");
             }
-
         }
     }
     pthread_exit(NULL);
 }
 
+void Servidor::enviarEstadoInicial(int fdCliente) {
+    cout << "enviando estado inicial" << endl;
+    enviarMensaje(Decodificador::getCodigoEstadoInicial(escenario), fdCliente);
+}
+
 void *Servidor::atenderCliente(void *arg) {
+    cout << "atendiendo un cliente" << endl;
     pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
     Servidor *servidor = parServidorCliente->first;
-    int clientfd = parServidorCliente->second;
+    int fdCliente = parServidorCliente->second;
+
+    // Antes de atenderlo se espera a que se conecten todos.
+    servidor->esperarPartida(fdCliente);
+    servidor->enviarEstadoInicial(fdCliente);
+
     int recieveResult = ESTADO_INICIAL;
     // Validar que esté conectado?
-    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR && servidor->clienteConectado(clientfd)) {
+    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR && servidor->clienteConectado(fdCliente)) {
         Mensaje *mensajeCliente;
-        recieveResult = servidor->recibirMensaje(mensajeCliente, clientfd);
+        recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
         if(recieveResult == MENSAJEOK) {
-            pair<int, Mensaje *> clienteMensaje(clientfd, mensajeCliente);
+            pair<int, Mensaje *> clienteMensaje(fdCliente, mensajeCliente);
             servidor->encolarMensaje(clienteMensaje);
         } else {
           cout << "Se ha desconectado un cliente" << endl;
         }
     }
 
-    servidor->quitarCliente(clientfd);
+    servidor->quitarCliente(fdCliente);
     pthread_exit(NULL);
 }
 
@@ -152,10 +163,12 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
 int Servidor::aceptar() {
 
     int resulAccept = accept(socketFd, 0, 0);
+    // Timeout de minuto y medio para recibir mensajes del cliente.
     struct timeval tv;
     tv.tv_sec = 90;
     tv.tv_usec = 0;
     setsockopt(resulAccept, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+
     if(this->servidorActivado) {
         Logger::instance()->logInfo("La conexión ha sido aceptada");
     }
@@ -163,13 +176,18 @@ int Servidor::aceptar() {
     if (resulAccept == -1) {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
+
     return resulAccept;
 }
 
+map<int, datosCliente>& Servidor::getClientes(){
+    return clientes;
+}
 
 void Servidor::cerrar() {
     this->desactivarServidor();
-    for (map<int, datosCliente>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++) {
+
+    for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
         int clienteActual = iterador->first;
         shutdown(clienteActual, 0);
         close(clienteActual);
@@ -214,6 +232,28 @@ void Servidor::desactivarServidor() {
 
 void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {
     this->colaDeMensajes.push(clienteMensaje);
+}
+
+// Envía al cliente la cantidad de jugadores faltantes para empezar periódicamente.
+void Servidor::esperarPartida(int fdCliente) {
+    cout << "esperando partida" << endl;
+    int clientesActuales;
+    while(hayLugar()){
+        string mensaje = "";
+
+        // Nos fijamos cuántos clientes hay conectados.
+        pthread_mutex_lock(&mutexAgregar);
+        clientesActuales = clientes.size();
+        pthread_mutex_unlock(&mutexAgregar);
+
+        Decodificador::pushCantidad(mensaje, cantidadMaximaDeClientes - clientesActuales);
+
+        // Enviamos la cantidad de clientes faltantes.
+        enviarMensaje(mensaje, fdCliente);
+        // Espera un segundo antes de mandar de nuevo.
+        sleep(1);
+    }
+    // Cuando ya no hay lugar, se termina la función.
 }
 
 void Servidor::agregarCliente(int fdCliente) {

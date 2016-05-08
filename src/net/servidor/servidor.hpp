@@ -20,6 +20,9 @@
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../codigoRespuesta.hpp"
 #include "../../juego/modelo/escenarioJuego.hpp"
+#include "../codigoRespuesta.hpp"
+#include <chrono>
+#include "../decodificador.hpp"
 
 using namespace std;
 
@@ -45,7 +48,6 @@ private:
     pthread_t cicloDesencolaciones;
     EscenarioJuego* escenario;
 
-
     void desencolarSalidaCliente(int clienteFd);
     int procesarMensaje(Mensaje *mensaje);
     bool validarTipo(int tipo, string valor);
@@ -53,6 +55,7 @@ private:
     bool validarChar(string valor);
     bool validarDouble(string valor);
 public:
+    map<int, datosCliente> & getClientes();
     bool hayLugar();
     Servidor(int port, int cantidadDeClientes);
     int getCantidadMaximaDeClientes();
@@ -66,6 +69,8 @@ public:
     void setPuerto(int unPuerto);
     void agregarCliente(int idCliente);
     void quitarCliente(int fdCliente);
+    void esperarPartida(int fdCliente);
+    void enviarEstadoInicial(int fdCliente);
     static void *atenderCliente(void *arg);
     static void *responderCliente(void *arg);
     static void *cicloAceptar(void *THIS);

@@ -16,7 +16,7 @@ private:
     template<typename T> static void push(string & str, T e);
     static string popBytes(string & codigo, int cBytes);
 public:
-    static void push(string & codigo, int evento);
+    static void pushEvento(string & codigo, int evento);
     static void push(string & codigo, string idImg);
     static void push(string & codigo, Elemento *e);
     static void push(string & codigo, Avion *a);

@@ -59,7 +59,7 @@ string Decodificador::popEscenario(string &codigo){
 }
 
 /*Push y Pop de Eventos*/
-void Decodificador::push(string & codigo, int evento){
+void Decodificador::pushEvento(string & codigo, int evento){
 	push(codigo, evento);
 }
 
