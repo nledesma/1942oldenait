@@ -1,5 +1,15 @@
 #include "escenarioJuego.hpp"
 
+void EscenarioJuego::reset(){
+	disparos.clear();
+	for(list<Avion*>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++){
+		(*itAviones)->volverEstadoInicial();
+	}
+	for(list<Elemento*>::iterator itElementos = elementos.begin(); itElementos != elementos.end(); itElementos++){
+		(*itElementos)->volverEstadoInicial();
+	}
+}
+
 EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY){
 	this->velocidadDesplazamientoY = velocidadDesplazamientoY;
     scrollingOffset = 0;
@@ -12,11 +22,32 @@ float EscenarioJuego::getOffset() {
     return offset;
 }
 
+void EscenarioJuego::agregarAvion(Avion * avion){
+	this->aviones.push_front(avion);
+}
+
+void EscenarioJuego::agregarEscenario(Escenario * escenario){
+	this->escenario.push_front(escenario);
+}
+
 void EscenarioJuego::manejarEvento(int nroAvion, char evento) {
-    // NOTE ojo, tienen que estar en orden los aviones.
-    list<Avion*>::iterator iterador = aviones.begin();
-    advance(iterador, nroAvion - 1);
-    (*iterador)->manejarEvento(evento);
+	list<Avion*>::iterator iterador = aviones.begin();
+	switch(evento){
+		case PRESIONA_R: reset();
+			break;
+		case PRESIONA_ESPACIO:
+			iterador = aviones.begin();
+			advance(iterador, nroAvion - 1);
+			disparos.push_back ((*iterador)->disparar());
+			// TODO Hay que hacerle delete a esto en algún momento.
+			break;
+		default:
+			// NOTE ojo, tienen que estar en orden los aviones.
+			iterador = aviones.begin();
+			advance(iterador, nroAvion - 1);
+			(*iterador)->manejarEvento(evento);
+			break;
+	}
 }
 
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
