@@ -117,6 +117,10 @@ list<Elemento*>& EscenarioJuego::getElementos(){
 	return this->elementos;
 }
 
+list<Disparo*>& EscenarioJuego::getDisparos(){
+	return this->disparos;
+}
+
 string EscenarioJuego::getIdSprite(){
 	return this->idSprite;
 }

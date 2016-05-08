@@ -37,6 +37,7 @@ public:
     void moverDisparos(float timeStep);
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
+    list<Disparo*>& getDisparos();
     int getAncho();
     int getAlto();
     string getIdSprite();

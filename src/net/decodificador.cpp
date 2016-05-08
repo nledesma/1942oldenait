@@ -144,3 +144,25 @@ string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
     Decodificador::pushInicialDisparo(codigo, aviones.front()->getIdSpriteDisparos());
     return codigo;
 }
+
+string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
+    string codigo;
+    Decodificador::push(codigo, escenarioJuego);
+    list<Avion*> aviones = escenarioJuego->getAviones();
+    for(list<Avion*>::iterator iterador = aviones.begin(); iterador != aviones.end(); ++iterador){
+        Avion* avion = *iterador;
+        Decodificador::push(codigo, avion);
+    }
+    list<Elemento*> elementos = escenarioJuego->getElementos();
+    for(list<Elemento*>::iterator iterador = elementos.begin(); iterador != elementos.end(); ++iterador){
+        Elemento* elemento = *iterador;
+        Decodificador::push(codigo, elemento);
+    }
+    list<Disparo*> disparos = escenarioJuego->getDisparos();
+    Decodificador::pushCantidad(codigo,  (int) disparos.size());
+    for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); ++iterador){
+        Disparo* disparo = *iterador;
+        Decodificador::push(codigo, disparo);
+    }
+    return codigo;
+}

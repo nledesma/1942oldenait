@@ -38,6 +38,7 @@ public:
     static string popDisparoInicial(string & codigo);
     static void imprimirBytes(string codigo);
     static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
+    static string getCodigoEstadoActual(EscenarioJuego * escenarioJuego);
 };
 
 #endif
