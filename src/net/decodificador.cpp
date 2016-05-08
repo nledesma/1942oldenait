@@ -106,3 +106,41 @@ void Decodificador::pushInicialDisparo(string &codigo, string idSpriteDisparo) {
     push(codigo, idSpriteDisparo);
 }
 
+void Decodificador::pushCantidad(string &codigo, int cantidad) {
+    push(codigo, cantidad);
+}
+
+string Decodificador::popAvionInicial(string & codigo){
+    return popBytes(codigo, 2*sizeof(float)) + popIdImg(codigo);
+}
+
+string Decodificador::popElementoInicial(string & codigo){
+    return popBytes(codigo, 2*sizeof(float)) + popIdImg(codigo);
+}
+
+string Decodificador::popEscenarioInicial(string & codigo){
+    return popBytes(codigo, 2*sizeof(int)) + popIdImg(codigo);
+}
+
+string Decodificador::popDisparoInicial(string &codigo) {
+    return popIdImg(codigo);
+}
+
+string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
+    string codigo;
+    Decodificador::pushInicial(codigo, escenarioJuego);
+    list<Avion*> aviones = escenarioJuego->getAviones();
+    Decodificador::pushCantidad(codigo, (int) aviones.size());
+    for(list<Avion*>::iterator iterador = aviones.begin(); iterador != aviones.end(); ++iterador){
+        Avion* avion = *iterador;
+        Decodificador::pushInicial(codigo, avion);
+    }
+    list<Elemento*> elementos = escenarioJuego->getElementos();
+    Decodificador::pushCantidad(codigo, (int) elementos.size());
+    for(list<Elemento*>::iterator iterador = elementos.begin(); iterador != elementos.end(); ++iterador){
+        Elemento* elemento = *iterador;
+        Decodificador::pushInicial(codigo, elemento);
+    }
+    Decodificador::pushInicialDisparo(codigo, aviones.front()->getIdSpriteDisparos());
+    return codigo;
+}

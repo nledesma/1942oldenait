@@ -25,13 +25,19 @@ public:
     static void pushInicial(string & codigo, Elemento *e);
     static void pushInicial(string & codigo, EscenarioJuego *e);
     static void pushInicialDisparo(string & codigo, string idSpriteDisparo);
+    static void pushCantidad(string & codigo, int cantidad);
     /* Devuelve un par con el id y el código con el nuevo estado */
     static string popIdImg(string & codigo);
     static string popElemento(string & codigo);
     static string popAvion(string & codigo);
     static string popEscenario(string & codigo);
     static string popDisparo(string & codigo);
+    static string popAvionInicial(string & codigo);
+    static string popElementoInicial(string & codigo);
+    static string popEscenarioInicial(string & codigo);
+    static string popDisparoInicial(string & codigo);
     static void imprimirBytes(string codigo);
+    static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
 };
 
 #endif

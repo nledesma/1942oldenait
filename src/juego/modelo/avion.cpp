@@ -142,3 +142,7 @@ void Avion::volverEstadoInicial(){
 string Avion::getIdSprite(){
     return this->idSprite;
 }
+
+string Avion::getIdSpriteDisparos() {
+    return this->idSpriteDisparos;
+}
