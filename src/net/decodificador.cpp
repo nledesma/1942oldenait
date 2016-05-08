@@ -58,6 +58,15 @@ string Decodificador::popEscenario(string &codigo){
     return popBytes(codigo, sizeof(float));
 }
 
+/*Push y Pop de Eventos*/
+void Decodificador::push(string & codigo, int evento){
+	push(codigo, evento);
+}
+
+string Decodificador::popEvento(string & codigo){
+    return popBytes(codigo, codigo.size());
+}
+
 /* Generales para cualquier tipo */
 template<typename T> void Decodificador::push(string & str, T e) {
     int n = sizeof(e);

@@ -48,5 +48,6 @@ public:
     int recibirMensaje(Mensaje* &mensaje);
     void iniciarEscenario();
     void crearEscenario(char * infoEscenario);
+    void actualizarComponentes(string mensaje);
 };
 #endif // CLIENTE_H

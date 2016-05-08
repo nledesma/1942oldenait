@@ -16,7 +16,8 @@ private:
     template<typename T> static void push(string & str, T e);
     static string popBytes(string & codigo, int cBytes);
 public:
-    static void push (string & codigo, string idImg);
+    static void push(string & codigo, int evento);
+    static void push(string & codigo, string idImg);
     static void push(string & codigo, Elemento *e);
     static void push(string & codigo, Avion *a);
     static void push(string & codigo, Disparo *d);
@@ -36,6 +37,7 @@ public:
     static string popElementoInicial(string & codigo);
     static string popEscenarioInicial(string & codigo);
     static string popDisparoInicial(string & codigo);
+    static string popEvento(string & codigo);
     static void imprimirBytes(string codigo);
     static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
     static string getCodigoEstadoActual(EscenarioJuego * escenarioJuego);
