@@ -1,3 +1,6 @@
+#ifndef TEMPORIZADOR_HPP
+#define TEMPORIZADOR_HPP
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -30,3 +33,5 @@ private:
   bool iniciado;
 
 };
+
+#endif

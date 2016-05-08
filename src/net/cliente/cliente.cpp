@@ -174,6 +174,28 @@ int Cliente::recibirMensaje(Mensaje* &mensaje) {
 	}
 }
 
+// int Cliente::recibirMensaje(char * mensaje){
+// 	int result = this->setTimeOut(3);
+// 	if (result < 0){
+// 		string msj;
+// 		ostringstream msjInfo;
+// 		msjInfo << this->socketFd;
+// 		msj = msjInfo.str();
+// 		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + msj);
+// 	}
+// 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
+// 	if (estadoRecepcion == PEER_DESCONECTADO) {
+// 		this->cerrarSocketFd();
+// 		cliente_conectado = false;
+// 		return estadoRecepcion;
+// 	} else if (estadoRecepcion == PEER_ERROR){
+// 		this->cerrar();
+// 		return estadoRecepcion;
+// 	} else {
+// 		return MENSAJEOK;
+// 	}
+// }
+
 bool Cliente::hayLugar(){
 	Mensaje * mensajeRecibido;
 	GameSocket::recibirMensaje(mensajeRecibido, socketFd);
@@ -189,3 +211,38 @@ bool Cliente::hayLugar(){
 Cliente::~Cliente() {
 	while(!this->listaMensajes.empty()) delete this->listaMensajes.front(), this->listaMensajes.pop_front();
 }
+
+// void Cliente::iniciarEscenario(string nombre){
+// 	bool escenarioIniciado = false;
+// 	//TODO enviar nombre
+// 	string mensajeRespuesta;
+// 	this->enviarEvento(EVENTO_VACIO);
+// 	this->recibirMensaje(&mensajeRespuesta);
+// 	//this->crearEscenario(mensajeRespuesta);
+// }
+
+// int Cliente::enviarEvento(int envento){
+// 	estadoEnvio = GameSocket::enviarMensaje(evento, sizeof(int), this->socketFd);
+// 	string info = "Se ha enviado correctamente el evento";
+// 	Logger::instance()->logInfo(info);
+// 	if (!validarEstadoConexion(estadoEnvio)){
+// 		this->cerrar();
+// 	}
+// 	return estadoEnvio;
+// }
+
+// void Cliente::actualizarComponentes(string mensaje){
+// 	string escenario = Decodificador::popEscenario(&mensaje);
+// 	escenarioVista->setScrollingOffset(stof(escenario));
+// 	for(int i = 0; i < escenarioVista->getDisparos().size(); i++){
+// 		pair<int, string> avion = Decodificador::popAvion(&mensaje);
+// 		string avionPosX = avion.second.substr(0, sizeof(float) -1);
+// 		string avionPosY = avion.second.substr(sizeof(float), avion.second.size());
+// 		escenarioVista->getDisparos().get(i).setPosX(stof(avionPosX));
+// 		escenarioVista->getDisparos().get(i).setPosY(stof(avionPosY));
+// 	}
+// 	for(int i = 0; i < escenarioVista->getElementos().size(), i++){
+// 		string elemento = Decodificador::popElemento(&mensaje);
+// 		string posX = el
+// 	}
+// }

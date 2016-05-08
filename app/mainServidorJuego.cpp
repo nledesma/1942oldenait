@@ -5,7 +5,7 @@
 #include <stdio.h>
 using namespace std;
 
-#define DEFAULT_XML "resources/xml/nivel_1.xml"
+#define DEFAULT_XML "../../resources/xml/nivel_1.xml"
 
 
 void* apagarServidor(void* servidor){
