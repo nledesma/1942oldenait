@@ -21,3 +21,8 @@ float Elemento::getPosY(){
 float Elemento::getVelocidadY() {
     return this->velocidadY;
 }
+
+void Elemento::volverEstadoInicial(){
+    this->posX = posXInicial;
+    this->posY = posYInicial;
+}

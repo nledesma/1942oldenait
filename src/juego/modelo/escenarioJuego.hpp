@@ -23,6 +23,8 @@ public:
     EscenarioJuego(float velocidadDesplazamientoY);
     ~EscenarioJuego();
     float getOffset();
+    void agregarAvion(Avion * avion);
+    void agregarElemento(Elemento * elemento);
     void manejarEvento(int nroAvion, char evento);
     void actualizarScrollingOffset(float timeStep);
     void mainLoop();

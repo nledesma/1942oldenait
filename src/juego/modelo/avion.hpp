@@ -24,6 +24,8 @@ private:
     int estadoAnimacion;
     float velocidad;
     int contador;
+    float posXInicial;
+    float posYInicial;
 
 public:
     static const int AVION_ANCHO = ANCHO_AVION_COMUN;
@@ -72,6 +74,8 @@ public:
     int getAltoDisparo();
 
     void loop();
+
+    void volverEstadoInicial();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

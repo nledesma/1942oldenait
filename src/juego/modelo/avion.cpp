@@ -5,6 +5,8 @@ using namespace std;
 Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos){
     this->posX = posX;
     this->posY = posY;
+    this->posXInicial = posX;
+    this->posYInicial = posY;
     this->velocidadX = 0;
     this->velocidadY = 0;
     this->velocidad = velocidad;
@@ -127,4 +129,9 @@ int Avion::getEstadoAnimacion(){
 int Avion::disparar(){
     //Por ahora sale con la misma velocidad y posición que el avión.
     return new Disparo(posX, posY, velocidad);
+}
+
+void Avion::volverEstadoInicial(){
+    this->posX = this->posXInicial;
+    this->posY = this->posYInicial;
 }

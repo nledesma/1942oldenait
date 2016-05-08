@@ -1,7 +1,13 @@
 #include "escenarioJuego.hpp"
 
 void EscenarioJuego::reset(){
-	// TODO
+	disparos.clear();
+	for(list<Avion*>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++){
+		(*itAviones)->volverEstadoInicial();
+	}
+	for(list<Elemento*>::iterator itElementos = elementos.begin(); itElementos != elementos.end(); itElementos++){
+		(*itElementos)->volverEstadoInicial();
+	}
 }
 
 EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY){
@@ -14,6 +20,14 @@ EscenarioJuego::~EscenarioJuego(){}
 
 float EscenarioJuego::getOffset() {
     return offset;
+}
+
+void EscenarioJuego::agregarAvion(Avion * avion){
+	this->aviones.push_front(avion);
+}
+
+void EscenarioJuego::agregarEscenario(Escenario * escenario){
+	this->escenario.push_front(escenario);
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, char evento) {

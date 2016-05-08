@@ -9,12 +9,15 @@ private:
     float posX;
     float posY;
     float velocidadY;
+    float posXInicial;
+    float posYInicial;
 public:
     Elemento(float posX, float posY, float velocidadDesplazamientoY);
     void mover(float timeStep);
     float getPosX();
     float getPosY();
     float getVelocidadY();
+    void volverEstadoInicial();
 };
 
 
