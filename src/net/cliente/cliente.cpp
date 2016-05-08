@@ -221,28 +221,39 @@ Cliente::~Cliente() {
 // 	//this->crearEscenario(mensajeRespuesta);
 // }
 
-// int Cliente::enviarEvento(int envento){
-// 	estadoEnvio = GameSocket::enviarMensaje(evento, sizeof(int), this->socketFd);
-// 	string info = "Se ha enviado correctamente el evento";
-// 	Logger::instance()->logInfo(info);
-// 	if (!validarEstadoConexion(estadoEnvio)){
-// 		this->cerrar();
-// 	}
-// 	return estadoEnvio;
-// }
+int Cliente::enviarEvento(int evento){
+	string mensaje;
+	int estadoEnvio = ESTADO_INICIAL;
+	Decodificador::push(mensaje, evento);
+	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
+	string info = "Se ha enviado correctamente el evento";
+	Logger::instance()->logInfo(info);
+	if (!validarEstadoConexion(estadoEnvio)){
+		this->cerrar();
+	}
+	return estadoEnvio;
+}
 
-// void Cliente::actualizarComponentes(string mensaje){
-// 	string escenario = Decodificador::popEscenario(&mensaje);
-// 	escenarioVista->setScrollingOffset(stof(escenario));
-// 	for(int i = 0; i < escenarioVista->getDisparos().size(); i++){
-// 		pair<int, string> avion = Decodificador::popAvion(&mensaje);
-// 		string avionPosX = avion.second.substr(0, sizeof(float) -1);
-// 		string avionPosY = avion.second.substr(sizeof(float), avion.second.size());
-// 		escenarioVista->getDisparos().get(i).setPosX(stof(avionPosX));
-// 		escenarioVista->getDisparos().get(i).setPosY(stof(avionPosY));
-// 	}
-// 	for(int i = 0; i < escenarioVista->getElementos().size(), i++){
-// 		string elemento = Decodificador::popElemento(&mensaje);
-// 		string posX = el
-// 	}
-// }
+void Cliente::actualizarComponentes(string mensaje){
+	string escenario = Decodificador::popEscenario(mensaje);
+	escenarioVista->actualizar(escenario);
+	list<AvionVista*>::iterator itAvion;
+	for(itAvion = escenarioVista->getAviones().begin(); itAvion != escenarioVista->getAviones().end(); itAvion++){
+		string avion = Decodificador::popAvion(mensaje);
+		(*itAvion)->actualizar(avion);
+	}
+	list<ElementoVista*>::iterator itElemento;
+	for(itElemento = escenarioVista->getElementos().begin(); itElemento != escenarioVista->getElementos().end(); itElemento++){
+		string elemento = Decodificador::popElemento(mensaje);
+		(*itElemento)->actualizar(elemento);
+	}
+	list<disparo> disparos;
+	while(mensaje != ""){
+		disparo unDisparo;
+		unDisparo.posX = stof(mensaje.substr(0, sizeof(float)));
+		unDisparo.posY = stof(mensaje.substr(sizeof(float)+1, sizeof(float) * 2));
+		mensaje.erase(0, sizeof(float) * 2);
+		disparos.push_front(unDisparo);
+	}
+	escenarioVista->setDisparos(disparos);
+}

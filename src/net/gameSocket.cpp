@@ -41,18 +41,14 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
 }
 
 
-int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor) {
-
+int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
     int bytesRecibidos = 0;
     int bytesActuales = ESTADO_INICIAL;
-
     while (bytesRecibidos < longitudMensaje && validarEstadoConexion(bytesActuales)) {
         // Agrego offsets si es que no se envía todo el mensaje
         bytesActuales = recv(fdEmisor, pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos,
                              0); // Recv retorna la cantidad de bytes recibidos.
-
         bytesRecibidos += bytesActuales;
-
     }
     if (bytesActuales == PEER_ERROR) {
         Logger::instance()->logError(errno,"Error al recibir bytes (socket).");
@@ -87,16 +83,18 @@ int GameSocket::enviarMensaje(Mensaje *mensaje, int fdReceptor) {
     return enviarBytes((char *) pMensaje, 9 + mensaje->lengthValor() + mensaje->lengthId(), fdReceptor);
 }
 
-// int GameSocket::enviarMensaje(char * mensaje, int tamanioMensaje ,int fdReceptor) {
-//     return enviarBytes((char *) mensaje, tamanioMensaje, fdReceptor);
-// }
+int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
+    string longitudMensaje;
+    Decodificador::pushCantidad(longitudMensaje, mensaje.size());
+    mensaje = longitudMensaje + mensaje;
+    return enviarBytes((char *) mensaje.c_str(), mensaje.size(), fdReceptor);
+}
 
 int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     char pInfoMensaje[LONG_INFO_MENSAJE];
     int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
     if (resultado == MENSAJEOK) {
         infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
-
         char *pMensaje = new char[datos.longitudId + datos.longitudValor];
         if (recibirBytes(pMensaje, datos.longitudId + datos.longitudValor, fdEmisor) == MENSAJEOK) {
             mensaje = new Mensaje(datos, pMensaje);
@@ -117,36 +115,33 @@ int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
     return -1;
 }
 
-// //TODO reever!!!!
-// int GameSocket::recibirMensaje(string &mensaje, int fdEmisor){
-//     char pInfoMensaje[sizeof(int)];
-//     int resultado = recibirBytes(pInfoMensaje, sizeof(int), fdEmisor);
-//     if (resultado == MENSAJEOK){
-//         int longMensaje = boost::lexical_cast<int>(pInfoMensaje);
-//         if(longMensaje == 0){
-//             mensaje == NULL;
-//             return MENSAJEOK;
-//         }
-//         char *pMensaje = new char[longMensaje];
-//         if (recibirBytes(pMensaje, longMensaje, fdEmisor) == MENSAJEOK) {
-//             mensaje(pMensaje);
-//             delete[] pMensaje;
-//             return MENSAJEOK;
-//         } else {
-//             stringstream ss;
-//             ss << "Error al recibir bytes";
-//             cout << ss.str() << endl;
-//             Logger::instance()->logInfo(ss.str());
-//             delete[] pMensaje;
-//         }
-//     } else if (resultado == PEER_DESCONECTADO) {
-//         return PEER_DESCONECTADO;
-//     } else {
-//         Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
-//     }
-//     return -1;
-//     }
-// }
+//TODO probar!!!!
+int GameSocket::recibirMensaje(string & mensaje, int fdEmisor){
+    char longMensaje[sizeof(int)];
+    int resultado = recibirBytes(longMensaje, sizeof(int), fdEmisor);
+    if (resultado == MENSAJEOK){
+        int longMensajeInt = stoi(longMensaje);
+        char * pMensaje = new char[longMensajeInt];
+        if (recibirBytes(pMensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
+            string mensajeString(pMensaje, longMensajeInt);
+            mensaje = mensajeString;
+            delete[] pMensaje;
+            return MENSAJEOK;
+        } else {
+            stringstream ss;
+            ss << "Error al recibir bytes";
+            cout << ss.str() << endl;
+            Logger::instance()->logInfo(ss.str());
+            delete[] pMensaje;
+        }
+    } else if (resultado == PEER_DESCONECTADO) {
+        return PEER_DESCONECTADO;
+    } else {
+        Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
+    }
+    return -1;
+}
+
 
 bool GameSocket::validarEstadoConexion(int estadoConexion) {
     if (estadoConexion != PEER_DESCONECTADO && estadoConexion != PEER_ERROR)

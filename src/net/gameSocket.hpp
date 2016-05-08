@@ -10,6 +10,7 @@
 #include <sstream>
 #include "mensaje/mensaje.hpp"
 #include "../logger/logger.hpp"
+#include "decodificador.hpp"
 #include "../accesorios/colaConcurrente/colaConcurrente.hpp"
 
 using namespace std;
@@ -24,8 +25,9 @@ protected:
   int enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor);
   int recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor);
   int enviarMensaje(Mensaje * mensaje, int fdReceptor);
-  int enviarMensaje(char * mensaje, int fdReceptor);
+  int enviarMensaje(string mensaje,int fdReceptor);
   int recibirMensaje(Mensaje *&mensaje, int fdEmisor);
+  int recibirMensaje(string &mensaje, int fdEmisor);
   int recibirMensaje(char * mensaje, int fdEmisor);
   int setTimeOut(int time);
   void cerrarSocket();
