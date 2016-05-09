@@ -214,7 +214,8 @@ Cliente::~Cliente() {
 }
 
 void Cliente::iniciarEscenario(){
-	cout << "iniciando escenario" << endl;
+	cout << "Iniciando escenario" << endl;
+	this->enviarMensaje(this->getAlias(), this->socketFd);
 	string mensajeRespuesta;
 	do {
 		this->recibirMensaje(mensajeRespuesta);
@@ -251,4 +252,12 @@ int Cliente::enviarEvento(int evento){
 
 void Cliente::actualizarComponentes(string mensaje){
 	this->escenarioVista->actualizarComponentes(mensaje);
+}
+
+void Cliente::setAlias(string alias){
+	this->alias = alias;
+}
+
+string Cliente::getAlias(){
+	return this->alias;
 }

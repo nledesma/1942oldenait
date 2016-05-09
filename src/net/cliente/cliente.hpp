@@ -29,6 +29,7 @@ private:
     Mensaje * encontrarMensajePorId(string idMensaje);
     bool hayLugar();
     EscenarioVista * escenarioVista;
+    string alias;
 
 public:
     Cliente(string ip, int port);
@@ -41,6 +42,8 @@ public:
     void cerrar();
     string getIP();
     int getPort();
+    void setAlias(string alias);
+    string getAlias();
     int enviarEvento(int evento);
     int enviarMensajePorId(string idMensaje);
     int ciclarMensajes(int milisegundos);
