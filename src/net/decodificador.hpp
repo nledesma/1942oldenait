@@ -38,6 +38,9 @@ public:
     static string popEscenarioInicial(string & codigo);
     static string popDisparoInicial(string & codigo);
     static string popEvento(string & codigo);
+    static string popCantidad(string & codigo);
+    static int stringToInt(string codigo);
+    static float stringToFloat(string codigo);
     static void imprimirBytes(string codigo);
     static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
     static string getCodigoEstadoActual(EscenarioJuego * escenarioJuego);

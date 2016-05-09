@@ -64,7 +64,11 @@ void Decodificador::pushEvento(string & codigo, int evento){
 }
 
 string Decodificador::popEvento(string & codigo){
-    return popBytes(codigo, codigo.size());
+    return popBytes(codigo, sizeof(int));
+}
+
+string Decodificador::popCantidad(string & codigo){
+    return popBytes(codigo, sizeof(int));
 }
 
 /* Generales para cualquier tipo */
@@ -91,6 +95,18 @@ void Decodificador::imprimirBytes(string codigo) {
         cout << (int) codigo[i] << " ";
     }
     cout << endl;
+}
+
+int Decodificador::stringToInt(string codigo){
+    int valorConvertido;
+    memcpy((void*)&valorConvertido, (void*)&codigo[0], sizeof(int));
+    return valorConvertido;
+}
+
+float Decodificador::stringToFloat(string codigo){
+    float valorConvertido;
+    memcpy((void*)&valorConvertido, (void*)&codigo[0], sizeof(float));
+    return valorConvertido;
 }
 
 void Decodificador::pushInicial(string &codigo, Avion *a) {
