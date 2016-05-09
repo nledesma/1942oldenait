@@ -218,14 +218,10 @@ void Cliente::iniciarEscenario(){
 	int cantClientes;
 	do {
 		this->recibirMensaje(mensajeRespuesta);
-		if (mensajeRespuesta.length() == sizeof(int)){
-			cantClientes = Decodificador::popInt(mensajeRespuesta);
-			cout << "Clientes a conectarse : " << cantClientes << endl;
-		}
 	} while(mensajeRespuesta.length() == sizeof(int));
-
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
+	//this->escenarioVista->mainLoop();
 }
 
 
