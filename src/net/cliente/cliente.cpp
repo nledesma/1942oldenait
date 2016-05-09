@@ -58,6 +58,10 @@ int Cliente::conectar(){
 	} catch(runtime_error &e){
 		Logger::instance()->logError(errno,"Se produjo un error en el connect");
 	}
+
+	// Antes de seguir hacemos la etapa inicial.
+	iniciarEscenario();
+
 	return conexion;
 }
 
@@ -197,15 +201,11 @@ int Cliente::recibirMensaje(string & mensaje){
 }
 
 bool Cliente::hayLugar(){
-	Mensaje * mensajeRecibido;
-	GameSocket::recibirMensaje(mensajeRecibido, socketFd);
-	if (mensajeRecibido->getValor() == "OK"){
-		delete mensajeRecibido;
-		return true;
-	} else {
-		delete mensajeRecibido;
-		return false;
-	}
+	cout << "inicia HAYLUGAR" << endl;
+	string mensaje = "";
+	GameSocket::recibirMensaje(mensaje, socketFd);
+	cout << "fin HAYLUGAR" << endl;
+	return (mensaje == "OK");
 }
 
 Cliente::~Cliente() {
@@ -213,14 +213,18 @@ Cliente::~Cliente() {
 }
 
 void Cliente::iniciarEscenario(){
+	cout << "iniciando escenario" << endl;
 	string mensajeRespuesta;
 	int cantClientes;
-	do{
+	do {
 		this->recibirMensaje(mensajeRespuesta);
-		cantClientes = Decodificador::popInt(mensajeRespuesta);
-		cout << "Clientes a conectarse : " << cantClientes << endl;
-	} while(cantClientes > 0);
-	this->recibirMensaje(mensajeRespuesta);
+		if (mensajeRespuesta.length() == sizeof(int)){
+			cantClientes = Decodificador::popInt(mensajeRespuesta);
+			cout << "Clientes a conectarse : " << cantClientes << endl;
+		}
+	} while(mensajeRespuesta.length() == sizeof(int));
+
+	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 }
 

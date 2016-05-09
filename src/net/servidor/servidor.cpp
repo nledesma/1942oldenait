@@ -9,8 +9,9 @@ Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     } catch (runtime_error &e) {
         Logger::instance()->logError(errno, "Se produjo un error en el BIND");
     }
+    // ?
     setCantidadMaximaDeClientes(cantidadDeClientes);
-    desactivarServidor();
+    // desactivarServidor();
 }
 
 void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
@@ -22,6 +23,7 @@ int Servidor::getCantidadMaximaDeClientes() {
 }
 
 void Servidor::inicializar(int port) {
+    cout << port << endl;
     setPuerto(port);
     this->setAddress(port); // Se setea el puerto en addr_info
     // Se vincula el socket al puerto indicado en addr_info
@@ -38,6 +40,7 @@ void Servidor::setAddress(int port) {
 }
 
 void Servidor::pasivar() {
+
     int resultadoListen = listen(this->socketFd, this->cantidadMaximaDeClientes);
     cout << "Esperando conexión ... " << endl;
     if (resultadoListen == -1) {
@@ -159,7 +162,6 @@ int Servidor::procesarMensaje(Mensaje* mensaje){
 }
 
 int Servidor::aceptar() {
-
     int resulAccept = accept(socketFd, 0, 0);
     // Timeout de minuto y medio para recibir mensajes del cliente.
     struct timeval tv;
@@ -379,25 +381,22 @@ void Servidor::setEscenario(EscenarioJuego* unEscenario){
 }
 
 void Servidor::imprimirDatosInicialesEscenario(){
-    string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
-    Decodificador::imprimirBytes(codigo);
-    string cosasEscenario = Decodificador::popEscenarioInicial(codigo);
-    cout << "Ancho: " <<Decodificador::popInt(cosasEscenario)<< endl;
-    cout << "Alto: " <<Decodificador::popInt(cosasEscenario)<< endl;
-    cout << "Sprite: " <<cosasEscenario<< endl;
-
-    int cantidadAviones = Decodificador::popInt(codigo);
-    cout << "Cantidad de aviones: " << cantidadAviones << endl;
-
-    string cosasAvion;
-    for (int i = 0; i < cantidadAviones; i ++){
-        cosasAvion = Decodificador::popAvionInicial(codigo);
-        cout << "Avion pos x: " << Decodificador::popFloat(cosasAvion) << endl;
-        cout << "Avion pos y: " << Decodificador::popFloat(cosasAvion) << endl;
-        cout << "Sprite: " <<cosasAvion<< endl;
-    }
-
-
-
-
+    // string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
+    // Decodificador::imprimirBytes(codigo);
+    // string cosasEscenario = Decodificador::popEscenarioInicial(codigo);
+    // cout << "Ancho: " <<Decodificador::popInt(cosasEscenario)<< endl;
+    // cout << "Alto: " <<Decodificador::popInt(cosasEscenario)<< endl;
+    // cout << "Sprite: " <<cosasEscenario<< endl;
+    //
+    // int cantidadAviones = Decodificador::popInt(codigo);
+    // cout << "Cantidad de aviones: " << cantidadAviones << endl;
+    //
+    // string cosasAvion;
+    // for (int i = 0; i < cantidadAviones; i ++){
+    //     cosasAvion = Decodificador::popAvionInicial(codigo);
+    //     cout << "Avion pos x: " << Decodificador::popFloat(cosasAvion) << endl;
+    //     cout << "Avion pos y: " << Decodificador::popFloat(cosasAvion) << endl;
+    //     cout << "Sprite: " <<cosasAvion<< endl;
+    // }
+    //
 }
