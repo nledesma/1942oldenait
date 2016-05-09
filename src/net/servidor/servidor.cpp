@@ -379,3 +379,9 @@ EscenarioJuego* Servidor::getEscenario(){
 void Servidor::setEscenario(EscenarioJuego* unEscenario){
     this->escenario = unEscenario;
 }
+
+void Servidor::imprimirDatosInicialesEscenario(){
+    string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
+    Decodificador::imprimirBytes(codigo);
+    string cosasEscenario = Decodificador::popEscenarioInicial(codigo);
+}

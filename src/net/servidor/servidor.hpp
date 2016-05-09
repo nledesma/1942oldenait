@@ -86,6 +86,7 @@ public:
     void iniciarEscenario();
     EscenarioJuego* getEscenario();
     void setEscenario(EscenarioJuego* unEscenario);
+    void imprimirDatosInicialesEscenario();
 };
 
 #endif

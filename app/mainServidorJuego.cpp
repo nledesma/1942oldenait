@@ -62,6 +62,7 @@ int main(int argc, char *argv[]){
     }catch(runtime_error &e){
         Logger::instance()->logError(errno,"Se produjo un error en el listen");
     }
+    servidor->imprimirDatosInicialesEscenario();
 
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
