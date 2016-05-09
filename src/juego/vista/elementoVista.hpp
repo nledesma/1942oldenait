@@ -25,6 +25,7 @@ public:
     void actualizar(string codigo);
     void render(SDL_Renderer* renderer);
     void cargarImagen(SDL_Renderer* renderer);
+    void cerrar();
     float getPosX();
     float getPosY();
 

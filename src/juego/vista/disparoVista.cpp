@@ -19,3 +19,7 @@ void DisparoVista::cargarImagen(SDL_Renderer * renderer){
 void DisparoVista::render(float posX, float posY, SDL_Renderer * renderer){
     this->figuraDisparo->render((int)posX, (int)posY, renderer, NULL);
 }
+
+void DisparoVista::cerrar() {
+    this->figuraDisparo->free();
+}

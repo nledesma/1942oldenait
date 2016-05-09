@@ -24,5 +24,6 @@ public:
 
     void cargarImagen(SDL_Renderer * renderer);
     void render(float posX, float posY, SDL_Renderer * renderer);
+    void cerrar();
 };
 #endif

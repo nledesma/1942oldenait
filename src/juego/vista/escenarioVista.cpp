@@ -60,12 +60,19 @@ int EscenarioVista::mainLoop(){
     SDL_RenderPresent(this->ventana->getVentanaRenderer());
     this->cargarVistasAviones();
     this->cargarVistasElementos();
-    SDL_Event e;
     Temporizador temporizador;
     SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear(ventana->getVentanaRenderer());
     this->setActivo();
+    SDL_Event e;
     while(this->activo){
+        while( SDL_PollEvent( &e ) != 0 ){
+            if( e.type == SDL_QUIT )
+            {
+                this->setInactivo();
+            }
+            cout << e.key.keysym.sym << endl;
+        }
         temporizador.comenzar();
         pthread_mutex_lock(&mutexActualizar);
         this->renderizarFondo(this->scrollingOffset);
@@ -89,6 +96,21 @@ void EscenarioVista::setInactivo(){
     this->activo = false;
 }
 
+void EscenarioVista::cerrar(){
+    this->fondo->free();
+
+    for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
+        AvionVista* avionVista = *iterador;
+        avionVista->cerrar();
+    }
+
+    for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
+        ElementoVista* elementoVista = *iterador;
+        elementoVista->cerrar();
+    }
+    this->disparoVista->cerrar();
+    this->ventana->cerrar();
+}
 
 void EscenarioVista::setDisparos(list<disparo> disparosParam){
     pthread_mutex_lock(&this->mutexDisparos);
