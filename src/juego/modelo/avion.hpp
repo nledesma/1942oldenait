@@ -35,7 +35,7 @@ public:
 
     ~Avion();
 
-    void manejarEvento(char evento);
+    void manejarEvento(int evento);
 
     Disparo* disparar();
 

@@ -21,7 +21,7 @@ Avion::~Avion(){
 
 }
 
-void Avion::manejarEvento(char evento){
+void Avion::manejarEvento(int evento){
     /* Se realizan acciones de avión si el mismo no esta loopeando */
     if((this->estadoAnimacion < LOOP_ETAPA_1)) {
         switch (evento) {

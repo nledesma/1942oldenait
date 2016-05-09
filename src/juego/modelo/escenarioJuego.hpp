@@ -24,7 +24,7 @@ private:
     int ancho;
     string idSprite;
     pthread_t mainLoopThread;
-    ColaConcurrente<pair<int, char>> colaEventos;
+    ColaConcurrente<pair<int, int>> colaEventos;
 public:
     void reset();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite);
@@ -33,7 +33,7 @@ public:
     void agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
     void agregarElemento(float posX, float posY, string idSprite);
     void manejarProximoEvento();
-    void manejarEvento(int nroAvion, char evento);
+    void manejarEvento(int nroAvion, int evento);
     void actualizarScrollingOffset(float timeStep);
     void mainLoop();
     static void *mainLoop_th(void* THIS);

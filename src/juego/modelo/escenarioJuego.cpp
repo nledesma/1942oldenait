@@ -35,7 +35,7 @@ void EscenarioJuego::agregarElemento(float posX, float posY, string idSprite){
 	this->elementos.push_back(elemento);
 }
 
-void EscenarioJuego::manejarEvento(int nroAvion, char evento) {
+void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 	list<Avion*>::iterator iterador = aviones.begin();
 	switch(evento){
 		case PRESIONA_R: reset();
@@ -84,7 +84,7 @@ void EscenarioJuego::mainLoop(){
 
 void EscenarioJuego::manejarProximoEvento(){
 	if (!this->colaEventos.vacia()){
-		pair <int, char> evento = this->colaEventos.pop();
+		pair <int, int> evento = this->colaEventos.pop();
 		this->manejarEvento(evento.first, evento.second);
 	}
 }

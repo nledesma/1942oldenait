@@ -51,5 +51,5 @@ ColaConcurrente<T>::~ColaConcurrente<T>(){}
 
 /* Explicito cuáles tipos pueden instanciarse */
 template class ColaConcurrente<std::pair<int, Mensaje*> >;
-template class ColaConcurrente<std::pair<int, char> >;
+template class ColaConcurrente<std::pair<int, int> >;
 template class ColaConcurrente<Mensaje*>;
