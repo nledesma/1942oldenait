@@ -5,6 +5,7 @@
 #include <cstring>
 #include <SDL2/SDL.h>
 #include "figura.hpp"
+#include "../../net/decodificador.hpp"
 
 #define ELEMENTO_POR_DEFECTO "../../../resources/img/planeta.bmp"
 
@@ -15,8 +16,8 @@ class ElementoVista {
     float posY;
     string pathSprite;
     Figura* figura;
-
 public:
+    ElementoVista(string codigo);
     ElementoVista(float posX, float posY, string pathSprite);
     void actualizar(string codigo);
     void render(SDL_Renderer* renderer);
