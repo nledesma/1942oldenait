@@ -1,5 +1,14 @@
 #include "escenarioJuego.hpp"
 
+EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite){
+	this->velocidadDesplazamientoY = velocidadDesplazamientoY;
+	scrollingOffset = 0;
+	posicionY = 0;
+	this->idSprite = idSprite;
+	this->ancho = ancho;
+	this->alto = alto;
+}
+
 void EscenarioJuego::reset(){
 	disparos.clear();
 	for(list<Avion*>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++){
@@ -8,15 +17,6 @@ void EscenarioJuego::reset(){
 	for(list<Elemento*>::iterator itElementos = elementos.begin(); itElementos != elementos.end(); itElementos++){
 		(*itElementos)->volverEstadoInicial();
 	}
-}
-
-EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite){
-	this->velocidadDesplazamientoY = velocidadDesplazamientoY;
-    scrollingOffset = 0;
-    posicionY = 0;
-	this->idSprite = idSprite;
-	this->ancho = ancho;
-	this->alto = alto;
 }
 
 EscenarioJuego::~EscenarioJuego(){}
@@ -72,13 +72,21 @@ void* EscenarioJuego::mainLoop_th(void* THIS){
         escenario->moverAviones(timeStep);
 		escenario->moverElementos(timeStep);
         escenario->moverDisparos(timeStep);
+		escenario->manejarProximoEvento();
     }
 
     pthread_exit(NULL);
 }
 
 void EscenarioJuego::mainLoop(){
-    pthread_create(&mainLoopThread, NULL, mainLoop_th, (void*)this);
+	pthread_create(&mainLoopThread, NULL, mainLoop_th, (void*)this);
+}
+
+void EscenarioJuego::manejarProximoEvento(){
+	if (!this->colaEventos.vacia()){
+		pair <int, char> evento = this->colaEventos.pop();
+		this->manejarEvento(evento.first, evento.second);
+	}
 }
 
 void EscenarioJuego::moverAviones(float timeStep){

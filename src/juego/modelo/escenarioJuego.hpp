@@ -6,6 +6,9 @@
 #include "avion.hpp"
 #include "elemento.hpp"
 #include "../../accesorios/temporizador.hpp"
+#include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
+
+using namespace std;
 
 class EscenarioJuego {
 private:
@@ -21,6 +24,7 @@ private:
     int ancho;
     string idSprite;
     pthread_t mainLoopThread;
+    ColaConcurrente<pair<int, char>> colaEventos;
 public:
     void reset();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite);
@@ -28,6 +32,7 @@ public:
     float getOffset();
     void agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
     void agregarElemento(float posX, float posY, string idSprite);
+    void manejarProximoEvento();
     void manejarEvento(int nroAvion, char evento);
     void actualizarScrollingOffset(float timeStep);
     void mainLoop();
