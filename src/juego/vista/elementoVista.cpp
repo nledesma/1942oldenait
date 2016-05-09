@@ -10,8 +10,8 @@ ElementoVista::ElementoVista(float posX, float posY, string pathSprite){
 
 ElementoVista::ElementoVista(string codigo){
     posX = Decodificador::popFloat(codigo);
-    posX = Decodificador::popFloat(codigo);
-    pathSprite = Decodificador::popIdImg(codigo);
+    posY = Decodificador::popFloat(codigo);
+    pathSprite = codigo;
     figura = new Figura();
 }
 

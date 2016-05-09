@@ -27,12 +27,12 @@ float EscenarioJuego::getOffset() {
 
 void EscenarioJuego::agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos){
 	Avion * avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
-	this->aviones.push_front(avion);
+	this->aviones.push_back(avion);
 }
 
 void EscenarioJuego::agregarElemento(float posX, float posY, string idSprite){
 	Elemento * elemento = new Elemento(posX, posY, idSprite);
-	this->elementos.push_front(elemento);
+	this->elementos.push_back(elemento);
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, char evento) {

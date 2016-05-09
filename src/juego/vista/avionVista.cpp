@@ -13,7 +13,7 @@ AvionVista::AvionVista(string infoAvion){
 
 AvionVista::~AvionVista() { }
 
-void AvionVista::iniciarAvion(float poX, float posY, string pathSprite){
+void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
     this->posX = posX;
     this->posY = posY;
     this->estadoAnimacion = ESTADO_NORMAL;

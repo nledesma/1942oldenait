@@ -217,13 +217,11 @@ void Cliente::iniciarEscenario(){
 	int cantClientes;
 	do{
 		this->recibirMensaje(mensajeRespuesta);
-		string clientes = Decodificador::popCantidad(mensajeRespuesta);
-		cantClientes = Decodificador::popInt(clientes);
+		cantClientes = Decodificador::popInt(mensajeRespuesta);
 		cout << "Clientes a conectarse : " << cantClientes << endl;
-	}
-	while(cantClientes > 0);
+	} while(cantClientes > 0);
 	this->recibirMensaje(mensajeRespuesta);
-	this->escenarioVista->crearEscenario(mensajeRespuesta);
+	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 }
 
 
@@ -241,24 +239,5 @@ int Cliente::enviarEvento(int evento){
 }
 
 void Cliente::actualizarComponentes(string mensaje){
-	string escenario = Decodificador::popEscenario(mensaje);
-	escenarioVista->actualizar(escenario);
-	list<AvionVista*>::iterator itAvion;
-	for(itAvion = escenarioVista->getAviones().begin(); itAvion != escenarioVista->getAviones().end(); itAvion++){
-		string avion = Decodificador::popAvion(mensaje);
-		(*itAvion)->actualizar(avion);
-	}
-	list<ElementoVista*>::iterator itElemento;
-	for(itElemento = escenarioVista->getElementos().begin(); itElemento != escenarioVista->getElementos().end(); itElemento++){
-		string elemento = Decodificador::popElemento(mensaje);
-		(*itElemento)->actualizar(elemento);
-	}
-	list<disparo> disparos;
-	while(mensaje != ""){
-		disparo unDisparo;
-		unDisparo.posX = Decodificador::popFloat(mensaje);
-		unDisparo.posY = Decodificador::popFloat(mensaje);
-		disparos.push_front(unDisparo);
-	}
-	escenarioVista->setDisparos(disparos);
+	this->escenarioVista->actualizarComponentes(mensaje);
 }

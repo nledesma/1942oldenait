@@ -1,21 +1,61 @@
 #include "escenarioVista.hpp"
 using namespace std;
 
-EscenarioVista::EscenarioVista(int ancho, int alto, string pathImagen){
-    this->ancho = ancho;
-    this->alto = alto;
-    this->ventana = new Ventana(ancho, alto);
-    this->fondo = new Figura();
+EscenarioVista::EscenarioVista(string infoEscenario){
+    this->ancho = Decodificador::popInt(infoEscenario);
+    this->alto = Decodificador::popInt(infoEscenario);
+    this->pathImagen = Decodificador::popIdImg(infoEscenario);
+    this->ventana = new Ventana(this->ancho, this->alto);
     this->scrollingOffset = 0;
-    this->pathImagen = pathImagen;
+    this->inicializarComponentes(infoEscenario);
+}
+
+void EscenarioVista::inicializarComponentes(string infoEscenario){
+    int cantAviones = Decodificador::popInt(infoEscenario);
+    for(int i = 0; i < cantAviones; i++){
+        string avion = Decodificador::popAvionInicial(infoEscenario);
+        this->agregarAvionVista(avion);
+    }
+    int cantElementos = Decodificador::popInt(infoEscenario);
+    for(int i = 0; i < cantElementos; i++){
+        string elemento = Decodificador::popElementoInicial(infoEscenario);
+        this->agregarElementoVista(elemento);
+    }
+    string disparo = Decodificador::popDisparoInicial(infoEscenario);
+    this->agregarDisparoVista(disparo);
+}
+
+void EscenarioVista::actualizarComponentes(string infoActualizacion) {
+    float offset = Decodificador::popFloat(infoActualizacion);
+    this->actualizar(offset);
+    list<AvionVista*>::iterator itAvion;
+    for(itAvion = this->getAviones().begin(); itAvion != this->getAviones().end(); itAvion++){
+        string avion = Decodificador::popAvion(infoActualizacion);
+        (*itAvion)->actualizar(avion);
+    }
+    list<ElementoVista*>::iterator itElemento;
+    for(itElemento = this->getElementos().begin(); itElemento != this->getElementos().end(); itElemento++){
+        string elemento = Decodificador::popElemento(infoActualizacion);
+        (*itElemento)->actualizar(elemento);
+    }
+    list<disparo> disparos;
+    while(infoActualizacion != ""){
+        disparo unDisparo;
+        unDisparo.posX = Decodificador::popFloat(infoActualizacion);
+        unDisparo.posY = Decodificador::popFloat(infoActualizacion);
+        disparos.push_front(unDisparo);
+    }
+    this->setDisparos(disparos);
 }
 
 EscenarioVista::~EscenarioVista(){}
 
-int EscenarioVista::iniciar(pthread_mutex_t mutexEscritura){
+int EscenarioVista::mainLoop(){
     this->ventana->iniciar();
     this->cargarFondo();
+    pthread_mutex_lock(&mutexActualizar);
     this->renderizarFondo(this->scrollingOffset);
+    pthread_mutex_unlock(&mutexActualizar);
     SDL_RenderPresent(this->ventana->getVentanaRenderer());
     this->cargarVistasAviones();
     this->cargarVistasElementos();
@@ -26,13 +66,15 @@ int EscenarioVista::iniciar(pthread_mutex_t mutexEscritura){
     this->setActivo();
     while(this->activo){
         temporizador.comenzar();
-        pthread_mutex_lock(&mutexEscritura);
+        pthread_mutex_lock(&mutexActualizar);
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
-        pthread_mutex_unlock(&mutexEscritura);
-        this->renderizarElementos(mutexEscritura);
-        this->renderizarAviones(mutexEscritura);
-        this->renderizarDisparos(mutexEscritura);
+        pthread_mutex_unlock(&mutexActualizar);
+        this->renderizarElementos();
+        this->renderizarAviones();
+        pthread_mutex_lock(&mutexDisparos);
+        this->renderizarDisparos();
+        pthread_mutex_unlock(&mutexDisparos);
         SDL_RenderPresent(ventana->getVentanaRenderer());
     }
     return 1;
@@ -48,7 +90,9 @@ void EscenarioVista::setInactivo(){
 
 
 void EscenarioVista::setDisparos(list<disparo> disparosParam){
+    pthread_mutex_lock(&this->mutexDisparos);
     this->disparos = disparosParam;
+    pthread_mutex_unlock(&this->mutexDisparos);
 }
 
 void EscenarioVista::setScrollingOffset(float scrollingOffset){
@@ -57,14 +101,14 @@ void EscenarioVista::setScrollingOffset(float scrollingOffset){
 
 /* Inicializacion de elementos internos del escenario */
 
-void EscenarioVista::agregarElementoVista(float posX, float posY, string pathSprite){
+void EscenarioVista::agregarElementoVista(string codigo){
     //Agrega el elemento a la lista.
-    ElementoVista* elementoVista = new ElementoVista(posX, posY, pathSprite);
+    ElementoVista* elementoVista = new ElementoVista(codigo);
     this->elementos.push_back(elementoVista);
 }
 
-void EscenarioVista::agregarAvionVista(float posX, float posY, string pathSprite){
-    AvionVista* avionVista = new AvionVista( posX, posY, pathSprite);
+void EscenarioVista::agregarAvionVista(string infoAvion){
+    AvionVista* avionVista = new AvionVista(infoAvion);
     this->aviones.push_back(avionVista);
 }
 
@@ -102,21 +146,17 @@ void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* 
 
 /* Renderizaciones */
 
-void EscenarioVista::renderizarElementos(pthread_mutex_t mutexEscritura){
+void EscenarioVista::renderizarElementos(){
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
         ElementoVista* elementoVista = *iterador;
-        pthread_mutex_lock(&mutexEscritura);
         elementoVista->render(this->ventana->getVentanaRenderer());
-        pthread_mutex_unlock(&mutexEscritura);
     }
 }
 
-void EscenarioVista::renderizarAviones(pthread_mutex_t mutexEscritura){
+void EscenarioVista::renderizarAviones(){
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avion = *iterador;
-        pthread_mutex_lock(&mutexEscritura);
         avion->render(this->ventana->getVentanaRenderer());
-        pthread_mutex_unlock(&mutexEscritura);
     }
 }
 
@@ -124,42 +164,18 @@ void EscenarioVista::renderizarFondo(float y) {
     this->fondo->render(0,(int)y,this->ventana->getVentanaRenderer(), NULL);
 }
 
-void EscenarioVista::renderizarDisparos(pthread_mutex_t mutexEscritura){
-    pthread_mutex_lock(&mutexEscritura);
+void EscenarioVista::renderizarDisparos(){
     for(list<disparo>::iterator iterador = this->disparos.begin(); iterador != this->disparos.end(); ++iterador){
         disparo disparo1 = *iterador;
         disparoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
     }
-    pthread_mutex_unlock(&mutexEscritura);
 }
 
-void EscenarioVista::crearEscenario(string infoEscenario){
-    string escenario = Decodificador::popEscenarioInicial(infoEscenario);
-    this->iniciarEscenario(escenario);
-    string aviones = Decodificador::popCantidad(infoEscenario);
-    int cantAviones = Decodificador::stringToInt(aviones);
-    for(int i = 0; i < cantAviones; i++){
-        string avion = Decodificador::popAvionInicial(infoEscenario);
-        this->aviones.push_front(new AvionVista(avion));
-    }
-    string elementos = Decodificador::popCantidad(infoEscenario);
-    int cantElementos = Decodificador::stringToInt(elementos);
-    for(int i = 0; i < cantElementos; i++){
-        string elemento = Decodificador::popElementoInicial(infoEscenario);
-        this->elementos.push_front(new ElementoVista(elemento));
-    }
-    string disparo = Decodificador::popDisparoInicial(infoEscenario);
-    this->disparoVista = new DisparoVista(disparo);
-}
+void EscenarioVista::actualizar(float offset) {
+    pthread_mutex_lock(&this->mutexActualizar);
+    this->scrollingOffset = offset;
+    pthread_mutex_unlock(&this->mutexActualizar);
 
-void EscenarioVista::iniciarEscenario(string infoEscenario){
-    this->ancho = Decodificador::popInt(infoEscenario);
-    this->alto = Decodificador::popInt(infoEscenario);
-    this->pathImagen = infoEscenario;
-}
-
-void EscenarioVista::actualizar(string codigo) {
-    memcpy((void*) &(this->scrollingOffset), (void*) &codigo[0], sizeof(float));
 }
 
 /* Getters */

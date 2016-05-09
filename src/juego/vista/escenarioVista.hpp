@@ -30,15 +30,19 @@ private:
     list<disparo> disparos;
     Figura *fondo;
     bool activo = false;
+    pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
 
 public:
     /* Constructor y destructor */
-    EscenarioVista(int ancho, int alto, string pathImagen);
+    EscenarioVista(string infoEscenario);
+    void inicializarComponentes(string infoEscenario);
+    void actualizarComponentes(string infoActualizacion);
     ~EscenarioVista();
     void cargarFondo();
     void cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador);
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
-    int iniciar(pthread_mutex_t mutexEscritura);
+    int mainLoop();
     void setActivo();
     void setInactivo();
     void setDisparos(list<disparo> disparos);
@@ -49,20 +53,18 @@ public:
     //Ventana* getVentana();
     list<AvionVista *> &getAviones();
     list<ElementoVista *> &getElementos();
-    void agregarAvionVista(float posX, float posY, string pathSprite);
-    void agregarElementoVista(float posX, float posY, string elementoSpriteId);
+    void agregarAvionVista(string infoAvion);
+    void agregarElementoVista(string codigo);
     void agregarDisparoVista(string pathSprite);
-    void renderizarAviones(pthread_mutex_t mutexEscritura);
-    void renderizarElementos(pthread_mutex_t mutexEscritura);
+    void renderizarAviones();
+    void renderizarElementos();
     void renderizarFondo(float y);
-    void renderizarDisparos(pthread_mutex_t mutexEscritura);
+    void renderizarDisparos();
     Figura *getFondo();
     Ventana *getVentana();
     void cargarVistasAviones();
     void cargarVistasElementos();
-    void actualizar(string codigo);
-    void iniciarEscenario(string infoEscenario);
-    void crearEscenario(string infoEscenario);
+    void actualizar(float offset);
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP
