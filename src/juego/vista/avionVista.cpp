@@ -58,9 +58,11 @@ void AvionVista::iniciarAvion(float poX, float posY, string pathSprite){
 }
 
 void AvionVista::actualizar(string codigo){
+    pthread_mutex_lock(&mutexActualizar);
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
     this->estadoAnimacion = Decodificador::popInt(codigo);
+    pthread_mutex_unlock(&mutexActualizar);
 }
 
 void AvionVista::manejarEvento(SDL_Event evento){
@@ -118,7 +120,9 @@ void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
 }
 
 void AvionVista::render(SDL_Renderer* renderer){
+    pthread_mutex_lock(&mutexActualizar);
     this->figura->render((int)this->posX, (int)this->posY, renderer, &this->clipsAnimacion[this->estadoAnimacion]);
+    pthread_mutex_unlock(&mutexCola);
 }
 
 void AvionVista::cerrar(){
