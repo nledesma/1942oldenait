@@ -16,8 +16,10 @@ ElementoVista::ElementoVista(string codigo){
 }
 
 void ElementoVista::actualizar(string codigo){
+    pthread_mutex_lock(&mutexActualizar);
     posX = Decodificador::popFloat(codigo);
     posY = Decodificador::popFloat(codigo);
+    pthread_mutex_unlock(&mutexActualizar);
 }
 
 float ElementoVista::getPosX(){
@@ -35,5 +37,7 @@ void ElementoVista::cargarImagen(SDL_Renderer* renderer){
 }
 
 void ElementoVista::render(SDL_Renderer* renderer){
-  this->figura->render((int)this->posX, (int)this->posY, renderer, NULL);
+    pthread_mutex_lock(&mutexActualizar);
+    this->figura->render((int)this->posX, (int)this->posY, renderer, NULL);
+    pthread_mutex_unlock(&mutexActualizar);
 }
