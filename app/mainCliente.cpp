@@ -45,7 +45,7 @@ void menuPrincipal(Cliente * cliente) {
     }
 }
 int main(){
-  Cliente* cliente = new Cliente("127.0.0.1", 8080);
+  Cliente* cliente = new Cliente("127.0.0.1", 8000);
   menuPrincipal(cliente);
   return 0;
 }
