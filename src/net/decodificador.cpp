@@ -4,13 +4,13 @@
 /* Push y pop de Strings de ids de sprites e imágenes */
 
 void Decodificador::push(string &codigo, string idImg) {
-    push(codigo, (char) idImg.length());
+    push(codigo, (int) idImg.length());
     codigo += idImg;
 }
 
 string Decodificador::popIdImg(string &codigo) {
-    string lengthString = popBytes(codigo, sizeof(char));
-    int length = (int) lengthString[0];
+    string lengthString = popBytes(codigo, sizeof(int));
+    int length = stringToInt(lengthString);
     return popBytes(codigo, length);
 }
 
@@ -136,15 +136,22 @@ void Decodificador::pushCantidad(string &codigo, int cantidad) {
 }
 
 string Decodificador::popAvionInicial(string & codigo){
-    return popBytes(codigo, 2*sizeof(float)) + popIdImg(codigo);
+    string str1 = popBytes(codigo, sizeof(float));
+    string str2 = popBytes(codigo, sizeof(float));
+    string str3 = popIdImg(codigo);
+    return str1 + str2 + str3;
 }
 
 string Decodificador::popElementoInicial(string & codigo){
-    return popBytes(codigo, 2*sizeof(float)) + popIdImg(codigo);
+    string str1 = popBytes(codigo, 2*sizeof(float));
+    string str2 = popIdImg(codigo);
+    return str1 + str2;
 }
 
 string Decodificador::popEscenarioInicial(string & codigo){
-    return popBytes(codigo, 2*sizeof(int)) + popIdImg(codigo);
+    string str1 = popBytes(codigo, 2*sizeof(int));
+    string str2 = popIdImg(codigo);
+    return str1 + str2;
 }
 
 string Decodificador::popDisparoInicial(string &codigo) {
