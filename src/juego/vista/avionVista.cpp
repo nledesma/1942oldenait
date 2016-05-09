@@ -114,8 +114,7 @@ void AvionVista::manejarEvento(SDL_Event evento){
 
 void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
     if(!this->figura->loadFromFile(this->pathSprite, renderer, color)){
-        cout << "Failed" << endl;
-        this->figura->loadFromFile( AVION_POR_DEFECTO, renderer, color);
+        this->figura->loadFromFile(AVION_POR_DEFECTO, renderer, color);
     }
 }
 
