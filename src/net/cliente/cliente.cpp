@@ -222,17 +222,28 @@ void Cliente::iniciarEscenario(){
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->mainLoop();
+	this->cicloMensajes();
 }
 
+void Cliente::cicloMensajes(){
+	while(this->escenarioVista->getActivo()){
+		string mensaje = "";
+		int evento = this->escenarioVista->popEvento();
+		this->enviarEvento(evento);
+		this->recibirMensaje(mensaje);
+	}
+}
 
 int Cliente::enviarEvento(int evento){
-	string mensaje;
+	string mensaje = "";
 	int estadoEnvio = ESTADO_INICIAL;
 	Decodificador::pushEvento(mensaje, evento);
 	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
-	string info = "Se ha enviado correctamente el evento";
-	Logger::instance()->logInfo(info);
+	if(estadoEnvio == MENSAJE_OK){
+		Logger::instance()->logInfo("Se ha enviado correctamente el evento");
+	}
 	if (!validarEstadoConexion(estadoEnvio)){
+		this->escenarioVista->setInactivo();
 		this->cerrar();
 	}
 	return estadoEnvio;
