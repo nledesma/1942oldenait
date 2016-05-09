@@ -28,7 +28,6 @@ private:
     Mensaje * encontrarMensajePorId(string idMensaje);
     bool hayLugar();
     EscenarioVista * escenarioVista;
-    Decodificador * decodificador;
 
 public:
     Cliente(string ip, int port);

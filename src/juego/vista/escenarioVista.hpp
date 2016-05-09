@@ -33,6 +33,7 @@ private:
     bool activo = false;
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_t mainLoopThread;
     ColaConcurrente <int> colaEventos;
 
 public:
@@ -44,9 +45,11 @@ public:
     void cargarFondo();
     void cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador);
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
+    static void* mainLoop_th(void* THIS);
     int mainLoop();
     void setActivo();
     void setInactivo();
+    bool getActivo();
     void setDisparos(list<disparo> disparos);
     int getAncho();
     int getAlto();

@@ -70,6 +70,7 @@ bool Cliente::conectado(){
 }
 
 void Cliente::cerrar(){
+	escenarioVista->cerrar();
 	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
 	cliente_conectado = false;
 	cerrarSocket();
@@ -215,14 +216,12 @@ Cliente::~Cliente() {
 void Cliente::iniciarEscenario(){
 	cout << "iniciando escenario" << endl;
 	string mensajeRespuesta;
-	int cantClientes;
 	do {
 		this->recibirMensaje(mensajeRespuesta);
 	} while(mensajeRespuesta.length() == sizeof(int));
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->mainLoop();
-	this->escenarioVista->cerrar();
 }
 
 

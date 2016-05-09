@@ -66,13 +66,13 @@ void* EscenarioJuego::mainLoop_th(void* THIS){
     while(!quit){
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
         escenario->actualizarScrollingOffset(timeStep);
-		escenario->posicionY = escenario->posicionY + timeStep * escenario->velocidadDesplazamientoY;
-        // TODO Por qué se comienza acá de todos los lugares? Fucking lazyfoo.
-        temporizador.comenzar();
-        escenario->moverAviones(timeStep);
-		escenario->moverElementos(timeStep);
-        escenario->moverDisparos(timeStep);
-		escenario->manejarProximoEvento();
+				escenario->posicionY = escenario->posicionY + timeStep * escenario->velocidadDesplazamientoY;
+    	// TODO Por qué se comienza acá de todos los lugares? Fucking lazyfoo.
+    		temporizador.comenzar();
+    		escenario->moverAviones(timeStep);
+				escenario->moverElementos(timeStep);
+    		escenario->moverDisparos(timeStep);
+				escenario->manejarProximoEvento();
     }
 
     pthread_exit(NULL);
