@@ -122,7 +122,7 @@ void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
 void AvionVista::render(SDL_Renderer* renderer){
     pthread_mutex_lock(&mutexActualizar);
     this->figura->render((int)this->posX, (int)this->posY, renderer, &this->clipsAnimacion[this->estadoAnimacion]);
-    pthread_mutex_unlock(&mutexCola);
+    pthread_mutex_unlock(&mutexActualizar);
 }
 
 void AvionVista::cerrar(){
