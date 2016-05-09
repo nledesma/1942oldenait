@@ -21,7 +21,10 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
     //Se declara la textura que va a cargarse en la figura.
     SDL_Texture* nuevaTextura = NULL;
     //Se carga la imagen desde el path especificado.
-    SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
+    string basePath = PATH_IMG;
+    string fullPath = basePath + path + ".bmp";
+    cout << "pase por aca y este es el pathSprite: " << fullPath << endl;
+    SDL_Surface* loadedSurface = SDL_LoadBMP(fullPath.c_str());
     if(loadedSurface == NULL){
         cout << "No se ha podido cargar la imagen " + path << IMG_GetError() << endl;
         return false;
@@ -67,6 +70,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
 void Figura::free(){
     //Se libera la textura si es necesario, y se redefinen los atributos por default.
     if(textura != NULL){
+        cout << "pase por aca" << endl;
         SDL_DestroyTexture(this->textura);
         this->textura = NULL;
         this->mWidth = 0;

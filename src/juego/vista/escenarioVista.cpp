@@ -8,6 +8,7 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->ventana = new Ventana(this->ancho, this->alto);
     this->scrollingOffset = 0;
     this->inicializarComponentes(infoEscenario);
+    this->fondo = new Figura();
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario){

@@ -221,7 +221,7 @@ void Cliente::iniciarEscenario(){
 	} while(mensajeRespuesta.length() == sizeof(int));
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
-	//this->escenarioVista->mainLoop();
+	this->escenarioVista->mainLoop();
 }
 
 

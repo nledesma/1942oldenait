@@ -4,6 +4,7 @@
 ElementoVista::ElementoVista(float posX, float posY, string pathSprite){
     this->posX = posX;
     this->posY = posY;
+    cout << "le llega este path: " << pathSprite << endl;
     this->pathSprite = pathSprite;
     this->figura = new Figura();
 }

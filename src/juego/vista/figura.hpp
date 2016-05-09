@@ -25,6 +25,8 @@
 #define COLOR_VERDE_G 255
 #define COLOR_VERDE_B 100
 
+#define PATH_IMG "../../resources/img/"
+
 using namespace std;
 
 class Figura{

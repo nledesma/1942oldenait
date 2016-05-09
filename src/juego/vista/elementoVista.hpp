@@ -8,7 +8,7 @@
 #include "../../net/decodificador.hpp"
 #include <pthread.h>
 
-#define ELEMENTO_POR_DEFECTO "../../../resources/img/planeta.bmp"
+#define ELEMENTO_POR_DEFECTO "../../resources/img/planeta.bmp"
 
 using namespace std;
 
