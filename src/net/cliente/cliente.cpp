@@ -222,6 +222,7 @@ void Cliente::iniciarEscenario(){
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->mainLoop();
+	this->escenarioVista->cerrar();
 }
 
 

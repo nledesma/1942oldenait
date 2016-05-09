@@ -10,6 +10,7 @@
 #include "figura.hpp"
 #include "elementoVista.hpp"
 #include "disparoVista.hpp"
+#include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include <list>
 #include <iterator>
@@ -32,6 +33,7 @@ private:
     bool activo = false;
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
+    ColaConcurrente <int> colaEventos;
 
 public:
     /* Constructor y destructor */
@@ -65,6 +67,7 @@ public:
     void cargarVistasAviones();
     void cargarVistasElementos();
     void actualizar(float offset);
+    void cerrar();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

@@ -37,6 +37,10 @@ void ElementoVista::cargarImagen(SDL_Renderer* renderer){
     }
 }
 
+void ElementoVista::cerrar(){
+    this->figura->free();
+}
+
 void ElementoVista::render(SDL_Renderer* renderer){
     pthread_mutex_lock(&mutexActualizar);
     this->figura->render((int)this->posX, (int)this->posY, renderer, NULL);
