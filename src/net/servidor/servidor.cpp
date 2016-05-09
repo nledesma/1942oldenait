@@ -384,20 +384,19 @@ void Servidor::imprimirDatosInicialesEscenario(){
     string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
     Decodificador::imprimirBytes(codigo);
     string cosasEscenario = Decodificador::popEscenarioInicial(codigo);
-    cout << "Ancho: " <<Decodificador::stringToInt(cosasEscenario.substr(0,sizeof(int) - 1)) << endl;
-    cout << "Alto: " <<Decodificador::stringToInt(cosasEscenario.substr(sizeof(int),sizeof(int)* 2 - 1)) << endl;
-    cout << "Sprite: " <<cosasEscenario.substr(sizeof(int)* 2,cosasEscenario.size() -1 )<< endl;
+    cout << "Ancho: " <<Decodificador::popInt(cosasEscenario)<< endl;
+    cout << "Alto: " <<Decodificador::popInt(cosasEscenario)<< endl;
+    cout << "Sprite: " <<cosasEscenario<< endl;
 
-    string stringCantAviones = Decodificador::popCantidad(codigo);
-    int cantidadAviones = Decodificador::stringToInt(stringCantAviones);
+    int cantidadAviones = Decodificador::popInt(codigo);
     cout << "Cantidad de aviones: " << cantidadAviones << endl;
 
     string cosasAvion;
     for (int i = 0; i < cantidadAviones; i ++){
         cosasAvion = Decodificador::popAvionInicial(codigo);
-        cout << "Avion pos x: " << Decodificador::stringToFloat(cosasAvion.substr(0, sizeof(float) - 1)) << endl;
-        cout << "Avion pos y: " << Decodificador::stringToFloat(cosasAvion.substr(sizeof(float) , sizeof(float)*2 - 1)) << endl;
-        cout << "Sprite: " <<cosasAvion.substr(sizeof(float)* 2,cosasAvion.size() -1 )<< endl;
+        cout << "Avion pos x: " << Decodificador::popFloat(cosasAvion) << endl;
+        cout << "Avion pos y: " << Decodificador::popFloat(cosasAvion) << endl;
+        cout << "Sprite: " <<cosasAvion<< endl;
     }
 
 
