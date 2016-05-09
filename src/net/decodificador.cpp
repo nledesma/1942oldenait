@@ -198,3 +198,11 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     }
     return codigo;
 }
+
+float Decodificador::popFloat(string & codigo) {
+    return stringToFloat(popBytes(codigo, sizeof(float)));
+}
+
+int Decodificador::popInt(string & codigo) {
+    return stringToInt(popBytes(codigo, sizeof(int)));
+}

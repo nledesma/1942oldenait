@@ -2,17 +2,22 @@
 
 
 ElementoVista::ElementoVista(float posX, float posY, string pathSprite){
-
     this->posX = posX;
     this->posY = posY;
     this->pathSprite = pathSprite;
     this->figura = new Figura();
+}
 
+ElementoVista::ElementoVista(string codigo){
+    posX = Decodificador::popFloat(codigo);
+    posX = Decodificador::popFloat(codigo);
+    pathSprite = Decodificador::popIdImg(codigo);
+    figura = new Figura();
 }
 
 void ElementoVista::actualizar(string codigo){
-    memcpy((void*)&(this->posX),(void*)&(codigo[0]), sizeof(float));
-    memcpy((void*)&(this->posY),(void*)&(codigo[sizeof(float)]), sizeof(float));
+    posX = Decodificador::popFloat(codigo);
+    posY = Decodificador::popFloat(codigo);
 }
 
 float ElementoVista::getPosX(){
