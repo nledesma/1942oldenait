@@ -71,7 +71,7 @@ int EscenarioVista::mainLoop(){
             {
                 this->setInactivo();
             }
-            cout << e.key.keysym.sym << endl;
+            this->pushEvento(e);
         }
         temporizador.comenzar();
         pthread_mutex_lock(&mutexActualizar);
@@ -86,6 +86,57 @@ int EscenarioVista::mainLoop(){
         SDL_RenderPresent(ventana->getVentanaRenderer());
     }
     return 1;
+}
+
+void EscenarioVista::pushEvento(SDL_Event evento){
+    if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
+    {
+        switch( evento.key.keysym.sym )
+        {
+            case SDLK_UP:
+                this->colaEventos.push((int)ARRIBA_PRESIONA);
+                break;
+            case SDLK_DOWN:
+                this->colaEventos.push((int)ABAJO_PRESIONA);
+                break;
+            case SDLK_LEFT:
+                this->colaEventos.push((int)IZQUIERDA_PRESIONA);
+                break;
+            case SDLK_RIGHT:
+                this->colaEventos.push((int)DERECHA_PRESIONA);
+                break;
+            case SDLK_SPACE:
+                this->colaEventos.push((int)PRESIONA_ESPACIO);
+                break;
+            case SDLK_RETURN:
+                this->colaEventos.push((int)PRESIONA_R);
+                break;
+        }
+    } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
+        switch( evento.key.keysym.sym )
+            {
+                case SDLK_UP:
+                    this->colaEventos.push((int)ARRIBA_SUELTA);
+                    break;
+                case SDLK_DOWN:
+                    this->colaEventos.push((int)ABAJO_SUELTA);
+                    break;
+                case SDLK_LEFT:
+                    this->colaEventos.push((int)DERECHA_SUELTA);
+                    break;
+                case SDLK_RIGHT:
+                    this->colaEventos.push((int)DERECHA_SUELTA);
+                    break;
+            }
+    }
+}
+
+int EscenarioVista::popEvento() {
+    if(!colaEventos.vacia()){
+        return colaEventos.pop();
+    } else{
+        return EVENTO_VACIO;
+    }
 }
 
 void EscenarioVista::setActivo(){

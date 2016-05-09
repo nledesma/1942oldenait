@@ -62,6 +62,8 @@ public:
     void renderizarElementos();
     void renderizarFondo(float y);
     void renderizarDisparos();
+    void pushEvento(SDL_Event evento);
+    int popEvento();
     Figura *getFondo();
     Ventana *getVentana();
     void cargarVistasAviones();
