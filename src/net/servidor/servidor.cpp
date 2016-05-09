@@ -56,12 +56,10 @@ void *Servidor::cicloAceptar(void *THIS) {
             fdCliente = servidor->aceptar();
             // Si hay lugar se lo agrega. Sino, se le avisa que no hay lugar.
             if (servidor->hayLugar()){
-                Mensaje mensaje(T_STRING, "", "OK");
-                servidor->enviarMensaje(&mensaje, fdCliente);
+                servidor->enviarMensaje("OK", fdCliente);
                 servidor->agregarCliente(fdCliente);
             } else {
-                Mensaje mensaje(T_STRING, "", "NO");
-                servidor->enviarMensaje(&mensaje, fdCliente);
+                servidor->enviarMensaje("NO", fdCliente);
             }
         } catch (runtime_error &e) {
             if(servidor->servidorActivo()) {
