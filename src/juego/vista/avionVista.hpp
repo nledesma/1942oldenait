@@ -5,6 +5,7 @@
 #include <cstring>
 #include "figura.hpp"
 #include "../../accesorios/codigo.hpp"
+#include "../../net/decodificador.hpp"
 
 #define AVION_POR_DEFECTO "../../../resources/img/millenium-sprite.bmp"
 
@@ -18,8 +19,11 @@ private:
     int estadoAnimacion;
     SDL_Rect clipsAnimacion[6];
     Figura *figura;
+    void iniciarAvion(float poX, float posY, string pathSprite);
 public:
     AvionVista(float posX, float posY, string pathSprite);
+
+    AvionVista(string infoAvion);
 
     ~AvionVista();
 

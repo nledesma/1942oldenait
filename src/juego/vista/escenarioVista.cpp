@@ -133,6 +133,31 @@ void EscenarioVista::renderizarDisparos(pthread_mutex_t mutexEscritura){
     pthread_mutex_unlock(&mutexEscritura);
 }
 
+void EscenarioVista::crearEscenario(string infoEscenario){
+    string escenario = Decodificador::popEscenarioInicial(infoEscenario);
+    this->iniciarEscenario(escenario);
+    string aviones = Decodificador::popCantidad(infoEscenario);
+    int cantAviones = Decodificador::stringToInt(aviones);
+    for(int i = 0; i < cantAviones; i++){
+        string avion = Decodificador::popAvionInicial(infoEscenario);
+        this->aviones.push_front(new AvionVista(avion));
+    }
+    string elementos = Decodificador::popCantidad(infoEscenario);
+    int cantElementos = Decodificador::stringToInt(elementos);
+    for(int i = 0; i < cantElementos; i++){
+        string elemento = Decodificador::popElementoInicial(infoEscenario);
+        this->elementos.push_front(new ElementoVista(elemento));
+    }
+    string disparo = Decodificador::popDisparoInicial(infoEscenario);
+    this->disparoVista = new DisparoVista(disparo);
+}
+
+void EscenarioVista::iniciarEscenario(string infoEscenario){
+    this->ancho = Decodificador::popInt(infoEscenario);
+    this->alto = Decodificador::popInt(infoEscenario);
+    this->pathImagen = infoEscenario;
+}
+
 void EscenarioVista::actualizar(string codigo) {
     memcpy((void*) &(this->scrollingOffset), (void*) &codigo[0], sizeof(float));
 }

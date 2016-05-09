@@ -2,7 +2,18 @@
 
 //TODO ver de donde sacar las dimensiones del avion
 AvionVista::AvionVista(float posX, float posY, string pathSprite){
+    this->iniciarAvion(posX, posY, pathSprite);
+}
 
+AvionVista::AvionVista(string infoAvion){
+    float posX = Decodificador::popFloat(infoAvion);
+    float posY = Decodificador::popFloat(infoAvion);
+    this->iniciarAvion(posX, posY, infoAvion);
+}
+
+AvionVista::~AvionVista() { }
+
+void AvionVista::iniciarAvion(float poX, float posY, string pathSprite){
     this->posX = posX;
     this->posY = posY;
     this->estadoAnimacion = ESTADO_NORMAL;
@@ -46,12 +57,10 @@ AvionVista::AvionVista(float posX, float posY, string pathSprite){
     this->clipsAnimacion[LOOP_ETAPA_3].h = ALTO_AVION_COMUN;
 }
 
-AvionVista::~AvionVista() { }
-
 void AvionVista::actualizar(string codigo){
-    memcpy((void*) &(this->posX), (void*) &(codigo[0]), sizeof(float));
-    memcpy((void*) &(this->posY), (void*) &(codigo[sizeof(float)]), sizeof(float));
-    estadoAnimacion = (int) codigo[2*sizeof(float)];
+    this->posX = Decodificador::popFloat(codigo);
+    this->posY = Decodificador::popFloat(codigo);
+    this->estadoAnimacion = Decodificador::popInt(codigo);
 }
 
 void AvionVista::manejarEvento(SDL_Event evento){
