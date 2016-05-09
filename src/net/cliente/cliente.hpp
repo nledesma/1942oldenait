@@ -46,6 +46,7 @@ public:
     int ciclarMensajes(int milisegundos);
     list <Mensaje*>& getMensajes();
     int recibirMensaje(Mensaje* &mensaje);
+    int recibirMensaje(string & mensaje);
     void iniciarEscenario();
     void crearEscenario(char * infoEscenario);
     void actualizarComponentes(string mensaje);

@@ -174,27 +174,27 @@ int Cliente::recibirMensaje(Mensaje* &mensaje) {
 	}
 }
 
-// int Cliente::recibirMensaje(char * mensaje){
-// 	int result = this->setTimeOut(3);
-// 	if (result < 0){
-// 		string msj;
-// 		ostringstream msjInfo;
-// 		msjInfo << this->socketFd;
-// 		msj = msjInfo.str();
-// 		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + msj);
-// 	}
-// 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
-// 	if (estadoRecepcion == PEER_DESCONECTADO) {
-// 		this->cerrarSocketFd();
-// 		cliente_conectado = false;
-// 		return estadoRecepcion;
-// 	} else if (estadoRecepcion == PEER_ERROR){
-// 		this->cerrar();
-// 		return estadoRecepcion;
-// 	} else {
-// 		return MENSAJEOK;
-// 	}
-// }
+int Cliente::recibirMensaje(string & mensaje){
+	int result = this->setTimeOut(5);
+	if (result < 0){
+		string msj;
+		ostringstream msjInfo;
+		msjInfo << this->socketFd;
+		msj = msjInfo.str();
+		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + msj);
+	}
+	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
+	if (estadoRecepcion == PEER_DESCONECTADO) {
+		this->cerrarSocketFd();
+		cliente_conectado = false;
+		return estadoRecepcion;
+	} else if (estadoRecepcion == PEER_ERROR){
+		this->cerrar();
+		return estadoRecepcion;
+	} else {
+		return MENSAJEOK;
+	}
+}
 
 bool Cliente::hayLugar(){
 	Mensaje * mensajeRecibido;
@@ -212,14 +212,20 @@ Cliente::~Cliente() {
 	while(!this->listaMensajes.empty()) delete this->listaMensajes.front(), this->listaMensajes.pop_front();
 }
 
-// void Cliente::iniciarEscenario(string nombre){
-// 	bool escenarioIniciado = false;
-// 	//TODO enviar nombre
-// 	string mensajeRespuesta;
-// 	this->enviarEvento(EVENTO_VACIO);
-// 	this->recibirMensaje(&mensajeRespuesta);
-// 	//this->crearEscenario(mensajeRespuesta);
-// }
+void Cliente::iniciarEscenario(){
+	string mensajeRespuesta;
+	int cantClientes;
+	do{
+		this->recibirMensaje(mensajeRespuesta);
+		string clientes = Decodificador::popCantidad(mensajeRespuesta);
+		cantClientes = Decodificador::popInt(clientes);
+		cout << "Clientes a conectarse : " << cantClientes << endl;
+	}
+	while(cantClientes > 0);
+	this->recibirMensaje(mensajeRespuesta);
+	this->escenarioVista->crearEscenario(mensajeRespuesta);
+}
+
 
 int Cliente::enviarEvento(int evento){
 	string mensaje;
@@ -250,9 +256,8 @@ void Cliente::actualizarComponentes(string mensaje){
 	list<disparo> disparos;
 	while(mensaje != ""){
 		disparo unDisparo;
-		unDisparo.posX = stof(mensaje.substr(0, sizeof(float)));
-		unDisparo.posY = stof(mensaje.substr(sizeof(float)+1, sizeof(float) * 2));
-		mensaje.erase(0, sizeof(float) * 2);
+		unDisparo.posX = Decodificador::popFloat(mensaje);
+		unDisparo.posY = Decodificador::popFloat(mensaje);
 		disparos.push_front(unDisparo);
 	}
 	escenarioVista->setDisparos(disparos);

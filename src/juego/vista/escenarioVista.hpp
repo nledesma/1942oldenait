@@ -61,6 +61,8 @@ public:
     void cargarVistasAviones();
     void cargarVistasElementos();
     void actualizar(string codigo);
+    void iniciarEscenario(string infoEscenario);
+    void crearEscenario(string infoEscenario);
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP
