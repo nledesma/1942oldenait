@@ -8,6 +8,7 @@
 #include <list>
 #include <string>
 #include "../../accesorios/codigo.hpp"
+#include "../../logger/logger.hpp"
 
 #define COLOR_BASE_R 255
 #define COLOR_BASE_G 255
