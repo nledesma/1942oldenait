@@ -26,6 +26,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
     cout << "pase por aca y este es el pathSprite: " << fullPath << endl;
     SDL_Surface* loadedSurface = SDL_LoadBMP(fullPath.c_str());
     if(loadedSurface == NULL){
+        Logger::instance()->logError(errno, "No se ha podido cargar la imagen" + path);
         cout << "No se ha podido cargar la imagen " + path << IMG_GetError() << endl;
         return false;
     }else{
@@ -35,6 +36,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
         //Se crea la textura a partir de la SDL_Surface
         nuevaTextura = SDL_CreateTextureFromSurface(renderer, loadedSurface);
         if(nuevaTextura == NULL){
+          Logger::instance()->logError(errno, "No se ha podido crear la textura" + path);
             cout <<  "No se ha podido crear la textura " +  path <<  SDL_GetError() << endl;
             return false;
         }

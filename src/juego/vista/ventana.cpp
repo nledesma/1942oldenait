@@ -8,8 +8,8 @@ Ventana::Ventana(int ancho, int alto) {
 int Ventana::iniciar() {
     int success = 1;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        Logger::instance()->logError(errno, "Hubo un error al iniciar la ventana");
         cout << "Hubo un error para iniciar la ventana: " << SDL_GetError() << endl;
-        //TODO acá habría que loggear el error y agarrarlo con una excepcion
     }
     else {
         //Set texture filtering to linear
@@ -20,11 +20,11 @@ int Ventana::iniciar() {
         sdlWindow = SDL_CreateWindow("1942", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->ancho, this->alto,
                                      SDL_WINDOW_SHOWN);
         if (sdlWindow == NULL) {
-            cout << "Hubo un error: " << SDL_GetError() << endl;
+            Logger::instance()->logError(errno, "Hubo un error al crear la ventana");
+            cout << "Hubo un error al crear la ventana: " << SDL_GetError() << endl;
             //TODO acá habría que loggear el error y agarrarlo con una excepcion
         }
     }
-    //TODO todo esto deberia estar encapsulado en alguna funcion o algo, porque sino aparece muchas veces!
     gVentanaRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
     if (gVentanaRenderer == NULL) {
         cout << "No se pudo crear el renderer de la ventana, SDL Error: " << SDL_GetError() << endl;
