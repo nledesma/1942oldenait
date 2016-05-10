@@ -63,19 +63,19 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
+    cout << scrollingOffset << " ... ";
     pthread_mutex_unlock(&this->mutexScroll);
 }
 
 void *EscenarioJuego::mainLoop_th(void *THIS) {
     EscenarioJuego *escenario = (EscenarioJuego *) THIS;
     bool quit = false;
-    Temporizador temporizador;
     while (!quit) {
-        float timeStep = escenario->temporizador.getTicks() / 1000.f;
+        float timeStep = escenario->temporizador.getTicks() / 1000.0;
         escenario->actualizarScrollingOffset(timeStep);
         escenario->posicionY = escenario->posicionY + timeStep * escenario->velocidadDesplazamientoY;
         // TODO Por qué se comienza acá de todos los lugares? Fucking lazyfoo.
-        temporizador.comenzar();
+        escenario->temporizador.comenzar();
         escenario->moverAviones(timeStep);
         escenario->moverElementos(timeStep);
         escenario->moverDisparos(timeStep);

@@ -7,6 +7,7 @@
 #include "elemento.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
+#include <unistd.h>
 
 using namespace std;
 

@@ -71,7 +71,6 @@ EscenarioVista::~EscenarioVista(){}
 
 void* EscenarioVista::mainLoop_th(void* THIS){
     EscenarioVista* escenario = (EscenarioVista*) THIS;
-    Temporizador temporizador;
     SDL_Event e;
     while(escenario->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
@@ -81,7 +80,6 @@ void* EscenarioVista::mainLoop_th(void* THIS){
             }
             escenario->pushEvento(e);
         }
-        temporizador.comenzar();
         //TODO puede fallar mutex.
         escenario->renderizarFondo(escenario->scrollingOffset);
         escenario->renderizarFondo(escenario->scrollingOffset - escenario->fondo->getHeight());
