@@ -305,7 +305,6 @@ void Servidor::encolarSalida(int clienteFd, string mensaje){
 void Servidor::desencolar() {
     pair<int, string> clienteMensaje = colaDeMensajes.pop();
     if (!servidorActivado) return;
-    Decodificador::imprimirBytes(clienteMensaje.second);
     int intEvento = Decodificador::popInt(clienteMensaje.second);
     int intJugador = clientes[clienteMensaje.first].nroJugador;
     pair <int, int> evento(intJugador, intEvento);

@@ -122,7 +122,7 @@ void Decodificador::pushInicial(string &codigo, Elemento *e) {
 }
 
 void Decodificador::pushInicial(string &codigo, EscenarioJuego *e) {
-    push(codigo , e->getAncho());
+    push(codigo, e->getAncho());
     push(codigo, e->getAlto());
     push(codigo, e->getIdSprite());
 }
@@ -205,4 +205,8 @@ float Decodificador::popFloat(string & codigo) {
 
 int Decodificador::popInt(string & codigo) {
     return stringToInt(popBytes(codigo, sizeof(int)));
+}
+
+int Decodificador::popByte(string & codigo) {
+    return (int) popBytes(codigo, 1)[0];
 }

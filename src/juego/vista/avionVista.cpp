@@ -61,7 +61,7 @@ void AvionVista::actualizar(string codigo){
     pthread_mutex_lock(&mutexActualizar);
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
-    this->estadoAnimacion = Decodificador::popInt(codigo);
+    this->estadoAnimacion = Decodificador::popByte(codigo);
     pthread_mutex_unlock(&mutexActualizar);
 }
 
@@ -120,7 +120,7 @@ void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
 
 void AvionVista::render(SDL_Renderer* renderer){
     pthread_mutex_lock(&mutexActualizar);
-    this->figura->render((int)this->posX, (int)this->posY, renderer, &this->clipsAnimacion[this->estadoAnimacion]);
+    figura->render((int)posX, (int)posY, renderer, &clipsAnimacion[estadoAnimacion]);
     pthread_mutex_unlock(&mutexActualizar);
 }
 

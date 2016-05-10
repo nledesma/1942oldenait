@@ -9,6 +9,19 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->scrollingOffset = 0;
     this->inicializarComponentes(infoEscenario);
     this->fondo = new Figura();
+    this->preloop();
+}
+
+// Provisorio. Carga todas las cosas. Anterior al loop.
+void EscenarioVista::preloop(){
+    ventana->iniciar();
+    cargarFondo();
+    renderizarFondo(scrollingOffset);
+    SDL_RenderPresent(ventana->getVentanaRenderer());
+    cargarVistasAviones();
+    cargarVistasElementos();
+    SDL_SetRenderDrawColor(getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear((getVentana()->getVentanaRenderer()));
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario){
@@ -27,7 +40,6 @@ void EscenarioVista::inicializarComponentes(string infoEscenario){
 }
 
 void EscenarioVista::actualizarComponentes(string infoActualizacion) {
-    Decodificador::imprimirBytes(infoActualizacion);
     float offset = Decodificador::popFloat(infoActualizacion);
     this->actualizar(offset);
     list<AvionVista*>::iterator itAvion;
@@ -41,35 +53,31 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         (*itElemento)->actualizar(elemento);
     }
     list<disparo> disparos;
-    while(infoActualizacion != ""){
+    for (int i = Decodificador::popInt(infoActualizacion); i > 0; i--){
+        // cout << "hay disparos" << endl;
         disparo unDisparo;
         unDisparo.posX = Decodificador::popFloat(infoActualizacion);
         unDisparo.posY = Decodificador::popFloat(infoActualizacion);
         disparos.push_front(unDisparo);
     }
-    this->setDisparos(disparos);
+
+    // TODO chequear...
+    if (disparos.size() > 0) {
+        this->setDisparos(disparos);
+    }
 }
 
 EscenarioVista::~EscenarioVista(){}
 
 void* EscenarioVista::mainLoop_th(void* THIS){
     EscenarioVista* escenario = (EscenarioVista*) THIS;
-    escenario->ventana->iniciar();
-    escenario->cargarFondo();
-    escenario->renderizarFondo(escenario->scrollingOffset);
-    SDL_RenderPresent(escenario->ventana->getVentanaRenderer());
-    escenario->cargarVistasAviones();
-    escenario->cargarVistasElementos();
     Temporizador temporizador;
-    SDL_SetRenderDrawColor(escenario->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-    SDL_RenderClear((escenario->getVentana()->getVentanaRenderer()));
     SDL_Event e;
     while(escenario->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
             if( e.type == SDL_QUIT )
             {
                 escenario->setInactivo();
-                cout << "Llego un quit" << endl;
             }
             escenario->pushEvento(e);
         }
@@ -83,7 +91,7 @@ void* EscenarioVista::mainLoop_th(void* THIS){
 
         SDL_RenderPresent(escenario->getVentana()->getVentanaRenderer());
     }
-    cout << "Se corto bien el ciclo" << endl;
+    cout << "Finalizó el ciclo de render." << endl;
     escenario->cerrar();
     pthread_exit(NULL);
 }

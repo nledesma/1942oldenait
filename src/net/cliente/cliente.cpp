@@ -117,7 +117,7 @@ void Cliente::iniciarEscenario(){
 		this->recibirMensaje(mensajeRespuesta);
 	} while(mensajeRespuesta.length() == sizeof(int));
 	// El primer mensaje que no es un entero es el escenario.
-	Decodificador::imprimirBytes(mensajeRespuesta);
+	// Decodificador::imprimirBytes(mensajeRespuesta);
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->setActivo();
 	this->escenarioVista->mainLoop();
@@ -129,12 +129,12 @@ void Cliente::cicloMensajes(){
 	while(this->escenarioVista->getActivo()){
 		string mensaje = "";
 		int evento = this->escenarioVista->popEvento();
-		cout << "Se envía el evento " << evento << endl;
+		// cout << "Se envía el evento " << evento << endl;
 		this->enviarEvento(evento);
-		cout << "Se efectua una lectura..." << endl;
+		// cout << "Se efectua una lectura..." << endl;
 		this->recibirMensaje(mensaje);
-		cout << "Se recibió el mensaje: " << endl;
-		Decodificador::imprimirBytes(mensaje);
+		// cout << "Se recibió el mensaje: " << endl;
+		// Decodificador::imprimirBytes(mensaje);
 		this->actualizarComponentes(mensaje);
 	}
 }

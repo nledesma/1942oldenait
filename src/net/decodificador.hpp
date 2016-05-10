@@ -41,6 +41,7 @@ public:
     static string popCantidad(string & codigo);
     static float popFloat(string & codigo);
     static int popInt(string & codigo);
+    static int popByte(string & codigo);
     static int stringToInt(string codigo);
     static float stringToFloat(string codigo);
     static void imprimirBytes(string codigo);

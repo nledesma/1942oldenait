@@ -46,6 +46,7 @@ public:
     void cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador);
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
     static void* mainLoop_th(void* THIS);
+    void preloop();
     int mainLoop();
     void setActivo();
     void setInactivo();
