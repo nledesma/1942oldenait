@@ -81,12 +81,13 @@ void* EscenarioVista::mainLoop_th(void* THIS){
             escenario->pushEvento(e);
         }
         //TODO puede fallar mutex.
+        SDL_SetRenderDrawColor(escenario->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderClear(escenario->getVentana()->getVentanaRenderer());
         escenario->renderizarFondo(escenario->scrollingOffset);
         escenario->renderizarFondo(escenario->scrollingOffset - escenario->fondo->getHeight());
         escenario->renderizarElementos();
         escenario->renderizarAviones();
         escenario->renderizarDisparos();
-
         SDL_RenderPresent(escenario->getVentana()->getVentanaRenderer());
     }
     cout << "Finalizó el ciclo de render." << endl;
