@@ -23,7 +23,6 @@ int Servidor::getCantidadMaximaDeClientes() {
 }
 
 void Servidor::inicializar(int port) {
-    cout << port << endl;
     setPuerto(port);
     this->setAddress(port); // Se setea el puerto en addr_info
     // Se vincula el socket al puerto indicado en addr_info
@@ -33,13 +32,12 @@ void Servidor::inicializar(int port) {
 }
 
 void Servidor::esperarJugadores(){
-    cout << "MAMA ENTRÉ" << endl;
     pthread_mutex_lock(&this->mutexPartidaLlena);
     while (this->hayLugar()) {
         pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
     }
     pthread_mutex_unlock(&this->mutexPartidaLlena);
-    cout << "MAMA SALÍ" << endl;
+    cout << "Comenzando partida!" << endl;
 }
 
 void Servidor::setAddress(int port) {
@@ -69,6 +67,7 @@ void *Servidor::cicloAceptar(void *THIS) {
             fdCliente = servidor->aceptar();
             // Si hay lugar se lo agrega. Sino, se le avisa que no hay lugar.
             if (servidor->hayLugar()){
+                // Se avisa que hay lugar para conectarse.
                 servidor->enviarMensaje("OK", fdCliente);
                 servidor->agregarCliente(fdCliente);
             } else {
@@ -89,15 +88,14 @@ void Servidor::enviarEstadoInicial(int fdCliente) {
 }
 
 void *Servidor::atenderCliente(void *arg) {
-    cout << "atendiendo un cliente" << endl;
+    cout << "Atendiendo a un cliente." << endl;
     pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
     Servidor *servidor = parServidorCliente->first;
     int fdCliente = parServidorCliente->second;
+    pair<int, string> clienteMensaje;
+    clienteMensaje.first = fdCliente;
 
     // Antes de atenderlo se espera a que se conecten todos.
-    string nombre = "";
-    servidor->recibirMensaje(nombre, fdCliente);
-    cout << "Se ha recibido al jugador con el alias: " << nombre << endl;
     servidor->esperarPartida(fdCliente);
     servidor->enviarEstadoInicial(fdCliente);
     servidor->signalComienzaPartida();
@@ -107,8 +105,12 @@ void *Servidor::atenderCliente(void *arg) {
     while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR && servidor->clienteConectado(fdCliente)) {
         string mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
+
         if(recieveResult != MENSAJEOK) {
-            cout << "Se ha desconectado un cliente" << endl; //TODO loggear
+            cout << "Se ha desconectado un cliente" << endl; // TODO loguear
+        } else {
+            clienteMensaje.second = mensajeCliente;
+            servidor->encolarMensaje(clienteMensaje);
         }
     }
 
@@ -146,26 +148,6 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
         this->enviarMensaje(mensaje, clienteFd);
     }
 }
-
-//int Servidor::procesarMensaje(Mensaje* mensaje){
-//    int result;
-//    string valor = mensaje->getValor();
-//    int tipo = mensaje->getTipo();
-//    bool mensajeValido = validarTipo(tipo, valor);
-//    if (mensajeValido){
-//        string info = "Se recibió el mensaje con id = "+mensaje->getId()+": '" + valor + "' de tipo " + mensaje->strTipo();
-//        Logger::instance()->logInfo(info);
-//        cout << info << endl;
-//        result = MENSAJE_OK;
-//    } else {
-//        string error = "El mensaje recibido con id = "+mensaje->getId()+": '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
-//        Logger::instance()->logError(INCONSISTENCIA_TIPO_VALOR, error);
-//        cout << error << endl;
-//        result = INCONSISTENCIA_TIPO_VALOR;
-//    }
-//    return result;
-//
-//}
 
 int Servidor::aceptar() {
     int resulAccept = accept(socketFd, 0, 0);
@@ -286,6 +268,11 @@ void Servidor::agregarCliente(int fdCliente) {
     pthread_mutex_unlock(&mutexAgregar);
 
     pair<Servidor *, int> arg(this, fdCliente);
+
+    // Recibo su nombre.
+    string nombre;
+    recibirMensaje(nombre, fdCliente);
+    clientes[fdCliente].nombreJugador = nombre;
 
     pthread_create(&(clientes[fdCliente].th_entrada), NULL, atenderCliente, &arg);
     pthread_create(&(clientes[fdCliente].th_salida), NULL, responderCliente, &arg);

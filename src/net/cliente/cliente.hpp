@@ -24,9 +24,7 @@ class Cliente: public GameSocket{
 private:
     string ip;
     int port;
-    list <Mensaje*> listaMensajes;
     bool cliente_conectado;
-    Mensaje * encontrarMensajePorId(string idMensaje);
     bool hayLugar();
     EscenarioVista * escenarioVista;
     string alias;
@@ -35,7 +33,6 @@ public:
     Cliente(string ip, int port);
     ~Cliente();
     void inicializar(string serverAddress ,int port);
-    void agregarMensaje(Mensaje* pMensaje);
     void setAddress(string serverAddress, int port);
     int conectar();
     bool conectado();
@@ -45,10 +42,6 @@ public:
     void setAlias(string alias);
     string getAlias();
     int enviarEvento(int evento);
-    int enviarMensajePorId(string idMensaje);
-    int ciclarMensajes(int milisegundos);
-    list <Mensaje*>& getMensajes();
-    int recibirMensaje(Mensaje* &mensaje);
     int recibirMensaje(string & mensaje);
     void iniciarEscenario();
     void actualizarComponentes(string mensaje);

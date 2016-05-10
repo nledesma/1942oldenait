@@ -33,7 +33,7 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
     }
 
     if (bytesActuales == PEER_ERROR) {
-        Logger::instance()->logError(errno,"Error al enviar bytes(socket).");
+        Logger::instance()->logError(errno,"Error al enviar bytes(socket). " + string(strerror(errno)) + ". ");
         return PEER_ERROR;
     } else {
         return MENSAJEOK;
@@ -41,24 +41,33 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
 }
 
 
-int GameSocket::recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor){
+int GameSocket::recibirBytes(string & mensaje, int longitudMensaje, int fdEmisor){
+    char *pMensaje = new char[longitudMensaje];
+    int codigoRet;
     int bytesRecibidos = 0;
     int bytesActuales = ESTADO_INICIAL;
+
     while (bytesRecibidos < longitudMensaje && validarEstadoConexion(bytesActuales)) {
         // Agrego offsets si es que no se envía todo el mensaje
         bytesActuales = recv(fdEmisor, pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos,
-                             0); // Recv retorna la cantidad de bytes recibidos.
+            0); // Recv retorna la cantidad de bytes recibidos.
         bytesRecibidos += bytesActuales;
     }
+    mensaje = string(pMensaje, longitudMensaje);
+
     if (bytesActuales == PEER_ERROR) {
-        Logger::instance()->logError(errno,"Error al recibir bytes (socket).");
-        return PEER_ERROR;
+        Logger::instance()->logError(errno,"Error al recibir bytes (socket). "
+            + string(strerror(errno)) + ". ");
+        codigoRet = PEER_ERROR;
     } else if (bytesActuales == PEER_DESCONECTADO) {
         Logger::instance()->logInfo("El peer se desconectó.");
-        return PEER_DESCONECTADO;
+        codigoRet = PEER_DESCONECTADO;
     } else {
-        return MENSAJEOK;
+        codigoRet = MENSAJEOK;
     }
+    delete[] pMensaje;
+
+    return codigoRet;
 }
 
 void GameSocket::cerrarSocketFd(){
@@ -74,16 +83,12 @@ void GameSocket::cerrarSocket() {
         this->cerrarSocketFd();
     } else {
         cout << "Hubo un error al cerrar la conexion (shutdown error)." << endl;
-        Logger::instance()->logError(errno,"Error al cerrar la conexion.");
+        Logger::instance()->logError(errno,"Error al cerrar la conexion. " + string(strerror(errno)) + ". ");
     }
 }
 
-int GameSocket::enviarMensaje(Mensaje *mensaje, int fdReceptor) {
-    const char *pMensaje = mensaje->codificar();
-    return enviarBytes((char *) pMensaje, 9 + mensaje->lengthValor() + mensaje->lengthId(), fdReceptor);
-}
-
 int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
+    cout << "Enviando mensaje: ";
     Decodificador::imprimirBytes(mensaje);
     string longitudMensaje;
     Decodificador::pushCantidad(longitudMensaje, mensaje.size());
@@ -91,50 +96,24 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
     return enviarBytes((char *) mensaje.c_str(), mensaje.size(), fdReceptor);
 }
 
-int GameSocket::recibirMensaje(Mensaje* &mensaje, int fdEmisor) {
-    char pInfoMensaje[LONG_INFO_MENSAJE];
-    int resultado = recibirBytes(pInfoMensaje, LONG_INFO_MENSAJE, fdEmisor);
-    if (resultado == MENSAJEOK) {
-        infoMensaje datos = Mensaje::decodificarInfo(pInfoMensaje);
-        char *pMensaje = new char[datos.longitudId + datos.longitudValor];
-        if (recibirBytes(pMensaje, datos.longitudId + datos.longitudValor, fdEmisor) == MENSAJEOK) {
-            mensaje = new Mensaje(datos, pMensaje);
-            delete[] pMensaje;
-            return MENSAJEOK;
-        } else {
-            stringstream ss;
-            ss << "Error al recibir bytes del mensaje de tipo." << datos.tipo;
-            cout << ss.str() << endl;
-            Logger::instance()->logInfo(ss.str());
-            delete[] pMensaje;
-        }
-    } else if (resultado == PEER_DESCONECTADO) {
-        return PEER_DESCONECTADO;
-    } else {
-        Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
-    }
-    return -1;
-}
-
 //TODO probar!!!!
 int GameSocket::recibirMensaje(string & mensaje, int fdEmisor){
-    char longMensaje[sizeof(int)];
-    int resultado = recibirBytes(longMensaje, sizeof(int), fdEmisor);
+    string cabecera;
+    int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
+    cout << "Se recibió la cabecera: " << endl;
+    Decodificador::imprimirBytes(cabecera);
+
     if (resultado == MENSAJEOK){
-        string strLong(longMensaje);
-        int longMensajeInt = Decodificador::popInt(strLong);
-        char * pMensaje = new char[longMensajeInt];
-        if (recibirBytes(pMensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
-            string mensajeString(pMensaje, longMensajeInt);
-            mensaje = mensajeString;
-            delete[] pMensaje;
+        int longMensajeInt = Decodificador::popInt(cabecera);
+        if (recibirBytes(mensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
+            cout << "Se recibió el mensaje: " << endl;
+            Decodificador::imprimirBytes(mensaje);
             return MENSAJEOK;
         } else {
             stringstream ss;
-            ss << "Error al recibir bytes";
+            ss << "Error al recibir bytes.";
             cout << ss.str() << endl;
             Logger::instance()->logInfo(ss.str());
-            delete[] pMensaje;
         }
     } else if (resultado == PEER_DESCONECTADO) {
         return PEER_DESCONECTADO;

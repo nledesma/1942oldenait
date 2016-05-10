@@ -23,12 +23,9 @@ class GameSocket {
 protected:
   int socketFd;
   int enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor);
-  int recibirBytes(char *pMensaje, int longitudMensaje, int fdEmisor);
-  int enviarMensaje(Mensaje * mensaje, int fdReceptor);
+  int recibirBytes(string & mensaje, int longitudMensaje, int fdEmisor);
   int enviarMensaje(string mensaje, int fdReceptor);
-  int recibirMensaje(Mensaje *&mensaje, int fdEmisor);
   int recibirMensaje(string &mensaje, int fdEmisor);
-  int recibirMensaje(char * mensaje, int fdEmisor);
   int setTimeOut(int time);
   void cerrarSocket();
   void cerrarSocketFd();

@@ -20,10 +20,6 @@ void Cliente::inicializar(string serverAddress ,int port){
 	this->setAddress(serverAddress, port);
 }
 
-void Cliente::agregarMensaje(Mensaje* pMensaje){
-	listaMensajes.push_back(pMensaje);
-}
-
 void Cliente::setAddress(string serverAddress, int port){
 	this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
 	this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
@@ -84,110 +80,14 @@ int Cliente::getPort(){
 	return this->port;
 }
 
-list <Mensaje*>& Cliente::getMensajes(){
-	return this->listaMensajes;
-}
-
-int Cliente::enviarMensajePorId(string idMensaje) {
-	Mensaje * mensaje = this->encontrarMensajePorId(idMensaje);
-	int estadoEnvio = ESTADO_INICIAL;
-	if(mensaje != NULL) {
-		estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
-		string info = "Se ha recibido correctamente el mensaje '" + mensaje->getValor()+ "' de tipo " + mensaje->strTipo();
-		Logger::instance()->logInfo(info);
-		if (!validarEstadoConexion(estadoEnvio)){
-			this->cerrar();
-		}
-	} else {
-		estadoEnvio = MENSAJE_INEXISTENTE;
-		stringstream ss;
-		ss << "No existe un mensaje con el id indicado (" << idMensaje << ")";
-		Logger::instance()->logInfo(ss.str());
-		cout << ss.str() << endl;
-	}
-	return estadoEnvio;
-}
-
-//El metodo devuelve el mensaje correspondiente y lo elimina de la coleccion de mensajes
-Mensaje * Cliente::encontrarMensajePorId(string idMensaje) {
-	bool mensajeEncontrado = false;
-	Mensaje * mensaje = NULL;
-	list<Mensaje*>::iterator iterador = listaMensajes.begin();
-	while(!mensajeEncontrado && (iterador != listaMensajes.end())){
-		if ((*iterador)->getId() == idMensaje) {
-			mensaje = (*iterador);
-			mensajeEncontrado = true;
-		} else {
-			iterador++;
-		}
-	}
-	return mensaje;
-}
-
-int Cliente::ciclarMensajes(int milisegundos) {
-	typedef std::chrono::high_resolution_clock Time;
-	typedef std::chrono::duration<float> fsec;
-	typedef std::chrono::milliseconds ms;
-	auto t0 = Time::now();
-	auto t1 = Time::now();
-	fsec fs = t1 - t0;
-	int estadoConexion = ESTADO_INICIAL;
-	ms d = std::chrono::duration_cast<ms>(fs);
-	while(d.count()<milisegundos && validarEstadoConexion(estadoConexion)) {
-		list<Mensaje*>::iterator iterador;
-		for(iterador = listaMensajes.begin(); iterador != listaMensajes.end(); iterador++) {
-			if (validarEstadoConexion(estadoConexion)) {
-				estadoConexion = GameSocket::enviarMensaje((*iterador), this->socketFd);
-				if (validarEstadoConexion(estadoConexion)) {
-					Mensaje *mensajeRecibido;
-					estadoConexion = this->recibirMensaje(mensajeRecibido);
-					if (estadoConexion == MENSAJEOK) {
-						string info = "Id mensaje recibido: "+ mensajeRecibido->getId();
-						cout << info << endl;
-						Logger::instance()->logInfo(info);
-						delete mensajeRecibido;
-					}
-				}
-			}
-		}
-		t1 = Time::now();
-		fs = t1 - t0;
-		d = chrono::duration_cast<ms>(fs);
-	}
-	return estadoConexion;
-}
-
-int Cliente::recibirMensaje(Mensaje* &mensaje) {
-	int result = this->setTimeOut(3);
-	if (result < 0){
-		string msj;
-		ostringstream msjInfo;
-		msjInfo << this->socketFd;
-		msj = msjInfo.str();
-		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + msj);
-	}
-	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
-	if (estadoRecepcion == PEER_DESCONECTADO) {
-		this->cerrarSocketFd();
-		cliente_conectado = false;
-		return estadoRecepcion;
-	} else if (estadoRecepcion == PEER_ERROR){
-		this->cerrar();
-		return estadoRecepcion;
-	} else {
-		return MENSAJEOK;
-	}
-}
-
 int Cliente::recibirMensaje(string & mensaje){
-	int result = this->setTimeOut(5);
+	int result = this->setTimeOut(20);
 	if (result < 0){
-		string msj;
-		ostringstream msjInfo;
-		msjInfo << this->socketFd;
-		msj = msjInfo.str();
-		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + msj);
+		stringstream ss;
+		ss << this->socketFd;
+		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + ss.str());
 	}
+
 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
 	if (estadoRecepcion == PEER_DESCONECTADO) {
 		this->cerrarSocketFd();
@@ -202,25 +102,22 @@ int Cliente::recibirMensaje(string & mensaje){
 }
 
 bool Cliente::hayLugar(){
-	cout << "inicia HAYLUGAR" << endl;
 	string mensaje = "";
 	GameSocket::recibirMensaje(mensaje, socketFd);
-	cout << "fin HAYLUGAR" << endl;
 	return (mensaje == "OK");
 }
 
 Cliente::~Cliente() {
-	while(!this->listaMensajes.empty()) delete this->listaMensajes.front(), this->listaMensajes.pop_front();
 }
 
 void Cliente::iniciarEscenario(){
-	cout << "Iniciando escenario" << endl;
 	this->enviarMensaje(this->getAlias(), this->socketFd);
 	string mensajeRespuesta;
 	do {
 		this->recibirMensaje(mensajeRespuesta);
 	} while(mensajeRespuesta.length() == sizeof(int));
 	// El primer mensaje que no es un entero es el escenario.
+	Decodificador::imprimirBytes(mensajeRespuesta);
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->setActivo();
 	this->escenarioVista->mainLoop();
@@ -228,14 +125,16 @@ void Cliente::iniciarEscenario(){
 }
 
 void Cliente::cicloMensajes(){
-	cout << "buenas entre al ciclo mensajes" << endl;
+	cout << "Comienza el ciclo de mensajes del cliente." << endl;
 	while(this->escenarioVista->getActivo()){
-		cout << "entre por aca" << endl;
 		string mensaje = "";
 		int evento = this->escenarioVista->popEvento();
-		cout << "evento: " << evento << endl;
+		cout << "Se envía el evento " << evento << endl;
 		this->enviarEvento(evento);
+		cout << "Se efectua una lectura..." << endl;
 		this->recibirMensaje(mensaje);
+		cout << "Se recibió el mensaje: " << endl;
+		Decodificador::imprimirBytes(mensaje);
 		this->actualizarComponentes(mensaje);
 	}
 }
@@ -249,6 +148,7 @@ int Cliente::enviarEvento(int evento){
 		Logger::instance()->logInfo("Se ha enviado correctamente el evento");
 	}
 	if (!validarEstadoConexion(estadoEnvio)){
+		cout << "Fallo en la conexión, se cierra el cliente." << endl;
 		this->escenarioVista->setInactivo();
 		this->cerrar();
 	}

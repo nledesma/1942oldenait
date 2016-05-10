@@ -91,7 +91,7 @@ string Decodificador::popBytes(string & codigo, int cBytes) {
 }
 
 void Decodificador::imprimirBytes(string codigo) {
-    for (int i = 0; i < codigo.length(); ++i) {
+    for (unsigned int i = 0; i < codigo.length(); ++i) {
         cout << (int) codigo[i] << " ";
     }
     cout << endl;
