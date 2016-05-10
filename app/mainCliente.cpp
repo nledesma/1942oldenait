@@ -6,6 +6,8 @@ using namespace std;
 void menuPrincipal(Cliente * cliente) {
     char opcion = '-';
     string aliasUsuario;
+    string ip;
+    int puerto;
     while (opcion != '3'){
         cout << "-----------------------------------------------------" << endl;
         cout << "Bienvenido, Elija la opcion que desee:" << endl;
@@ -21,12 +23,16 @@ void menuPrincipal(Cliente * cliente) {
                 if (cliente->conectado()){
                     cout << "El cliente ya está conectado." << endl;
                 } else {
+                    cout << "Ingrese IP: " << endl;
+                    cin >> ip;
+                    cout << "Ingrese un puerto: " << endl;
+                    cin >> puerto;
+                    cliente->setAddress(ip, puerto);
+                    cout << "Ingrese un alias: ";
+                    cin >> aliasUsuario;
+                    cliente->setAlias(aliasUsuario);
+                    cout << "Se ha ingresado el alias " << aliasUsuario << endl;
                     cliente->conectar();
-                    if(cliente->conectado()){
-                        cout << "Ingrese un alias: ";
-                        cin >> aliasUsuario;
-                        cout << "Se ha ingresado el alias " << aliasUsuario << endl;
-                    }
                 }
                 break;
             case '2':
@@ -45,6 +51,7 @@ void menuPrincipal(Cliente * cliente) {
     }
 }
 int main(){
+    //TODO Habria que hacer otro constructor que no reciba estos parametros.
   Cliente* cliente = new Cliente("127.0.0.1", 8000);
   menuPrincipal(cliente);
   return 0;

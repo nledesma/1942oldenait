@@ -70,6 +70,7 @@ bool Cliente::conectado(){
 }
 
 void Cliente::cerrar(){
+	escenarioVista->cerrar();
 	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
 	cliente_conectado = false;
 	cerrarSocket();
@@ -213,27 +214,37 @@ Cliente::~Cliente() {
 }
 
 void Cliente::iniciarEscenario(){
-	cout << "iniciando escenario" << endl;
+	cout << "Iniciando escenario" << endl;
+	this->enviarMensaje(this->getAlias(), this->socketFd);
 	string mensajeRespuesta;
-	int cantClientes;
 	do {
 		this->recibirMensaje(mensajeRespuesta);
 	} while(mensajeRespuesta.length() == sizeof(int));
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->mainLoop();
-	this->escenarioVista->cerrar();
+	this->cicloMensajes();
 }
 
+void Cliente::cicloMensajes(){
+	while(this->escenarioVista->getActivo()){
+		string mensaje = "";
+		int evento = this->escenarioVista->popEvento();
+		this->enviarEvento(evento);
+		this->recibirMensaje(mensaje);
+	}
+}
 
 int Cliente::enviarEvento(int evento){
-	string mensaje;
+	string mensaje = "";
 	int estadoEnvio = ESTADO_INICIAL;
 	Decodificador::pushEvento(mensaje, evento);
 	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
-	string info = "Se ha enviado correctamente el evento";
-	Logger::instance()->logInfo(info);
+	if(estadoEnvio == MENSAJE_OK){
+		Logger::instance()->logInfo("Se ha enviado correctamente el evento");
+	}
 	if (!validarEstadoConexion(estadoEnvio)){
+		this->escenarioVista->setInactivo();
 		this->cerrar();
 	}
 	return estadoEnvio;
@@ -241,4 +252,12 @@ int Cliente::enviarEvento(int evento){
 
 void Cliente::actualizarComponentes(string mensaje){
 	this->escenarioVista->actualizarComponentes(mensaje);
+}
+
+void Cliente::setAlias(string alias){
+	this->alias = alias;
+}
+
+string Cliente::getAlias(){
+	return this->alias;
 }

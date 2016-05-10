@@ -85,6 +85,9 @@ void *Servidor::atenderCliente(void *arg) {
     int fdCliente = parServidorCliente->second;
 
     // Antes de atenderlo se espera a que se conecten todos.
+    string nombre = "";
+    servidor->recibirMensaje(nombre, fdCliente);
+    cout << "Se ha recibido al jugador con el alias: " << nombre << endl;
     servidor->esperarPartida(fdCliente);
     servidor->enviarEstadoInicial(fdCliente);
 

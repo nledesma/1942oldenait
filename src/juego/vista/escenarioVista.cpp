@@ -51,41 +51,50 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
 
 EscenarioVista::~EscenarioVista(){}
 
-int EscenarioVista::mainLoop(){
-    this->ventana->iniciar();
-    this->cargarFondo();
-    pthread_mutex_lock(&mutexActualizar);
-    this->renderizarFondo(this->scrollingOffset);
-    pthread_mutex_unlock(&mutexActualizar);
-    SDL_RenderPresent(this->ventana->getVentanaRenderer());
-    this->cargarVistasAviones();
-    this->cargarVistasElementos();
+void* EscenarioVista::mainLoop_th(void* THIS){
+    EscenarioVista* escenario = (EscenarioVista*) THIS;
+    escenario->ventana->iniciar();
+    escenario->cargarFondo();
+    escenario->renderizarFondo(escenario->scrollingOffset);
+    SDL_RenderPresent(escenario->ventana->getVentanaRenderer());
+    escenario->cargarVistasAviones();
+    escenario->cargarVistasElementos();
     Temporizador temporizador;
-    SDL_SetRenderDrawColor(ventana->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-    SDL_RenderClear(ventana->getVentanaRenderer());
-    this->setActivo();
+    SDL_SetRenderDrawColor(escenario->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear((escenario->getVentana()->getVentanaRenderer()));
+    escenario->setActivo();
     SDL_Event e;
-    while(this->activo){
+    while(escenario->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
             if( e.type == SDL_QUIT )
             {
-                this->setInactivo();
+                escenario->setInactivo();
+                cout << "Llego un quit" << endl;
             }
-            this->pushEvento(e);
+            escenario->pushEvento(e);
         }
         temporizador.comenzar();
-        pthread_mutex_lock(&mutexActualizar);
-        this->renderizarFondo(this->scrollingOffset);
-        this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
-        pthread_mutex_unlock(&mutexActualizar);
-        this->renderizarElementos();
-        this->renderizarAviones();
-        pthread_mutex_lock(&mutexDisparos);
-        this->renderizarDisparos();
-        pthread_mutex_unlock(&mutexDisparos);
-        SDL_RenderPresent(ventana->getVentanaRenderer());
+        //TODO puede fallar mutex.
+        escenario->renderizarFondo(escenario->scrollingOffset);
+        escenario->renderizarFondo(escenario->scrollingOffset - escenario->fondo->getHeight());
+        escenario->renderizarElementos();
+        escenario->renderizarAviones();
+        escenario->renderizarDisparos();
+
+        SDL_RenderPresent(escenario->getVentana()->getVentanaRenderer());
     }
-    return 1;
+    cout << "Se corto bien el ciclo" << endl;
+    escenario->cerrar();
+    pthread_exit(NULL);
+}
+
+bool EscenarioVista::getActivo(){
+  return this->activo;
+}
+
+int EscenarioVista::mainLoop(){
+	pthread_create(&mainLoopThread, NULL, mainLoop_th, (void*)this);
+  return 1;
 }
 
 void EscenarioVista::pushEvento(SDL_Event evento){
@@ -235,14 +244,18 @@ void EscenarioVista::renderizarAviones(){
 }
 
 void EscenarioVista::renderizarFondo(float y) {
+    pthread_mutex_lock(&mutexActualizar);
     this->fondo->render(0,(int)y,this->ventana->getVentanaRenderer(), NULL);
+    pthread_mutex_unlock(&mutexActualizar);
 }
 
 void EscenarioVista::renderizarDisparos(){
+    pthread_mutex_lock(&mutexDisparos);
     for(list<disparo>::iterator iterador = this->disparos.begin(); iterador != this->disparos.end(); ++iterador){
         disparo disparo1 = *iterador;
         disparoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
     }
+    pthread_mutex_unlock(&mutexDisparos);
 }
 
 void EscenarioVista::actualizar(float offset) {

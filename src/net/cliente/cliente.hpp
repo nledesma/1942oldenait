@@ -4,6 +4,7 @@
 #include "../mensaje/mensaje.hpp"
 #include "../decodificador.hpp"
 #include "../../juego/vista/escenarioVista.hpp"
+#include "../codigoRespuesta.hpp"
 #include <list>
 #include <string>
 #include <errno.h>
@@ -28,7 +29,7 @@ private:
     Mensaje * encontrarMensajePorId(string idMensaje);
     bool hayLugar();
     EscenarioVista * escenarioVista;
-    Decodificador * decodificador;
+    string alias;
 
 public:
     Cliente(string ip, int port);
@@ -41,6 +42,8 @@ public:
     void cerrar();
     string getIP();
     int getPort();
+    void setAlias(string alias);
+    string getAlias();
     int enviarEvento(int evento);
     int enviarMensajePorId(string idMensaje);
     int ciclarMensajes(int milisegundos);
@@ -49,5 +52,6 @@ public:
     int recibirMensaje(string & mensaje);
     void iniciarEscenario();
     void actualizarComponentes(string mensaje);
+    void cicloMensajes();
 };
 #endif // CLIENTE_H

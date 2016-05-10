@@ -7,7 +7,7 @@
 #include "../../accesorios/codigo.hpp"
 #include "../../net/decodificador.hpp"
 
-#define AVION_POR_DEFECTO "../../resources/img/millenium-sprite.bmp"
+#define AVION_POR_DEFECTO "imagen-default"
 
 using namespace std;
 
