@@ -72,6 +72,7 @@ public:
     Ventana *getVentana();
     void cargarVistasAviones();
     void cargarVistasElementos();
+    void cargarVistaDisparos();
     void actualizar(float offset);
     void cerrar();
 };

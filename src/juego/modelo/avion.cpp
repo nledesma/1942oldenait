@@ -116,6 +116,12 @@ float Avion::getPosicionY(){
     pthread_mutex_unlock(&this->mutexMover);
     return posicionY;}
 
+void Avion::setEstadoAnimacion(int estadoAnimacion){
+    pthread_mutex_lock(&this->mutexMover);
+    this->estadoAnimacion = estadoAnimacion;
+    pthread_mutex_unlock(&this->mutexMover);
+}
+
 int Avion::getAncho(){
     return AVION_ANCHO;
 }
@@ -139,6 +145,7 @@ int Avion::getEstadoAnimacion(){
 }
 
 Disparo* Avion::disparar(){
+    cout<<"Y aca tambien" << endl;
     //Por ahora sale con la misma velocidad y posición que el avión.
     return new Disparo(posX, posY, velocidad);
 }

@@ -63,6 +63,8 @@ public:
 
     void setPosicionY();
 
+    void setEstadoAnimacion(int estadoAnimacion);
+
     void mover(float timeStep);
 
     int getAncho();

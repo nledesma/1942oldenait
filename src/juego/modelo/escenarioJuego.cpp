@@ -51,6 +51,11 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             disparos.push_back((*iterador)->disparar());
             // TODO Hay que hacerle delete a esto en algún momento.
             break;
+        case PRESIONA_ENTER:
+            iterador = aviones.begin();
+            advance(iterador, nroAvion - 1);
+            //TODO debe haber una manera mas elegante de hacerlo! Y no anda encima
+            (*iterador)->setEstadoAnimacion((int)LOOP_ETAPA_1);
         default:
             // NOTE ojo, tienen que estar en orden los aviones.
             iterador = aviones.begin();

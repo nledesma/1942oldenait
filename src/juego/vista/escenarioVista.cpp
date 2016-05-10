@@ -20,6 +20,7 @@ void EscenarioVista::preloop(){
     SDL_RenderPresent(ventana->getVentanaRenderer());
     cargarVistasAviones();
     cargarVistasElementos();
+    cargarVistaDisparos();
     SDL_SetRenderDrawColor(getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear((getVentana()->getVentanaRenderer()));
 }
@@ -62,9 +63,10 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
 
     // TODO chequear...
-    if (disparos.size() > 0) {
+    //TODO saqué esta validación porque sino no se seteaba cuando no había disparos y traia problemas en el reset
+    //if (disparos.size() > 0) {
         this->setDisparos(disparos);
-    }
+    //}
 }
 
 EscenarioVista::~EscenarioVista(){}
@@ -125,8 +127,10 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 this->colaEventos.push((int)PRESIONA_ESPACIO);
                 break;
             case SDLK_RETURN:
-                this->colaEventos.push((int)PRESIONA_R);
+                this->colaEventos.push((int)PRESIONA_ENTER);
                 break;
+            case SDLK_r:
+                this->colaEventos.push((int)PRESIONA_R);
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
         switch( evento.key.keysym.sym )
@@ -220,6 +224,10 @@ void EscenarioVista::cargarVistasElementos(){
         ElementoVista* elementoVista = *iterador;
         this->cargarElemento(elementoVista, ventana->getVentanaRenderer());
     }
+}
+
+void EscenarioVista::cargarVistaDisparos() {
+    this->disparoVista->cargarImagen(this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::cargarFondo(){
