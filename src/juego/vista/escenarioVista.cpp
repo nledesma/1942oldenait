@@ -138,7 +138,7 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                     this->colaEventos.push((int)ABAJO_SUELTA);
                     break;
                 case SDLK_LEFT:
-                    this->colaEventos.push((int)DERECHA_SUELTA);
+                    this->colaEventos.push((int)IZQUIERDA_SUELTA);
                     break;
                 case SDLK_RIGHT:
                     this->colaEventos.push((int)DERECHA_SUELTA);
