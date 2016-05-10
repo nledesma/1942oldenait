@@ -27,6 +27,7 @@ void EscenarioVista::inicializarComponentes(string infoEscenario){
 }
 
 void EscenarioVista::actualizarComponentes(string infoActualizacion) {
+    Decodificador::imprimirBytes(infoActualizacion);
     float offset = Decodificador::popFloat(infoActualizacion);
     this->actualizar(offset);
     list<AvionVista*>::iterator itAvion;
@@ -62,7 +63,6 @@ void* EscenarioVista::mainLoop_th(void* THIS){
     Temporizador temporizador;
     SDL_SetRenderDrawColor(escenario->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear((escenario->getVentana()->getVentanaRenderer()));
-    escenario->setActivo();
     SDL_Event e;
     while(escenario->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){

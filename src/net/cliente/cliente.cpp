@@ -222,16 +222,21 @@ void Cliente::iniciarEscenario(){
 	} while(mensajeRespuesta.length() == sizeof(int));
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
+	this->escenarioVista->setActivo();
 	this->escenarioVista->mainLoop();
 	this->cicloMensajes();
 }
 
 void Cliente::cicloMensajes(){
+	cout << "buenas entre al ciclo mensajes" << endl;
 	while(this->escenarioVista->getActivo()){
+		cout << "entre por aca" << endl;
 		string mensaje = "";
 		int evento = this->escenarioVista->popEvento();
+		cout << "evento: " << evento << endl;
 		this->enviarEvento(evento);
 		this->recibirMensaje(mensaje);
+		this->actualizarComponentes(mensaje);
 	}
 }
 

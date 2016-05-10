@@ -84,6 +84,7 @@ int GameSocket::enviarMensaje(Mensaje *mensaje, int fdReceptor) {
 }
 
 int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
+    Decodificador::imprimirBytes(mensaje);
     string longitudMensaje;
     Decodificador::pushCantidad(longitudMensaje, mensaje.size());
     mensaje = longitudMensaje + mensaje;

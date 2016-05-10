@@ -49,6 +49,8 @@ private:
     pthread_t cicloAceptaciones;
     pthread_t cicloDesencolaciones;
     EscenarioJuego* escenario;
+    pthread_mutex_t mutexPartidaLlena = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_t condPartidaLlena = PTHREAD_COND_INITIALIZER;
 
     void desencolarSalidaCliente(int clienteFd);
 //    int procesarMensaje(string mensaje);
@@ -88,6 +90,8 @@ public:
     EscenarioJuego* getEscenario();
     void setEscenario(EscenarioJuego* unEscenario);
     void imprimirDatosInicialesEscenario();
+    void esperarJugadores();
+    void signalComienzaPartida();
 };
 
 #endif

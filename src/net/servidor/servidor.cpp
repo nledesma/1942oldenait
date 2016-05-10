@@ -32,6 +32,16 @@ void Servidor::inicializar(int port) {
     }
 }
 
+void Servidor::esperarJugadores(){
+    cout << "MAMA ENTRÉ" << endl;
+    pthread_mutex_lock(&this->mutexPartidaLlena);
+    while (this->hayLugar()) {
+        pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
+    }
+    pthread_mutex_unlock(&this->mutexPartidaLlena);
+    cout << "MAMA SALÍ" << endl;
+}
+
 void Servidor::setAddress(int port) {
     this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
     this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
@@ -90,6 +100,7 @@ void *Servidor::atenderCliente(void *arg) {
     cout << "Se ha recibido al jugador con el alias: " << nombre << endl;
     servidor->esperarPartida(fdCliente);
     servidor->enviarEstadoInicial(fdCliente);
+    servidor->signalComienzaPartida();
 
     int recieveResult = ESTADO_INICIAL;
     // Validar que esté conectado?
@@ -103,6 +114,12 @@ void *Servidor::atenderCliente(void *arg) {
 
     servidor->quitarCliente(fdCliente);
     pthread_exit(NULL);
+}
+
+void Servidor::signalComienzaPartida(){
+    pthread_mutex_lock(&this->mutexPartidaLlena);
+    pthread_cond_signal(&this->condPartidaLlena);
+    pthread_mutex_unlock(&this->mutexPartidaLlena);
 }
 
 // Ciclo que desencola la salida para cada cliente.
@@ -301,6 +318,7 @@ void Servidor::encolarSalida(int clienteFd, string mensaje){
 void Servidor::desencolar() {
     pair<int, string> clienteMensaje = colaDeMensajes.pop();
     if (!servidorActivado) return;
+    Decodificador::imprimirBytes(clienteMensaje.second);
     int intEvento = Decodificador::popInt(clienteMensaje.second);
     int intJugador = clientes[clienteMensaje.first].nroJugador;
     pair <int, int> evento(intJugador, intEvento);
