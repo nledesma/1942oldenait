@@ -91,13 +91,10 @@ void *Servidor::atenderCliente(void *arg) {
     int recieveResult = ESTADO_INICIAL;
     // Validar que esté conectado?
     while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR && servidor->clienteConectado(fdCliente)) {
-        Mensaje *mensajeCliente;
+        string mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
-        if(recieveResult == MENSAJEOK) {
-            pair<int, Mensaje *> clienteMensaje(fdCliente, mensajeCliente);
-            servidor->encolarMensaje(clienteMensaje);
-        } else {
-          cout << "Se ha desconectado un cliente" << endl;
+        if(recieveResult != MENSAJEOK) {
+            cout << "Se ha desconectado un cliente" << endl; //TODO loggear
         }
     }
 
@@ -122,44 +119,33 @@ bool Servidor::clienteConectado(int clienteFd){
 }
 
 void Servidor::desencolarSalidaCliente(int clienteFd){
-    ColaConcurrente<Mensaje*> *colaSalida = &(clientes[clienteFd].colaSalida);
-    Mensaje* mensaje = colaSalida->pop();
-
-    // Por ahí desencola cuando ya cerró el servidor.
-    if (!servidorActivado || !clienteConectado(clienteFd)) return;
-
-    int result = procesarMensaje(mensaje);
-    if (result == MENSAJE_OK){
-      Mensaje * mensajeRespuesta = new Mensaje(T_STRING,mensaje -> getId() + "_OK" ," El mensaje enviado es correcto");
-      enviarMensaje(mensajeRespuesta, clienteFd);
-      delete mensajeRespuesta;
-      delete mensaje;
-    } else {
-        Mensaje* mensajeError = new Mensaje(T_STRING, mensaje->getId()+"_ERR", "Mensaje erróneo");
-        enviarMensaje(mensajeError, clienteFd);
-        delete mensajeError;
+    ColaConcurrente<string> *colaSalida = &(clientes[clienteFd].colaSalida);
+    if(!colaSalida->vacia()){
+        if (!servidorActivado || !clienteConectado(clienteFd)) return;
+        string mensaje = colaSalida->pop();
+        this->enviarMensaje(mensaje, clienteFd);
     }
 }
 
-int Servidor::procesarMensaje(Mensaje* mensaje){
-    int result;
-    string valor = mensaje->getValor();
-    int tipo = mensaje->getTipo();
-    bool mensajeValido = validarTipo(tipo, valor);
-    if (mensajeValido){
-        string info = "Se recibió el mensaje con id = "+mensaje->getId()+": '" + valor + "' de tipo " + mensaje->strTipo();
-        Logger::instance()->logInfo(info);
-        cout << info << endl;
-        result = MENSAJE_OK;
-    } else {
-        string error = "El mensaje recibido con id = "+mensaje->getId()+": '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
-        Logger::instance()->logError(INCONSISTENCIA_TIPO_VALOR, error);
-        cout << error << endl;
-        result = INCONSISTENCIA_TIPO_VALOR;
-    }
-    return result;
-
-}
+//int Servidor::procesarMensaje(Mensaje* mensaje){
+//    int result;
+//    string valor = mensaje->getValor();
+//    int tipo = mensaje->getTipo();
+//    bool mensajeValido = validarTipo(tipo, valor);
+//    if (mensajeValido){
+//        string info = "Se recibió el mensaje con id = "+mensaje->getId()+": '" + valor + "' de tipo " + mensaje->strTipo();
+//        Logger::instance()->logInfo(info);
+//        cout << info << endl;
+//        result = MENSAJE_OK;
+//    } else {
+//        string error = "El mensaje recibido con id = "+mensaje->getId()+": '" + valor +"' es inconsistente con el tipo "+ mensaje->strTipo();
+//        Logger::instance()->logError(INCONSISTENCIA_TIPO_VALOR, error);
+//        cout << error << endl;
+//        result = INCONSISTENCIA_TIPO_VALOR;
+//    }
+//    return result;
+//
+//}
 
 int Servidor::aceptar() {
     int resulAccept = accept(socketFd, 0, 0);
@@ -230,7 +216,7 @@ void Servidor::desactivarServidor() {
 
 }
 
-void Servidor::encolarMensaje(pair<int, Mensaje *> clienteMensaje) {
+void Servidor::encolarMensaje(pair<int, string> clienteMensaje) {
     this->colaDeMensajes.push(clienteMensaje);
 }
 
@@ -268,6 +254,8 @@ void Servidor::agregarCliente(int fdCliente) {
 
     datosCliente datos;
     datos.conectado = true;
+    datos.nroJugador = (int) clientes.size() + 1;
+    datos.nombreJugador = "unNombre";
 
     cout << "Conectado a un cliente en la dirección " + direccionCliente.str() << endl;
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
@@ -298,18 +286,32 @@ void *Servidor::cicloDesencolar(void *THIS) {
     Servidor *servidor = (Servidor *) THIS;
     while (servidor->servidorActivo()) {
         servidor->desencolar();
+
     }
     pthread_exit(NULL);
 }
 
-void Servidor::encolarSalida(int clienteFd, Mensaje* mensaje){
+void Servidor::encolarSalida(int clienteFd, string mensaje){
     clientes[clienteFd].colaSalida.push(mensaje);
 }
 
 void Servidor::desencolar() {
-    pair<int, Mensaje*> clienteMensaje = colaDeMensajes.pop();
+    pair<int, string> clienteMensaje = colaDeMensajes.pop();
     if (!servidorActivado) return;
-    encolarSalida(clienteMensaje.first, clienteMensaje.second);
+    int intEvento = Decodificador::popInt(clienteMensaje.second);
+    int intJugador = clientes[clienteMensaje.first].nroJugador;
+    pair <int, int> evento(intJugador, intEvento);
+    this->escenario->pushEvento(evento);
+
+    string codigoEstadoActual = Decodificador::getCodigoEstadoActual(this->escenario);
+    this->broadcastEstadoEscenario(codigoEstadoActual);
+}
+
+void Servidor::broadcastEstadoEscenario(string codigoEstadoEscenario) {
+    for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
+        int clienteActual = iterador->first;
+        encolarSalida(clienteActual, codigoEstadoEscenario);
+    }
 }
 
 bool Servidor::validarChar(string valor) {

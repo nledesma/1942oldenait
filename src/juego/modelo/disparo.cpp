@@ -20,13 +20,18 @@ float Disparo::getVelocidad(){
 
 //TODO reever el return de este metodo
 int Disparo::mover(float timeStep){
+    pthread_mutex_lock(&this->mutexMover);
+    int retorno;
 	this->posY -= this->velocidad * timeStep;
 	//If the dot went too far to the left or right
 	if( this->posY < - ALTO_DISPARO_COMUN){
 			//Move back
-			return 0;
-	}
-	return 1;
+        retorno = 0;
+	} else {
+        retorno = 1;
+    }
+    pthread_mutex_unlock(&this->mutexMover);
+    return retorno;
 }
 
 void Disparo::setPosY(float posY){

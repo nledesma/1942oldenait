@@ -66,6 +66,7 @@ void Avion::manejarEvento(int evento){
 }
 
 void Avion::mover(float timeStep){
+    pthread_mutex_lock(&this->mutexMover);
     if(this->estadoAnimacion < 3) {
         this->posX += this->velocidadX * timeStep;
         if( this->posX < 0 ){
@@ -91,6 +92,7 @@ void Avion::mover(float timeStep){
             }
         }
     }
+    pthread_mutex_unlock(&this->mutexMover);
 }
 
 
@@ -103,11 +105,16 @@ void Avion::setVelocidad(float velocidad){
 }
 
 float Avion::getPosicionX(){
-    return this->posX;
+    pthread_mutex_lock(&this->mutexMover);
+    float posicionX = this->posX;
+    pthread_mutex_unlock(&this->mutexMover);
+    return posicionX;
 }
 float Avion::getPosicionY(){
-    return this->posY;
-}
+    pthread_mutex_lock(&this->mutexMover);
+    float posicionY = this->posY;
+    pthread_mutex_unlock(&this->mutexMover);
+    return posicionY;}
 
 int Avion::getAncho(){
     return AVION_ANCHO;
@@ -125,7 +132,10 @@ int Avion::getAltoDisparo(){
 }
 
 int Avion::getEstadoAnimacion(){
-    return this->estadoAnimacion;
+    pthread_mutex_lock(&this->mutexMover);
+    int estado = this->estadoAnimacion;;
+    pthread_mutex_unlock(&this->mutexMover);
+    return estado;
 }
 
 Disparo* Avion::disparar(){

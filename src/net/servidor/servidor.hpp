@@ -30,7 +30,9 @@ struct datosCliente {
     pthread_t th_entrada;
     pthread_t th_salida;
     bool conectado;
-    ColaConcurrente<Mensaje *> colaSalida;
+    ColaConcurrente<string> colaSalida;
+    int nroJugador;
+    string nombreJugador;
 };
 
 class Servidor : public GameSocket {
@@ -38,7 +40,7 @@ private:
     map<int, datosCliente> clientes;
     map<int , string> direcciones;
     struct sockaddr_in addr_info;
-    ColaConcurrente<pair<int, Mensaje *> > colaDeMensajes;
+    ColaConcurrente<pair<int, string> > colaDeMensajes;
     pthread_mutex_t mutexAgregar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexActivarServidor = PTHREAD_MUTEX_INITIALIZER;
     int cantidadMaximaDeClientes;
@@ -49,7 +51,7 @@ private:
     EscenarioJuego* escenario;
 
     void desencolarSalidaCliente(int clienteFd);
-    int procesarMensaje(Mensaje *mensaje);
+//    int procesarMensaje(string mensaje);
     bool validarTipo(int tipo, string valor);
     bool validarInt(string valor);
     bool validarChar(string valor);
@@ -78,12 +80,11 @@ public:
     void esperar();
     void desactivarServidor();
     bool servidorActivo();
-    void encolarMensaje(pair<int, Mensaje *> clienteMensaje);
+    void encolarMensaje(pair<int, string> clienteMensaje);
     void desencolar();
-    void encolarSalida(int clienteFd, Mensaje *mensaje);
+    void encolarSalida(int clienteFd, string mensaje );
     bool clienteConectado(int clienteFd);
-
-    void iniciarEscenario();
+    void broadcastEstadoEscenario(string codigoEstadoEscenario);
     EscenarioJuego* getEscenario();
     void setEscenario(EscenarioJuego* unEscenario);
     void imprimirDatosInicialesEscenario();

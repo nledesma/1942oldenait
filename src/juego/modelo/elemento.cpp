@@ -13,11 +13,17 @@ void Elemento::mover(float timeStep, float velocidadY){
 }
 
 float Elemento::getPosX(){
-    return this->posX;
+    pthread_mutex_lock(&this->mutexMover);
+    float posicionX = this->posX;
+    pthread_mutex_unlock(&this->mutexMover);
+    return posicionX;
 }
 
 float Elemento::getPosY(){
-    return this->posY;
+    pthread_mutex_lock(&this->mutexMover);
+    float posicionY = this->posY;
+    pthread_mutex_unlock(&this->mutexMover);
+    return posicionY;
 }
 
 void Elemento::volverEstadoInicial(){

@@ -2,6 +2,7 @@
 #define INC_1942OLDENAIT_ELEMENTO_HPP
 
 #include <string>
+#include <pthread.h>
 using namespace std;
 
 class Elemento {
@@ -11,6 +12,7 @@ private:
     float posXInicial;
     float posYInicial;
     string idSprite;
+    pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
 public:
     Elemento(float posX, float posY, string idSprite);
     void mover(float timeStep, float velocidadY);

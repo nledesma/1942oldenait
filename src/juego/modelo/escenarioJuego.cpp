@@ -21,7 +21,10 @@ void EscenarioJuego::reset(){
 
 EscenarioJuego::~EscenarioJuego(){}
 
-float EscenarioJuego::getOffset() {
+float EscenarioJuego::getScrollingOffset() {
+	pthread_mutex_lock(&this->mutexScroll);
+	float offset = this->scrollingOffset;
+	pthread_mutex_unlock(&this->mutexScroll);
     return offset;
 }
 
@@ -56,7 +59,9 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 }
 
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
+	pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
+	pthread_mutex_unlock(&this->mutexScroll);
 }
 
 void* EscenarioJuego::mainLoop_th(void* THIS){
@@ -87,6 +92,10 @@ void EscenarioJuego::manejarProximoEvento(){
 		pair <int, int> evento = this->colaEventos.pop();
 		this->manejarEvento(evento.first, evento.second);
 	}
+}
+
+void EscenarioJuego::pushEvento(pair<int, int> evento){
+	this->colaEventos.push(evento);
 }
 
 void EscenarioJuego::moverAviones(float timeStep){

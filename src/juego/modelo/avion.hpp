@@ -8,6 +8,7 @@
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
 #include "disparo.hpp"
+#include <pthread.h>
 //TODO estas constantes estaban definidas para el tuto.
 #define AVION_ANCHO ANCHO_AVION_COMUN;
 #define AVION_ALTO ALTO_AVION_COMUN;
@@ -29,6 +30,7 @@ private:
     float posYInicial;
     string idSprite;
     string idSpriteDisparos;
+    pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
 
 public:
     Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);

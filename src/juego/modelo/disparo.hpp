@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <pthread.h>
 #include "../../accesorios/codigo.hpp"
 using namespace std;
 
@@ -11,7 +12,7 @@ private:
 	float velocidad;
 	float posX;
 	float posY;
-
+	pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
 public:
 	Disparo(float posX, float posY, float velocidad);
 	~Disparo();

@@ -51,7 +51,7 @@ string Decodificador::popDisparo(string & codigo) {
 /* Push y Pop del Escenario. */
 void Decodificador::push(string & codigo, EscenarioJuego *e) {
     // Offset (float)
-    push(codigo, e->getOffset());
+    push(codigo, e->getScrollingOffset());
 }
 
 string Decodificador::popEscenario(string &codigo){
