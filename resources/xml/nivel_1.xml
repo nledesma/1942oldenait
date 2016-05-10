@@ -29,8 +29,8 @@
     </escenario>
     <aviones>
         <avion>
-            <velocidadDesplazamiento>10</velocidadDesplazamiento>
-            <velocidadDisparos>500</velocidadDisparos>
+            <velocidadDesplazamiento>500</velocidadDesplazamiento>
+            <velocidadDisparos>510</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
         </avion>
