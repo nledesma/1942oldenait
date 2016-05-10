@@ -63,7 +63,6 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
-    cout << scrollingOffset << " ... ";
     pthread_mutex_unlock(&this->mutexScroll);
 }
 
