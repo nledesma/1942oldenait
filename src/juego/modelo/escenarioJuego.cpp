@@ -40,7 +40,7 @@ void EscenarioJuego::agregarElemento(float posX, float posY, string idSprite) {
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
-    list<Avion *>::iterator iterador = aviones.begin();
+    list<Avion *>::iterator iterador;
     switch (evento) {
         case PRESIONA_R:
             reset();

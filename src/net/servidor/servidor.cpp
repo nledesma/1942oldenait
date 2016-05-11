@@ -296,7 +296,7 @@ void *Servidor::cicloDesencolar(void *THIS) {
     Servidor *servidor = (Servidor *) THIS;
     while (servidor->servidorActivo()) {
         servidor->desencolar();
-
+        usleep(5000);
     }
     pthread_exit(NULL);
 }
