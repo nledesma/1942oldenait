@@ -83,22 +83,5 @@ int main(int argc, char *argv[]){
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
     Logger::resetInstance();
-
     pthread_exit(NULL);
-
-    //Esto detiene el funcionamiento del thread de salida
-    bool quit = false;
-    SDL_Event e; //Event handler
-
-    while(!quit){ //While application is running
-        while( SDL_PollEvent( &e ) != 0 ){ //Handle events on queue
-            if( e.type == SDL_QUIT ){ //User requests quit
-                quit = true;
-            }
-        }
-    }
-
-    delete servidor->getEscenario();
-
-    return 0;
 }
