@@ -4,6 +4,8 @@ using namespace std;
 
 /* Inicio del servidor */
 Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
+    cout << "pasa por acá y se pone la partida en inactiva.";
+    partidaEnJuego = false;
     try {
         iniciarSocket();
         inicializar(port);
@@ -30,6 +32,8 @@ void Servidor::esperarJugadores(){
         pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
     }
     pthread_mutex_unlock(&this->mutexPartidaLlena);
+    cout << "pasa por acá y se pone la partida en activa.";
+    partidaEnJuego = true;
     cout << "Comenzando partida!" << endl;
 }
 
@@ -58,7 +62,8 @@ void Servidor::iniciarCicloDesencolaciones(){
 // Se fija si se dan las condiciones para que entre fdCliente y se elabora el
 // mensaje de respuesta correspondiente.
 string Servidor::evaluarIngreso(string nombre){
-    if (partidaActiva()){
+    if (partidaEnJuego){
+        cout << "la partida está activa" << endl;
         // Si la partida está activa entonces hay que ver si el nombre está activo.
         if (nombres.count(nombre) > 0){
             if (nombres[nombre]){
@@ -70,6 +75,7 @@ string Servidor::evaluarIngreso(string nombre){
             return "No hay jugador en la partida con ese nombre.";
         }
     } else {
+        cout << "la partida no está activa." << endl;
         // Si la partida no está activa hay que ver si el nombre está disponible.
         if (nombres.count(nombre) == 0){
             return "OK";
@@ -80,8 +86,7 @@ string Servidor::evaluarIngreso(string nombre){
 }
 
 bool Servidor::partidaActiva(){
-    // TODO implementar
-    return false;
+    return partidaEnJuego;
 }
 
 void *Servidor::cicloAceptar(void *THIS) {
