@@ -120,25 +120,31 @@ void Cliente::iniciarEscenario(){
 	// Decodificador::imprimirBytes(mensajeRespuesta);
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->setActivo();
-	this->escenarioVista->mainLoop();
+	this->escenarioVista->preloop();
 	this->cicloMensajes();
+	this->escenarioVista->mainLoop();
+}
+
+
+void* Cliente::cicloMensajes_th(void * THIS){
+	Cliente * cliente = (Cliente *) THIS;
+	cout << "Comienza el ciclo de mensajes del cliente." << endl;
+	while(cliente->getEscenario()->getActivo()){
+		string mensaje = "";
+		int evento = cliente->getEscenario()->popEvento();
+		// cout << "Se envía el evento " << evento << endl;
+		cliente->enviarEvento(evento);
+		// cout << "Se efectua una lectura..." << endl;
+		cliente->recibirMensaje(mensaje);
+		// cout << "Se recibió el mensaje: " << endl;
+		// Decodificador::imprimirBytes(mensaje);
+		cliente->actualizarComponentes(mensaje);
+	}
+	pthread_exit(NULL);
 }
 
 void Cliente::cicloMensajes(){
-	cout << "Comienza el ciclo de mensajes del cliente." << endl;
-	while(this->escenarioVista->getActivo()){
-		string mensaje = "";
-		int evento = this->escenarioVista->popEvento();
-		// cout << "Se envía el evento " << evento << endl;
-		if (evento != EVENTO_VACIO){
-			this->enviarEvento(evento);
-		}
-		// cout << "Se efectua una lectura..." << endl;
-		this->recibirMensaje(mensaje);
-		// cout << "Se recibió el mensaje: " << endl;
-		// Decodificador::imprimirBytes(mensaje);
-		this->actualizarComponentes(mensaje);
-	}
+	pthread_create(&mainLoopThread, NULL, cicloMensajes_th, (void*)this);
 }
 
 int Cliente::enviarEvento(int evento){
@@ -164,4 +170,8 @@ void Cliente::setAlias(string alias){
 
 string Cliente::getAlias(){
 	return this->alias;
+}
+
+EscenarioVista * Cliente::getEscenario(){
+	return escenarioVista;
 }
