@@ -28,7 +28,7 @@ void Servidor::inicializar(int port) {
 
 void Servidor::esperarJugadores(){
     pthread_mutex_lock(&this->mutexPartidaLlena);
-    while (this->hayLugar() && this->servidorActivo()) {
+    while (this->hayLugar()) {
         pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
     }
     pthread_mutex_unlock(&this->mutexPartidaLlena);
@@ -201,7 +201,7 @@ int Servidor::aceptar() {
 
 void Servidor::cerrar() {
     this->desactivarServidor();
-    this->escenario->desactivar();
+
     for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
         int clienteActual = iterador->first;
         shutdown(clienteActual, 0);
@@ -267,11 +267,16 @@ string Servidor::obtenerDireccion(int fdCliente){
 }
 
 void Servidor::agregarCliente(int fdCliente, string nombre) {
+
     datosCliente datos;
     datos.conectado = true;
     datos.nroJugador = (int) clientes.size() + 1;
     datos.nombreJugador = nombre;
-
+    if(this->escenario->estaActivo()){
+        list<Avion*>::iterator itAviones = this->escenario->getAviones().begin();
+        advance(itAviones, datos.nroJugador -1);
+        (*itAviones)->setEstadoAnimacion(ESTADO_NORMAL);
+    }
     nombres[nombre] = true;
 
     string dir = obtenerDireccion(fdCliente);
