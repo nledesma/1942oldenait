@@ -14,6 +14,28 @@ void GameSocket::iniciarSocket() {
         Logger::instance()->logError(errno, "Socket en uso.");
 }
 
+bool GameSocket::validarEstadoConexion(int estadoConexion) {
+    if (estadoConexion != PEER_DESCONECTADO && estadoConexion != PEER_ERROR)
+        return true;
+    return false;
+}
+
+void GameSocket::cerrarSocketFd(){
+    close(socketFd);
+}
+
+void GameSocket::cerrarSocket() {
+    int cerrado = shutdown(socketFd, 0); //Dejo de transmitir datos
+
+    if(cerrado == 0){
+        cout << "Se cerró la conexión." << endl;
+        this->cerrarSocketFd();
+    } else {
+        cout << "Hubo un error al cerrar la conexion (shutdown error)." << endl;
+        Logger::instance()->logError(errno,"Error al cerrar la conexion. " + string(strerror(errno)) + ". ");
+    }
+}
+
 int GameSocket::setTimeOut(int time){
     struct timeval tv;
     tv.tv_sec = time;
@@ -70,23 +92,6 @@ int GameSocket::recibirBytes(string & mensaje, int longitudMensaje, int fdEmisor
     return codigoRet;
 }
 
-void GameSocket::cerrarSocketFd(){
-    close(socketFd);
-
-}
-
-void GameSocket::cerrarSocket() {
-    int cerrado = shutdown(socketFd, 0); //Dejo de transmitir datos
-
-    if(cerrado == 0){
-        cout << "Se cerró la conexión." << endl;
-        this->cerrarSocketFd();
-    } else {
-        cout << "Hubo un error al cerrar la conexion (shutdown error)." << endl;
-        Logger::instance()->logError(errno,"Error al cerrar la conexion. " + string(strerror(errno)) + ". ");
-    }
-}
-
 int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
     // cout << "Enviando mensaje: ";
     // Decodificador::imprimirBytes(mensaje);
@@ -120,11 +125,4 @@ int GameSocket::recibirMensaje(string & mensaje, int fdEmisor){
         Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
     }
     return -1;
-}
-
-
-bool GameSocket::validarEstadoConexion(int estadoConexion) {
-    if (estadoConexion != PEER_DESCONECTADO && estadoConexion != PEER_ERROR)
-        return true;
-    return false;
 }

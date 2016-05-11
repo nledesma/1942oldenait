@@ -8,12 +8,11 @@
 #include "cliente.hpp"
 using namespace std;
 
-
 Cliente::Cliente(string ip, int port):GameSocket(){
 	this->ip = ip;
 	this->port = port;
 	cliente_conectado = false;
-	inicializar(ip,port);
+	inicializar(ip, port);
 }
 
 void Cliente::inicializar(string serverAddress ,int port){
@@ -39,10 +38,11 @@ int Cliente::conectar(){
 			Logger::instance()->logInfo("Conexión exitosa");
 			cliente_conectado = true;
 			cout << "Conexión exitosa" << endl;
-			if (!hayLugar()) {
-				cout << "No hay lugar en el servidor" << endl;
-				Logger::instance()->logInfo("No hay lugar en el servidor.");
+			if (!sePuedeEntrar()) {
 				cerrar();
+			} else {
+				// Antes de seguir hacemos la etapa inicial.
+				iniciarEscenario();
 			}
 		} else {
 			if (connected == -1){
@@ -55,10 +55,22 @@ int Cliente::conectar(){
 		Logger::instance()->logError(errno,"Se produjo un error en el connect");
 	}
 
-	// Antes de seguir hacemos la etapa inicial.
-	iniciarEscenario();
-
 	return conexion;
+}
+
+bool Cliente::sePuedeEntrar() {
+	// Primero se envía un mensaje con el nombre.
+	enviarMensaje(alias, socketFd);
+	// Luego el servidor evalua y envia su respuesta. Si es OK se puede.
+	string mensaje = "";
+	GameSocket::recibirMensaje(mensaje, socketFd);
+	if (mensaje == "OK"){
+		return true;
+	} else {
+		cout << "No fue posible conectarse. El servidor responde: \"";
+		cout << mensaje << "\"" << endl;
+		return false;
+	}
 }
 
 bool Cliente::conectado(){
@@ -66,7 +78,9 @@ bool Cliente::conectado(){
 }
 
 void Cliente::cerrar(){
-	escenarioVista->cerrar();
+	if (escenarioVista){
+		escenarioVista->cerrar();
+	}
 	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
 	cliente_conectado = false;
 	cerrarSocket();
@@ -101,30 +115,31 @@ int Cliente::recibirMensaje(string & mensaje){
 	}
 }
 
-bool Cliente::hayLugar(){
-	string mensaje = "";
-	GameSocket::recibirMensaje(mensaje, socketFd);
-	return (mensaje == "OK");
-}
-
 Cliente::~Cliente() {
 }
 
 void Cliente::iniciarEscenario(){
-	this->enviarMensaje(this->getAlias(), this->socketFd);
 	string mensajeRespuesta;
-	do {
+	int n = 10; // Nunca van a ser 10 jugadores, el máximo es 4.
+	int n2;
+
+	// Vamos a recibir periódicamente los jugadores que faltan.
+	this->recibirMensaje(mensajeRespuesta);
+	while(mensajeRespuesta.length() == sizeof(int)){
+		n2 = Decodificador::popInt(mensajeRespuesta);
+		if (n2 != n){
+			n = n2;
+			cout << "Faltan " << n2 << " jugadores para comenzar." << endl;
+		}
 		this->recibirMensaje(mensajeRespuesta);
-	} while(mensajeRespuesta.length() == sizeof(int));
+	}
 	// El primer mensaje que no es un entero es el escenario.
-	// Decodificador::imprimirBytes(mensajeRespuesta);
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->setActivo();
 	this->escenarioVista->preloop();
 	this->cicloMensajes();
 	this->escenarioVista->mainLoop();
 }
-
 
 void* Cliente::cicloMensajes_th(void * THIS){
 	Cliente * cliente = (Cliente *) THIS;

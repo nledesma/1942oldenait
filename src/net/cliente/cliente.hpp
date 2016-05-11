@@ -25,8 +25,7 @@ private:
     string ip;
     int port;
     bool cliente_conectado;
-    bool hayLugar();
-    EscenarioVista * escenarioVista;
+    EscenarioVista * escenarioVista = NULL;
     string alias;
     pthread_t mainLoopThread;
 
@@ -44,6 +43,7 @@ public:
     void actualizarComponentes(string mensaje);
     void cicloMensajes();
     static void * cicloMensajes_th(void* THIS);
+    bool sePuedeEntrar();
     /* getters */
     EscenarioVista * getEscenario();
     string getIP();

@@ -2,6 +2,7 @@
 
 using namespace std;
 
+/* Inicio del servidor */
 Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     try {
         iniciarSocket();
@@ -12,14 +13,6 @@ Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     // ?
     setCantidadMaximaDeClientes(cantidadDeClientes);
     // desactivarServidor();
-}
-
-void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
-    cantidadMaximaDeClientes = unaCantidadDeClientes;
-}
-
-int Servidor::getCantidadMaximaDeClientes() {
-    return cantidadMaximaDeClientes;
 }
 
 void Servidor::inicializar(int port) {
@@ -62,19 +55,49 @@ void Servidor::iniciarCicloDesencolaciones(){
     pthread_create(&this->cicloDesencolaciones, NULL, cicloDesencolar, (void *) this );
 }
 
+// Se fija si se dan las condiciones para que entre fdCliente y se elabora el
+// mensaje de respuesta correspondiente.
+string Servidor::evaluarIngreso(string nombre){
+    if (partidaActiva()){
+        // Si la partida está activa entonces hay que ver si el nombre está activo.
+        if (nombres.count(nombre) > 0){
+            if (nombres[nombre]){
+                return "El nombre está en uso.";
+            } else {
+                return "OK";
+            }
+        } else {
+            return "No hay jugador en la partida con ese nombre.";
+        }
+    } else {
+        // Si la partida no está activa hay que ver si el nombre está disponible.
+        if (nombres.count(nombre) == 0){
+            return "OK";
+        } else {
+            return "El nombre está en uso.";
+        }
+    }
+}
+
+bool Servidor::partidaActiva(){
+    // TODO implementar
+    return false;
+}
+
 void *Servidor::cicloAceptar(void *THIS) {
     Servidor *servidor = (Servidor *) THIS;
     int fdCliente;
+    string nombre;
     while (servidor->servidorActivo()) {
         try {
             fdCliente = servidor->aceptar();
-            // Si hay lugar se lo agrega. Sino, se le avisa que no hay lugar.
-            if (servidor->hayLugar()){
-                // Se avisa que hay lugar para conectarse.
-                servidor->enviarMensaje("OK", fdCliente);
-                servidor->agregarCliente(fdCliente);
-            } else {
-                servidor->enviarMensaje("NO", fdCliente);
+            servidor->recibirMensaje(nombre, fdCliente);
+            string respuesta = servidor->evaluarIngreso(nombre);
+            // En cualquier caso se le envía la respuesta.
+            servidor->enviarMensaje(respuesta, fdCliente);
+            if (respuesta == "OK"){
+                // Si puede entrar, se lo agrega.
+                servidor->agregarCliente(fdCliente, nombre);
             }
         } catch (runtime_error &e) {
             if(servidor->servidorActivo()) {
@@ -171,10 +194,6 @@ int Servidor::aceptar() {
     return resulAccept;
 }
 
-map<int, datosCliente>& Servidor::getClientes(){
-    return clientes;
-}
-
 void Servidor::cerrar() {
     this->desactivarServidor();
 
@@ -192,22 +211,6 @@ void Servidor::cerrar() {
 
     cout << "Servidor cerrado" << endl;
     Logger::instance()->logInfo("El servidor ha sido cerrado");
-}
-
-void Servidor::setPuerto(int unPuerto) {
-    puerto = unPuerto;
-}
-
-int Servidor::getPuerto() {
-    return puerto;
-}
-
-void Servidor::esperar() {
-    sleep(10);
-    for (map<int, datosCliente>::iterator iterador = clientes.begin(); iterador != clientes.end(); iterador++) {
-        pthread_join(iterador->second.th_entrada, NULL);
-        pthread_join(iterador->second.th_salida, NULL);
-    }
 }
 
 bool Servidor::servidorActivo() {
@@ -231,14 +234,11 @@ void Servidor::esperarPartida(int fdCliente) {
     int clientesActuales;
     while(hayLugar()){
         string mensaje = "";
-
         // Nos fijamos cuántos clientes hay conectados.
         pthread_mutex_lock(&mutexAgregar);
         clientesActuales = clientes.size();
         pthread_mutex_unlock(&mutexAgregar);
-
         Decodificador::pushCantidad(mensaje, cantidadMaximaDeClientes - clientesActuales);
-
         // Enviamos la cantidad de clientes faltantes.
         enviarMensaje(mensaje, fdCliente);
         // Espera un segundo antes de mandar de nuevo.
@@ -247,7 +247,7 @@ void Servidor::esperarPartida(int fdCliente) {
     // Cuando ya no hay lugar, se termina la función.
 }
 
-void Servidor::agregarCliente(int fdCliente) {
+string Servidor::obtenerDireccion(int fdCliente){
     struct sockaddr_in client_addr;
     int client_addr_len = sizeof(client_addr);
     getpeername(fdCliente, (sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
@@ -256,15 +256,22 @@ void Servidor::agregarCliente(int fdCliente) {
 
     stringstream direccionCliente;
     direccionCliente << clientAddress << ":" << port;
+    return direccionCliente.str();
+}
 
+void Servidor::agregarCliente(int fdCliente, string nombre) {
     datosCliente datos;
     datos.conectado = true;
     datos.nroJugador = (int) clientes.size() + 1;
-    datos.nombreJugador = "unNombre";
+    datos.nombreJugador = nombre;
 
-    cout << "Conectado a un cliente en la dirección " + direccionCliente.str() << endl;
-    Logger::instance()->logInfo("Conectado a un cliente en la dirección " + direccionCliente.str());
-    direcciones.insert(pair<int, string>(fdCliente, direccionCliente.str()));
+    nombres[nombre] = true;
+
+    string dir = obtenerDireccion(fdCliente);
+    cout << "Conectado a un cliente en la dirección " + dir << endl;
+    Logger::instance()->logInfo("Conectado a un cliente en la dirección " + dir);
+    // TODO no debería haber un utex acá?
+    direcciones.insert(pair<int, string>(fdCliente, dir));
 
     pthread_mutex_lock(&mutexAgregar);
     clientes.insert(pair<int, datosCliente>(fdCliente, datos));
@@ -272,16 +279,12 @@ void Servidor::agregarCliente(int fdCliente) {
 
     pair<Servidor *, int> arg(this, fdCliente);
 
-    // Recibo su nombre.
-    string nombre;
-    recibirMensaje(nombre, fdCliente);
-    clientes[fdCliente].nombreJugador = nombre;
-
     pthread_create(&(clientes[fdCliente].th_entrada), NULL, atenderCliente, &arg);
     pthread_create(&(clientes[fdCliente].th_salida), NULL, responderCliente, &arg);
 }
 
 void Servidor::quitarCliente(int clienteFd) {
+    nombres[clientes[clienteFd].nombreJugador] = false;
     clientes[clienteFd].conectado = false;
     clientes[clienteFd].colaSalida.avisar();
     string msj = "Cliente en la dirección " + direcciones[clienteFd] + " desconectado.";
@@ -325,72 +328,12 @@ void Servidor::broadcastEstadoEscenario(string codigoEstadoEscenario) {
     }
 }
 
-bool Servidor::validarChar(string valor) {
-    return (valor.length() == 1);
-}
-
-bool Servidor::validarInt(string valor) {
-    if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
-        return false;
-    char * p ;
-    strtol(valor.c_str(), &p, 10) ;
-
-    return (*p == 0) ;
-}
-
-bool Servidor::validarDouble(string valor) {
-    if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
-        return false;
-    char * p ;
-    strtod(valor.c_str(), &p) ;
-
-    return (*p == 0) ;
-}
-
-bool Servidor::validarTipo(int tipo, string valor) {
-
-    bool esValido;
-    switch (tipo) {
-        case T_STRING:
-            esValido = true;
-            break;
-        case T_CHAR:
-            esValido = validarChar(valor);
-            break;
-        case T_INT:
-            esValido = validarInt(valor);
-            break;
-        case T_DOUBLE:
-            esValido = validarDouble(valor);
-            break;
-        default:
-            esValido = false;
-    }
-    return esValido;
-}
-
 bool Servidor::hayLugar(){
     int clientesActuales;
     pthread_mutex_lock(&mutexAgregar);
     clientesActuales = clientes.size();
     pthread_mutex_unlock(&mutexAgregar);
     return clientesActuales < cantidadMaximaDeClientes;
-}
-
-/*
-void Servidor::iniciarEscenario(){
-  Escenario* escenario = new Escenario(800, 600);
-  this->escenario = escenario;
-  cout << "Se creo el escenario" << endl;
-}
-*/
-
-EscenarioJuego* Servidor::getEscenario(){
-    return this->escenario;
-}
-
-void Servidor::setEscenario(EscenarioJuego* unEscenario){
-    this->escenario = unEscenario;
 }
 
 void Servidor::imprimirDatosInicialesEscenario(){
@@ -412,4 +355,34 @@ void Servidor::imprimirDatosInicialesEscenario(){
     //     cout << "Sprite: " <<cosasAvion<< endl;
     // }
     //
+}
+
+/* getters y setters */
+
+void Servidor::setPuerto(int unPuerto) {
+    puerto = unPuerto;
+}
+
+int Servidor::getPuerto() {
+    return puerto;
+}
+
+map<int, datosCliente>& Servidor::getClientes(){
+    return clientes;
+}
+
+void Servidor::setCantidadMaximaDeClientes(int unaCantidadDeClientes) {
+    cantidadMaximaDeClientes = unaCantidadDeClientes;
+}
+
+int Servidor::getCantidadMaximaDeClientes() {
+    return cantidadMaximaDeClientes;
+}
+
+EscenarioJuego* Servidor::getEscenario(){
+    return this->escenario;
+}
+
+void Servidor::setEscenario(EscenarioJuego* unEscenario){
+    this->escenario = unEscenario;
 }

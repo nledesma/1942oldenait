@@ -51,13 +51,8 @@ private:
     EscenarioJuego* escenario;
     pthread_mutex_t mutexPartidaLlena = PTHREAD_MUTEX_INITIALIZER;
     pthread_cond_t condPartidaLlena = PTHREAD_COND_INITIALIZER;
-
+    map<string, bool> nombres;
     void desencolarSalidaCliente(int clienteFd);
-//    int procesarMensaje(string mensaje);
-    bool validarTipo(int tipo, string valor);
-    bool validarInt(string valor);
-    bool validarChar(string valor);
-    bool validarDouble(string valor);
 public:
     map<int, datosCliente> & getClientes();
     bool hayLugar();
@@ -71,7 +66,7 @@ public:
     void cerrar();
     int getPuerto();
     void setPuerto(int unPuerto);
-    void agregarCliente(int idCliente);
+    void agregarCliente(int idCliente, string nombre);
     void quitarCliente(int fdCliente);
     void esperarPartida(int fdCliente);
     void enviarEstadoInicial(int fdCliente);
@@ -79,7 +74,6 @@ public:
     static void *responderCliente(void *arg);
     static void *cicloAceptar(void *THIS);
     static void *cicloDesencolar(void *THIS);
-    void esperar();
     void desactivarServidor();
     bool servidorActivo();
     void encolarMensaje(pair<int, string> clienteMensaje);
@@ -93,6 +87,9 @@ public:
     void imprimirDatosInicialesEscenario();
     void esperarJugadores();
     void signalComienzaPartida();
+    string evaluarIngreso(string nombre);
+    string obtenerDireccion(int fdCliente);
+    bool partidaActiva();
 };
 
 #endif
