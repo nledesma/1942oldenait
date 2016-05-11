@@ -53,6 +53,7 @@ private:
     pthread_cond_t condPartidaLlena = PTHREAD_COND_INITIALIZER;
     map<string, bool> nombres;
     void desencolarSalidaCliente(int clienteFd);
+    bool partidaEnJuego = false;
 public:
     map<int, datosCliente> & getClientes();
     bool hayLugar();
@@ -89,6 +90,7 @@ public:
     void signalComienzaPartida();
     string evaluarIngreso(string nombre);
     string obtenerDireccion(int fdCliente);
+    void activarPartida();
     bool partidaActiva();
 };
 

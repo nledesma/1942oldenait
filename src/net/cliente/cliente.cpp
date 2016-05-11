@@ -139,6 +139,7 @@ void Cliente::iniciarEscenario(){
 	this->escenarioVista->preloop();
 	this->cicloMensajes();
 	this->escenarioVista->mainLoop();
+	this->cerrar();
 }
 
 void* Cliente::cicloMensajes_th(void * THIS){
