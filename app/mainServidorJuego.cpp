@@ -35,19 +35,33 @@ bool archivoExiste (const string& archivo) {
 
 int main(int argc, char *argv[]){
     string rutaXMLServidor;
+    bool defaultFallo = false;
 
-    if (argc < 2){
-        cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
-        Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el servidor con el XML por defecto.");
+    if (argc < 2) {
+        string war = "No se especificó archivo de configuración. Se utilizará el XML por defecto.";
+        cout << war << endl;
+        Logger::instance()->logWarning(war);
         rutaXMLServidor = (DEFAULT_XML);
+        defaultFallo = !archivoExiste(DEFAULT_XML);
     } else {
-        if (archivoExiste(argv[1])){
+        if (archivoExiste(argv[1])) {
             rutaXMLServidor = argv[1];
         } else {
-            rutaXMLServidor = (DEFAULT_XML);
             cout << "El parámetro ingresado no es válido. Se inicializa el servidor con el XML por defecto" << endl;
             Logger::instance()->logWarning("El parámetro ingresado no es válido. Se inicializa el servidor con el XML por defecto.");
+            rutaXMLServidor = (DEFAULT_XML);
+            defaultFallo = !archivoExiste(DEFAULT_XML);
         }
+    }
+
+    if (defaultFallo) {
+        stringstream ss;
+        ss << "No se encontró el archivo de configuración por defecto. No es posible iniciar el servidor." << endl;
+        ss << "Presione enter para salir.";
+        cout << ss.str();
+        Logger::instance()->logError(0, ss.str());
+        cin.get();
+        return 1;
     }
 
     Servidor* servidor;

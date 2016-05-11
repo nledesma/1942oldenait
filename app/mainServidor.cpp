@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
     string rutaXMLServidor;
 
     if (argc < 2){
-        cout << "Argumentos insuficientes, se utilizará el XML por defecto" << endl;
+        cout << "No se especificó archivo de configuración XML. Se utilizará configuración por defecto." << endl;
         Logger::instance()->logWarning("No se ingresó la cantidad de parámetros suficientes. Se inicializa el servidor con el XML por defecto.");
         rutaXMLServidor = (DEFAULT_XML);
     } else {
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
     }
 
     Logger::instance()->logWarning("Hubo un error al inicializar el servidor desde el archivo XML por default");
-    cout << "Hubo un error al iniciar el servidor. Presione cualquier tecla para finalizar el programa" << endl;
+    cout << "No fue encontrado el archivo de configuración por defecto. No es posible inicializar el servidor. Presione cualquier tecla para finalizar el programa" << endl;
     cin.get();
     Logger::instance()->cerrar();
 
