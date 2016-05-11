@@ -132,8 +132,10 @@ void* Cliente::cicloMensajes_th(void * THIS){
 	while(cliente->getEscenario()->getActivo()){
 		string mensaje = "";
 		int evento = cliente->getEscenario()->popEvento();
+		if (evento != EVENTO_VACIO){
+			cliente->enviarEvento(evento);
+					}
 		// cout << "Se envía el evento " << evento << endl;
-		cliente->enviarEvento(evento);
 		// cout << "Se efectua una lectura..." << endl;
 		cliente->recibirMensaje(mensaje);
 		// cout << "Se recibió el mensaje: " << endl;
