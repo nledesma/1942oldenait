@@ -143,7 +143,6 @@ void Cliente::iniciarEscenario(){
 
 void* Cliente::cicloMensajes_th(void * THIS){
 	Cliente * cliente = (Cliente *) THIS;
-	cout << "Comienza el ciclo de mensajes del cliente." << endl;
 	while(cliente->getEscenario()->getActivo()){
 		string mensaje = "";
 		int evento = cliente->getEscenario()->popEvento();
