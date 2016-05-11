@@ -231,7 +231,9 @@ void EscenarioVista::cargarVistaDisparos() {
 }
 
 void EscenarioVista::cargarFondo(){
-    this->fondo->loadFromFile(this->pathImagen, this->ventana->getVentanaRenderer());
+    if(!this->fondo->loadFromFile(this->pathImagen, this->ventana->getVentanaRenderer())){
+        this->fondo->loadFromFile(FONDO_POR_DEFECTO, this->ventana->getVentanaRenderer());
+    }
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){
