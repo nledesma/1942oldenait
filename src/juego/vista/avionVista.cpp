@@ -55,6 +55,91 @@ void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
     this->clipsAnimacion[LOOP_ETAPA_3].y = 0 + ALTO_AVION_COMUN;
     this->clipsAnimacion[LOOP_ETAPA_3].w = ANCHO_AVION_COMUN;
     this->clipsAnimacion[LOOP_ETAPA_3].h = ALTO_AVION_COMUN;
+
+    //Cuarto sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_4].x = 0 + ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_4].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_4].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_4].h = ALTO_AVION_COMUN;
+
+    //Quinto sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_5].x = 0 + ANCHO_AVION_COMUN * 2;
+    this->clipsAnimacion[LOOP_ETAPA_5].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_5].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_5].h = ALTO_AVION_COMUN;
+
+    //Sexto sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_6].x = 0 + ANCHO_AVION_COMUN * 3;
+    this->clipsAnimacion[LOOP_ETAPA_6].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_6].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_6].h = ALTO_AVION_COMUN;
+
+    //Septimo sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_7].x = 0 + ANCHO_AVION_COMUN * 4;
+    this->clipsAnimacion[LOOP_ETAPA_7].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_7].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_7].h = ALTO_AVION_COMUN;
+
+    //Octavo sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_8].x = 0;
+    this->clipsAnimacion[LOOP_ETAPA_8].y = 0 + ALTO_AVION_COMUN * 2;
+    this->clipsAnimacion[LOOP_ETAPA_8].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_8].h = ALTO_AVION_COMUN;
+
+    //Noveno sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_9].x = 0 + ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_9].y = 0 + ALTO_AVION_COMUN * 2;
+    this->clipsAnimacion[LOOP_ETAPA_9].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_9].h = ALTO_AVION_COMUN;
+
+    //Octavo sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_10].x = 0;
+    this->clipsAnimacion[LOOP_ETAPA_10].y = 0 + ALTO_AVION_COMUN * 2;
+    this->clipsAnimacion[LOOP_ETAPA_10].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_10].h = ALTO_AVION_COMUN;
+
+    //Septimo sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_11].x = 0 + ANCHO_AVION_COMUN * 4;
+    this->clipsAnimacion[LOOP_ETAPA_11].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_11].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_11].h = ALTO_AVION_COMUN;
+
+    //Sexto sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_12].x = 0 + ANCHO_AVION_COMUN * 3;
+    this->clipsAnimacion[LOOP_ETAPA_12].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_12].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_12].h = ALTO_AVION_COMUN;
+
+    //Quinto sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_13].x = 0 + ANCHO_AVION_COMUN * 2;
+    this->clipsAnimacion[LOOP_ETAPA_13].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_13].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_13].h = ALTO_AVION_COMUN;
+
+    //Cuarto sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_14].x = 0 + ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_14].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_14].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_14].h = ALTO_AVION_COMUN;
+
+    //Tercer sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_15].x = 0;
+    this->clipsAnimacion[LOOP_ETAPA_15].y = 0 + ALTO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_15].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_15].h = ALTO_AVION_COMUN;
+
+    //Segundo sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_16].x = 0 + ANCHO_AVION_COMUN * 4;
+    this->clipsAnimacion[LOOP_ETAPA_16].y = 0;
+    this->clipsAnimacion[LOOP_ETAPA_16].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_16].h = ALTO_AVION_COMUN;
+
+    //Primer sprite vuelta
+    this->clipsAnimacion[LOOP_ETAPA_17].x = 0 + ANCHO_AVION_COMUN * 3;
+    this->clipsAnimacion[LOOP_ETAPA_17].y = 0;
+    this->clipsAnimacion[LOOP_ETAPA_17].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[LOOP_ETAPA_17].h = ALTO_AVION_COMUN;
+
 }
 
 void AvionVista::actualizar(string codigo){

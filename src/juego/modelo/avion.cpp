@@ -46,18 +46,22 @@ void Avion::manejarEvento(int evento){
                 this->estadoAnimacion = LOOP_ETAPA_1;
                 break;
             case ARRIBA_SUELTA:
-                this->velocidadY += this->velocidad;
+                if (this->velocidadY != 0)
+                    this->velocidadY += this->velocidad;
                 break;
             case ABAJO_SUELTA:
-                this->velocidadY -= this->velocidad;
+                if (this->velocidadY != 0)
+                    this->velocidadY -= this->velocidad;
                 break;
             case IZQUIERDA_SUELTA:
-                this->velocidadX += this->velocidad;
+                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_DERECHA)
+                    this->velocidadX += this->velocidad;
                 if (this->estadoAnimacion != GIRANDO_DERECHA)
                     this->estadoAnimacion = ESTADO_NORMAL;
                 break;
             case DERECHA_SUELTA:
-                this->velocidadX -= this->velocidad;
+                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_IZQUIERDA)
+                    this->velocidadX -= this->velocidad;
                 if (this->estadoAnimacion != GIRANDO_IZQUIERDA)
                     this->estadoAnimacion = ESTADO_NORMAL;
                 break;
@@ -83,13 +87,22 @@ void Avion::mover(float timeStep){
     } else {
         if(this->contador > 0) {
             this->contador --;
+            if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5){
+                this->posY -= (this->velocidad / 2.f) * timeStep;
+            } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13){
+                this->posY += (this->velocidad / 2.f) * timeStep;
+            }
         } else {
-            this->contador = 150;
-            if(this->estadoAnimacion == 5) {
+            this->contador = 20;
+            if(this->estadoAnimacion == LOOP_ETAPA_17) {
                 this->estadoAnimacion = 0;
             } else {
                 this->estadoAnimacion ++;
             }
+        }
+        if (this->estadoAnimacion == LOOP_ETAPA_17){
+            this->velocidadX = 0;
+            this->velocidadY = 0;
         }
     }
     pthread_mutex_unlock(&this->mutexMover);
@@ -146,7 +159,7 @@ int Avion::getEstadoAnimacion(){
 
 Disparo* Avion::disparar(){
     //Por ahora sale con la misma velocidad y posición que el avión.
-    return new Disparo(posX, posY, velocidad);
+    return new Disparo(this->posX + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, posY, velocidad);
 }
 
 void Avion::volverEstadoInicial(){

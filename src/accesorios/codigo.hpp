@@ -53,6 +53,15 @@
 #define LOOP_ETAPA_6 8
 #define LOOP_ETAPA_7 9
 #define LOOP_ETAPA_8 10
+#define LOOP_ETAPA_9 11
+#define LOOP_ETAPA_10 12
+#define LOOP_ETAPA_11 13
+#define LOOP_ETAPA_12 14
+#define LOOP_ETAPA_13 15
+#define LOOP_ETAPA_14 16
+#define LOOP_ETAPA_15 17
+#define LOOP_ETAPA_16 18
+#define LOOP_ETAPA_17 19
 
 /* Contador Loop avion */
 #define CONTADOR_INICIAL 150
