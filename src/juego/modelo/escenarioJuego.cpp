@@ -11,6 +11,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
 
 void EscenarioJuego::reset() {
     disparos.clear();
+    this->posicionNivel = 0;
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
         (*itAviones)->volverEstadoInicial();
     }
@@ -68,6 +69,10 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
+    posicionNivel += scrollingOffset;
+    if(posicionNivel >= LARGO_NIVEL){
+        this->reset();
+    }
     if (scrollingOffset > alto){
         scrollingOffset = 0;
     }

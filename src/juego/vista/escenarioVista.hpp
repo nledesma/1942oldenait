@@ -16,6 +16,7 @@
 #include <iterator>
 #include <pthread.h>
 
+#define FONDO_POR_DEFECTO "background-default"
 using namespace std;
 
 class EscenarioVista {

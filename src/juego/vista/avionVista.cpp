@@ -140,6 +140,11 @@ void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
     this->clipsAnimacion[LOOP_ETAPA_17].w = ANCHO_AVION_COMUN;
     this->clipsAnimacion[LOOP_ETAPA_17].h = ALTO_AVION_COMUN;
 
+    this->clipsAnimacion[DESCONECTADO].x = 0 + ANCHO_AVION_COMUN * 2;
+    this->clipsAnimacion[DESCONECTADO].y = 0 + ALTO_AVION_COMUN * 2;
+    this->clipsAnimacion[DESCONECTADO].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[DESCONECTADO].h = ALTO_AVION_COMUN;
+
 }
 
 void AvionVista::actualizar(string codigo){
@@ -199,7 +204,7 @@ void AvionVista::manejarEvento(SDL_Event evento){
 
 void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
     if(!this->figura->loadFromFile(this->pathSprite, renderer, color)){
-        this->figura->loadFromFile(AVION_POR_DEFECTO, renderer, color);
+        this->figura->loadFromFile((string)AVION_POR_DEFECTO, renderer, color);
     }
 }
 

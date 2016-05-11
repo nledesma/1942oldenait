@@ -128,6 +128,8 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 break;
             case SDLK_r:
                 this->colaEventos.push((int)PRESIONA_R);
+            case SDLK_x:
+                this->colaEventos.push((int)PRESIONA_X);
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
         switch( evento.key.keysym.sym )
@@ -216,6 +218,7 @@ void EscenarioVista::cargarVistasAviones(){
     }
 }
 
+
 void EscenarioVista::cargarVistasElementos(){
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
         ElementoVista* elementoVista = *iterador;
@@ -228,7 +231,9 @@ void EscenarioVista::cargarVistaDisparos() {
 }
 
 void EscenarioVista::cargarFondo(){
-    this->fondo->loadFromFile(this->pathImagen, this->ventana->getVentanaRenderer());
+    if(!this->fondo->loadFromFile(this->pathImagen, this->ventana->getVentanaRenderer())){
+        this->fondo->loadFromFile(FONDO_POR_DEFECTO, this->ventana->getVentanaRenderer());
+    }
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){

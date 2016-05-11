@@ -85,24 +85,26 @@ void Avion::mover(float timeStep){
             this->posY = ALTO_ESCENARIO - this->getAlto();
         }
     } else {
-        if(this->contador > 0) {
-            this->contador --;
-            if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5){
-                this->posY -= (this->velocidad / 2.f) * timeStep;
-            } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13){
-                this->posY += (this->velocidad / 2.f) * timeStep;
-            }
-        } else {
-            this->contador = 20;
-            if(this->estadoAnimacion == LOOP_ETAPA_17) {
-                this->estadoAnimacion = 0;
+        if(this->estadoAnimacion != DESCONECTADO) {
+            if(this->contador > 0) {
+                this->contador --;
+                if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5){
+                    this->posY -= (this->velocidad / 2.f) * timeStep;
+                } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13){
+                    this->posY += (this->velocidad / 2.f) * timeStep;
+                }
             } else {
-                this->estadoAnimacion ++;
+                this->contador = CONTADOR_INICIAL;
+                if(this->estadoAnimacion == LOOP_ETAPA_17) {
+                    this->estadoAnimacion = 0;
+                } else {
+                    this->estadoAnimacion ++;
+                }
             }
-        }
-        if (this->estadoAnimacion == LOOP_ETAPA_17){
-            this->velocidadX = 0;
-            this->velocidadY = 0;
+            if (this->estadoAnimacion == LOOP_ETAPA_17){
+                this->velocidadX = 0;
+                this->velocidadY = 0;
+            }
         }
     }
     pthread_mutex_unlock(&this->mutexMover);
