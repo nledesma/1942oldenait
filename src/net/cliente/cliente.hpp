@@ -28,6 +28,7 @@ private:
     bool hayLugar();
     EscenarioVista * escenarioVista;
     string alias;
+    pthread_t mainLoopThread;
 
 public:
     Cliente(string ip, int port);
@@ -37,14 +38,17 @@ public:
     int conectar();
     bool conectado();
     void cerrar();
-    string getIP();
-    int getPort();
-    void setAlias(string alias);
-    string getAlias();
     int enviarEvento(int evento);
     int recibirMensaje(string & mensaje);
     void iniciarEscenario();
     void actualizarComponentes(string mensaje);
     void cicloMensajes();
+    static void * cicloMensajes_th(void* THIS);
+    /* getters */
+    EscenarioVista * getEscenario();
+    string getIP();
+    int getPort();
+    string getAlias();
+    void setAlias(string alias);
 };
 #endif // CLIENTE_H

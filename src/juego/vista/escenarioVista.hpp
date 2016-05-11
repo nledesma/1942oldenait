@@ -33,7 +33,6 @@ private:
     bool activo = false;
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
-    pthread_t mainLoopThread;
     ColaConcurrente <int> colaEventos;
 
 public:
@@ -45,7 +44,6 @@ public:
     void cargarFondo();
     void cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador);
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
-    static void* mainLoop_th(void* THIS);
     void preloop();
     int mainLoop();
     void setActivo();
@@ -56,7 +54,6 @@ public:
     int getAlto();
     float getScrollingOffset();
     void setScrollingOffset(float scrollingOffset);
-    //Ventana* getVentana();
     list<AvionVista *> &getAviones();
     list<ElementoVista *> &getElementos();
     void agregarAvionVista(string infoAvion);
