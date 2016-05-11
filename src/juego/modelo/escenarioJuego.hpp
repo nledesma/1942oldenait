@@ -26,6 +26,7 @@ private:
     pthread_t mainLoopThread;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente<pair<int, int>> colaEventos;
+    float posicionNivel;
 public:
     void reset();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite);

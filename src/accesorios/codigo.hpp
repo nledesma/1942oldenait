@@ -65,4 +65,7 @@
 /* Contador Loop avion */
 #define CONTADOR_INICIAL 20
 
+//Largo nivel
+#define LARGO_NIVEL 1000000
+
 #endif //INC_1942OLDENAIT_CODIGO_HPP
