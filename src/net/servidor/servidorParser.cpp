@@ -113,12 +113,21 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 		}
 	}
 
+	/*XMLNode * pNodoConexion = pRoot -> FirstChild();
+	if((pNodoConexion == 0) || (string(pNodoConexion->Value()) != "conexion")){
+		return false;
+	}*/
+
+
 	XMLNode * pRoot = doc.FirstChildElement();
 	//Nodo Servidor
 	XMLNode * pNodoServidor = pRoot -> FirstChild();
 	int unaCantidadDeClientes;
 	XMLNode * pNodoCantidadMaximaDeClientes = pNodoServidor -> FirstChild();
 	pNodoCantidadMaximaDeClientes -> ToElement() -> QueryIntText(&unaCantidadDeClientes);
+	if(unaCantidadDeClientes > 4){
+		unaCantidadDeClientes = 4;
+	}
 
 	int unPuerto;
 	XMLNode * pNodoPuerto =  pNodoCantidadMaximaDeClientes -> NextSibling();
