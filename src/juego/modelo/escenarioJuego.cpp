@@ -87,6 +87,7 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
         escenario->moverElementos(timeStep);
         escenario->moverDisparos(timeStep);
         escenario->manejarProximoEvento();
+        usleep(5000);
     }
 
     pthread_exit(NULL);

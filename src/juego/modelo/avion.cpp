@@ -145,7 +145,6 @@ int Avion::getEstadoAnimacion(){
 }
 
 Disparo* Avion::disparar(){
-    cout<<"Y aca tambien" << endl;
     //Por ahora sale con la misma velocidad y posición que el avión.
     return new Disparo(posX, posY, velocidad);
 }
