@@ -128,8 +128,10 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 break;
             case SDLK_r:
                 this->colaEventos.push((int)PRESIONA_R);
+                break;
             case SDLK_x:
                 this->colaEventos.push((int)PRESIONA_X);
+                break;
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
         switch( evento.key.keysym.sym )
