@@ -7,14 +7,12 @@
 #define AZUL 2
 #define ROJO 3
 #define VERDE 4
-
 /* Colores */
 
 #define JUGADOR_1 BASE
 #define JUGADOR_2 AZUL
 #define JUGADOR_3 ROJO
 #define JUGADOR_4 VERDE
-
 /* Eventos */
 
 #define EVENTO_VACIO 0
@@ -62,8 +60,9 @@
 #define LOOP_ETAPA_15 17
 #define LOOP_ETAPA_16 18
 #define LOOP_ETAPA_17 19
+#define DESCONECTADO 20
 
 /* Contador Loop avion */
-#define CONTADOR_INICIAL 150
+#define CONTADOR_INICIAL 20
 
 #endif //INC_1942OLDENAIT_CODIGO_HPP

@@ -128,6 +128,8 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 break;
             case SDLK_r:
                 this->colaEventos.push((int)PRESIONA_R);
+            case SDLK_x:
+                this->colaEventos.push((int)PRESIONA_X);
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
         switch( evento.key.keysym.sym )
@@ -215,6 +217,7 @@ void EscenarioVista::cargarVistasAviones(){
         numeroJugador++;
     }
 }
+
 
 void EscenarioVista::cargarVistasElementos(){
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){

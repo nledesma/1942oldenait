@@ -282,6 +282,9 @@ void Servidor::agregarCliente(int fdCliente) {
 }
 
 void Servidor::quitarCliente(int clienteFd) {
+    list<Avion*>::iterator itAviones = this->escenario->getAviones().begin();
+    advance(itAviones, clientes[clienteFd].nroJugador -1);
+    (*itAviones)->setEstadoAnimacion(DESCONECTADO);
     clientes[clienteFd].conectado = false;
     clientes[clienteFd].colaSalida.avisar();
     string msj = "Cliente en la dirección " + direcciones[clienteFd] + " desconectado.";
@@ -312,7 +315,11 @@ void Servidor::desencolar() {
         int intEvento = Decodificador::popInt(clienteMensaje.second);
         int intJugador = clientes[clienteMensaje.first].nroJugador;
         pair <int, int> evento(intJugador, intEvento);
-        this->escenario->pushEvento(evento);
+        if(intEvento != PRESIONA_X){
+            this->escenario->pushEvento(evento);
+        } else {
+            this->cerrar();
+        }
     }
     string codigoEstadoActual = Decodificador::getCodigoEstadoActual(this->escenario);
     this->broadcastEstadoEscenario(codigoEstadoActual);
