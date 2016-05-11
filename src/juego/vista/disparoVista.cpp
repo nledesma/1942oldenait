@@ -11,7 +11,6 @@ DisparoVista::DisparoVista(string pathSprite){
 DisparoVista::~DisparoVista(){ }
 
 void DisparoVista::cargarImagen(SDL_Renderer * renderer){
-    cout<<"Aca llega" <<endl;
     if(!this->figuraDisparo->loadFromFile(this->pathSprite, renderer)){
         this->figuraDisparo->loadFromFile(DISPARO_POR_DEFECTO, renderer);
     }

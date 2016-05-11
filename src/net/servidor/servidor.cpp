@@ -235,7 +235,8 @@ void Servidor::encolarMensaje(pair<int, string> clienteMensaje) {
 
 // Envía al cliente la cantidad de jugadores faltantes para empezar periódicamente.
 void Servidor::esperarPartida(int fdCliente) {
-    cout << "esperando partida" << endl;
+    cout << "Esperando usuarios para comenzar la partida" << endl;
+    cout << "La partida comenzará cuando se encuentren conectados " << this->getCantidadMaximaDeClientes() << " jugadores" << endl;
     int clientesActuales;
     while(hayLugar()){
         string mensaje = "";
@@ -249,6 +250,7 @@ void Servidor::esperarPartida(int fdCliente) {
         // Espera un segundo antes de mandar de nuevo.
         sleep(1);
     }
+    cout << "Ya estan todos los jugadores conectados" << endl;
     // Cuando ya no hay lugar, se termina la función.
 }
 
