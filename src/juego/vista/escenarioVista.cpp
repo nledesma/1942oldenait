@@ -3,9 +3,14 @@ using namespace std;
 
 EscenarioVista::EscenarioVista(string infoEscenario){
     this->ancho = Decodificador::popInt(infoEscenario);
+    cout << "Ancho: " << this->ancho << endl;
     this->alto = Decodificador::popInt(infoEscenario);
+    cout << "Alto: " << this->alto << endl;
+
     this->pathImagen = Decodificador::popIdImg(infoEscenario);
+    cout << "pathImagen: " << this->pathImagen << endl;
     this->ventana = new Ventana(this->ancho, this->alto);
+
     this->scrollingOffset = 0;
     this->inicializarComponentes(infoEscenario);
     this->fondo = new Figura();

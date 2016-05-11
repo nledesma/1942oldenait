@@ -63,8 +63,9 @@ int main(int argc, char *argv[]){
         Logger::instance()->logError(errno,"Se produjo un error en el listen");
     }
     servidor->esperarJugadores();
+    sleep(2);
     servidor->getEscenario()->mainLoop();
-
+    servidor->iniciarCicloDesencolaciones();
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
     Logger::resetInstance();

@@ -83,6 +83,7 @@ public:
     void desactivarServidor();
     bool servidorActivo();
     void encolarMensaje(pair<int, string> clienteMensaje);
+    void iniciarCicloDesencolaciones();
     void desencolar();
     void encolarSalida(int clienteFd, string mensaje );
     bool clienteConectado(int clienteFd);

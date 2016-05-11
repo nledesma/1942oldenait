@@ -32,6 +32,11 @@ void ColaConcurrente<T>::push(T el){
 }
 
 template <class T>
+int ColaConcurrente<T>::getLong() {
+    return (int)this->cola.size();
+}
+
+template <class T>
 bool ColaConcurrente<T>::vacia(){
     return cola.empty();
 }

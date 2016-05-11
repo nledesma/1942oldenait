@@ -130,7 +130,9 @@ void Cliente::cicloMensajes(){
 		string mensaje = "";
 		int evento = this->escenarioVista->popEvento();
 		// cout << "Se envía el evento " << evento << endl;
-		this->enviarEvento(evento);
+		if (evento != EVENTO_VACIO){
+			this->enviarEvento(evento);
+		}
 		// cout << "Se efectua una lectura..." << endl;
 		this->recibirMensaje(mensaje);
 		// cout << "Se recibió el mensaje: " << endl;
@@ -144,9 +146,6 @@ int Cliente::enviarEvento(int evento){
 	int estadoEnvio = ESTADO_INICIAL;
 	Decodificador::pushEvento(mensaje, evento);
 	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
-	if(estadoEnvio == MENSAJE_OK){
-		Logger::instance()->logInfo("Se ha enviado correctamente el evento");
-	}
 	if (!validarEstadoConexion(estadoEnvio)){
 		cout << "Fallo en la conexión, se cierra el cliente." << endl;
 		this->escenarioVista->setInactivo();

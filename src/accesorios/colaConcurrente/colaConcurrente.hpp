@@ -22,6 +22,7 @@ public:
   void push(T el);
   bool vacia();
   void avisar();
+  int getLong();
 };
 
 #endif

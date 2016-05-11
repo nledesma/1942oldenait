@@ -56,6 +56,9 @@ void Servidor::pasivar() {
     }
     servidorActivado = true;
     pthread_create(&this->cicloAceptaciones, NULL, cicloAceptar, (void *) this);
+}
+
+void Servidor::iniciarCicloDesencolaciones(){
     pthread_create(&this->cicloDesencolaciones, NULL, cicloDesencolar, (void *) this );
 }
 
@@ -303,13 +306,14 @@ void Servidor::encolarSalida(int clienteFd, string mensaje){
 }
 
 void Servidor::desencolar() {
-    pair<int, string> clienteMensaje = colaDeMensajes.pop();
-    if (!servidorActivado) return;
-    int intEvento = Decodificador::popInt(clienteMensaje.second);
-    int intJugador = clientes[clienteMensaje.first].nroJugador;
-    pair <int, int> evento(intJugador, intEvento);
-    this->escenario->pushEvento(evento);
-
+    if (! colaDeMensajes.vacia()){
+        pair<int, string> clienteMensaje = colaDeMensajes.pop();
+        if (!servidorActivado) return;
+        int intEvento = Decodificador::popInt(clienteMensaje.second);
+        int intJugador = clientes[clienteMensaje.first].nroJugador;
+        pair <int, int> evento(intJugador, intEvento);
+        this->escenario->pushEvento(evento);
+    }
     string codigoEstadoActual = Decodificador::getCodigoEstadoActual(this->escenario);
     this->broadcastEstadoEscenario(codigoEstadoActual);
 }
