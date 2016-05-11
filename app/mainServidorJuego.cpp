@@ -78,10 +78,11 @@ int main(int argc, char *argv[]){
     }
     servidor->esperarJugadores();
     sleep(2);
-    servidor->getEscenario()->mainLoop();
+    servidor->getEscenario()->mainLoop(servidor->servidorActivo());
     servidor->iniciarCicloDesencolaciones();
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
     Logger::resetInstance();
+
     pthread_exit(NULL);
 }

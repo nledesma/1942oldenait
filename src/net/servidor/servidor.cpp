@@ -26,7 +26,7 @@ void Servidor::inicializar(int port) {
 
 void Servidor::esperarJugadores(){
     pthread_mutex_lock(&this->mutexPartidaLlena);
-    while (this->hayLugar()) {
+    while (this->hayLugar() && this->servidorActivo()) {
         pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
     }
     pthread_mutex_unlock(&this->mutexPartidaLlena);
@@ -196,7 +196,7 @@ int Servidor::aceptar() {
 
 void Servidor::cerrar() {
     this->desactivarServidor();
-
+    this->escenario->desactivar();
     for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
         int clienteActual = iterador->first;
         shutdown(clienteActual, 0);

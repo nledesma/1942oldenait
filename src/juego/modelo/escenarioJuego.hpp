@@ -22,6 +22,7 @@ private:
     float scrollingOffset;
     int alto;
     int ancho;
+    bool motorActivado;
     string idSprite;
     pthread_t mainLoopThread;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
@@ -38,7 +39,7 @@ public:
     void manejarEvento(int nroAvion, int evento);
     void actualizarScrollingOffset(float timeStep);
     void pushEvento(pair<int, int> evento);
-    void mainLoop();
+    void mainLoop(bool serverActivo);
     static void *mainLoop_th(void* THIS);
     void moverAviones(float timestep);
     void moverElementos(float timestep);
@@ -49,6 +50,9 @@ public:
     int getAncho();
     int getAlto();
     string getIdSprite();
+    bool estaActivo();
+    void activar();
+    void desactivar();
 };
 
 

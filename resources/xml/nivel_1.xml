@@ -31,7 +31,7 @@
         <avion>
             <velocidadDesplazamiento>500</velocidadDesplazamiento>
             <velocidadDisparos>510</velocidadDisparos>
-            <avionSpriteId>millen</avionSpriteId>
+            <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
         </avion>
     </aviones>

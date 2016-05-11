@@ -81,8 +81,8 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
 
 void *EscenarioJuego::mainLoop_th(void *THIS) {
     EscenarioJuego *escenario = (EscenarioJuego *) THIS;
-    bool quit = false;
-    while (!quit) {
+    escenario->activar();
+    while (escenario->estaActivo()) {
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
         escenario->actualizarScrollingOffset(timeStep);
         escenario->posicionY = escenario->posicionY + timeStep * escenario->velocidadDesplazamientoY;
@@ -98,8 +98,10 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
     pthread_exit(NULL);
 }
 
-void EscenarioJuego::mainLoop() {
-    pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
+void EscenarioJuego::mainLoop(bool serverActivo) {
+    if (serverActivo){
+        pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
+    }
 }
 
 void EscenarioJuego::manejarProximoEvento() {
@@ -166,3 +168,16 @@ int EscenarioJuego::getAncho() {
 int EscenarioJuego::getAlto() {
     return this->alto;
 }
+
+bool EscenarioJuego::estaActivo() {
+    return this->motorActivado;
+}
+
+void EscenarioJuego::desactivar() {
+    this->motorActivado = false;
+}
+
+void EscenarioJuego::activar() {
+    this->motorActivado = true;
+}
+
