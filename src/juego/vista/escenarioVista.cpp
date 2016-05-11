@@ -74,7 +74,7 @@ int EscenarioVista::mainLoop(){
     SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     while(this->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
-            if( e.type == SDL_QUIT )
+            if( e.type == SDL_QUIT || e.key.keysym.sym == SDLK_x)
             {
                 this->setInactivo();
             }

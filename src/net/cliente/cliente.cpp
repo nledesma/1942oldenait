@@ -28,6 +28,7 @@ void Cliente::setAddress(string serverAddress, int port){
 }
 
 int Cliente::conectar(){
+	cout << "Pasamos por el \"conectar\"" << endl;
 	// Me conecto a la direccion.
 	iniciarSocket();
 	int conexion;
