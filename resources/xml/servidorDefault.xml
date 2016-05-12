@@ -1,4 +1,0 @@
-<servidor>
-  <cantidadMaximaDeClientes> 10 </cantidadMaximaDeClientes>
-  <puerto>8080</puerto>
-</servidor>
