@@ -17,6 +17,13 @@
 #include <chrono>
 #include <sstream>
 
+struct Conexion {
+	string nombre;
+	string ip;
+	int puerto;
+};
+
+
 using namespace std;
 #define MENSAJE_INEXISTENTE -2
 

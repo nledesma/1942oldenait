@@ -6,13 +6,6 @@
 #include <algorithm>
 #include "clienteParser.hpp"
 
-
-#define T_STRING 0
-#define T_INT 1
-#define T_DOUBLE 2
-#define T_CHAR 3
-#define DEFAULT_XML "../../resources/xml/clienteDefault.xml"
-
 using namespace std;
 using namespace tinyxml2;
 
@@ -37,35 +30,9 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
 
 	pConexion->InsertEndChild(pNodoIp);
 	pConexion->InsertEndChild(pNodoPort);
-	// Lista de mensajes.
-	XMLElement * pNodoMensajes = doc.NewElement("mensajes");
-
-	for(list<Mensaje*>::iterator iterador = cliente->getMensajes().begin(); iterador != cliente->getMensajes().end(); ++iterador){
-		XMLElement * pMensaje = doc.NewElement("mensaje");
-		Mensaje *mensaje = *iterador;
-
-		// ID del mensaje.
-		XMLElement * pId = doc.NewElement("id");
-		pId-> SetText(mensaje->getId().c_str());
-		pMensaje ->InsertEndChild(pId);
-
-		// Tipo de datos del mensaje.
-		XMLElement * pTipo = doc.NewElement("tipo");
-		pTipo-> SetText(mensaje->strTipo().c_str());
-		pMensaje ->InsertEndChild(pTipo);
-
-		// Valor del mensaje.
-		XMLElement * pValor = doc.NewElement("valor");
-		pValor -> SetText(mensaje->getValor().c_str());
-		pMensaje->InsertEndChild(pValor);
-
-		// Agrego el mensaje a la lista en el xml.
-		pNodoMensajes->InsertEndChild(pMensaje);
-	}
 
   // Inserto Conexion (IP y Puerto) y Lista al xml.
 	pCliente->InsertEndChild(pConexion);
-	pCliente-> InsertEndChild(pNodoMensajes);
 
 	// Guardado del xml.
   XMLError e = doc.SaveFile(ruta.c_str());
@@ -76,9 +43,51 @@ void ClienteParser::serializador(Cliente *cliente, string ruta){
   }
 }
 
-Cliente * ClienteParser::deserializador(string ruta){
+// Por ahora siempre levanta del archivo de conexiones.
+// NOTE Por ahí convendría una lista de punteros a conexiones... y devolver un puntero...
+list<Conexion> ClienteParser::levantarConexiones(){
 	XMLDocument doc;
-	XMLError eResult = doc.LoadFile(ruta.c_str());
+	list<Conexion> conexiones;
+
+	XMLError eResult = doc.LoadFile(CONEXIONES_GUARDADAS);
+	// Si hay error devuelve la lista vacía.
+	if (!archivoValido(eResult, CONEXIONES_GUARDADAS)) return conexiones;
+
+	XMLNode * pRoot = doc.FirstChild();
+
+	// Itero sobre las conexiones.
+	XMLElement * pConexion = pRoot->FirstChildElement("conexion");
+	while(pConexion != NULL) {
+
+		Conexion c = {
+			.nombre = getString(pConexion, "nombre"),
+			.ip = getString(pConexion, "IP"),
+			.puerto = getInt(pConexion, "puerto")
+		};
+		conexiones.push_back(c);
+
+		pConexion = pConexion->NextSiblingElement("conexion");
+	}
+
+	return conexiones;
+}
+
+string ClienteParser::getString(XMLElement * padre, const char * nombreHijo){
+	// Hay que hacer delete de esto?
+	XMLElement * pHijo = padre->FirstChildElement(nombreHijo);
+	string texto(pHijo->GetText());
+	return texto;
+}
+
+int ClienteParser::getInt(XMLElement * padre, const char * nombreHijo){
+	XMLElement * pHijo = padre->FirstChildElement(nombreHijo);
+	int n;
+	pHijo->QueryIntText(&n);
+	return n;
+}
+
+
+bool ClienteParser::archivoValido(XMLError eResult, string ruta){
 	if (eResult != XML_NO_ERROR){
 		if(eResult >= 16){
 			cout << "El archivo" + ruta +"  no es válido" << endl;
@@ -94,8 +103,16 @@ Cliente * ClienteParser::deserializador(string ruta){
 			Logger::instance()->logWarning("Ruta " + ruta + " inválida.");
 		}
 
-		return NULL;
+		return false;
 	}
+	return true;
+}
+
+Cliente * ClienteParser::deserializador(string ruta){
+	XMLDocument doc;
+	XMLError eResult = doc.LoadFile(ruta.c_str());
+	if (!archivoValido(eResult, ruta)) return NULL;
+
 	XMLNode * pRoot = doc.FirstChild();
 	string ip;
 	int puerto;
@@ -105,12 +122,7 @@ Cliente * ClienteParser::deserializador(string ruta){
 		return NULL;
 	}
 	Cliente * cliente = new Cliente(ip, puerto);
-	if(!mensajesValidos(cliente, pRoot)){
-		cout <<"Error en los elementos del archivo " + ruta << endl;
-		Logger::instance()->logWarning("Incoveniente con los mensajes del archivo " + ruta );
-		delete cliente;
-		return NULL;
-	}
+
 	return cliente;
 }
 
@@ -130,131 +142,47 @@ bool ClienteParser::esIpValido(string ip){
 	return false;
 }
 
-	bool ClienteParser::mensajesValidos(Cliente * cliente, XMLNode * pRoot) {
-		XMLNode * pNodoMensajes = pRoot -> FirstChild()-> NextSibling();
-		if(string(pNodoMensajes->Value()) != "mensajes") {
-			return false;
-		}
-		XMLNode * pNodoMensaje = pNodoMensajes -> FirstChild();
-		list<string>  ids;
-		while(pNodoMensaje != NULL){
-			if(string(pNodoMensaje->Value()) != "mensaje"){
-				return false;
-			}
-			string id;
-			string tipo, valor;
-			XMLNode * pNodoId = pNodoMensaje->FirstChild();
-			if((pNodoId == 0) || string(pNodoId->Value()) != "id") {
-				return false;
-			}
-			if(pNodoId -> ToElement() -> GetText() == nullptr){
-				return false;
-			}else{
-				id = pNodoId -> ToElement() -> GetText();
-			}
-			if(!idValido(ids, id)) {
-				Logger::instance()->logWarning("Id" + id + " duplicado.");
-				return false;
-			}
-			XMLNode * pNodoTipo = pNodoId -> NextSibling();
-			if((pNodoTipo == 0) || string(pNodoTipo->Value()) != "tipo") {
-				return false;
-			}
-			if(pNodoTipo -> ToElement() -> GetText() == nullptr){
-				return false;
-			}else{
-				tipo = pNodoTipo -> ToElement() -> GetText();
-			}
-			transform(tipo.begin(), tipo.end(),tipo.begin(), ::toupper);
-			int codTipo;
-			if(!this->tipoValido(tipo, codTipo)){
-				return false;
-			}
-			XMLNode * pNodoValor = pNodoTipo -> NextSibling();
-			if ((pNodoValor == 0) || string(pNodoValor->Value()) != "valor") {
-				return false;
-			}
-			if(pNodoValor->ToElement()->GetText() == nullptr){
-				return false;
-			}else{
-				valor = pNodoValor->ToElement()->GetText();
-			}
-			cliente->agregarMensaje(new Mensaje(codTipo, id, valor));
-			pNodoMensaje = pNodoMensaje -> NextSibling();
-		}
-		return true;
-	}
-
-	bool ClienteParser::nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot) {
-
-		XMLNode * pNodoConexion = pRoot -> FirstChild();
-		if((pNodoConexion == 0) || (string(pNodoConexion->Value()) != "conexion")){
-			return false;
-		}
-
-		XMLNode * pNodoIp = pNodoConexion -> FirstChild();
-		if((pNodoIp == 0) || (string(pNodoIp->Value()) != "IP")) {
-			return false;
-		}
-
-		XMLNode * pNodoPuerto = pNodoIp -> NextSibling();
-		if((pNodoPuerto == 0) || (string(pNodoPuerto->Value()) != "puerto")){
-			return false;
-		}
-		if(pNodoPuerto->NextSibling() != 0){
-			return false;
-		}
-		if(pNodoIp == NULL){
-			return false;
-		}
-		if (pNodoIp->ToElement()->GetText() == nullptr){
-			return false;
-		} else {
-			ip = pNodoIp->ToElement()->GetText();
-			if (!esIpValido(ip)) {
-				return false;
-			}
-		}
-		if (pNodoPuerto->ToElement()->GetText() == nullptr){
-			return false;
-		} else{
-			pNodoPuerto->ToElement()->QueryIntText(&puerto);
-			if ((puerto>=1024)&&(puerto<65535)){
-				return true;
-			}else{
-				return false;
-			}
-		}
-		return true;
-}
 
 
-	bool ClienteParser::idValido(list<string> &ids, string id){
-		for(list<string>::iterator it=ids.begin(); it != ids.end(); it++){
-			if(it->c_str() == id){
-				return false;
-			}
-		}
-		ids.push_back(id);
-		return true;
-	}
+bool ClienteParser::nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot) {
 
-	bool ClienteParser::tipoValido(string tipo, int &codTipo) {
-		if(tipo == "STRING") {
-			codTipo = T_STRING;
-			return true;
-		}
-		if(tipo == "INT") {
-			codTipo = T_INT;
-			return true;
-		}
-		if(tipo == "DOUBLE") {
-			codTipo = T_DOUBLE;
-			return true;
-		}
-		if(tipo == "CHAR") {
-			codTipo = T_CHAR;
-			return true;
-		}
+	XMLNode * pNodoConexion = pRoot -> FirstChild();
+	if((pNodoConexion == 0) || (string(pNodoConexion->Value()) != "conexion")){
 		return false;
 	}
+
+	XMLNode * pNodoIp = pNodoConexion -> FirstChild();
+	if((pNodoIp == 0) || (string(pNodoIp->Value()) != "IP")) {
+		return false;
+	}
+
+	XMLNode * pNodoPuerto = pNodoIp -> NextSibling();
+	if((pNodoPuerto == 0) || (string(pNodoPuerto->Value()) != "puerto")){
+		return false;
+	}
+	if(pNodoPuerto->NextSibling() != 0){
+		return false;
+	}
+	if(pNodoIp == NULL){
+		return false;
+	}
+	if (pNodoIp->ToElement()->GetText() == nullptr){
+		return false;
+	} else {
+		ip = pNodoIp->ToElement()->GetText();
+		if (!esIpValido(ip)) {
+			return false;
+		}
+	}
+	if (pNodoPuerto->ToElement()->GetText() == nullptr){
+		return false;
+	} else{
+		pNodoPuerto->ToElement()->QueryIntText(&puerto);
+		if ((puerto>=1024)&&(puerto<65535)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	return true;
+}

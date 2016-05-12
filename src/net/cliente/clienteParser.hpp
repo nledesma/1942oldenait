@@ -6,18 +6,22 @@
 #include "../../logger/logger.hpp"
 #include <sstream>
 
+#define CONEXIONES_GUARDADAS "../../resources/xml/conexionesCliente.xml"
+
 using namespace tinyxml2;
 
 class ClienteParser {
 private:
-	bool tipoValido(string valor, int  &tipo);
-	bool idValido(list<string> &ids, string id);
-	bool nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot);
-	bool mensajesValidos(Cliente * cliente, XMLNode * pRoot);
-	bool esIpValido(string ip);
-	//El cliente recibe una direccion IP, un puerto y una coleccion de mensajes de tamaño indefinido
-	public:
-		void serializador(Cliente *cliente, string ruta);
-		Cliente * deserializador(string ruta);
+	/* utilidades */
+	static string getString(XMLElement *padre, const char * nombreHijo);
+	static int getInt(XMLElement *padre, const char* nombreHijo);
+	static bool nodoConexionValido(string &ip, int &puerto, XMLNode * pRoot);
+	static bool esIpValido(string ip);
+public:
+	static void serializador(Cliente *cliente, string ruta);
+	static Cliente * deserializador(string ruta);
+	static list<Conexion> levantarConexiones();
+	static bool archivoValido(XMLError eResult, string ruta);
+
 };
 #endif // CLIENTE_PARSER_H
