@@ -1,0 +1,5 @@
+<cliente>
+    <IP>127.0.0.1</IP>
+    <puerto>8000</puerto>
+    <!-- <alias> tomas </alias> -->  <!-- No creo que sea cómodo poner el alias para probar.-->
+</cliente>
