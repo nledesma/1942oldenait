@@ -54,9 +54,6 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             if (disparo) disparos.push_back(disparo);
             // TODO Hay que hacerle delete a esto en algún momento.
             break;
-        case PRESIONA_ENTER:
-            //TODO debe haber una manera mas elegante de hacerlo! Y no anda encima
-            avion(nroAvion)->setEstadoAnimacion((int)LOOP_ETAPA_1);
         default:
             avion(nroAvion)->manejarEvento(evento);
             break;

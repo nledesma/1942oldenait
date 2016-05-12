@@ -39,9 +39,6 @@ void Avion::manejarEvento(int evento){
                 this->estadoAnimacion = GIRANDO_DERECHA;
                 this->velocidadX += this->velocidad;
                 break;
-            case PRESIONA_ESPACIO:
-                //this->disparar();
-                break;
             case PRESIONA_ENTER:
                 this->estadoAnimacion = LOOP_ETAPA_1;
                 break;
