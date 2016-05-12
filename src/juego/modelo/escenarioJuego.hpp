@@ -22,15 +22,15 @@ private:
     float scrollingOffset;
     int alto;
     int ancho;
+    int longitud;
     bool motorActivado;
     string idSprite;
     pthread_t mainLoopThread;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente<pair<int, int>> colaEventos;
-    float posicionNivel;
 public:
     void reset();
-    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite);
+    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int longitud, string idSprite);
     ~EscenarioJuego();
     float getScrollingOffset();
     void agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
@@ -49,6 +49,7 @@ public:
     list<Disparo*>& getDisparos();
     int getAncho();
     int getAlto();
+    int getLongitud();
     string getIdSprite();
     bool estaActivo();
     void activar();

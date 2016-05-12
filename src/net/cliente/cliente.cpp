@@ -28,7 +28,6 @@ void Cliente::setAddress(string serverAddress, int port){
 }
 
 int Cliente::conectar(){
-	cout << "Pasamos por el \"conectar\"" << endl;
 	// Me conecto a la direccion.
 	iniciarSocket();
 	int conexion;
@@ -150,7 +149,7 @@ void* Cliente::cicloMensajes_th(void * THIS){
 		int evento = cliente->getEscenario()->popEvento();
 		if (evento != EVENTO_VACIO){
 			cliente->enviarEvento(evento);
-					}
+		}
 		// cout << "Se envía el evento " << evento << endl;
 		// cout << "Se efectua una lectura..." << endl;
 		cliente->recibirMensaje(mensaje);

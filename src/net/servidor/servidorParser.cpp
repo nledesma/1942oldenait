@@ -135,8 +135,13 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 
 	//Nodo Escenario
 	XMLNode * pNodoEscenario = pRoot -> FirstChild()-> NextSibling();
+	//Nodo Longitud
+	int longitud;
+	XMLNode * pNodoLongitud = pNodoEscenario -> FirstChild();
+	pNodoLongitud -> ToElement() -> QueryIntText(&longitud);
+
 	//Nodo Ventana
-	XMLNode * pNodoVentana = pNodoEscenario -> FirstChild();
+	XMLNode * pNodoVentana = pNodoEscenario->FirstChildElement("ventana");
 	//Ancho
 	int ancho;
 	XMLNode* pNodoAncho = pNodoVentana->FirstChild();
@@ -148,7 +153,7 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 	pNodoAlto -> ToElement() -> QueryIntText(&alto);
 
 	//Nodo Fondo
-	XMLNode* pNodoFondo = pNodoEscenario->FirstChild()->NextSibling();
+	XMLNode* pNodoFondo = pNodoEscenario->FirstChildElement("fondo");
 
 	//Id fondo sprite
 	string idSprite;
@@ -170,14 +175,14 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 	XMLNode* pdNodoVelocidadDesplazamientoYFondo = pNodoFondo->FirstChild()->NextSibling()->NextSibling()->NextSibling();
 	pdNodoVelocidadDesplazamientoYFondo ->ToElement() ->QueryFloatText(&velocidadDesplazamientoY);
 
-	//Nodo elementos
-	XMLNode* pNodoElementos = pNodoEscenario->FirstChild()->NextSibling()->NextSibling();
-
+	// Se crean servidor y escenario con lo obtenido hasta ahora.
 	Servidor* servidor = new Servidor(unPuerto,unaCantidadDeClientes);
-	EscenarioJuego* escenario = new EscenarioJuego(velocidadDesplazamientoY, ancho, alto, idSprite);
+	EscenarioJuego* escenario = new EscenarioJuego(velocidadDesplazamientoY, ancho, alto, longitud, idSprite);
 	servidor->setEscenario(escenario);
 	cout << "Se creo un escenario" << endl;
 
+	//Nodo elementos
+	XMLNode* pNodoElementos = pNodoEscenario -> FirstChildElement("elementos");
 	//Lista de elementos
 	XMLNode * pNodoElemento = pNodoElementos -> FirstChild();
 

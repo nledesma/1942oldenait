@@ -4,6 +4,7 @@
         <puerto>8000</puerto>
     </servidor>
     <escenario>
+        <longitud>1600</longitud> <!-- En pixels, por el momento.-->
         <ventana>
             <ancho>800</ancho>
             <alto>800</alto>
@@ -30,7 +31,7 @@
     <aviones>
         <avion>
             <velocidadDesplazamiento>500</velocidadDesplazamiento>
-            <velocidadDisparos>510</velocidadDisparos>
+            <velocidadDisparos>1000</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
         </avion>

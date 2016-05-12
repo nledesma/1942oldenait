@@ -1,17 +1,20 @@
 #include "escenarioJuego.hpp"
 
-EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, string idSprite) {
+EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int longitud, string idSprite) {
     this->velocidadDesplazamientoY = velocidadDesplazamientoY;
     scrollingOffset = 0;
     posicionY = 0;
     this->idSprite = idSprite;
+    // Ancho y alto de la ventana.
     this->ancho = ancho;
     this->alto = alto;
+    // Longitud del nivel.
+    this->longitud = longitud;
 }
 
 void EscenarioJuego::reset() {
     disparos.clear();
-    this->posicionNivel = 0;
+    posicionY = 0;
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
         (*itAviones)->volverEstadoInicial();
     }
@@ -69,8 +72,7 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
-    posicionNivel += scrollingOffset;
-    if(posicionNivel >= LARGO_NIVEL){
+    if(posicionY >= longitud){
         this->reset();
     }
     if (scrollingOffset > alto){
@@ -169,6 +171,10 @@ int EscenarioJuego::getAlto() {
     return this->alto;
 }
 
+int EscenarioJuego::getLongitud() {
+    return this->longitud;
+}
+
 bool EscenarioJuego::estaActivo() {
     return this->motorActivado;
 }
@@ -180,4 +186,3 @@ void EscenarioJuego::desactivar() {
 void EscenarioJuego::activar() {
     this->motorActivado = true;
 }
-

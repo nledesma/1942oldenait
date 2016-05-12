@@ -160,8 +160,8 @@ int Avion::getEstadoAnimacion(){
 }
 
 Disparo* Avion::disparar(){
-    //Por ahora sale con la misma velocidad y posición que el avión.
-    return new Disparo(this->posX + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, posY, velocidad);
+    // Por ahora sale con la misma velocidad y posición que el avión.
+    return new Disparo(this->posX + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, posY, velocidadDisparos);
 }
 
 void Avion::volverEstadoInicial(){
