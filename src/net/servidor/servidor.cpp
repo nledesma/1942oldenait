@@ -12,9 +12,8 @@ Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     } catch (runtime_error &e) {
         Logger::instance()->logError(errno, "Se produjo un error en el BIND");
     }
-    // ?
+    
     setCantidadMaximaDeClientes(cantidadDeClientes);
-    // desactivarServidor();
 }
 
 void Servidor::inicializar(int port) {
@@ -63,19 +62,17 @@ void Servidor::iniciarCicloDesencolaciones(){
 // mensaje de respuesta correspondiente.
 string Servidor::evaluarIngreso(string nombre){
     if (partidaEnJuego){
-        cout << "la partida está activa" << endl;
         // Si la partida está activa entonces hay que ver si el nombre está activo.
         if (nombres.count(nombre) > 0){
             if (nombres[nombre]){
-                return "El nombre está en uso.";
+                return "El usuario con ese nombre ya está jugando.";
             } else {
                 return "OK";
             }
         } else {
-            return "No hay jugador en la partida con ese nombre.";
+            return "La partida está llena.";
         }
     } else {
-        cout << "la partida no está activa." << endl;
         // Si la partida no está activa hay que ver si el nombre está disponible.
         if (nombres.count(nombre) == 0){
             return "OK";

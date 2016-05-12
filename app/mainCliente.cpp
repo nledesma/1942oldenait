@@ -15,12 +15,14 @@ bool validarInt(string valor) {
 int leerInt(){
     string lectura;
     stringstream ss;
-    cin >> lectura;
     int n;
+
+    cin >> lectura;
     while(!validarInt(lectura)) {
-        cout << "No se ingresó un número." << endl;
+        cout << "El valor ingresado debe ser un número." << endl;
         cin >> lectura;
     }
+    
     ss << lectura;
     ss >> n;
     return n;

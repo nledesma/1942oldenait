@@ -44,27 +44,21 @@ void EscenarioJuego::agregarElemento(float posX, float posY, string idSprite) {
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
-    list<Avion *>::iterator iterador;
+    Disparo * disparo;
     switch (evento) {
         case PRESIONA_R:
             reset();
             break;
         case PRESIONA_ESPACIO:
-            iterador = aviones.begin();
-            advance(iterador, nroAvion - 1);
-            disparos.push_back((*iterador)->disparar());
+            disparo = avion(nroAvion)->disparar();
+            if (disparo) disparos.push_back(disparo);
             // TODO Hay que hacerle delete a esto en algún momento.
             break;
         case PRESIONA_ENTER:
-            iterador = aviones.begin();
-            advance(iterador, nroAvion - 1);
             //TODO debe haber una manera mas elegante de hacerlo! Y no anda encima
-            (*iterador)->setEstadoAnimacion((int)LOOP_ETAPA_1);
+            avion(nroAvion)->setEstadoAnimacion((int)LOOP_ETAPA_1);
         default:
-            // NOTE ojo, tienen que estar en orden los aviones.
-            iterador = aviones.begin();
-            advance(iterador, nroAvion - 1);
-            (*iterador)->manejarEvento(evento);
+            avion(nroAvion)->manejarEvento(evento);
             break;
     }
 }
@@ -185,4 +179,10 @@ void EscenarioJuego::desactivar() {
 
 void EscenarioJuego::activar() {
     this->motorActivado = true;
+}
+
+Avion* EscenarioJuego::avion(int i){
+    list<Avion*>::iterator it = aviones.begin();
+    advance (it, i - 1);
+    return *it;
 }

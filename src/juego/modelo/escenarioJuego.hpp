@@ -54,6 +54,7 @@ public:
     bool estaActivo();
     void activar();
     void desactivar();
+    Avion* avion(int i);
 };
 
 
