@@ -30,7 +30,6 @@ void Servidor::esperarJugadores(){
         pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
     }
     pthread_mutex_unlock(&this->mutexPartidaLlena);
-
     if (servidorActivo()) {
         partidaEnJuego = true;
         cout << "Comenzando partida!" << endl;
@@ -231,7 +230,7 @@ void Servidor::encolarMensaje(pair<int, string> clienteMensaje) {
 // Envía al cliente la cantidad de jugadores faltantes para empezar periódicamente.
 void Servidor::esperarPartida(int fdCliente) {
     cout << "Faltan " << clientesFaltantes() << " jugadores." << endl;
-    while(hayLugar()){
+    while(hayLugar() && servidorActivo()){
         string mensaje = "";
         // Enviamos la cantidad de clientes faltantes al cliente.
         Decodificador::pushCantidad(mensaje, clientesFaltantes());
