@@ -4,7 +4,6 @@
 #include "../mensaje/mensaje.hpp"
 #include "../decodificador.hpp"
 #include "../../juego/vista/escenarioVista.hpp"
-#include "../codigoRespuesta.hpp"
 #include <list>
 #include <string>
 #include <errno.h>

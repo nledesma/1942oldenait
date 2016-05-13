@@ -63,7 +63,7 @@ bool Cliente::sePuedeEntrar() {
 	enviarMensaje(alias, socketFd);
 	// Luego el servidor evalua y envia su respuesta. Si es OK se puede.
 	string mensaje = "";
-	GameSocket::recibirMensaje(mensaje, socketFd);
+	if(recibirMensaje(mensaje) != MENSAJEOK) return false;
 	if (mensaje == "OK"){
 		return true;
 	} else {
@@ -95,7 +95,9 @@ int Cliente::getPort(){
 }
 
 int Cliente::recibirMensaje(string & mensaje){
-	int result = this->setTimeOut(20);
+	if (!cliente_conectado) return PEER_DESCONECTADO;
+
+	int result = this->setTimeOut(3);
 	if (result < 0){
 		stringstream ss;
 		ss << this->socketFd;
@@ -124,8 +126,8 @@ void Cliente::iniciarEscenario(){
 	int n2;
 
 	// Vamos a recibir periódicamente los jugadores que faltan.
-	this->recibirMensaje(mensajeRespuesta);
-	while(mensajeRespuesta.length() == sizeof(int)){
+	if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
+	while(mensajeRespuesta.length() == sizeof(int) && cliente_conectado){
 		n2 = Decodificador::popInt(mensajeRespuesta);
 		if (n2 != n){
 			n = n2;
@@ -133,6 +135,7 @@ void Cliente::iniciarEscenario(){
 		}
 		this->recibirMensaje(mensajeRespuesta);
 	}
+	if(!cliente_conectado) return;
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
 	this->escenarioVista->setActivo();
@@ -152,7 +155,7 @@ void* Cliente::cicloMensajes_th(void * THIS){
 		}
 		// cout << "Se envía el evento " << evento << endl;
 		// cout << "Se efectua una lectura..." << endl;
-		cliente->recibirMensaje(mensaje);
+		if(cliente->recibirMensaje(mensaje) != MENSAJEOK) pthread_exit(NULL);
 		// cout << "Se recibió el mensaje: " << endl;
 		// Decodificador::imprimirBytes(mensaje);
 		cliente->actualizarComponentes(mensaje);
