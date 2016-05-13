@@ -18,13 +18,18 @@
         <elementos>
             <elemento>
                 <spriteIdElemento>asteroide</spriteIdElemento>
-                <posx>100</posx>
-                <posy>300</posy>
+                <posx>000</posx>
+                <posy>200</posy>
             </elemento>
             <elemento>
                 <spriteIdElemento>planeta</spriteIdElemento>
                 <posx>600</posx>
-                <posy>1000</posy>
+                <posy>800</posy>
+            </elemento>
+            <elemento>
+                <spriteIdElemento>asteroide</spriteIdElemento>
+                <posx>000</posx>
+                <posy>1600</posy>
             </elemento>
         </elementos>
     </escenario>
