@@ -12,7 +12,7 @@ Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     } catch (runtime_error &e) {
         Logger::instance()->logError(errno, "Se produjo un error en el BIND");
     }
-    
+
     setCantidadMaximaDeClientes(cantidadDeClientes);
 }
 
@@ -111,7 +111,7 @@ void *Servidor::cicloAceptar(void *THIS) {
 }
 
 void Servidor::enviarEstadoInicial(int fdCliente) {
-    cout << "enviando estado inicial" << endl;
+    cout << "Enviando estado inicial." << endl;
     enviarMensaje(Decodificador::getCodigoEstadoInicial(escenario), fdCliente);
 }
 
@@ -135,7 +135,7 @@ void *Servidor::atenderCliente(void *arg) {
         recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
 
         if(recieveResult != MENSAJEOK) {
-            cout << "Se ha desconectado un cliente" << endl; // TODO loguear
+            cout << "Se ha desconectado un cliente." << endl; // TODO loguear
         } else {
             clienteMensaje.second = mensajeCliente;
             servidor->encolarMensaje(clienteMensaje);
@@ -270,16 +270,14 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
     datos.nroJugador = (int) clientes.size() + 1;
     datos.nombreJugador = nombre;
     if(this->escenario->estaActivo()){
-        list<Avion*>::iterator itAviones = this->escenario->getAviones().begin();
-        advance(itAviones, datos.nroJugador -1);
-        (*itAviones)->setEstadoAnimacion(ESTADO_NORMAL);
+        escenario->avion(datos.nroJugador - 1)->setEstadoAnimacion(ESTADO_NORMAL);
     }
     nombres[nombre] = true;
 
     string dir = obtenerDireccion(fdCliente);
     cout << "Conectado a un cliente en la dirección " + dir << endl;
     Logger::instance()->logInfo("Conectado a un cliente en la dirección " + dir);
-    // TODO no debería haber un utex acá?
+    // TODO no debería haber un mutex acá?
     direcciones.insert(pair<int, string>(fdCliente, dir));
 
     pthread_mutex_lock(&mutexAgregar);

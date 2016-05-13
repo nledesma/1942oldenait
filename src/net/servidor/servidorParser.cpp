@@ -219,8 +219,10 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 	XMLNode* pNodoSpriteIdAvionDisparos = pNodoSpriteIdAvion->NextSibling();
 	disparosSpriteId = pNodoSpriteIdAvionDisparos -> ToElement() -> GetText();
 
+	float d = ancho/(unaCantidadDeClientes + 1);
 	for (int i = 1; i <= unaCantidadDeClientes; i++){
-		servidor->getEscenario()->agregarAvion(40, 40, velocidadDesplazamiento, velocidadDisparos, avionSpriteId, disparosSpriteId);
+		servidor->getEscenario()->agregarAvion(d*i - ANCHO_AVION_COMUN/2, 600,
+			velocidadDesplazamiento, velocidadDisparos, avionSpriteId, disparosSpriteId);
 	}
 	return servidor;
 }
