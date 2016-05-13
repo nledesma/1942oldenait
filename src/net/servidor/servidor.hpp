@@ -18,7 +18,6 @@
 #include <cstdlib>
 #include <sstream>
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
-#include "../codigoRespuesta.hpp"
 #include "../../juego/modelo/escenarioJuego.hpp"
 #include <chrono>
 #include "../decodificador.hpp"
