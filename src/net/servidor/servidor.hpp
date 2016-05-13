@@ -20,7 +20,6 @@
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../codigoRespuesta.hpp"
 #include "../../juego/modelo/escenarioJuego.hpp"
-#include "../codigoRespuesta.hpp"
 #include <chrono>
 #include "../decodificador.hpp"
 
