@@ -92,6 +92,7 @@ public:
     string obtenerDireccion(int fdCliente);
     void activarPartida();
     bool partidaActiva();
+    int clientesFaltantes();
 };
 
 #endif

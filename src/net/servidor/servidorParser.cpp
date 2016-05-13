@@ -176,10 +176,9 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 	pdNodoVelocidadDesplazamientoYFondo ->ToElement() ->QueryFloatText(&velocidadDesplazamientoY);
 
 	// Se crean servidor y escenario con lo obtenido hasta ahora.
-	Servidor* servidor = new Servidor(unPuerto,unaCantidadDeClientes);
+	Servidor* servidor = new Servidor(unPuerto, unaCantidadDeClientes);
 	EscenarioJuego* escenario = new EscenarioJuego(velocidadDesplazamientoY, ancho, alto, longitud, idSprite);
 	servidor->setEscenario(escenario);
-	cout << "Se creo un escenario" << endl;
 
 	//Nodo elementos
 	XMLNode* pNodoElementos = pNodoEscenario -> FirstChildElement("elementos");

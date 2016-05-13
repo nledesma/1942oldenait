@@ -172,6 +172,7 @@ bool EscenarioJuego::estaActivo() {
 
 void EscenarioJuego::desactivar() {
     this->motorActivado = false;
+    colaEventos.avisar();
 }
 
 void EscenarioJuego::activar() {

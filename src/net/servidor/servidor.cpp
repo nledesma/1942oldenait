@@ -4,7 +4,6 @@ using namespace std;
 
 /* Inicio del servidor */
 Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
-    cout << "pasa por acá y se pone la partida en inactiva.";
     partidaEnJuego = false;
     try {
         iniciarSocket();
@@ -27,13 +26,15 @@ void Servidor::inicializar(int port) {
 
 void Servidor::esperarJugadores(){
     pthread_mutex_lock(&this->mutexPartidaLlena);
-    while (this->hayLugar()) {
+    while (this->hayLugar() && servidorActivo()) {
         pthread_cond_wait(&this->condPartidaLlena, &this->mutexPartidaLlena);
     }
     pthread_mutex_unlock(&this->mutexPartidaLlena);
-    cout << "pasa por acá y se pone la partida en activa.";
-    partidaEnJuego = true;
-    cout << "Comenzando partida!" << endl;
+
+    if (servidorActivo()) {
+        partidaEnJuego = true;
+        cout << "Comenzando partida!" << endl;
+    }
 }
 
 void Servidor::setAddress(int port) {
@@ -46,7 +47,6 @@ void Servidor::setAddress(int port) {
 void Servidor::pasivar() {
 
     int resultadoListen = listen(this->socketFd, this->cantidadMaximaDeClientes);
-    cout << "Esperando conexión ... " << endl;
     if (resultadoListen == -1) {
         throw runtime_error("LISTEN_EXCEPTION");
     }
@@ -111,12 +111,10 @@ void *Servidor::cicloAceptar(void *THIS) {
 }
 
 void Servidor::enviarEstadoInicial(int fdCliente) {
-    cout << "Enviando estado inicial." << endl;
     enviarMensaje(Decodificador::getCodigoEstadoInicial(escenario), fdCliente);
 }
 
 void *Servidor::atenderCliente(void *arg) {
-    cout << "Atendiendo a un cliente." << endl;
     pair<Servidor *, int> *parServidorCliente = (pair<Servidor *, int> *) arg;
     Servidor *servidor = parServidorCliente->first;
     int fdCliente = parServidorCliente->second;
@@ -198,7 +196,6 @@ int Servidor::aceptar() {
 
 void Servidor::cerrar() {
     this->desactivarServidor();
-
     for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
         int clienteActual = iterador->first;
         shutdown(clienteActual, 0);
@@ -210,7 +207,8 @@ void Servidor::cerrar() {
 
     // Cerramos las colas.
     colaDeMensajes.avisar();
-
+    this->escenario->desactivar();
+    pthread_cond_signal(&condPartidaLlena);
     cout << "Servidor cerrado" << endl;
     Logger::instance()->logInfo("El servidor ha sido cerrado");
 }
@@ -232,23 +230,15 @@ void Servidor::encolarMensaje(pair<int, string> clienteMensaje) {
 
 // Envía al cliente la cantidad de jugadores faltantes para empezar periódicamente.
 void Servidor::esperarPartida(int fdCliente) {
-    cout << "Esperando usuarios para comenzar la partida" << endl;
-    cout << "La partida comenzará cuando se encuentren conectados " << this->getCantidadMaximaDeClientes() << " jugadores" << endl;
-    int clientesActuales;
+    cout << "Faltan " << clientesFaltantes() << " jugadores." << endl;
     while(hayLugar()){
         string mensaje = "";
-        // Nos fijamos cuántos clientes hay conectados.
-        pthread_mutex_lock(&mutexAgregar);
-        clientesActuales = clientes.size();
-        pthread_mutex_unlock(&mutexAgregar);
-        Decodificador::pushCantidad(mensaje, cantidadMaximaDeClientes - clientesActuales);
-        // Enviamos la cantidad de clientes faltantes.
+        // Enviamos la cantidad de clientes faltantes al cliente.
+        Decodificador::pushCantidad(mensaje, clientesFaltantes());
         enviarMensaje(mensaje, fdCliente);
         // Espera un segundo antes de mandar de nuevo.
         sleep(1);
     }
-    cout << "Ya estan todos los jugadores conectados" << endl;
-    // Cuando ya no hay lugar, se termina la función.
 }
 
 string Servidor::obtenerDireccion(int fdCliente){
@@ -342,14 +332,6 @@ void Servidor::broadcastEstadoEscenario(string codigoEstadoEscenario) {
     }
 }
 
-bool Servidor::hayLugar(){
-    int clientesActuales;
-    pthread_mutex_lock(&mutexAgregar);
-    clientesActuales = clientes.size();
-    pthread_mutex_unlock(&mutexAgregar);
-    return clientesActuales < cantidadMaximaDeClientes;
-}
-
 void Servidor::imprimirDatosInicialesEscenario(){
     // string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
     // Decodificador::imprimirBytes(codigo);
@@ -398,5 +380,19 @@ EscenarioJuego* Servidor::getEscenario(){
 }
 
 void Servidor::setEscenario(EscenarioJuego* unEscenario){
+    string str = (cantidadMaximaDeClientes > 1 ? "es" : "");
+    cout << "Se esperará a " << cantidadMaximaDeClientes << " jugador" << str << " para comenzar la partida" << endl;
     this->escenario = unEscenario;
+}
+
+bool Servidor::hayLugar(){
+    return clientesFaltantes() > 0;
+}
+
+int Servidor::clientesFaltantes() {
+    int clientesActuales;
+    pthread_mutex_lock(&mutexAgregar);
+    clientesActuales = clientes.size();
+    pthread_mutex_unlock(&mutexAgregar);
+    return cantidadMaximaDeClientes - clientesActuales;
 }

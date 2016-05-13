@@ -16,7 +16,7 @@ void* apagarServidor(void* servidor){
     do{
         cout << "Presione 'S' para salir" << endl;
         cin >> caracter;
-    }while((caracter != 's')&&(caracter != 'S'));
+    } while((caracter != 's')&&(caracter != 'S'));
 
     if((caracter == 's')||(caracter == 'S')){
         servidor1->cerrar();
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
     servidor = parser.deserializarEscenario(rutaXMLServidor);
 
     pthread_t apagar;
-    pthread_create(&apagar,NULL,apagarServidor,servidor);
+    pthread_create(&apagar, NULL, apagarServidor, servidor);
     // Servidor aceptando conexiones
     try{
         servidor->pasivar();
@@ -77,12 +77,16 @@ int main(int argc, char *argv[]){
         Logger::instance()->logError(errno,"Se produjo un error en el listen");
     }
     servidor->esperarJugadores();
-    sleep(2);
-    servidor->getEscenario()->mainLoop(servidor->servidorActivo());
-    servidor->iniciarCicloDesencolaciones();
+
+    // Se puede haber cerrado el servidor antes de recibir jugadores.
+    if (servidor->servidorActivo()) {
+        sleep(2);
+        servidor->getEscenario()->mainLoop(servidor->servidorActivo());
+        servidor->iniciarCicloDesencolaciones();
+    }
+
     pthread_join(apagar, NULL);
     Logger::instance()->cerrar();
     Logger::resetInstance();
-
     pthread_exit(NULL);
 }
