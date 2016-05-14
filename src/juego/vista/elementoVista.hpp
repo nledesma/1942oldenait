@@ -6,9 +6,8 @@
 #include <SDL2/SDL.h>
 #include "figura.hpp"
 #include "../../net/decodificador.hpp"
+#include "../../accesorios/default.hpp"
 #include <pthread.h>
-
-#define ELEMENTO_POR_DEFECTO "imagen-default"
 
 using namespace std;
 

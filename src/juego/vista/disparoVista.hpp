@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "figura.hpp"
+#include "../../accesorios/default.hpp"
 
-#define DISPARO_POR_DEFECTO "../../../resources/img/redLaserRay.bmp"
 using namespace std;
 
 struct disparo {

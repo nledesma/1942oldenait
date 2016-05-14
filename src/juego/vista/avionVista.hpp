@@ -6,8 +6,7 @@
 #include "figura.hpp"
 #include "../../accesorios/codigo.hpp"
 #include "../../net/decodificador.hpp"
-
-#define AVION_POR_DEFECTO "millenium-sprite-default"
+#include "../../accesorios/default.hpp"
 
 using namespace std;
 

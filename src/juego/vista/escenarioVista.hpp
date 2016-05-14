@@ -15,8 +15,8 @@
 #include <list>
 #include <iterator>
 #include <pthread.h>
+#include "../../accesorios/default.hpp"
 
-#define FONDO_POR_DEFECTO "background-default"
 using namespace std;
 
 class EscenarioVista {
