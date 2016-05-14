@@ -76,7 +76,7 @@ int EscenarioVista::mainLoop(){
         while( SDL_PollEvent( &e ) != 0 ){
             if( e.type == SDL_QUIT || e.key.keysym.sym == SDLK_x)
             {
-                this->setInactivo();
+                this->desactivar();
             }
             this->pushEvento(e);
         }
@@ -94,11 +94,6 @@ int EscenarioVista::mainLoop(){
     cerrar();
     return 1;
 }
-
-bool EscenarioVista::getActivo(){
-  return this->activo;
-}
-
 
 void EscenarioVista::pushEvento(SDL_Event evento){
     if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
@@ -157,15 +152,16 @@ int EscenarioVista::popEvento() {
     }
 }
 
-void EscenarioVista::setActivo(){
+void EscenarioVista::activar() {
     this->activo = true;
 }
 
-void EscenarioVista::setInactivo(){
+void EscenarioVista::desactivar() {
     this->activo = false;
+    colaEventos.avisar();
 }
 
-void EscenarioVista::cerrar(){
+void EscenarioVista::cerrar() {
     this->fondo->free();
 
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
@@ -309,4 +305,8 @@ Ventana* EscenarioVista::getVentana(){
 
 float EscenarioVista::getScrollingOffset(){
     return this->scrollingOffset;
+}
+
+bool EscenarioVista::getActivo(){
+  return this->activo;
 }

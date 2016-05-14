@@ -37,6 +37,7 @@ private:
 
 public:
     Cliente(string ip, int port);
+	Cliente();
     ~Cliente();
     void inicializar(string serverAddress ,int port);
     void setAddress(string serverAddress, int port);

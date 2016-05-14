@@ -14,10 +14,9 @@ void GameSocket::iniciarSocket() {
         Logger::instance()->logError(errno, "Socket en uso.");
 }
 
+// Dada una cantidad de bytes recibidos, se fija si hubo error en la conexión.
 bool GameSocket::validarEstadoConexion(int estadoConexion) {
-    if (estadoConexion != PEER_DESCONECTADO && estadoConexion != PEER_ERROR)
-        return true;
-    return false;
+    return estadoConexion != PEER_DESCONECTADO && estadoConexion != PEER_ERROR;
 }
 
 void GameSocket::cerrarSocketFd(){

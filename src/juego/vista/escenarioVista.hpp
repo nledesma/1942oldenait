@@ -47,16 +47,8 @@ public:
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
     void preloop();
     int mainLoop();
-    void setActivo();
-    void setInactivo();
-    bool getActivo();
-    void setDisparos(list<disparo> disparos);
-    int getAncho();
-    int getAlto();
     float getScrollingOffset();
     void setScrollingOffset(float scrollingOffset);
-    list<AvionVista *> &getAviones();
-    list<ElementoVista *> &getElementos();
     void agregarAvionVista(string infoAvion);
     void agregarElementoVista(string codigo);
     void agregarDisparoVista(string pathSprite);
@@ -66,13 +58,22 @@ public:
     void renderizarDisparos();
     void pushEvento(SDL_Event evento);
     int popEvento();
-    Figura *getFondo();
-    Ventana *getVentana();
     void cargarVistasAviones();
     void cargarVistasElementos();
     void cargarVistaDisparos();
     void actualizar(float offset);
     void cerrar();
+    /* getters y setters*/
+    void activar();
+    void desactivar();
+    list<AvionVista *> &getAviones();
+    list<ElementoVista *> &getElementos();
+    bool getActivo();
+    void setDisparos(list<disparo> disparos);
+    int getAncho();
+    int getAlto();
+    Figura *getFondo();
+    Ventana *getVentana();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

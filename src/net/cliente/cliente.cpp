@@ -12,11 +12,11 @@ Cliente::Cliente(string ip, int port):GameSocket(){
 	this->ip = ip;
 	this->port = port;
 	cliente_conectado = false;
-	inicializar(ip, port);
+	setAddress(ip, port);
 }
 
-void Cliente::inicializar(string serverAddress ,int port){
-	this->setAddress(serverAddress, port);
+Cliente::Cliente():GameSocket(){
+	cliente_conectado = false;
 }
 
 void Cliente::setAddress(string serverAddress, int port){
@@ -34,7 +34,7 @@ int Cliente::conectar(){
 	try {
 		int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
 		conexion = connected;
-		if(connected == 0) {
+		if (connected == 0) {
 			Logger::instance()->logInfo("Conexión exitosa");
 			cliente_conectado = true;
 			cout << "Conexión exitosa" << endl;
@@ -44,14 +44,14 @@ int Cliente::conectar(){
 				// Antes de seguir hacemos la etapa inicial.
 				iniciarEscenario();
 			}
-		} else {
-			if (connected == -1){
-				cliente_conectado = false;
-				cout << "La conexión falló, error " << errno << endl;
-				throw runtime_error("CLIENTE_EXCEPTION");
-			}
+		} else if (connected == -1) {
+			cliente_conectado = false;
+			// TODO: loggear con strerror.
+			cout << "La conexión falló, error " << errno << endl;
+			throw runtime_error("CLIENTE_EXCEPTION");
 		}
 	} catch(runtime_error &e){
+		// TODO este catch solo sirve para nuestro throw? Porque si es así deberíamos mover el log ahí arriba y sacar todo esto.
 		Logger::instance()->logError(errno,"Se produjo un error en el connect");
 	}
 
@@ -79,7 +79,7 @@ bool Cliente::conectado(){
 
 void Cliente::cerrar(){
 	if (escenarioVista){
-		escenarioVista->cerrar();
+		escenarioVista->desactivar();
 	}
 	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
 	cliente_conectado = false;
@@ -95,7 +95,7 @@ int Cliente::getPort(){
 }
 
 int Cliente::recibirMensaje(string & mensaje){
-	if (!cliente_conectado) return PEER_DESCONECTADO;
+	if (!cliente_conectado) return SIN_CONEXION;
 
 	int result = this->setTimeOut(3);
 	if (result < 0){
@@ -106,8 +106,10 @@ int Cliente::recibirMensaje(string & mensaje){
 
 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
 	if (estadoRecepcion == PEER_DESCONECTADO) {
+		// Convendría mudar esto al cerrado.
 		this->cerrarSocketFd();
 		cliente_conectado = false;
+		if (escenarioVista) escenarioVista->desactivar();
 		return estadoRecepcion;
 	} else if (estadoRecepcion == PEER_ERROR){
 		this->cerrar();
@@ -133,12 +135,11 @@ void Cliente::iniciarEscenario(){
 			n = n2;
 			cout << "Faltan " << n2 << " jugadores para comenzar." << endl;
 		}
-		this->recibirMensaje(mensajeRespuesta);
+		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
 	}
-	if(!cliente_conectado) return;
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
-	this->escenarioVista->setActivo();
+	this->escenarioVista->activar();
 	this->escenarioVista->preloop();
 	this->cicloMensajes();
 	this->escenarioVista->mainLoop();
@@ -173,8 +174,8 @@ int Cliente::enviarEvento(int evento){
 	Decodificador::pushEvento(mensaje, evento);
 	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
 	if (!validarEstadoConexion(estadoEnvio)){
-		cout << "Fallo en la conexión, se cierra el cliente." << endl;
-		this->escenarioVista->setInactivo();
+		cout << "Fallo en la conexión al enviar mensaje, se cierra el cliente." << endl;
+		this->escenarioVista->desactivar();
 		this->cerrar();
 	}
 	return estadoEnvio;
