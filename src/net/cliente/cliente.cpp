@@ -19,6 +19,8 @@ Cliente::Cliente():GameSocket(){
 	cliente_conectado = false;
 }
 
+Cliente::~Cliente() {}
+
 void Cliente::setAddress(string serverAddress, int port){
 	this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
 	this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
@@ -73,27 +75,6 @@ bool Cliente::sePuedeEntrar() {
 	}
 }
 
-bool Cliente::conectado(){
-	return cliente_conectado;
-}
-
-void Cliente::cerrar(){
-	if (escenarioVista){
-		escenarioVista->desactivar();
-	}
-	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
-	cliente_conectado = false;
-	cerrarSocket();
-}
-
-string Cliente::getIP(){
-	return this->ip;
-}
-
-int Cliente::getPort(){
-	return this->port;
-}
-
 int Cliente::recibirMensaje(string & mensaje){
 	if (!cliente_conectado) return SIN_CONEXION;
 
@@ -119,7 +100,17 @@ int Cliente::recibirMensaje(string & mensaje){
 	}
 }
 
-Cliente::~Cliente() {
+int Cliente::enviarEvento(int evento){
+	string mensaje = "";
+	int estadoEnvio = ESTADO_INICIAL;
+	Decodificador::pushEvento(mensaje, evento);
+	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
+	if (!validarEstadoConexion(estadoEnvio)){
+		cout << "Fallo en la conexión al enviar mensaje, se cierra el cliente." << endl;
+		this->escenarioVista->desactivar();
+		this->cerrar();
+	}
+	return estadoEnvio;
 }
 
 void Cliente::iniciarEscenario(){
@@ -168,23 +159,18 @@ void Cliente::cicloMensajes(){
 	pthread_create(&mainLoopThread, NULL, cicloMensajes_th, (void*)this);
 }
 
-int Cliente::enviarEvento(int evento){
-	string mensaje = "";
-	int estadoEnvio = ESTADO_INICIAL;
-	Decodificador::pushEvento(mensaje, evento);
-	estadoEnvio = GameSocket::enviarMensaje(mensaje, this->socketFd);
-	if (!validarEstadoConexion(estadoEnvio)){
-		cout << "Fallo en la conexión al enviar mensaje, se cierra el cliente." << endl;
-		this->escenarioVista->desactivar();
-		this->cerrar();
-	}
-	return estadoEnvio;
-}
-
 void Cliente::actualizarComponentes(string mensaje){
 	this->escenarioVista->actualizarComponentes(mensaje);
 }
 
+void Cliente::cerrar(){
+	if (escenarioVista) escenarioVista->desactivar();
+	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
+	cliente_conectado = false;
+	cerrarSocket();
+}
+
+/* Getters y setters.*/
 void Cliente::setAlias(string alias){
 	this->alias = alias;
 }
@@ -195,4 +181,16 @@ string Cliente::getAlias(){
 
 EscenarioVista * Cliente::getEscenario(){
 	return escenarioVista;
+}
+
+string Cliente::getIP(){
+	return this->ip;
+}
+
+int Cliente::getPort(){
+	return this->port;
+}
+
+bool Cliente::conectado(){
+	return cliente_conectado;
 }

@@ -24,7 +24,7 @@ void GameSocket::cerrarSocketFd(){
 }
 
 void GameSocket::cerrarSocket() {
-    int cerrado = shutdown(socketFd, 0); //Dejo de transmitir datos
+    int cerrado = shutdown(socketFd, SHUT_RDWR); // Dejo de transmitir datos
 
     if(cerrado == 0){
         cout << "Se cerró la conexión." << endl;

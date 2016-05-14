@@ -22,9 +22,7 @@ struct Conexion {
 	int puerto;
 };
 
-
 using namespace std;
-#define MENSAJE_INEXISTENTE -2
 
 class Cliente: public GameSocket{
 private:
