@@ -4,7 +4,7 @@
         <puerto>8000</puerto>
     </servidor>
     <escenario>
-        <longitud>1600</longitud> <!-- En pixels, por el momento.-->
+        <longitud>16000</longitud> <!-- En pixels, por el momento.-->
         <ventana>
             <ancho>800</ancho>
             <alto>800</alto>

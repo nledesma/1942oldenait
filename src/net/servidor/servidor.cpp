@@ -172,6 +172,7 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
         string mensaje = colaSalida->pop();
         this->enviarMensaje(mensaje, clienteFd);
     }
+    usleep(100);
 }
 
 int Servidor::aceptar() {
@@ -306,7 +307,7 @@ void *Servidor::cicloDesencolar(void *THIS) {
     Servidor *servidor = (Servidor *) THIS;
     while (servidor->servidorActivo()) {
         servidor->desencolar();
-        usleep(5000);
+        usleep(500);
     }
     pthread_exit(NULL);
 }
