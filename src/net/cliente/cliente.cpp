@@ -166,8 +166,10 @@ void Cliente::actualizarComponentes(string mensaje){
 void Cliente::cerrar(){
 	if (escenarioVista) escenarioVista->desactivar();
 	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
-	cliente_conectado = false;
-	cerrarSocket();
+	if (cliente_conectado) {
+		cliente_conectado = false;
+		cerrarSocket();
+	}
 }
 
 /* Getters y setters.*/
