@@ -167,7 +167,8 @@ Disparo* Avion::disparar(){
 void Avion::volverEstadoInicial(){
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
-    this->estadoAnimacion = ESTADO_NORMAL;
+    if (this->estadoAnimacion != DESCONECTADO)
+        this->estadoAnimacion = ESTADO_NORMAL;
 }
 
 string Avion::getIdSprite(){
