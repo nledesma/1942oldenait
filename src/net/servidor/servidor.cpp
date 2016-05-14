@@ -121,13 +121,13 @@ void *Servidor::atenderCliente(void *arg) {
     clienteMensaje.first = fdCliente;
 
     // Antes de atenderlo se espera a que se conecten todos.
-    servidor->esperarPartida(fdCliente);
+    if(!servidor->partidaActiva()) servidor->esperarPartida(fdCliente);
     servidor->enviarEstadoInicial(fdCliente);
-    servidor->signalComienzaPartida();
+    if(!servidor->partidaActiva()) servidor->signalComienzaPartida();
 
     int recieveResult = ESTADO_INICIAL;
     // Validar que esté conectado?
-    while (recieveResult != PEER_DESCONECTADO && recieveResult != PEER_ERROR && servidor->clienteConectado(fdCliente)) {
+    while (servidor->validarEstadoConexion(recieveResult) && servidor->clienteConectado(fdCliente)) {
         string mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
 
@@ -176,18 +176,19 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
 
 int Servidor::aceptar() {
     int resulAccept = accept(socketFd, 0, 0);
+
+    if (resulAccept == -1) {
+        throw runtime_error("ACCEPT_EXCEPTION");
+    }
     // Timeout de minuto y medio para recibir mensajes del cliente.
     struct timeval tv;
+    // TODO cambiar esto para que no se salga por inactividad.
     tv.tv_sec = 90;
     tv.tv_usec = 0;
     setsockopt(resulAccept, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 
     if(this->servidorActivado) {
         Logger::instance()->logInfo("La conexión ha sido aceptada");
-    }
-
-    if (resulAccept == -1) {
-        throw runtime_error("ACCEPT_EXCEPTION");
     }
 
     return resulAccept;
@@ -256,10 +257,17 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
 
     datosCliente datos;
     datos.conectado = true;
-    datos.nroJugador = (int) clientes.size() + 1;
+    if (!partidaEnJuego){
+        datos.nroJugador = (int) clientes.size() + 1;
+        nroAvionSegunNombre[nombre] = datos.nroJugador;
+        cout << "Se agrega al jugador " << nombre << " con el nro de avión " << datos.nroJugador << endl;
+    } else {
+        datos.nroJugador = nroAvion(nombre);
+        cout << "Se conecta el jugador " << nombre << " al avión " << datos.nroJugador << endl;
+    }
     datos.nombreJugador = nombre;
     if(this->escenario->estaActivo()){
-        escenario->avion(datos.nroJugador - 1)->setEstadoAnimacion(ESTADO_NORMAL);
+        escenario->avion(datos.nroJugador)->setEstadoAnimacion(ESTADO_NORMAL);
     }
     nombres[nombre] = true;
 
@@ -394,4 +402,8 @@ int Servidor::clientesFaltantes() {
     clientesActuales = clientes.size();
     pthread_mutex_unlock(&mutexAgregar);
     return cantidadMaximaDeClientes - clientesActuales;
+}
+
+int Servidor::nroAvion(string nombre){
+    return nroAvionSegunNombre[nombre];
 }

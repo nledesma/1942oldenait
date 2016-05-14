@@ -35,6 +35,7 @@ struct datosCliente {
 
 class Servidor : public GameSocket {
 private:
+    map<string, int> nroAvionSegunNombre;
     map<int, datosCliente> clientes;
     map<int , string> direcciones;
     struct sockaddr_in addr_info;
@@ -91,6 +92,7 @@ public:
     void activarPartida();
     bool partidaActiva();
     int clientesFaltantes();
+    int nroAvion(string nombre);
 };
 
 #endif

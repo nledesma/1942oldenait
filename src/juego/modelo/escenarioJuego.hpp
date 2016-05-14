@@ -2,6 +2,7 @@
 #define INC_1942OLDENAIT_ESCENARIOJUEGO_HPP
 
 #include <list>
+#include <map>
 #include <pthread.h>
 #include "avion.hpp"
 #include "elemento.hpp"
