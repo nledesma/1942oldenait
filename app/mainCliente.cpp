@@ -22,7 +22,7 @@ int leerInt(){
         cout << "El valor ingresado debe ser un número." << endl;
         cin >> lectura;
     }
-    
+
     ss << lectura;
     ss >> n;
     return n;
@@ -47,7 +47,7 @@ int validarPuerto(){
 	while ((puerto <= 1024) || (puerto >= 65535)){
 		cout << "Ingrese un número de puerto entre 1024 y 65535." << endl;
 		puerto = leerInt();
-	} 
+	}
 	return puerto;
 }
 
@@ -129,7 +129,7 @@ void menuConexiones(Cliente * cliente,list<Conexion>* conexionesGuardadas) {
 
         it = conexionesGuardadas->begin();
         advance(it, opcion - 1);
-        cout << "ingrese un alias" << endl;
+        cout << "Ingrese un alias" << endl;
         string alias;
         cin >> alias;
         cliente->setAlias(alias);
@@ -173,5 +173,6 @@ int main(){
     // Levanto las conexiones del archivo de conexiones guardadas.
     list<Conexion> c = ClienteParser::levantarConexiones();
     menuPrincipal(cliente, &c);
+    delete cliente;
     return 0;
 }

@@ -23,7 +23,12 @@ void EscenarioJuego::reset() {
     }
 }
 
-EscenarioJuego::~EscenarioJuego() { }
+//Se destruyen todas las listas.
+EscenarioJuego::~EscenarioJuego() {
+    while(!this->aviones.empty()) delete this->aviones.front(), this->aviones.pop_front();
+    while(!this->elementos.empty()) delete this->elementos.front(), this->elementos.pop_front();
+    while(!this->disparos.empty()) delete this->disparos.front(), this->disparos.pop_front();
+}
 
 float EscenarioJuego::getScrollingOffset() {
     pthread_mutex_lock(&this->mutexScroll);
