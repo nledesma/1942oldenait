@@ -74,8 +74,11 @@ int EscenarioVista::mainLoop(){
     SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     while(this->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
-            if( e.type == SDL_QUIT || e.key.keysym.sym == SDLK_x)
+            if( e.type == SDL_WINDOWEVENT)
             {
+                if (e.window.event == SDL_WINDOWEVENT_CLOSE)
+                    this->desactivar();
+            } else if (e.key.keysym.sym == SDLK_x){
                 this->desactivar();
             }
             this->pushEvento(e);
