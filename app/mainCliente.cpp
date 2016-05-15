@@ -41,6 +41,32 @@ void imprimirMenu(){
     separador();
 }
 
+int validarPuerto(){
+	int puerto;
+	puerto = leerInt();
+	while ((puerto <= 1024) || (puerto >= 65535)){
+		cout << "Ingrese un número de puerto entre 1024 y 65535." << endl;
+		puerto = leerInt();
+	} 
+	return puerto;
+}
+
+bool esIpValida(string ip){
+	unsigned int i = 0;
+	const char* ipAux = ip.c_str();
+	int cantidadPuntos = 0;
+	while(i < ip.length()){
+		if(ipAux[i] == '.'){
+			cantidadPuntos++;
+		}
+		i++;
+	}
+	if((cantidadPuntos == 3)&&(ip.length()>=7)){
+		return true;
+	}
+	return false;
+}
+
 void conexionManual(Cliente* cliente){
     string ip;
     int puerto;
@@ -51,8 +77,14 @@ void conexionManual(Cliente* cliente){
     } else {
         cout << "Ingrese IP: " << endl;
         cin >> ip;
+        while (!(esIpValida(ip))){
+        	cout << "La dirección IP ingresada no tiene un formato válido" << endl;
+        	cin >> ip;
+        }
+
         cout << "Ingrese un puerto: " << endl;
-        cin >> puerto;
+       	puerto = validarPuerto();
+
         cliente->setAddress(ip, puerto);
         cout << "Ingrese un alias: ";
         cin >> alias;
