@@ -5,8 +5,7 @@
 #include <stdio.h>
 using namespace std;
 
-#define DEFAULT_XML "../../resources/xml/nivel_1.xml"
-
+#define DEFAULT_XML "../../resources/xml/nivelDefault.xml"
 
 void* apagarServidor(void* servidor){
 
@@ -23,6 +22,33 @@ void* apagarServidor(void* servidor){
     }
     pthread_exit(NULL);
 }
+
+void ejecutar(Servidor* servidor){
+
+    pthread_t apagar;
+    pthread_create(&apagar, NULL, apagarServidor, servidor);
+    // Servidor aceptando conexiones
+    try{
+        servidor->pasivar();
+    }catch(runtime_error &e){
+        Logger::instance()->logError(errno,"Se produjo un error en el listen");
+    }
+    servidor->esperarJugadores();
+
+    // Se puede haber cerrado el servidor antes de recibir jugadores.
+    if (servidor->servidorActivo()) {
+        sleep(2);
+        servidor->getEscenario()->mainLoop(servidor->servidorActivo());
+        servidor->iniciarCicloDesencolaciones();
+    }
+
+    pthread_join(apagar, NULL);
+    Logger::instance()->cerrar();
+    Logger::resetInstance();
+    pthread_exit(NULL);
+
+}
+
 
 bool archivoExiste (const string& archivo) {
     if (FILE *file = fopen(archivo.c_str(), "r")) {
@@ -67,26 +93,14 @@ int main(int argc, char *argv[]){
     Servidor* servidor;
     ServidorParser parser;
     servidor = parser.deserializarEscenario(rutaXMLServidor);
-
-    pthread_t apagar;
-    pthread_create(&apagar, NULL, apagarServidor, servidor);
-    // Servidor aceptando conexiones
-    try{
-        servidor->pasivar();
-    }catch(runtime_error &e){
-        Logger::instance()->logError(errno,"Se produjo un error en el listen");
+    if (servidor != NULL){
+        ejecutar(servidor);
+        delete servidor;
+        return 0;
     }
-    servidor->esperarJugadores();
-
-    // Se puede haber cerrado el servidor antes de recibir jugadores.
-    if (servidor->servidorActivo()) {
-        sleep(2);
-        servidor->getEscenario()->mainLoop(servidor->servidorActivo());
-        servidor->iniciarCicloDesencolaciones();
-    }
-
-    pthread_join(apagar, NULL);
+    Logger::instance()->logWarning("Hubo un error al inicializar el servidor desde el archivo XML");
+    cout << "Hubo un error al iniciar el servidor. Presione cualquier tecla para finalizar el programa" << endl;
+    cin.get();
     Logger::instance()->cerrar();
-    Logger::resetInstance();
-    pthread_exit(NULL);
+
 }
