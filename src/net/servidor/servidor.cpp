@@ -169,7 +169,11 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
     if(!colaSalida->vacia()){
         if (!servidorActivado || !clienteConectado(clienteFd)) return;
         string mensaje = colaSalida->pop();
-        this->enviarMensaje(mensaje, clienteFd);
+        int result = this->enviarMensaje(mensaje, clienteFd);
+        if(result < 0){
+            cout << "Se ha desconectado el jugador " << clientes[clienteFd].nroJugador << endl;
+            this->quitarCliente(clienteFd);
+        }
     }
     usleep(100);
 }
@@ -181,11 +185,13 @@ int Servidor::aceptar() {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
     // Timeout de minuto y medio para recibir mensajes del cliente.
-    struct timeval tv;
-    // TODO cambiar esto para que no se salga por inactividad.
-    tv.tv_sec = 90;
-    tv.tv_usec = 0;
-    setsockopt(resulAccept, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+    // struct timeval tv;
+    // // TODO cambiar esto para que no se salga por inactividad.
+    // tv.tv_sec = 10;
+    // tv.tv_usec = 0;
+    // setsockopt(resulAccept, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+
+    //setsockopt(resulAccept, SOL_SOCKET, SO_SNDTIMEO, NULL, NULL);
 
     if(this->servidorActivado) {
         Logger::instance()->logInfo("La conexión ha sido aceptada");
