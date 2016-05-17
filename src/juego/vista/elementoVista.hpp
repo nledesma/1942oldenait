@@ -21,6 +21,7 @@ private:
 public:
     ElementoVista(string codigo);
     ElementoVista(float posX, float posY, string pathSprite);
+    ~ElementoVista();
     void actualizar(string codigo);
     void render(SDL_Renderer* renderer);
     void cargarImagen(SDL_Renderer* renderer);

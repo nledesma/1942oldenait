@@ -21,6 +21,7 @@ private:
 	bool validarContenidoTagString(XMLNode* pNodoStr, string &unStr);
 	bool validarContenidoTagFloat(XMLNode* pNodoFloat, float &unFloat);
 	bool archivoValido(XMLError eResult, string ruta);
+	bool validarTag(XMLNode* pNode, string unString);
 public:
 	Servidor * deserializar(string ruta);
 	Servidor * deserializarEscenario(string ruta);

@@ -73,7 +73,6 @@ list<Conexion> ClienteParser::levantarConexiones(){
 }
 
 string ClienteParser::getString(XMLElement * padre, const char * nombreHijo){
-	// Hay que hacer delete de esto?
 	XMLElement * pHijo = padre->FirstChildElement(nombreHijo);
 	string texto(pHijo->GetText());
 	return texto;

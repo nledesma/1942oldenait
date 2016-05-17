@@ -9,7 +9,7 @@
 #include "../../accesorios/codigo.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
-//TODO estas constantes estaban definidas para el tuto.
+
 #define AVION_ANCHO ANCHO_AVION_COMUN;
 #define AVION_ALTO ALTO_AVION_COMUN;
 #define DISPARO_ANCHO 20;

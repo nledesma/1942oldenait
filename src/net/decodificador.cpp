@@ -16,7 +16,6 @@ string Decodificador::popIdImg(string &codigo) {
 
 /* Push y pop de Elementos del mapa. */
 void Decodificador::push(string & codigo, Elemento *e) {
-    // pos_x (1 float) | pos_y (1 float)
     push(codigo, e->getPosX());
     push(codigo, e->getPosY());
 }
@@ -27,7 +26,6 @@ string Decodificador::popElemento(string & codigo) {
 
 /* Push y pop de Aviones. */
 void Decodificador::push(string & codigo, Avion* a) {
-    // posX, posY (2 floats) | estadoAnimacion (1 byte)
     push(codigo, a->getPosicionX());
     push(codigo, a->getPosicionY());
     push(codigo, (char) a->getEstadoAnimacion());
@@ -39,7 +37,6 @@ string Decodificador::popAvion(string & codigo){
 
 /* Push y pop de disparo. */
 void Decodificador::push(string & codigo, Disparo *d) {
-    // posX, posY (2 floats)
     push(codigo, d->getPosX());
     push(codigo, d->getPosY());
 }
@@ -50,7 +47,6 @@ string Decodificador::popDisparo(string & codigo) {
 
 /* Push y Pop del Escenario. */
 void Decodificador::push(string & codigo, EscenarioJuego *e) {
-    // Offset (float)
     push(codigo, e->getScrollingOffset());
 }
 

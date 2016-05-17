@@ -126,13 +126,12 @@ void *Servidor::atenderCliente(void *arg) {
     if(!servidor->partidaActiva()) servidor->signalComienzaPartida();
 
     int recieveResult = ESTADO_INICIAL;
-    // Validar que esté conectado?
     while (servidor->validarEstadoConexion(recieveResult) && servidor->clienteConectado(fdCliente)) {
         string mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
 
         if(recieveResult != MENSAJEOK) {
-            cout << "Se ha desconectado un cliente." << endl; // TODO loguear
+            cout << "Se ha desconectado un cliente." << endl;
         } else {
             clienteMensaje.second = mensajeCliente;
             servidor->encolarMensaje(clienteMensaje);
@@ -340,28 +339,7 @@ void Servidor::broadcastEstadoEscenario(string codigoEstadoEscenario) {
     }
 }
 
-void Servidor::imprimirDatosInicialesEscenario(){
-    // string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
-    // Decodificador::imprimirBytes(codigo);
-    // string cosasEscenario = Decodificador::popEscenarioInicial(codigo);
-    // cout << "Ancho: " <<Decodificador::popInt(cosasEscenario)<< endl;
-    // cout << "Alto: " <<Decodificador::popInt(cosasEscenario)<< endl;
-    // cout << "Sprite: " <<cosasEscenario<< endl;
-    //
-    // int cantidadAviones = Decodificador::popInt(codigo);
-    // cout << "Cantidad de aviones: " << cantidadAviones << endl;
-    //
-    // string cosasAvion;
-    // for (int i = 0; i < cantidadAviones; i ++){
-    //     cosasAvion = Decodificador::popAvionInicial(codigo);
-    //     cout << "Avion pos x: " << Decodificador::popFloat(cosasAvion) << endl;
-    //     cout << "Avion pos y: " << Decodificador::popFloat(cosasAvion) << endl;
-    //     cout << "Sprite: " <<cosasAvion<< endl;
-    // }
-    //
-}
-
-/* getters y setters */
+/* Getters y Setters */
 
 void Servidor::setPuerto(int unPuerto) {
     puerto = unPuerto;

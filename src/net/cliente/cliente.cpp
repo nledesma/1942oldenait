@@ -43,17 +43,14 @@ int Cliente::conectar(){
 			if (!sePuedeEntrar()) {
 				cerrar();
 			} else {
-				// Antes de seguir hacemos la etapa inicial.
 				iniciarEscenario();
 			}
 		} else if (connected == -1) {
 			cliente_conectado = false;
-			// TODO: loggear con strerror.
 			cout << "La conexión falló, error " << errno << endl;
 			throw runtime_error("CLIENTE_EXCEPTION");
 		}
 	} catch(runtime_error &e){
-		// TODO este catch solo sirve para nuestro throw? Porque si es así deberíamos mover el log ahí arriba y sacar todo esto.
 		Logger::instance()->logError(errno,"Se produjo un error en el connect");
 	}
 
@@ -87,7 +84,7 @@ int Cliente::recibirMensaje(string & mensaje){
 
 	int estadoRecepcion = GameSocket::recibirMensaje(mensaje, this->socketFd);
 	if (estadoRecepcion == PEER_DESCONECTADO) {
-		// Convendría mudar esto al cerrado.
+		// TODO Convendría mudar esto al cerrado.
 		this->cerrarSocketFd();
 		cliente_conectado = false;
 		if (escenarioVista) escenarioVista->desactivar();
@@ -145,11 +142,7 @@ void* Cliente::cicloMensajes_th(void * THIS){
 		if (evento != EVENTO_VACIO){
 			cliente->enviarEvento(evento);
 		}
-		// cout << "Se envía el evento " << evento << endl;
-		// cout << "Se efectua una lectura..." << endl;
 		if(cliente->recibirMensaje(mensaje) != MENSAJEOK) pthread_exit(NULL);
-		// cout << "Se recibió el mensaje: " << endl;
-		// Decodificador::imprimirBytes(mensaje);
 		cliente->actualizarComponentes(mensaje);
 	}
 	pthread_exit(NULL);

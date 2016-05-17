@@ -57,7 +57,6 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
             if (disparo) disparos.push_back(disparo);
-            // TODO Hay que hacerle delete a esto en algún momento.
             break;
         default:
             avion(nroAvion)->manejarEvento(evento);
@@ -84,7 +83,6 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
         escenario->actualizarScrollingOffset(timeStep);
         escenario->posicionY = escenario->posicionY + timeStep * escenario->velocidadDesplazamientoY;
-        // TODO Por qué se comienza acá de todos los lugares? Fucking lazyfoo.
         escenario->temporizador.comenzar();
         escenario->moverAviones(timeStep);
         escenario->moverElementos(timeStep);
@@ -118,7 +116,6 @@ void EscenarioJuego::moverAviones(float timeStep) {
          iterador != this->getAviones().end(); ++iterador) {
         Avion *avion = *iterador;
         avion->mover(timeStep);
-        //avion->moverDisparos(timeStep);
     }
 }
 

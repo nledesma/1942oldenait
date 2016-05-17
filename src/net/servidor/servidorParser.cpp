@@ -5,8 +5,6 @@
 #include "../../juego/modelo/elemento.hpp"
 
 
-//#define DEFAULT_XML_NIVEL "../../../resources/xml/niveles/nivel1.xml"
-
 using namespace std;
 using namespace tinyxml2;
 
