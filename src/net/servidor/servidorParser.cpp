@@ -1,14 +1,4 @@
 #include "servidorParser.hpp"
-#include "../../juego/modelo/escenarioJuego.hpp"
-#include "../../juego/modelo/disparo.hpp"
-#include "../../juego/modelo/avion.hpp"
-#include "../../juego/modelo/elemento.hpp"
-
-
-//#define DEFAULT_XML_NIVEL "../../../resources/xml/niveles/nivel1.xml"
-
-using namespace std;
-using namespace tinyxml2;
 
 void ServidorParser::serializar(Servidor * servidor, string ruta) {
 	XMLDocument doc;

@@ -91,8 +91,7 @@ int main(int argc, char *argv[]){
     }
 
     Servidor* servidor;
-    ServidorParser parser;
-    servidor = parser.deserializarEscenario(rutaXMLServidor);
+    servidor = ServidorParser::deserializarEscenario(rutaXMLServidor);
     if (servidor != NULL){
         ejecutar(servidor);
         delete servidor;

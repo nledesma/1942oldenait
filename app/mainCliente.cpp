@@ -168,11 +168,9 @@ void menuPrincipal(Cliente * cliente, list<Conexion>* conexionesGuardadas) {
 }
 
 int main(){
-    // TODO Habria que hacer otro constructor que no reciba estos parametros.
-    Cliente* cliente = new Cliente("127.0.0.1", 8000);
+    Cliente cliente;
     // Levanto las conexiones del archivo de conexiones guardadas.
     list<Conexion> c = ClienteParser::levantarConexiones();
-    menuPrincipal(cliente, &c);
-    delete cliente;
+    menuPrincipal(&cliente, &c);
     return 0;
 }

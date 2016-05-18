@@ -4,27 +4,26 @@
 #include <string>
 #include <sstream>
 #include "servidor.hpp"
-#include "../../../resources/lib/tinyxml2.h"
+#include "../../accesorios/parserXML.hpp"
 #include "../../logger/logger.hpp"
 using namespace std;
-using namespace tinyxml2;
 
-class ServidorParser{
+class ServidorParser : public ParserXML {
 private:
-	bool laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &cantidadDeClientes);
-	bool elPuertoEsValido(XMLNode * pNodoPuerto, int &unPuerto);
-	bool nodoServidorValido(int &unaCantidadDeClientes, int &unPuerto, XMLNode * pRoot);
-	bool nodoEscenarioValido(Servidor* servidor, XMLNode* pNodoConfiguracion);
-	bool nodoElementosValido(Servidor* servidor, XMLNode* pNodoEscenario);
-	bool nodoAvionesValido(Servidor* servidor, XMLNode * pNodoConfiguracion);
-	bool validarContenidoTagInt(XMLNode* pNodoInt, int &unInt);
-	bool validarContenidoTagString(XMLNode* pNodoStr, string &unStr);
-	bool validarContenidoTagFloat(XMLNode* pNodoFloat, float &unFloat);
-	bool archivoValido(XMLError eResult, string ruta);
+	static bool laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &cantidadDeClientes);
+	static bool elPuertoEsValido(XMLNode * pNodoPuerto, int &unPuerto);
+	static bool nodoServidorValido(int &unaCantidadDeClientes, int &unPuerto, XMLNode * pRoot);
+	static bool nodoEscenarioValido(Servidor* servidor, XMLNode* pNodoConfiguracion);
+	static bool nodoElementosValido(Servidor* servidor, XMLNode* pNodoEscenario);
+	static bool nodoAvionesValido(Servidor* servidor, XMLNode * pNodoConfiguracion);
+	static bool validarContenidoTagInt(XMLNode* pNodoInt, int &unInt);
+	static bool validarContenidoTagString(XMLNode* pNodoStr, string &unStr);
+	static bool validarContenidoTagFloat(XMLNode* pNodoFloat, float &unFloat);
+	static bool archivoValido(XMLError eResult, string ruta);
 public:
-	Servidor * deserializar(string ruta);
-	Servidor * deserializarEscenario(string ruta);
-	void serializar(Servidor *servidor, string ruta);
+	static Servidor * deserializar(string ruta);
+	static Servidor * deserializarEscenario(string ruta);
+	static void serializar(Servidor *servidor, string ruta);
 };
 
 #endif

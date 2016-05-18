@@ -25,7 +25,7 @@ vpath %.cpp $(SRC)
 OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	logger.o colaConcurrente.o avion.o disparo.o clienteParser.o\
 	elemento.o escenarioJuego.o avionVista.o disparoVista.o elementoVista.o \
-	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o
+	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o parserXML.o
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 
