@@ -13,13 +13,14 @@ private:
 	static bool getCantidadClientes(XMLElement * pNodoServidor, int & nClientes);
 	static bool getPuerto(XMLElement * pNodoServidor, int & puerto);
 	static bool getServidor(int &unaCantidadDeClientes, int &unPuerto, XMLNode * pRoot);
-	static bool nodoEscenarioValido(Servidor* servidor, XMLNode* pNodoConfiguracion);
-	static bool nodoElementosValido(Servidor* servidor, XMLNode* pNodoEscenario);
-	static bool nodoAvionesValido(Servidor* servidor, XMLNode * pNodoConfiguracion);
-	static bool validarContenidoTagInt(XMLNode* pNodoInt, int &unInt);
-	static bool validarContenidoTagString(XMLNode* pNodoStr, string &unStr);
-	static bool validarContenidoTagFloat(XMLNode* pNodoFloat, float &unFloat);
-	static bool archivoValido(XMLError eResult, string ruta);
+	static bool getVentana(XMLElement * pNodoEscenario, int & ancho, int & alto);
+	static bool getFondo(XMLElement * pNodoEscenario, string & pathSprite,
+		int & ancho, int & alto, float & velocidadY);
+	static bool getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracion);
+	static bool getElemento(XMLElement * pNodoElemento, string & pathSprite,
+		float & posx, float & posy);
+	static bool agregarElementos(Servidor* servidor, XMLElement* pNodoEscenario);
+	static bool agregarAviones(Servidor* servidor, XMLNode * pNodoConfiguracion);
 public:
 	static Servidor * deserializar(string ruta);
 	static Servidor * deserializarEscenario(string ruta);
