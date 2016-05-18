@@ -38,7 +38,7 @@
             <velocidadDesplazamiento>500</velocidadDesplazamiento>
             <velocidadDisparos>1000</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
-            <disparosSpriteId>redLaserRay</disparosSpriteId>
+            <disparosSpriteId>fwjfl</disparosSpriteId>
         </avion>
     </aviones>
 </configuracion>

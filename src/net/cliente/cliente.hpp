@@ -1,7 +1,6 @@
 #ifndef CLIENTE_H
 #define CLIENTE_H
 #include "../gameSocket.hpp"
-#include "../mensaje/mensaje.hpp"
 #include "../decodificador.hpp"
 #include "../../juego/vista/escenarioVista.hpp"
 #include <list>
