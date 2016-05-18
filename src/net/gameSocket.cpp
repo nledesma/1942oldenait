@@ -70,7 +70,6 @@ int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor)
             if(secondsSinceStart >= timeOut){
                 return CLIENTE_DESCONECTADO;
             }
-            cout << "Bytes actuales" << bytesActuales  << endl;
         }
 
         if(bytesActuales == CLIENTE_DESCONECTADO){

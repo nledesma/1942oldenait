@@ -79,7 +79,7 @@ int EscenarioVista::mainLoop(){
             }
             this->pushEvento(e);
         }
-        //TODO puede fallar mutex.
+        // TODO por ahí conviene agregar un mutex.
         SDL_SetRenderDrawColor(this->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear(this->getVentana()->getVentanaRenderer());
         this->renderizarFondo(this->scrollingOffset);

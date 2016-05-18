@@ -89,8 +89,6 @@ bool ServidorParser::getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracio
 	string pathSpriteFondo; int anchoFondo, altoFondo; float velocidadY;
 	if (!getFondo(pNodoEscenario, pathSpriteFondo, anchoFondo, altoFondo, velocidadY)) return false;
 
-	// NOTE el ancho y el alto del fondo ni los usamos?
-
 	// Se crea el escenario y se lo setea al servidor
 	EscenarioJuego* escenario = new EscenarioJuego(velocidadY, ancho, alto, longitud, pathSpriteFondo);
 	servidor->setEscenario(escenario);
