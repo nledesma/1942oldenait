@@ -188,9 +188,11 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     }
     list<Disparo*> disparos = escenarioJuego->getDisparos();
     Decodificador::pushCantidad(codigo,  (int) disparos.size());
-    for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); ++iterador){
-        Disparo* disparo = *iterador;
-        Decodificador::push(codigo, disparo);
+    if(!disparos.empty()){
+        for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); ++iterador){
+            Disparo* disparo = *iterador;
+            Decodificador::push(codigo, disparo);
+        }
     }
     return codigo;
 }
