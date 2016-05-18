@@ -104,7 +104,7 @@ bool ServidorParser::getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracio
 bool ServidorParser::getElemento(XMLElement * pNodoElemento, string & pathSprite, float & posx, float & posy){
 	if (!getString(pNodoElemento, "spriteIdElemento", pathSprite)) pathSprite = "";
 	if (!getFloat(pNodoElemento, "posx", posx)) return false;
-	if (!getFloat(pNodoElemento, "posx", posy)) return false;
+	if (!getFloat(pNodoElemento, "posy", posy)) return false;
 	return true;
 }
 
@@ -153,7 +153,8 @@ bool ServidorParser::agregarAviones(Servidor* servidor, XMLNode * pNodoConfigura
 	// Agregamos el mismo avión para todos los jugadores.
 	for (int i = 1; i <= cantidadDeClientes; i++){
 		servidor->getEscenario()->agregarAvion(d*i - ANCHO_AVION_COMUN/2, 600,
-			velocidadDesplazamiento, velocidadDisparos, avionSpriteId, disparosSpriteId);
+			velocidadDesplazamiento, velocidadDisparos + velocidadDesplazamiento,
+			avionSpriteId, disparosSpriteId);
 	}
 	return true;
 }

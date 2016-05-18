@@ -1,10 +1,10 @@
 <configuracion>
     <servidor>
-        <cantidadMaximaDeClientes>2</cantidadMaximaDeClientes>
+        <cantidadMaximaDeClientes>1</cantidadMaximaDeClientes>
         <puerto>8000</puerto>
     </servidor>
     <escenario>
-        <longitud>16000</longitud>
+        <longitud>3200</longitud>
         <ventana>
             <ancho>800</ancho>
             <alto>800</alto>
@@ -18,25 +18,25 @@
         <elementos>
             <elemento>
                 <spriteIdElemento>asteroide</spriteIdElemento>
-                <posx>000</posx>
+                <posx>0</posx>
                 <posy>200</posy>
             </elemento>
             <elemento>
                 <spriteIdElemento>planeta</spriteIdElemento>
                 <posx>600</posx>
-                <posy>800</posy>
+                <posy>1600</posy>
             </elemento>
             <elemento>
                 <spriteIdElemento>asteroide</spriteIdElemento>
-                <posx>000</posx>
-                <posy>1600</posy>
+                <posx>0</posx>
+                <posy>3200</posy>
             </elemento>
         </elementos>
     </escenario>
     <aviones>
         <avion>
             <velocidadDesplazamiento>500</velocidadDesplazamiento>
-            <velocidadDisparos>1000</velocidadDisparos>
+            <velocidadDisparos>0</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
         </avion>
