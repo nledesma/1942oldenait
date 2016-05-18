@@ -10,9 +10,9 @@ using namespace std;
 
 class ServidorParser : public ParserXML {
 private:
-	static bool laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &cantidadDeClientes);
-	static bool elPuertoEsValido(XMLNode * pNodoPuerto, int &unPuerto);
-	static bool nodoServidorValido(int &unaCantidadDeClientes, int &unPuerto, XMLNode * pRoot);
+	static bool getCantidadClientes(XMLElement * pNodoServidor, int & nClientes);
+	static bool getPuerto(XMLElement * pNodoServidor, int & puerto);
+	static bool getServidor(int &unaCantidadDeClientes, int &unPuerto, XMLNode * pRoot);
 	static bool nodoEscenarioValido(Servidor* servidor, XMLNode* pNodoConfiguracion);
 	static bool nodoElementosValido(Servidor* servidor, XMLNode* pNodoEscenario);
 	static bool nodoAvionesValido(Servidor* servidor, XMLNode * pNodoConfiguracion);

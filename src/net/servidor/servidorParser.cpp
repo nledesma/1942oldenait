@@ -21,23 +21,22 @@ void ServidorParser::serializar(Servidor * servidor, string ruta) {
 	}
 }
 
-bool ServidorParser::elPuertoEsValido(XMLNode * pNodoPuerto, int &unPuerto) {
-	if (!(pNodoPuerto->ToElement()->GetText() == nullptr)) {
-			pNodoPuerto ->ToElement() -> QueryIntText(&unPuerto);
-			return((unPuerto>=1024)&&(unPuerto<65535));
-	} else {
-		return false;
-	}
+bool ServidorParser::getPuerto(XMLElement * pNodoServidor, int & puerto) {
+	if(!getInt(pNodoServidor,"puerto", puerto)) return false;
+	if (!puertoValido(puerto)) return false;
+	return true;
 }
 
-bool ServidorParser::laCantidadEsValida(XMLNode * pNodoCantidadClientes, int &cantidadDeClientes) {
-	if(!(pNodoCantidadClientes -> ToElement() -> GetText() == nullptr)) {
-		pNodoCantidadClientes -> ToElement() -> QueryIntText(&cantidadDeClientes);
-		if(cantidadDeClientes > 4) return false;
-		return(cantidadDeClientes > 0);
-	} else {
+bool ServidorParser::getCantidadClientes(XMLElement * pNodoServidor, int &nClientes) {
+	if (!getInt(pNodoServidor, "cantidadMaximaDeClientes", nClientes))
+		return false;
+
+	if (nClientes < 1 || nClientes > 4) {
+		Logger::instance()->logWarning("Cantidad de clientes no valida.");
 		return false;
 	}
+
+	return true;
 }
 
 bool ServidorParser::validarContenidoTagInt(XMLNode* pNodoInt, int &unInt){
@@ -66,23 +65,16 @@ bool ServidorParser::validarContenidoTagFloat(XMLNode* pNodoFloat, float &unFloa
 	}
 }
 
-bool ServidorParser::nodoServidorValido(int &unaCantidadDeClientes, int &unPuerto, XMLNode *pRoot){
-	XMLNode * pNodoServidor = pRoot -> FirstChild();
+bool ServidorParser::getServidor(int & cantidadClientes, int &puerto, XMLNode *pRoot){
+	XMLElement * pNodoServidor = pRoot -> FirstChildElement("servidor");
+
 	//Cantidad Maxima de Clientes
-	XMLNode * pNodoCantidadMaximaDeClientes = pNodoServidor -> FirstChild();
-	if((pNodoCantidadMaximaDeClientes == 0) || (string(pNodoCantidadMaximaDeClientes -> Value()) != "cantidadMaximaDeClientes") || (!laCantidadEsValida(pNodoCantidadMaximaDeClientes, unaCantidadDeClientes))) {
-		return false;
-	}
-	pNodoCantidadMaximaDeClientes -> ToElement() -> QueryIntText(&unaCantidadDeClientes);
+	if (!getCantidadClientes(pNodoServidor, cantidadClientes)) return false;
+
 	//Puerto
-	XMLNode * pNodoPuerto =  pNodoCantidadMaximaDeClientes -> NextSibling();
-	if((pNodoPuerto == 0) || (string(pNodoPuerto -> Value()) != "puerto") || (!elPuertoEsValido(pNodoPuerto, unPuerto))) {
-		return false;
-	}
-	pNodoPuerto -> ToElement() -> QueryIntText(&unPuerto);
+	if (!getPuerto(pNodoServidor, puerto)) return false;
 
 	return true;
-
 }
 
 bool ServidorParser::nodoEscenarioValido(Servidor* servidor, XMLNode* pNodoConfiguracion){
@@ -209,7 +201,7 @@ Servidor * ServidorParser::deserializarEscenario(string ruta){
 	//Nodo Servidor
 	int unaCantidadDeClientes;
 	int unPuerto;
-	if(!nodoServidorValido(unaCantidadDeClientes, unPuerto, pNodoConfiguracion)){
+	if(!getServidor(unaCantidadDeClientes, unPuerto, pNodoConfiguracion)){
 		cout <<"Error en los elementos del archivo " + ruta  << endl;
 		Logger::instance()->logWarning("Incoveniente en el nodo 'servidor' del archivo " + ruta);
 		return NULL;
