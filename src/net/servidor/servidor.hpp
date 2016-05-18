@@ -84,7 +84,6 @@ public:
     void broadcastEstadoEscenario(string codigoEstadoEscenario);
     EscenarioJuego* getEscenario();
     void setEscenario(EscenarioJuego* unEscenario);
-    void imprimirDatosInicialesEscenario();
     void esperarJugadores();
     void signalComienzaPartida();
     string evaluarIngreso(string nombre);

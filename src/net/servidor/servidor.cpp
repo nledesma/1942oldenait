@@ -126,13 +126,12 @@ void *Servidor::atenderCliente(void *arg) {
     if(!servidor->partidaActiva()) servidor->signalComienzaPartida();
 
     int recieveResult = ESTADO_INICIAL;
-    // Validar que esté conectado?
     while (servidor->validarEstadoConexion(recieveResult) && servidor->clienteConectado(fdCliente)) {
         string mensajeCliente;
         recieveResult = servidor->recibirMensaje(mensajeCliente, fdCliente);
 
         if(recieveResult != MENSAJEOK) {
-            cout << "Se ha desconectado un cliente." << endl; // TODO loguear
+            cout << "Se ha desconectado un cliente." << endl;
         } else {
             clienteMensaje.second = mensajeCliente;
             servidor->encolarMensaje(clienteMensaje);
@@ -170,7 +169,11 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
     if(!colaSalida->vacia()){
         if (!servidorActivado || !clienteConectado(clienteFd)) return;
         string mensaje = colaSalida->pop();
-        this->enviarMensaje(mensaje, clienteFd);
+        int result = this->enviarMensaje(mensaje, clienteFd);
+        if(result < 0){
+            cout << "Se ha desconectado el jugador " << clientes[clienteFd].nroJugador << endl;
+            this->quitarCliente(clienteFd);
+        }
     }
     usleep(100);
 }
@@ -182,11 +185,13 @@ int Servidor::aceptar() {
         throw runtime_error("ACCEPT_EXCEPTION");
     }
     // Timeout de minuto y medio para recibir mensajes del cliente.
-    struct timeval tv;
-    // TODO cambiar esto para que no se salga por inactividad.
-    tv.tv_sec = 90;
-    tv.tv_usec = 0;
-    setsockopt(resulAccept, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+    // struct timeval tv;
+    // // TODO cambiar esto para que no se salga por inactividad.
+    // tv.tv_sec = 10;
+    // tv.tv_usec = 0;
+    // setsockopt(resulAccept, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+
+    //setsockopt(resulAccept, SOL_SOCKET, SO_SNDTIMEO, NULL, NULL);
 
     if(this->servidorActivado) {
         Logger::instance()->logInfo("La conexión ha sido aceptada");
@@ -340,28 +345,7 @@ void Servidor::broadcastEstadoEscenario(string codigoEstadoEscenario) {
     }
 }
 
-void Servidor::imprimirDatosInicialesEscenario(){
-    // string codigo = Decodificador::getCodigoEstadoInicial(this->escenario);
-    // Decodificador::imprimirBytes(codigo);
-    // string cosasEscenario = Decodificador::popEscenarioInicial(codigo);
-    // cout << "Ancho: " <<Decodificador::popInt(cosasEscenario)<< endl;
-    // cout << "Alto: " <<Decodificador::popInt(cosasEscenario)<< endl;
-    // cout << "Sprite: " <<cosasEscenario<< endl;
-    //
-    // int cantidadAviones = Decodificador::popInt(codigo);
-    // cout << "Cantidad de aviones: " << cantidadAviones << endl;
-    //
-    // string cosasAvion;
-    // for (int i = 0; i < cantidadAviones; i ++){
-    //     cosasAvion = Decodificador::popAvionInicial(codigo);
-    //     cout << "Avion pos x: " << Decodificador::popFloat(cosasAvion) << endl;
-    //     cout << "Avion pos y: " << Decodificador::popFloat(cosasAvion) << endl;
-    //     cout << "Sprite: " <<cosasAvion<< endl;
-    // }
-    //
-}
-
-/* getters y setters */
+/* Getters y Setters */
 
 void Servidor::setPuerto(int unPuerto) {
     puerto = unPuerto;

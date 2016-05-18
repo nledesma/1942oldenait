@@ -43,23 +43,19 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
     list<disparo> disparos;
     for (int i = Decodificador::popInt(infoActualizacion); i > 0; i--){
-        // cout << "hay disparos" << endl;
         disparo unDisparo;
         unDisparo.posX = Decodificador::popFloat(infoActualizacion);
         unDisparo.posY = Decodificador::popFloat(infoActualizacion);
         disparos.push_front(unDisparo);
     }
 
-    // TODO chequear...
-    //TODO saqué esta validación porque sino no se seteaba cuando no había disparos y traia problemas en el reset
-    //if (disparos.size() > 0) {
         this->setDisparos(disparos);
-    //}
+
 }
 
 EscenarioVista::~EscenarioVista(){}
 
-// Provisorio. Carga todas las cosas. Anterior al loop.
+// Carga todas las cosas. Anterior al loop.
 void EscenarioVista::preloop(){
     ventana->iniciar();
 

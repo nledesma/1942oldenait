@@ -42,14 +42,34 @@ int GameSocket::setTimeOut(int time){
     return setsockopt(this->socketFd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 }
 
+// int GameSocket::setTimeOutSend(int time){
+//     struct timeval tv;
+//     tv.tv_sec = time;
+//     tv.tv_usec = 0;
+//     return setsockopt(this->socketFd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+// }
+
 int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor) {
     int bytesEnviados = 0;
     int bytesActuales = ESTADO_INICIAL;
 
     while (bytesEnviados < longitudMensaje && validarEstadoConexion(bytesActuales)) {
+        struct timeval tv;
+        tv.tv_sec = 10;
+        tv.tv_usec = 0;
+        setsockopt(fdReceptor, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
         // Agrego offsets si es que no se envía todo el mensaje
+
         bytesActuales = send(fdReceptor, pMensaje + bytesEnviados, longitudMensaje - bytesEnviados,
                              MSG_NOSIGNAL); // Send retorna la cantidad de byes enviados
+        if(bytesActuales < 1) {
+            cout << "Bytes actuales" << bytesActuales  << endl;
+        }
+
+        if(bytesActuales == CLIENTE_DESCONECTADO){
+            return CLIENTE_DESCONECTADO;
+        }
+
         bytesEnviados += bytesActuales;
     }
 
@@ -92,8 +112,6 @@ int GameSocket::recibirBytes(string & mensaje, int longitudMensaje, int fdEmisor
 }
 
 int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
-    // cout << "Enviando mensaje: ";
-    // Decodificador::imprimirBytes(mensaje);
     string longitudMensaje;
     Decodificador::pushCantidad(longitudMensaje, mensaje.size());
     mensaje = longitudMensaje + mensaje;
@@ -103,14 +121,10 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
 int GameSocket::recibirMensaje(string & mensaje, int fdEmisor){
     string cabecera;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
-    // cout << "Se recibió la cabecera: " << endl;
-    // Decodificador::imprimirBytes(cabecera);
 
     if (resultado == MENSAJEOK){
         int longMensajeInt = Decodificador::popInt(cabecera);
         if (recibirBytes(mensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
-            // cout << "Se recibió el mensaje: " << endl;
-            // Decodificador::imprimirBytes(mensaje);
             return MENSAJEOK;
         } else {
             stringstream ss;

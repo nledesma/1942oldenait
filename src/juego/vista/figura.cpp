@@ -29,7 +29,6 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
         //cout << "No se ha podido cargar la imagen " + path << IMG_GetError() << endl;
         return false;
     }else{
-        //Color key image
         SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 
         //Se crea la textura a partir de la SDL_Surface
@@ -79,26 +78,20 @@ void Figura::free(){
 }
 
 void Figura::render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip){
-    //Set rendering space and render to screen
     SDL_Rect renderQuad = { x, y, this->mWidth, this->mHeight };
 
-    //Set clip rendering dimensions
-    if( clip != NULL )
-    {
+    if(clip != NULL){
         renderQuad.w = clip->w;
         renderQuad.h = clip->h;
     }
 
-    //Render to screen
-    SDL_RenderCopy( renderer, this->textura, clip, &renderQuad );
+    SDL_RenderCopy(renderer, this->textura, clip, &renderQuad);
 }
 
-int Figura::getWidth()
-{
+int Figura::getWidth(){
     return mWidth;
 }
 
-int Figura::getHeight()
-{
+int Figura::getHeight(){
     return mHeight;
 }

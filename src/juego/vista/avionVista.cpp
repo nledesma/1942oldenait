@@ -1,6 +1,5 @@
 #include "avionVista.hpp"
 
-//TODO ver de donde sacar las dimensiones del avion
 AvionVista::AvionVista(float posX, float posY, string pathSprite){
     this->iniciarAvion(posX, posY, pathSprite);
 }
@@ -153,53 +152,6 @@ void AvionVista::actualizar(string codigo){
     this->posY = Decodificador::popFloat(codigo);
     this->estadoAnimacion = Decodificador::popByte(codigo);
     pthread_mutex_unlock(&mutexActualizar);
-}
-
-void AvionVista::manejarEvento(SDL_Event evento){
-    if( evento.type == SDL_KEYDOWN && evento.key.repeat == 0 )
-    {
-        if((this->estadoAnimacion < 3)){
-            switch( evento.key.keysym.sym )
-            {
-                case SDLK_UP:
-//                    this->cliente->enviarEvento(ARRIBA_PRESIONA);
-                    break;
-                case SDLK_DOWN:
-//                    this->cliente->enviarEvento(ABAJO_PRESIONA);
-                    break;
-                case SDLK_LEFT:
-//                    this->cliente->enviarEvento(IZQUIERDA_PRESIONA);
-                    break;
-                case SDLK_RIGHT:
-//                    this->cliente->enviarEvento(DERECHA_PRESIONA);
-                    break;
-                case SDLK_SPACE:
-//                    this->cliente->enviarEvento(PRESIONA_ESPACIO);
-                    break;
-                case SDLK_RETURN:
-//                    this->cliente->enviarEvento(PRESIONA_ENTER);
-                    break;
-            }
-        }
-    }
-    else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 )
-    {
-        switch( evento.key.keysym.sym )
-        {
-            case SDLK_UP:
-//                this->cliente->enviarEvento(ARRIBA_SUELTA);
-                break;
-            case SDLK_DOWN:
-//                this->cliente->enviarEvento(ABAJO_SUELTA);
-                break;
-            case SDLK_LEFT:
-//                this->cliente->enviarEvento(IZQUIERDA_SUELTA);
-                break;
-            case SDLK_RIGHT:
-//                this->cliente->enviarEvento(DERECHA_SUELTA);
-                break;
-        }
-    }
 }
 
 void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){

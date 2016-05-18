@@ -12,7 +12,6 @@ int Ventana::iniciar() {
         cout << "Hubo un error para iniciar la ventana: " << SDL_GetError() << endl;
     }
     else {
-        //Set texture filtering to linear
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
             printf("Warning: Linear texture filtering not enabled!");
         }
@@ -22,14 +21,12 @@ int Ventana::iniciar() {
         if (sdlWindow == NULL) {
             Logger::instance()->logError(errno, "Hubo un error al crear la ventana");
             cout << "Hubo un error al crear la ventana: " << SDL_GetError() << endl;
-            //TODO acá habría que loggear el error y agarrarlo con una excepcion
         }
     }
     gVentanaRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
     if (gVentanaRenderer == NULL) {
         cout << "No se pudo crear el renderer de la ventana, SDL Error: " << SDL_GetError() << endl;
     } else {
-        //Initialize renderer color
         SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     }
     return success;
@@ -37,10 +34,8 @@ int Ventana::iniciar() {
 
 void Ventana::cerrar() {
     SDL_DestroyRenderer(gVentanaRenderer);
-    //Destroy window
     SDL_DestroyWindow(sdlWindow);
     sdlWindow = NULL;
-    //Quit SDL subsystems
     SDL_Quit();
 }
 

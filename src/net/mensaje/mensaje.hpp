@@ -9,6 +9,8 @@
 
 using namespace std;
 
+
+//TODO mover lo útil a código.hpp
 #define T_STRING 0
 #define T_INT 1
 #define T_DOUBLE 2
@@ -18,6 +20,8 @@ using namespace std;
 #define INT_SIZE 4
 #define DOUBLE_SIZE 8
 #define MENSAJEOK 1
+#define CLIENTE_DESCONECTADO -1
+
 
 struct infoMensaje {
     int tipo;
