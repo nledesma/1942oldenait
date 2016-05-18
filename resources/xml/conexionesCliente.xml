@@ -5,13 +5,28 @@
         <puerto>8000</puerto>
     </conexion>
     <conexion>
-        <nombre>PC Nico</nombre>
+        <nombre>PC Noe</nombre>
         <IP>192.0.0.1</IP>
         <puerto>8000</puerto>
     </conexion>
     <conexion>
         <nombre>PC Tom</nombre>
+        <IP>192.0.0.2</IP>
+        <puerto>8000</puerto>
+    </conexion>
+    <conexion>
+        <nombre>PC Ro</nombre>
         <IP>192.0.0.3</IP>
+        <puerto>8000</puerto>
+    </conexion>
+    <conexion>
+        <nombre>PC Nico</nombre>
+        <IP>192.0.0.4</IP>
+        <puerto>8000</puerto>
+    </conexion>
+    <conexion>
+        <nombre>PC Leo</nombre>
+        <IP>192.0.0.5</IP>
         <puerto>8000</puerto>
     </conexion>
 </conexiones>
