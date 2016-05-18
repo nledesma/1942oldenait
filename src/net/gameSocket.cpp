@@ -42,27 +42,34 @@ int GameSocket::setTimeOut(int time){
     return setsockopt(this->socketFd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 }
 
-// int GameSocket::setTimeOutSend(int time){
-//     struct timeval tv;
-//     tv.tv_sec = time;
-//     tv.tv_usec = 0;
-//     return setsockopt(this->socketFd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
-// }
+int GameSocket::setSendTimeOut(int time){
+    struct timeval tv;
+    tv.tv_sec = time;
+    tv.tv_usec = 0;
+    return setsockopt(this->socketFd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+}
 
 int GameSocket::enviarBytes(char *pMensaje, int longitudMensaje, int fdReceptor) {
     int bytesEnviados = 0;
     int bytesActuales = ESTADO_INICIAL;
 
     while (bytesEnviados < longitudMensaje && validarEstadoConexion(bytesActuales)) {
-        struct timeval tv;
-        tv.tv_sec = 10;
-        tv.tv_usec = 0;
-        setsockopt(fdReceptor, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+        // struct timeval tv;
+        // tv.tv_sec = 10;
+        // tv.tv_usec = 0;
+        // setsockopt(fdReceptor, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+        int timeOut = 10;
+        this->setSendTimeOut(timeOut);
         // Agrego offsets si es que no se envía todo el mensaje
-
+        time_t start = time(0);
         bytesActuales = send(fdReceptor, pMensaje + bytesEnviados, longitudMensaje - bytesEnviados,
                              MSG_NOSIGNAL); // Send retorna la cantidad de byes enviados
+
         if(bytesActuales < 1) {
+            double secondsSinceStart = difftime(time(0), start);
+            if(secondsSinceStart >= timeOut){
+                return CLIENTE_DESCONECTADO;
+            }
             cout << "Bytes actuales" << bytesActuales  << endl;
         }
 

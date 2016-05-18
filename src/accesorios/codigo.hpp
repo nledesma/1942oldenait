@@ -1,6 +1,10 @@
 #ifndef INC_1942OLDENAIT_CODIGO_HPP
 #define INC_1942OLDENAIT_CODIGO_HPP
 
+// Para envio de mensajes
+#define MENSAJEOK 1
+#define CLIENTE_DESCONECTADO -2
+
 /* Colores */
 
 #define BASE 1

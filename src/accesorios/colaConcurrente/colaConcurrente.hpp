@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 #include <queue>
-#include "../../net/mensaje/mensaje.hpp"
+#include <string>
 using namespace std;
 
 template <class T>

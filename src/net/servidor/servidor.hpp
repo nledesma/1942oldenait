@@ -8,7 +8,6 @@
 #include <cstring> // Necesario para el memset.
 #include <cstdio>
 #include <list>
-#include "../mensaje/mensaje.hpp"
 #include "../gameSocket.hpp"
 #include <queue>
 #include <pthread.h>

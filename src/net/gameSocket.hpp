@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <iostream>
 #include <sstream>
-#include "mensaje/mensaje.hpp"
+#include <time.h>
 #include "../logger/logger.hpp"
 #include "decodificador.hpp"
 #include "../accesorios/colaConcurrente/colaConcurrente.hpp"
@@ -33,6 +33,7 @@ protected:
   struct sockaddr_in addr_info;
   void iniciarSocket();
   bool validarEstadoConexion(int estadoConexion);
+  int setSendTimeOut(int time);
 
 public:
     GameSocket();

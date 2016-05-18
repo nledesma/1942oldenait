@@ -170,7 +170,7 @@ void Servidor::desencolarSalidaCliente(int clienteFd){
         if (!servidorActivado || !clienteConectado(clienteFd)) return;
         string mensaje = colaSalida->pop();
         int result = this->enviarMensaje(mensaje, clienteFd);
-        if(result < 0){
+        if(result == CLIENTE_DESCONECTADO){
             cout << "Se ha desconectado el jugador " << clientes[clienteFd].nroJugador << endl;
             this->quitarCliente(clienteFd);
         }
