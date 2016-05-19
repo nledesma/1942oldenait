@@ -56,7 +56,11 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
-            if (disparo) disparos.push_back(disparo);
+            if (disparo){
+                pthread_mutex_lock(&this->mutexListaDisparos);
+                disparos.push_back(disparo);
+                pthread_mutex_unlock(&this->mutexListaDisparos);
+            }
             break;
         default:
             avion(nroAvion)->manejarEvento(evento);
@@ -132,7 +136,9 @@ void EscenarioJuego::moverDisparos(float timeStep) {
         for (list<Disparo *>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++) {
             if ((*iterador)->mover(timeStep) == 0) {
                 delete (*iterador);
+                pthread_mutex_lock(&this->mutexListaDisparos);
                 iterador = disparos.erase(iterador);
+                pthread_mutex_unlock(&this->mutexListaDisparos);
             }
         }
     }
@@ -148,8 +154,12 @@ list<Elemento *> &EscenarioJuego::getElementos() {
     return this->elementos;
 }
 
-list<Disparo *> &EscenarioJuego::getDisparos() {
-    return this->disparos;
+list<Disparo *> EscenarioJuego::getDisparos() {
+    list<Disparo *> listaDisparos;
+    pthread_mutex_lock(&this->mutexListaDisparos);
+        listaDisparos = this->disparos;
+    pthread_mutex_unlock(&this->mutexListaDisparos);
+    return listaDisparos;
 }
 
 string EscenarioJuego::getIdSprite() {

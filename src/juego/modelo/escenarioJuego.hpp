@@ -27,6 +27,7 @@ private:
     bool motorActivado;
     string idSprite;
     pthread_t mainLoopThread;
+    pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente<pair<int, int>> colaEventos;
 public:
@@ -47,7 +48,7 @@ public:
     void moverDisparos(float timeStep);
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
-    list<Disparo*>& getDisparos();
+    list<Disparo*> getDisparos();
     int getAncho();
     int getAlto();
     int getLongitud();
