@@ -146,12 +146,20 @@ void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
 
 }
 
-void AvionVista::actualizar(string codigo){
+int AvionVista::actualizar(string codigo){
+    int sonido = 0;
     pthread_mutex_lock(&mutexActualizar);
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
-    this->estadoAnimacion = Decodificador::popByte(codigo);
+    int estadoAnimacionActual = Decodificador::popByte(codigo);
+    if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_EXPLOSION){
+        sonido = 1;
+        estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_DISPARO;
+    }
+    this->estadoAnimacion = estadoAnimacionActual;
     pthread_mutex_unlock(&mutexActualizar);
+
+    return sonido;
 }
 
 void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){

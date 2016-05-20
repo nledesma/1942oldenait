@@ -9,11 +9,13 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->ventana = new Ventana(this->ancho, this->alto);
 
     this->scrollingOffset = 0;
-    this->inicializarComponentes(infoEscenario);
+    this->soundBoard = new SoundBoard();
     this->fondo = new Figura();
+    this->inicializarComponentes(infoEscenario);
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario){
+    this->soundBoard->inicializar();
     int cantAviones = Decodificador::popInt(infoEscenario);
     for(int i = 0; i < cantAviones; i++){
         string avion = Decodificador::popAvionInicial(infoEscenario);
@@ -34,7 +36,16 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     list<AvionVista*>::iterator itAvion;
     for(itAvion = this->getAviones().begin(); itAvion != this->getAviones().end(); itAvion++){
         string avion = Decodificador::popAvion(infoActualizacion);
-        (*itAvion)->actualizar(avion);
+        int sonido = (*itAvion)->actualizar(avion);
+        if (sonido == 1){
+            if (this->contadorSonido == 0){
+                this->contadorSonido = CONATADOR_SONIDO_DISPARO_INICIAL;
+                SoundBoard::reproducirDisparo(this->soundBoard);
+            }
+        }
+        if (this->contadorSonido > 0){
+            this->contadorSonido = this->contadorSonido - 1;
+        }
     }
     list<ElementoVista*>::iterator itElemento;
     for(itElemento = this->getElementos().begin(); itElemento != this->getElementos().end(); itElemento++){
@@ -63,11 +74,13 @@ void EscenarioVista::preloop(){
     cargarVistasAviones();
     cargarVistasElementos();
     cargarVistaDisparos();
+    cargarSonidos();
 }
 
 int EscenarioVista::mainLoop(){
     SDL_Event e;
     SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
+    SoundBoard::toggleMusica(this->soundBoard);
     while(this->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
             if( e.type == SDL_WINDOWEVENT)
@@ -162,6 +175,7 @@ void EscenarioVista::desactivar() {
 
 void EscenarioVista::cerrar() {
     this->fondo->free();
+    this->soundBoard->cerrar();
 
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avionVista = *iterador;
@@ -236,6 +250,10 @@ void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer,
 
 void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* renderer){
     elementoVista->cargarImagen(renderer);
+}
+
+void EscenarioVista::cargarSonidos() {
+    this->soundBoard->cargarSonidos();
 }
 
 /* Renderizaciones */

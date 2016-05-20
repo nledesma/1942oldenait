@@ -10,6 +10,7 @@
 #include "figura.hpp"
 #include "elementoVista.hpp"
 #include "disparoVista.hpp"
+#include "soundboard.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include <list>
@@ -30,6 +31,8 @@ private:
     list<ElementoVista *> elementos;
     DisparoVista* disparoVista;
     list<disparo> disparos;
+    SoundBoard *soundBoard;
+    int contadorSonido;
     Figura *fondo;
     bool activo = false;
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
@@ -61,6 +64,7 @@ public:
     void cargarVistasAviones();
     void cargarVistasElementos();
     void cargarVistaDisparos();
+    void cargarSonidos();
     void actualizar(float offset);
     void cerrar();
     /* getters y setters*/

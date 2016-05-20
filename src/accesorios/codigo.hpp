@@ -65,10 +65,14 @@
 #define LOOP_ETAPA_16 18
 #define LOOP_ETAPA_17 19
 #define DESCONECTADO 20
+#define OFFSET_ESTADO_DISPARO 50
+#define OFFSET_ESTADO_EXPLOSION 100
 
 /* Contador Loop avion */
 #define CONTADOR_INICIAL 20
 
+/* Contador Sonido disparo */
+#define CONATADOR_SONIDO_DISPARO_INICIAL 10
 //Largo nivel
 #define LARGO_NIVEL 10000000
 
