@@ -137,6 +137,8 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 break;
             case SDLK_x:
                 this->colaEventos.push((int)PRESIONA_X);
+            case SDLK_m:
+                this->soundBoard->toggleMusica();
                 break;
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
