@@ -41,6 +41,7 @@ void Avion::manejarEvento(int evento){
                 break;
             case PRESIONA_ENTER:
                 this->estadoAnimacion = LOOP_ETAPA_1;
+                this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_LOOP;
                 break;
             case ARRIBA_SUELTA:
                 if (this->velocidadY != 0)
@@ -68,8 +69,10 @@ void Avion::manejarEvento(int evento){
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-    if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION){
+    if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
+    } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION){
+        this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
     }
     if(this->estadoAnimacion < 3) {
         this->posX += this->velocidadX * timeStep;

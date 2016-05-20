@@ -9,13 +9,14 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->ventana = new Ventana(this->ancho, this->alto);
 
     this->scrollingOffset = 0;
-    this->soundBoard = new SoundBoard();
+    this->contadorSonido = 0;
     this->fondo = new Figura();
+    this->soundBoard = new SoundBoard();
+    this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario){
-    this->soundBoard->inicializar();
     int cantAviones = Decodificador::popInt(infoEscenario);
     for(int i = 0; i < cantAviones; i++){
         string avion = Decodificador::popAvionInicial(infoEscenario);
@@ -37,11 +38,13 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     for(itAvion = this->getAviones().begin(); itAvion != this->getAviones().end(); itAvion++){
         string avion = Decodificador::popAvion(infoActualizacion);
         int sonido = (*itAvion)->actualizar(avion);
-        if (sonido == 1){
+        if (sonido == CODIGO_SONIDO_DISPARO){
             if (this->contadorSonido == 0){
-                this->contadorSonido = CONATADOR_SONIDO_DISPARO_INICIAL;
-                SoundBoard::reproducirDisparo(this->soundBoard);
+                this->contadorSonido = CONTADOR_SONIDO_DISPARO_INICIAL;
+                this->soundBoard->reproducirDisparo();
             }
+        } else if (sonido == CODIGO_SONIDO_LOOP) {
+            this->soundBoard->reproducirLoop();
         }
         if (this->contadorSonido > 0){
             this->contadorSonido = this->contadorSonido - 1;
@@ -69,7 +72,6 @@ EscenarioVista::~EscenarioVista(){}
 // Carga todas las cosas. Anterior al loop.
 void EscenarioVista::preloop(){
     ventana->iniciar();
-
     cargarFondo();
     cargarVistasAviones();
     cargarVistasElementos();
@@ -80,7 +82,7 @@ void EscenarioVista::preloop(){
 int EscenarioVista::mainLoop(){
     SDL_Event e;
     SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
-    SoundBoard::toggleMusica(this->soundBoard);
+    this->soundBoard->toggleMusica();
     while(this->getActivo()){
         while( SDL_PollEvent( &e ) != 0 ){
             if( e.type == SDL_WINDOWEVENT)
@@ -175,7 +177,6 @@ void EscenarioVista::desactivar() {
 
 void EscenarioVista::cerrar() {
     this->fondo->free();
-    this->soundBoard->cerrar();
 
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avionVista = *iterador;

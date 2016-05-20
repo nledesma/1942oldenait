@@ -13,6 +13,7 @@
 #define DISPARO_ENEMIGO "tieLaser.wav"
 #define EXPLOSION "explosion.wav"
 #define MUSICA "empire_strikes_back.wav"
+#define LOOP "falconFly.wav"
 
 using namespace std;
 
@@ -22,16 +23,18 @@ private:
     Mix_Chunk* disparo = NULL;
     Mix_Chunk* disparo_enemigo = NULL;
     Mix_Chunk* explosion = NULL;
+    Mix_Chunk* loop = NULL;
     bool reproduciendoMusica;
 public:
     SoundBoard();
     ~SoundBoard();
     bool inicializar();
     bool cargarSonidos();
-    static void reproducirDisparo(void* THIS);
-    static void reproducirDisparoEnemigo(void* THIS);
-    static void reproducirExplosion(void* THIS);
-    static void toggleMusica(void* THIS);
+    void reproducirDisparo();
+    void reproducirDisparoEnemigo();
+    void reproducirExplosion();
+    void reproducirLoop();
+    void toggleMusica();
     void cerrar();
 };
 

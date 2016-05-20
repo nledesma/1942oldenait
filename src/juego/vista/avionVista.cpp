@@ -147,14 +147,17 @@ void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
 }
 
 int AvionVista::actualizar(string codigo){
-    int sonido = 0;
+    int sonido = CODIGO_SIN_SONIDO;
     pthread_mutex_lock(&mutexActualizar);
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
     int estadoAnimacionActual = Decodificador::popByte(codigo);
-    if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_EXPLOSION){
-        sonido = 1;
+    if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_LOOP){
+        sonido = CODIGO_SONIDO_DISPARO;
         estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_DISPARO;
+    } else if (estadoAnimacionActual >= OFFSET_ESTADO_LOOP && estadoAnimacionActual < OFFSET_ESTADO_EXPLOSION){
+        sonido = CODIGO_SONIDO_LOOP;
+        estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_LOOP;
     }
     this->estadoAnimacion = estadoAnimacionActual;
     pthread_mutex_unlock(&mutexActualizar);
