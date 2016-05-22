@@ -28,8 +28,18 @@ float AvionEnemigo::getPosicionX(){
     pthread_mutex_unlock(&this->mutexMover);
     return posicionX;
 }
+
 float AvionEnemigo::getPosicionY(){
     pthread_mutex_lock(&this->mutexMover);
     float posicionY = this->posY;
     pthread_mutex_unlock(&this->mutexMover);
-    return posicionY;}
+    return posicionY;
+  }
+
+string Avion::getIdSprite(){
+      return this->idSprite;
+  }
+
+string Avion::getIdSpriteDisparos() {
+      return this->idSpriteDisparos;
+  }
