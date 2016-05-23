@@ -178,3 +178,8 @@ string Avion::getIdSprite(){
 string Avion::getIdSpriteDisparos() {
     return this->idSpriteDisparos;
 }
+
+void Avion::setPosicion(float x, float y) {
+    posX = x;
+    posY = y;
+}

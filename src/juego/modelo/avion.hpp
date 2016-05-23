@@ -82,6 +82,8 @@ public:
     string getIdSprite();
 
     string getIdSpriteDisparos();
+
+    void setPosicion(float x, float y);
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

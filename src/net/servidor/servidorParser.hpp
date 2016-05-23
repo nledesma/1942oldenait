@@ -19,8 +19,10 @@ private:
 	static bool getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracion);
 	static bool getElemento(XMLElement * pNodoElemento, string & pathSprite,
 		float & posx, float & posy);
-	static bool agregarElementos(Servidor* servidor, XMLElement* pNodoEscenario);
+	static bool agregarElementos(Etapa* etapa, XMLElement* pNodoEtapa, int altoVentana);
 	static bool agregarAviones(Servidor* servidor, XMLNode * pNodoConfiguracion);
+	static bool agregarEtapas(EscenarioJuego* escenario, XMLElement * pEscenario);
+	static bool getEtapa(XMLElement * pNodoEtapa, Etapa * & etapa, int altoVentana);
 public:
 	static Servidor * deserializar(string ruta);
 	static Servidor * deserializarEscenario(string ruta);

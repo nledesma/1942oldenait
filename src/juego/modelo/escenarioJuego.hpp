@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include "avion.hpp"
 #include "elemento.hpp"
+#include "etapa.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include <unistd.h>
@@ -14,44 +15,64 @@ using namespace std;
 
 class EscenarioJuego {
 private:
+    /* Etapas */
+    list<Etapa*> etapas;
+    list<Etapa*>::iterator itEtapa;
     list<Avion*> aviones;
     list<Elemento*> elementos;
     list<Disparo*> disparos;
+    /* Specs */
     float velocidadDesplazamientoY;
-    Temporizador temporizador;
     float posicionY;
     float scrollingOffset;
-    int alto;
+    /* Ventana */
+    int anchoVentana;
+    int altoVentana;
+    /* Fondo */
     int ancho;
-    int longitud;
-    bool motorActivado;
+    int alto;
     string idSprite;
+    /* Estado */
+    bool motorActivado;
+    /* Sincronización */
+    Temporizador temporizador;
+    ColaConcurrente<pair<int, int>> colaEventos;
     pthread_t mainLoopThread;
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
-    ColaConcurrente<pair<int, int>> colaEventos;
+
 public:
     void reset();
-    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int longitud, string idSprite);
+    void siguienteEtapa();
+    void comenzarEtapa();
+    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite);
     ~EscenarioJuego();
-    float getScrollingOffset();
-    void agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
-    void agregarElemento(float posX, float posY, string idSprite);
+    void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    void agregarEtapa(Etapa * etapa);
+    /* Eventos */
     void manejarProximoEvento();
     void manejarEvento(int nroAvion, int evento);
-    void actualizarScrollingOffset(float timeStep);
     void pushEvento(pair<int, int> evento);
-    void mainLoop(bool serverActivo);
+    /* mainLoop */
+    void jugar(bool serverActivo);
     static void *mainLoop_th(void* THIS);
+    /* Actualizaciones de estado. */
+    void actualizarEstado(float timeStep);
+    void actualizarScrollingOffset(float timeStep);
     void moverAviones(float timestep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
+    /* getters & setters */
+    float getScrollingOffset();
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
     list<Disparo*> getDisparos();
     int getAncho();
     int getAlto();
+    int getAnchoVentana();
+    int getAltoVentana();
     int getLongitud();
+    Etapa * etapaActual();
     string getIdSprite();
     bool estaActivo();
     void activar();
@@ -60,4 +81,4 @@ public:
 };
 
 
-#endif //INC_1942OLDENAIT_ESCENARIOJUEGO_HPP
+#endif

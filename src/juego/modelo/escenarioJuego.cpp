@@ -1,15 +1,13 @@
 #include "escenarioJuego.hpp"
 
-EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int longitud, string idSprite) {
+EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite) {
     this->velocidadDesplazamientoY = velocidadDesplazamientoY;
     scrollingOffset = 0;
     posicionY = 0;
     this->idSprite = idSprite;
-    // Ancho y alto de la ventana.
+    // Ancho y alto del fondo.
     this->ancho = ancho;
     this->alto = alto;
-    // Longitud del nivel.
-    this->longitud = longitud;
 }
 
 void EscenarioJuego::reset() {
@@ -23,7 +21,7 @@ void EscenarioJuego::reset() {
     }
 }
 
-//Se destruyen todas las listas.
+// Se destruyen todas las listas.
 EscenarioJuego::~EscenarioJuego() {
     while(!this->aviones.empty()) delete this->aviones.front(), this->aviones.pop_front();
     while(!this->elementos.empty()) delete this->elementos.front(), this->elementos.pop_front();
@@ -37,15 +35,15 @@ float EscenarioJuego::getScrollingOffset() {
     return offset;
 }
 
-void EscenarioJuego::agregarAvion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite,
+void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, string idSprite,
                                   string idSpriteDisparos) {
+    float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
     Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
     this->aviones.push_back(avion);
 }
 
-void EscenarioJuego::agregarElemento(float posX, float posY, string idSprite) {
-    Elemento *elemento = new Elemento(posX, posY, idSprite);
-    this->elementos.push_back(elemento);
+void EscenarioJuego::agregarEtapa(Etapa * etapa) {
+    this->etapas.push_back(etapa);
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
@@ -68,11 +66,36 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
     }
 }
 
+void EscenarioJuego::siguienteEtapa() {
+    ++itEtapa;
+    comenzarEtapa();
+}
+
+void EscenarioJuego::comenzarEtapa() {
+    scrollingOffset = 0;
+    posicionY = 0;
+    disparos.clear();
+    elementos = etapaActual()->getElementos();
+
+    /* Se fijan las posiciones de los aviones */
+    float d = ancho/(aviones.size() + 1);
+    list<Avion*>::iterator it;
+    int i = 1;
+
+    for (it = aviones.begin(); it != aviones.end(); ++it) {
+        (*it)->setPosicion(d*i - ANCHO_AVION_COMUN/2, 200);
+        ++i;
+    }
+
+    // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P
+}
+
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
-    if(posicionY >= longitud){
-        this->reset();
+    if(posicionY >= getLongitud()){
+        // Se termina una etapa y se pasa a la siguiente.
+        this->siguienteEtapa();
     }
     if (scrollingOffset > alto){
         scrollingOffset = 0;
@@ -85,20 +108,24 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
     escenario->activar();
     while (escenario->estaActivo()) {
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
-        escenario->actualizarScrollingOffset(timeStep);
-        escenario->posicionY = escenario->posicionY + timeStep * escenario->velocidadDesplazamientoY;
         escenario->temporizador.comenzar();
-        escenario->moverAviones(timeStep);
-        escenario->moverElementos(timeStep);
-        escenario->moverDisparos(timeStep);
-        escenario->manejarProximoEvento();
+        escenario->actualizarEstado(timeStep);
         usleep(5000);
     }
-
     pthread_exit(NULL);
 }
 
-void EscenarioJuego::mainLoop(bool serverActivo) {
+void EscenarioJuego::actualizarEstado(float timeStep) {
+    this->actualizarScrollingOffset(timeStep);
+    this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
+    this->moverAviones(timeStep);
+    this->moverElementos(timeStep);
+    this->moverDisparos(timeStep);
+    this->manejarProximoEvento();
+}
+
+void EscenarioJuego::jugar(bool serverActivo) {
+
     if (serverActivo){
         pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
     }
@@ -144,7 +171,7 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     }
 }
 
-/* getters */
+/* getters & setters */
 list<Avion *> &EscenarioJuego::getAviones() {
     return this->aviones;
 }
@@ -175,7 +202,11 @@ int EscenarioJuego::getAlto() {
 }
 
 int EscenarioJuego::getLongitud() {
-    return this->longitud;
+    return this->etapaActual()->getLongitud();
+}
+
+Etapa * EscenarioJuego::etapaActual() {
+    return *itEtapa;
 }
 
 bool EscenarioJuego::estaActivo() {
@@ -195,4 +226,12 @@ Avion* EscenarioJuego::avion(int i){
     list<Avion*>::iterator it = aviones.begin();
     advance (it, i - 1);
     return *it;
+}
+
+int EscenarioJuego::getAnchoVentana() {
+    return anchoVentana;
+}
+
+int EscenarioJuego::getAltoVentana() {
+    return altoVentana;
 }

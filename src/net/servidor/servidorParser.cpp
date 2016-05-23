@@ -73,28 +73,48 @@ bool ServidorParser::getFondo(XMLElement * pNodoEscenario, string & spriteId, in
 	return true;
 }
 
+bool ServidorParser::getEtapa(XMLElement * pEtapa, Etapa * & etapa, int altoVentana) {
+	int longitud;
+	if (!getInt(pEtapa, "longitud", longitud)) return false;
+	etapa = new Etapa(longitud);
+	// Agregar Elementos.
+	if (!agregarElementos(etapa, pEtapa, altoVentana)) return false;
+	// TODO agregar enemigos, cuando corresponda.
+	return true;
+}
+
+bool ServidorParser::agregarEtapas(EscenarioJuego *escenario, XMLElement *pEscenario) {
+	XMLElement * pEtapas = pEscenario->FirstChildElement("etapas");
+	if (!pEtapas) return false;
+
+	XMLElement * pEtapa = pEtapas->FirstChildElement("etapa");
+	while (pEtapa != NULL) {
+		Etapa * etapa;
+		if (getEtapa(pEtapa, etapa, escenario->getAltoVentana())) escenario->agregarEtapa(etapa);
+		pEtapa = pEtapa->NextSiblingElement("etapa");
+	}
+
+	return true;
+}
+
 bool ServidorParser::getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracion){
 	// Nodo Escenario
 	XMLElement * pNodoEscenario = pNodoConfiguracion -> FirstChildElement("escenario");
 
-	// Longitud
-	int longitud;
-	if (!getInt(pNodoEscenario, "longitud", longitud)) return false;
-
 	// Ventana
-	int ancho, alto;
-	if (!getVentana(pNodoEscenario, ancho, alto)) return false;
+	int anchoVentana, altoVentana;
+	if (!getVentana(pNodoEscenario, anchoVentana, altoVentana)) return false;
 
-	// Fondo
+	// Fondo.
 	string pathSpriteFondo; int anchoFondo, altoFondo; float velocidadY;
 	if (!getFondo(pNodoEscenario, pathSpriteFondo, anchoFondo, altoFondo, velocidadY)) return false;
 
-	// Se crea el escenario y se lo setea al servidor
-	EscenarioJuego* escenario = new EscenarioJuego(velocidadY, ancho, alto, longitud, pathSpriteFondo);
-	servidor->setEscenario(escenario);
+	// Se crea el escenario y se lo setea al servidor.
+	EscenarioJuego* escenario = new EscenarioJuego(velocidadY, anchoFondo, altoFondo, anchoVentana, altoVentana, pathSpriteFondo);
 
-	// Elementos
-	if (!agregarElementos(servidor, pNodoEscenario)) return false;
+	// Se agregan las etapas.
+	if (!agregarEtapas(escenario, pNodoEscenario)) return false;
+	servidor->setEscenario(escenario);
 
 	return true;
 }
@@ -106,13 +126,12 @@ bool ServidorParser::getElemento(XMLElement * pNodoElemento, string & pathSprite
 	return true;
 }
 
-bool ServidorParser::agregarElementos(Servidor* servidor, XMLElement* pNodoEscenario){
-	int alto = servidor->getEscenario()->getAlto();
+bool ServidorParser::agregarElementos(Etapa * etapa, XMLElement* pNodoEtapa, int altoVentana){
 	string spriteIdElemento;
 	float posx, posy;
 
 	// Nodo elementos
-	XMLElement * pNodoElementos = pNodoEscenario -> FirstChildElement("elementos");
+	XMLElement * pNodoElementos = pNodoEtapa -> FirstChildElement("elementos");
 	if (!pNodoElementos) return false;
 
 	// Iteramos sobre la lista de elementos
@@ -121,7 +140,7 @@ bool ServidorParser::agregarElementos(Servidor* servidor, XMLElement* pNodoEscen
 	while( pNodoElemento != NULL ){
 
 		if (getElemento(pNodoElemento, spriteIdElemento, posx, posy)) {
-			servidor->getEscenario()->agregarElemento(posx, alto - posy, spriteIdElemento);
+			etapa->agregarElemento(posx, altoVentana - posy, spriteIdElemento);
 		}
 
 		pNodoElemento = pNodoElemento -> NextSiblingElement("elemento");
@@ -144,14 +163,12 @@ bool ServidorParser::agregarAviones(Servidor* servidor, XMLNode * pNodoConfigura
 	if (!getFloat(pNodoAvion, "velocidadDisparos", velocidadDisparos)) return false;
 	if (!getString(pNodoAvion, "avionSpriteId", avionSpriteId)) avionSpriteId = "";
 	if (!getString(pNodoAvion, "disparosSpriteId", disparosSpriteId)) avionSpriteId = "";
-	int ancho = servidor->getEscenario()->getAncho();
 	int cantidadDeClientes = servidor->getCantidadMaximaDeClientes();
-	float d = ancho/(cantidadDeClientes + 1);
 
 	// Agregamos el mismo avión para todos los jugadores.
 	for (int i = 1; i <= cantidadDeClientes; i++){
-		servidor->getEscenario()->agregarAvion(d*i - ANCHO_AVION_COMUN/2, 600,
-			velocidadDesplazamiento, velocidadDisparos + velocidadDesplazamiento,
+		servidor->getEscenario()->agregarAvion(velocidadDesplazamiento,
+			velocidadDisparos + velocidadDesplazamiento,
 			avionSpriteId, disparosSpriteId);
 	}
 	return true;

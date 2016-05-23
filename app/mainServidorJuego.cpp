@@ -38,7 +38,7 @@ void ejecutar(Servidor* servidor){
     // Se puede haber cerrado el servidor antes de recibir jugadores.
     if (servidor->servidorActivo()) {
         sleep(2);
-        servidor->getEscenario()->mainLoop(servidor->servidorActivo());
+        servidor->getEscenario()->jugar(servidor->servidorActivo());
         servidor->iniciarCicloDesencolaciones();
     }
 

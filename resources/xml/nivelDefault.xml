@@ -4,7 +4,6 @@
         <puerto>8000</puerto>
     </servidor>
     <escenario>
-        <longitud>3200</longitud>
         <ventana>
             <ancho>800</ancho>
             <alto>800</alto>
@@ -15,23 +14,65 @@
             <alto>800</alto>
             <velocidadDesplazamientoY>200</velocidadDesplazamientoY>
         </fondo>
-        <elementos>
-            <elemento>
-                <spriteIdElemento>asteroide</spriteIdElemento>
-                <posx>0</posx>
-                <posy>200</posy>
-            </elemento>
-            <elemento>
-                <spriteIdElemento>planeta</spriteIdElemento>
-                <posx>600</posx>
-                <posy>1600</posy>
-            </elemento>
-            <elemento>
-                <spriteIdElemento>asteroide</spriteIdElemento>
-                <posx>0</posx>
-                <posy>3200</posy>
-            </elemento>
-        </elementos>
+        <!-- etapa 1 - 3 pantallas -->
+        <etapas>
+            <etapa>
+                <longitud>3200</longitud>
+                <elementos>
+                    <elemento>
+                        <spriteIdElemento>asteroide</spriteIdElemento>
+                        <posx>0</posx>
+                        <posy>200</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>planeta</spriteIdElemento>
+                        <posx>600</posx>
+                        <posy>1600</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>asteroide</spriteIdElemento>
+                        <posx>0</posx>
+                        <posy>3200</posy>
+                    </elemento>
+                </elementos>
+            </etapa>
+            <!-- etapa 2, 3 pantallas -->
+            <etapa>
+                <longitud>3200</longitud>
+                <elementos>
+                    <elemento>
+                        <spriteIdElemento>asteroide</spriteIdElemento>
+                        <posx>0</posx>
+                        <posy>200</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>planeta</spriteIdElemento>
+                        <posx>300</posx>
+                        <posy>200</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>asteroide</spriteIdElemento>
+                        <posx>600</posx>
+                        <posy>200</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>asteroide</spriteIdElemento>
+                        <posx>0</posx>
+                        <posy>3200</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>planeta</spriteIdElemento>
+                        <posx>300</posx>
+                        <posy>3200</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>asteroide</spriteIdElemento>
+                        <posx>600</posx>
+                        <posy>3200</posy>
+                    </elemento>
+                </elementos>
+            </etapa>
+        </etapas>
     </escenario>
     <aviones>
         <avion>
