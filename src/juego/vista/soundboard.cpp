@@ -9,6 +9,7 @@ bool SoundBoard::inicializar() {
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
         return false;
     }
+    Mix_AllocateChannels(20);
     return true;
 }
 
@@ -101,7 +102,7 @@ void SoundBoard::reproducirDisparoEnemigo(){
     Mix_PlayChannel( -1, this->disparo_enemigo, 0 );
 }
 void SoundBoard::reproducirExplosion(){
-    Mix_PlayChannel( -1, this->explosion, 0 );
+    Mix_PlayChannel( 1, this->explosion, 0 );
 }
 void SoundBoard::reproducirLoop(){
     Mix_PlayChannel( -1, this->loop, 0 );
