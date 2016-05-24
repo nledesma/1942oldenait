@@ -118,6 +118,8 @@ void Decodificador::pushInicial(string &codigo, Elemento *e) {
 }
 
 void Decodificador::pushInicial(string &codigo, EscenarioJuego *e) {
+    push(codigo, e->getAnchoVentana());
+    push(codigo, e->getAltoVentana());
     push(codigo, e->getAncho());
     push(codigo, e->getAlto());
     push(codigo, e->getIdSprite());
@@ -163,11 +165,19 @@ string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
         Avion* avion = *iterador;
         Decodificador::pushInicial(codigo, avion);
     }
-    list<Elemento*> elementos = escenarioJuego->getElementos();
-    Decodificador::pushCantidad(codigo, (int) elementos.size());
-    for(list<Elemento*>::iterator iterador = elementos.begin(); iterador != elementos.end(); ++iterador){
-        Elemento* elemento = *iterador;
-        Decodificador::pushInicial(codigo, elemento);
+    // TODO por ahí no conviene copia sino referencia, por velocidad. Igual es una vez.
+    list<Etapa *> etapas = escenarioJuego->getEtapas();
+    list<Etapa *>::iterator itEtapa;
+    Decodificador::pushCantidad(codigo, etapas.size());
+    for (itEtapa = etapas.begin(); itEtapa != etapas.end(); ++itEtapa) {
+        list<Elemento*> elementos = (*itEtapa)->getElementos();
+        // cout << "elementos.size()" << elementos.size();
+        Decodificador::pushCantidad(codigo, elementos.size());
+        list<Elemento *>::iterator itElemento;
+        for(itElemento = elementos.begin(); itElemento != elementos.end(); ++itElemento) {
+            Elemento* elemento = *itElemento;
+            Decodificador::pushInicial(codigo, elemento);
+        }
     }
     Decodificador::pushInicialDisparo(codigo, aviones.front()->getIdSpriteDisparos());
     return codigo;
@@ -177,19 +187,19 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     string codigo;
     Decodificador::push(codigo, escenarioJuego);
     list<Avion*> aviones = escenarioJuego->getAviones();
-    for(list<Avion*>::iterator iterador = aviones.begin(); iterador != aviones.end(); ++iterador){
+    for(list<Avion*>::iterator iterador = aviones.begin(); iterador != aviones.end(); ++iterador) {
         Avion* avion = *iterador;
         Decodificador::push(codigo, avion);
     }
     list<Elemento*> elementos = escenarioJuego->getElementos();
-    for(list<Elemento*>::iterator iterador = elementos.begin(); iterador != elementos.end(); ++iterador){
+    for(list<Elemento*>::iterator iterador = elementos.begin(); iterador != elementos.end(); ++iterador) {
         Elemento* elemento = *iterador;
         Decodificador::push(codigo, elemento);
     }
     list<Disparo*> disparos = escenarioJuego->getDisparos();
-    Decodificador::pushCantidad(codigo,  (int) disparos.size());
+    Decodificador::pushCantidad(codigo, (int) disparos.size());
     if(!disparos.empty()){
-        for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); ++iterador){
+        for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); ++iterador) {
             Disparo* disparo = *iterador;
             Decodificador::push(codigo, disparo);
         }

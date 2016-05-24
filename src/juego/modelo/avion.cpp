@@ -68,7 +68,7 @@ void Avion::manejarEvento(int evento){
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-    if(this->estadoAnimacion < 3) {
+    if(this->estadoAnimacion < LOOP_ETAPA_1) {
         this->posX += this->velocidadX * timeStep;
         if( this->posX < 0 ){
             this->posX = 0;
@@ -93,7 +93,7 @@ void Avion::mover(float timeStep){
             } else {
                 this->contador = CONTADOR_INICIAL;
                 if(this->estadoAnimacion == LOOP_ETAPA_17) {
-                    this->estadoAnimacion = 0;
+                    this->estadoAnimacion = ESTADO_NORMAL;
                 } else {
                     this->estadoAnimacion ++;
                 }

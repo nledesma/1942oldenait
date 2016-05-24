@@ -9,6 +9,7 @@
 #include "avionVista.hpp"
 #include "figura.hpp"
 #include "elementoVista.hpp"
+#include "etapaVista.hpp"
 #include "disparoVista.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../../accesorios/temporizador.hpp"
@@ -21,17 +22,26 @@ using namespace std;
 
 class EscenarioVista {
 private:
+    /* Fondo */
     int ancho;
     int alto;
     float scrollingOffset;
     string pathImagen;
+    Figura *fondo;
+    /* Ventana */
+    int anchoVentana;
+    int altoVentana;
     Ventana *ventana;
     list<AvionVista *> aviones;
     list<ElementoVista *> elementos;
     DisparoVista* disparoVista;
     list<disparo> disparos;
-    Figura *fondo;
+    /* Etapas */
+    list<EtapaVista*> etapas;
+    list<EtapaVista*>::iterator itEtapa;
+    /* Estado */
     bool activo = false;
+    /* Sincronización */
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
@@ -47,8 +57,6 @@ public:
     void cargarElemento(ElementoVista *elemento, SDL_Renderer *renderer);
     void preloop();
     int mainLoop();
-    float getScrollingOffset();
-    void setScrollingOffset(float scrollingOffset);
     void agregarAvionVista(string infoAvion);
     void agregarElementoVista(string codigo);
     void agregarDisparoVista(string pathSprite);
@@ -63,7 +71,13 @@ public:
     void cargarVistaDisparos();
     void actualizar(float offset);
     void cerrar();
+    /* Etapas */
+    void comenzarEtapa();
+    void avanzarEtapa();
+    EtapaVista* etapaActual();
     /* getters y setters*/
+    float getScrollingOffset();
+    void setScrollingOffset(float scrollingOffset);
     void activar();
     void desactivar();
     list<AvionVista *> &getAviones();

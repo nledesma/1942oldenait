@@ -73,6 +73,7 @@ public:
     int getAltoVentana();
     int getLongitud();
     Etapa * etapaActual();
+    list<Etapa *> getEtapas();
     string getIdSprite();
     bool estaActivo();
     void activar();

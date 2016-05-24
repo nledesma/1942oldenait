@@ -8,6 +8,8 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     // Ancho y alto del fondo.
     this->ancho = ancho;
     this->alto = alto;
+    this->anchoVentana = anchoVentana;
+    this->altoVentana = altoVentana;
 }
 
 void EscenarioJuego::reset() {
@@ -68,7 +70,11 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 
 void EscenarioJuego::siguienteEtapa() {
     ++itEtapa;
-    comenzarEtapa();
+    if (itEtapa == etapas.end()) {
+        desactivar();
+    } else {
+        comenzarEtapa();
+    }
 }
 
 void EscenarioJuego::comenzarEtapa() {
@@ -125,7 +131,8 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
 }
 
 void EscenarioJuego::jugar(bool serverActivo) {
-
+    itEtapa = etapas.begin();
+    comenzarEtapa();
     if (serverActivo){
         pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
     }
@@ -207,6 +214,11 @@ int EscenarioJuego::getLongitud() {
 
 Etapa * EscenarioJuego::etapaActual() {
     return *itEtapa;
+}
+
+list<Etapa *> EscenarioJuego::getEtapas() {
+    // copia de lista de etapas.
+    return etapas;
 }
 
 bool EscenarioJuego::estaActivo() {

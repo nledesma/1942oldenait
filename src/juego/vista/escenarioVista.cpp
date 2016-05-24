@@ -2,55 +2,93 @@
 using namespace std;
 
 EscenarioVista::EscenarioVista(string infoEscenario){
+    this->anchoVentana = Decodificador::popInt(infoEscenario);
+    this->altoVentana = Decodificador::popInt(infoEscenario);
+    this->ventana = new Ventana(this->anchoVentana, this->altoVentana);
+
     this->ancho = Decodificador::popInt(infoEscenario);
     this->alto = Decodificador::popInt(infoEscenario);
 
     this->pathImagen = Decodificador::popIdImg(infoEscenario);
-    this->ventana = new Ventana(this->ancho, this->alto);
 
     this->scrollingOffset = 0;
     this->inicializarComponentes(infoEscenario);
     this->fondo = new Figura();
+    this->comenzarEtapa();
 }
 
-void EscenarioVista::inicializarComponentes(string infoEscenario){
+void EscenarioVista::comenzarEtapa() {
+    this->scrollingOffset = 0;
+    this->elementos = etapaActual()->getElementos();
+}
+
+void EscenarioVista::avanzarEtapa() {
+    ++itEtapa;
+    if (itEtapa != etapas.end() && this->activo) {
+        comenzarEtapa();
+    } else {
+        desactivar();
+    }
+}
+
+EtapaVista* EscenarioVista::etapaActual() {
+    return *itEtapa;
+}
+
+void EscenarioVista::inicializarComponentes(string infoEscenario) {
     int cantAviones = Decodificador::popInt(infoEscenario);
-    for(int i = 0; i < cantAviones; i++){
+    for(int i = 0; i < cantAviones; i++) {
         string avion = Decodificador::popAvionInicial(infoEscenario);
         this->agregarAvionVista(avion);
     }
-    int cantElementos = Decodificador::popInt(infoEscenario);
-    for(int i = 0; i < cantElementos; i++){
-        string elemento = Decodificador::popElementoInicial(infoEscenario);
-        this->agregarElementoVista(elemento);
+    int cantEtapas = Decodificador::popInt(infoEscenario);
+    for (int i = 0; i < cantEtapas; ++i) {
+        int cantElementos = Decodificador::popInt(infoEscenario);
+        EtapaVista * etapaVista = new EtapaVista();
+
+        for(int j = 0; j < cantElementos; ++j) {
+            string elemento = Decodificador::popElementoInicial(infoEscenario);
+            etapaVista->agregarElementoVista(elemento);
+        }
+        etapas.push_back(etapaVista);
     }
+    itEtapa = etapas.begin();
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
 }
 
 void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     float offset = Decodificador::popFloat(infoActualizacion);
+    // cout << "offset = " << offset << endl;
     this->actualizar(offset);
     list<AvionVista*>::iterator itAvion;
     for(itAvion = this->getAviones().begin(); itAvion != this->getAviones().end(); itAvion++){
         string avion = Decodificador::popAvion(infoActualizacion);
         (*itAvion)->actualizar(avion);
     }
+    // cout << "elementos.size() = " << elementos.size() << endl;
     list<ElementoVista*>::iterator itElemento;
     for(itElemento = this->getElementos().begin(); itElemento != this->getElementos().end(); itElemento++){
         string elemento = Decodificador::popElemento(infoActualizacion);
         (*itElemento)->actualizar(elemento);
     }
     list<disparo> disparos;
-    for (int i = Decodificador::popInt(infoActualizacion); i > 0; i--){
+    // cout << "disparos.size() = " << disparos.size() << endl;
+    int cantDisparos = Decodificador::popInt(infoActualizacion);
+    if (cantDisparos != 0) {
+        cout << "hay " << cantDisparos << " disparos. " << endl;
+    }
+    for (int i = 0; i < cantDisparos; ++i) {
         disparo unDisparo;
         unDisparo.posX = Decodificador::popFloat(infoActualizacion);
         unDisparo.posY = Decodificador::popFloat(infoActualizacion);
         disparos.push_front(unDisparo);
     }
 
-        this->setDisparos(disparos);
-
+    this->setDisparos(disparos);
+    if (infoActualizacion.size() != 0) {
+        cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
+    }
 }
 
 EscenarioVista::~EscenarioVista(){}
@@ -188,12 +226,6 @@ void EscenarioVista::setScrollingOffset(float scrollingOffset){
 
 /* Inicializacion de elementos internos del escenario */
 
-void EscenarioVista::agregarElementoVista(string codigo){
-    //Agrega el elemento a la lista.
-    ElementoVista* elementoVista = new ElementoVista(codigo);
-    this->elementos.push_back(elementoVista);
-}
-
 void EscenarioVista::agregarAvionVista(string infoAvion){
     AvionVista* avionVista = new AvionVista(infoAvion);
     this->aviones.push_back(avionVista);
@@ -262,7 +294,7 @@ void EscenarioVista::renderizarFondo(float y) {
 
 void EscenarioVista::renderizarDisparos(){
     pthread_mutex_lock(&mutexDisparos);
-    for(list<disparo>::iterator iterador = this->disparos.begin(); iterador != this->disparos.end(); ++iterador){
+    for(list<disparo>::iterator iterador = this->disparos.begin(); iterador != this->disparos.end(); ++iterador) {
         disparo disparo1 = *iterador;
         disparoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
     }

@@ -121,16 +121,18 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
     string longitudMensaje;
     Decodificador::pushCantidad(longitudMensaje, mensaje.size());
     mensaje = longitudMensaje + mensaje;
+    // Decodificador::imprimirBytes(mensaje);
     return enviarBytes((char *) mensaje.c_str(), mensaje.size(), fdReceptor);
 }
 
-int GameSocket::recibirMensaje(string & mensaje, int fdEmisor){
+int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
     string cabecera;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
 
     if (resultado == MENSAJEOK){
         int longMensajeInt = Decodificador::popInt(cabecera);
         if (recibirBytes(mensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
+            // Decodificador::imprimirBytes(mensaje);
             return MENSAJEOK;
         } else {
             stringstream ss;
