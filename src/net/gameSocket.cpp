@@ -122,10 +122,16 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
     Decodificador::pushCantidad(longitudMensaje, mensaje.size());
     mensaje = longitudMensaje + mensaje;
     // Decodificador::imprimirBytes(mensaje);
-    return enviarBytes((char *) mensaje.c_str(), mensaje.size(), fdReceptor);
+    pthread_mutex_lock(&mutexEnviar);
+    int resultado = enviarBytes((char *) mensaje.c_str(), mensaje.size(), fdReceptor);
+    pthread_mutex_unlock(&mutexEnviar);
+
+    return resultado;
 }
 
 int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
+    pthread_mutex_lock(&mutexRecibir);
+    
     string cabecera;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
 
@@ -145,5 +151,8 @@ int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
     } else {
         Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
     }
+
+    pthread_mutex_unlock(&mutexRecibir);
+
     return -1;
 }
