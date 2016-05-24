@@ -130,9 +130,7 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
 }
 
 int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
-    cout << "entro en recibirMensaje." << endl;
     pthread_mutex_lock(&mutexRecibir);
-    cout << "paso el mutex" << endl;
 
     string cabecera;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
