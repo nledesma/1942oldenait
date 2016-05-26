@@ -7,7 +7,6 @@
 class RutinaLoop: public Rutina {
 private:
     const float velocidadAngular = 5.625;
-    void transportarAngulo(float &angulo, float timestep);
 public:
     void mover(float &posX, float &posY, float &velocidad, float &angulo, float timestep);
 };
