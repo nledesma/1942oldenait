@@ -3,12 +3,15 @@
 
 #include "../../accesorios/trigonomaster.hpp"
 
-class Giro {
+class Giro : public TipoMovimiento {
 private:
+    float anguloAbarrer;
+    float velocidadAngular;
     float transportarAngulo(float &angulo, float velocidadAngular,float timestep);
 public:
-    void girarAngulo(float &posX, float &posY, float &velocidad, float &angulo, float &anguloAbarrer,
-                     int &estadoAnimacion, float velocidadAngular, float timestep);
+    Giro(float arg1, float arg2);
+    ~Giro();
+    bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
 };
 
 
