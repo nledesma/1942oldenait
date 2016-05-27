@@ -43,12 +43,15 @@ private:
 
 public:
     void reset();
-    void siguienteEtapa();
-    void comenzarEtapa();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite);
     ~EscenarioJuego();
     void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    /* Etapas */
     void agregarEtapa(Etapa * etapa);
+    void avanzarEtapa();
+    void comenzarEtapa();
+    void esperarEtapa();
+    bool quedanEtapas();
     /* Eventos */
     void manejarProximoEvento();
     void manejarEvento(int nroAvion, int evento);

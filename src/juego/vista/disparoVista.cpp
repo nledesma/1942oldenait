@@ -16,7 +16,6 @@ void DisparoVista::cargarImagen(SDL_Renderer * renderer){
 }
 
 void DisparoVista::render(float posX, float posY, SDL_Renderer * renderer){
-    cout << "se llama a renderizar un disparo" << endl;
     this->figuraDisparo->render((int)posX, (int)posY, renderer, NULL);
 }
 

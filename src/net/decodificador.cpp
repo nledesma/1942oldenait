@@ -171,7 +171,6 @@ string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
     Decodificador::pushCantidad(codigo, etapas.size());
     for (itEtapa = etapas.begin(); itEtapa != etapas.end(); ++itEtapa) {
         list<Elemento*> elementos = (*itEtapa)->getElementos();
-        // cout << "elementos.size()" << elementos.size();
         Decodificador::pushCantidad(codigo, elementos.size());
         list<Elemento *>::iterator itElemento;
         for(itElemento = elementos.begin(); itElemento != elementos.end(); ++itElemento) {

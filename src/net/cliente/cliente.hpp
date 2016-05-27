@@ -44,7 +44,7 @@ public:
     int enviarEvento(int evento);
     int recibirMensaje(string & mensaje);
     void iniciarEscenario();
-    void actualizarComponentes(string mensaje);
+    void actualizarEscenario(string mensaje);
     void cicloMensajes();
     static void * cicloMensajes_th(void* THIS);
     bool sePuedeEntrar();

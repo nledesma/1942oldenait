@@ -71,10 +71,12 @@ public:
     void cargarVistaDisparos();
     void actualizar(float offset);
     void cerrar();
+    void manejarEvento(int evento);
     /* Etapas */
-    void comenzarEtapa();
+    int comenzarEtapa();
     void avanzarEtapa();
     EtapaVista* etapaActual();
+    bool quedanEtapas();
     /* getters y setters*/
     float getScrollingOffset();
     void setScrollingOffset(float scrollingOffset);

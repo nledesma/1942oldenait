@@ -14,25 +14,6 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->scrollingOffset = 0;
     this->inicializarComponentes(infoEscenario);
     this->fondo = new Figura();
-    this->comenzarEtapa();
-}
-
-void EscenarioVista::comenzarEtapa() {
-    this->scrollingOffset = 0;
-    this->elementos = etapaActual()->getElementos();
-}
-
-void EscenarioVista::avanzarEtapa() {
-    ++itEtapa;
-    if (itEtapa != etapas.end() && this->activo) {
-        comenzarEtapa();
-    } else {
-        desactivar();
-    }
-}
-
-EtapaVista* EscenarioVista::etapaActual() {
-    return *itEtapa;
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -57,26 +38,56 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     this->agregarDisparoVista(disparo);
 }
 
+int EscenarioVista::comenzarEtapa() {
+    this->activar();
+    this->scrollingOffset = 0;
+    this->elementos = etapaActual()->getElementos();
+    cout << "se comienza una etapa con " << elementos.size() << " elementos." << endl;
+    return this->mainLoop();
+}
+
+void EscenarioVista::avanzarEtapa() {
+    desactivar();
+    ++itEtapa;
+}
+
+EtapaVista* EscenarioVista::etapaActual() {
+    return *itEtapa;
+}
+
+bool EscenarioVista::quedanEtapas() {
+    return itEtapa != etapas.end();
+}
+
+
+void EscenarioVista::manejarEvento(int evento) {
+    switch (evento) {
+        case AVANZAR_ETAPA:
+            avanzarEtapa();
+            Logger::instance()->logInfo("Se avanza de etapa.");
+            break;
+        default:
+            Logger::instance()->logWarning("El evento que recibió el cliente no existe.");
+            break;
+    }
+}
+
 void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     float offset = Decodificador::popFloat(infoActualizacion);
-    // cout << "offset = " << offset << endl;
     this->actualizar(offset);
     list<AvionVista*>::iterator itAvion;
     for(itAvion = this->getAviones().begin(); itAvion != this->getAviones().end(); itAvion++){
         string avion = Decodificador::popAvion(infoActualizacion);
         (*itAvion)->actualizar(avion);
     }
-    // cout << "elementos.size() = " << elementos.size() << endl;
     list<ElementoVista*>::iterator itElemento;
     for(itElemento = this->getElementos().begin(); itElemento != this->getElementos().end(); itElemento++){
         string elemento = Decodificador::popElemento(infoActualizacion);
         (*itElemento)->actualizar(elemento);
     }
     list<disparo> disparos;
-    // cout << "disparos.size() = " << disparos.size() << endl;
     int cantDisparos = Decodificador::popInt(infoActualizacion);
     if (cantDisparos != 0) {
-        cout << "hay " << cantDisparos << " disparos. " << endl;
     }
     for (int i = 0; i < cantDisparos; ++i) {
         disparo unDisparo;
@@ -104,16 +115,20 @@ void EscenarioVista::preloop(){
 }
 
 int EscenarioVista::mainLoop(){
+    cout << "se entra al mainLoop" << endl;
     SDL_Event e;
-    SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     while(this->getActivo()){
-        while( SDL_PollEvent( &e ) != 0 ){
-            if( e.type == SDL_WINDOWEVENT)
-            {
-                if (e.window.event == SDL_WINDOWEVENT_CLOSE)
+        while ( SDL_PollEvent( &e ) != 0 ) {
+            if (e.type == SDL_WINDOWEVENT) {
+                if (e.window.event == SDL_WINDOWEVENT_CLOSE){
+                    cout << "Evento de cierre" << endl;
                     this->desactivar();
-            } else if (e.key.keysym.sym == SDLK_x){
+                    return CERRAR;
+                }
+            } else if (e.key.keysym.sym == SDLK_x) {
+                cout << "Se apretó x" << endl;
                 this->desactivar();
+                return CERRAR;
             }
             this->pushEvento(e);
         }
@@ -127,9 +142,10 @@ int EscenarioVista::mainLoop(){
         this->renderizarDisparos();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
+    cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
     cout << "Finalizó el ciclo de render." << endl;
-    cerrar();
-    return 1;
+    //cerrar();
+    return CONTINUAR;
 }
 
 void EscenarioVista::pushEvento(SDL_Event evento){
@@ -246,9 +262,15 @@ void EscenarioVista::cargarVistasAviones(){
 
 
 void EscenarioVista::cargarVistasElementos(){
-    for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
-        ElementoVista* elementoVista = *iterador;
-        this->cargarElemento(elementoVista, ventana->getVentanaRenderer());
+    // Cargo imágenes de todas las etapas.
+    list<EtapaVista*>::iterator i;
+    for (i = etapas.begin(); i != etapas.end(); ++i) {
+        EtapaVista * etapa = *i;
+        list<ElementoVista*>::iterator j;
+        list<ElementoVista*> elementos = etapa->getElementos();
+        for (j = elementos.begin(); j != elementos.end(); ++j){
+            this->cargarElemento(*j, ventana->getVentanaRenderer());
+        }
     }
 }
 

@@ -76,7 +76,7 @@ int Cliente::recibirMensaje(string & mensaje){
 	if (!cliente_conectado) return SIN_CONEXION;
 
 	int result = this->setTimeOut(3);
-	if (result < 0){
+	if (result < 0) {
 		stringstream ss;
 		ss << this->socketFd;
 		Logger::instance()->logError(errno,"Se produjo un error al setear el timeOut en el socketfd " + ss.str());
@@ -89,7 +89,7 @@ int Cliente::recibirMensaje(string & mensaje){
 		cliente_conectado = false;
 		if (escenarioVista) escenarioVista->desactivar();
 		return estadoRecepcion;
-	} else if (estadoRecepcion == PEER_ERROR){
+	} else if (estadoRecepcion == PEER_ERROR) {
 		this->cerrar();
 		return estadoRecepcion;
 	} else {
@@ -117,7 +117,7 @@ void Cliente::iniciarEscenario(){
 
 	// Vamos a recibir periódicamente los jugadores que faltan.
 	if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
-	while(mensajeRespuesta.length() == sizeof(int) && cliente_conectado){
+	while(mensajeRespuesta.length() == sizeof(int) && cliente_conectado) {
 		n2 = Decodificador::popInt(mensajeRespuesta);
 		if (n2 != n){
 			n = n2;
@@ -127,10 +127,20 @@ void Cliente::iniciarEscenario(){
 	}
 	// El primer mensaje que no es un entero es el escenario.
 	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
-	this->escenarioVista->activar();
 	this->escenarioVista->preloop();
-	this->cicloMensajes();
-	this->escenarioVista->mainLoop();
+	int resultadoRender = CONTINUAR;
+	while(escenarioVista->quedanEtapas() && resultadoRender == CONTINUAR) {
+		cout << "comienza un ciclo de mensajes." << endl;
+		// El ciclo de mensajes termina cuando el escenario sse desactiva.
+		this->escenarioVista->activar();
+		this->cicloMensajes();
+		resultadoRender = this->escenarioVista->comenzarEtapa();
+		cout << "terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
+	}
+	if (!escenarioVista->quedanEtapas()) cout << "todas las etapas finalizadas" << endl;
+	if (resultadoRender != CONTINUAR) cout << "el resultado de render no fue de continuar" << endl;
+	// Terminadas todas las etapas, se cierra el escenario.
+	this->escenarioVista->cerrar();
 	this->cerrar();
 }
 
@@ -143,7 +153,8 @@ void* Cliente::cicloMensajes_th(void * THIS){
 			cliente->enviarEvento(evento);
 		}
 		if(cliente->recibirMensaje(mensaje) != MENSAJEOK) pthread_exit(NULL);
-		cliente->actualizarComponentes(mensaje);
+
+		cliente->actualizarEscenario(mensaje);
 	}
 	pthread_exit(NULL);
 }
@@ -152,8 +163,14 @@ void Cliente::cicloMensajes(){
 	pthread_create(&mainLoopThread, NULL, cicloMensajes_th, (void*)this);
 }
 
-void Cliente::actualizarComponentes(string mensaje){
-	this->escenarioVista->actualizarComponentes(mensaje);
+void Cliente::actualizarEscenario(string mensaje){
+	if (mensaje.size() == sizeof(int)){
+		// Caso evento.
+		this->escenarioVista->manejarEvento(Decodificador::popInt(mensaje));
+	} else {
+		// Caso actualización de estado.
+		this->escenarioVista->actualizarComponentes(mensaje);
+	}
 }
 
 void Cliente::cerrar(){

@@ -110,6 +110,7 @@ void *Servidor::cicloAceptar(void *THIS) {
 }
 
 void Servidor::enviarEstadoInicial(int fdCliente) {
+        cout << "se envía el estado inicial." << endl;
     enviarMensaje(Decodificador::getCodigoEstadoInicial(escenario), fdCliente);
 }
 
@@ -243,7 +244,7 @@ void Servidor::esperarPartida(int fdCliente) {
         Decodificador::pushCantidad(mensaje, clientesFaltantes());
         enviarMensaje(mensaje, fdCliente);
         // Espera un segundo antes de mandar de nuevo.
-        sleep(1);
+        usleep(5000);
     }
 }
 
@@ -334,14 +335,52 @@ void Servidor::desencolar() {
             this->cerrar();
         }
     }
-    string codigoEstadoActual = Decodificador::getCodigoEstadoActual(this->escenario);
-    this->broadcastEstadoEscenario(codigoEstadoActual);
+    // Para evitar el envío de mensajes viejos al pasar de etapa nos fijamos si está activo.
+    if (escenario->estaActivo()) {
+        string codigoEstadoActual = Decodificador::getCodigoEstadoActual(this->escenario);
+        this->broadcastMensaje(codigoEstadoActual);
+    }
 }
 
-void Servidor::broadcastEstadoEscenario(string codigoEstadoEscenario) {
+void Servidor::broadcastMensaje(string codigoEstadoEscenario) {
     for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
         int clienteActual = iterador->first;
         encolarSalida(clienteActual, codigoEstadoEscenario);
+    }
+}
+
+void Servidor::broadcastEvento(int evento) {
+    string mensaje = "";
+    Decodificador::pushCantidad(mensaje, evento);
+    broadcastMensaje(mensaje);
+}
+
+/* Ejecución general */
+void Servidor::ejecutar() {
+    // Servidor aceptando conexiones
+    try {
+        pasivar();
+    } catch(runtime_error &e) {
+        Logger::instance()->logError(errno,"Se produjo un error en el listen");
+    }
+
+    esperarJugadores();
+    // TODO lo ideal no sería esperar un segundo, sino esperar a recibir un
+    // evento de todos los clientes avisando que ya cargaron el nivel.
+    sleep(1);
+
+    // Se puede haber cerrado el servidor antes de recibir a todos los jugadores.
+    if (servidorActivo()) {
+        // Comienza la partida.
+        escenario->jugar(servidorActivo());
+        iniciarCicloDesencolaciones();
+        escenario->esperarEtapa();
+    }
+
+    while (servidorActivo() && escenario->quedanEtapas()) {
+        broadcastEvento(AVANZAR_ETAPA);
+        escenario->comenzarEtapa();
+        escenario->esperarEtapa();
     }
 }
 

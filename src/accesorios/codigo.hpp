@@ -69,7 +69,11 @@
 /* Contador Loop avion */
 #define CONTADOR_INICIAL 20
 
-//Largo nivel
-#define LARGO_NIVEL 10000000
+/* Códigos de eventos al cliente */
+#define AVANZAR_ETAPA 0
+
+/* respuestas de mainLoop */
+#define CONTINUAR 1
+#define CERRAR 2
 
 #endif //INC_1942OLDENAIT_CODIGO_HPP

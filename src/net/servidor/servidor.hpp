@@ -69,6 +69,7 @@ public:
     void quitarCliente(int fdCliente);
     void esperarPartida(int fdCliente);
     void enviarEstadoInicial(int fdCliente);
+    void ejecutar();
     static void *atenderCliente(void *arg);
     static void *responderCliente(void *arg);
     static void *cicloAceptar(void *THIS);
@@ -80,7 +81,8 @@ public:
     void desencolar();
     void encolarSalida(int clienteFd, string mensaje );
     bool clienteConectado(int clienteFd);
-    void broadcastEstadoEscenario(string codigoEstadoEscenario);
+    void broadcastMensaje(string codigoEstadoEscenario);
+    void broadcastEvento(int evento);
     EscenarioJuego* getEscenario();
     void setEscenario(EscenarioJuego* unEscenario);
     void esperarJugadores();

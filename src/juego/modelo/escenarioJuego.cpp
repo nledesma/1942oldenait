@@ -62,22 +62,23 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
                 pthread_mutex_unlock(&this->mutexListaDisparos);
             }
             break;
+            // TODO x para la partida para todos?
         default:
             avion(nroAvion)->manejarEvento(evento);
             break;
     }
 }
 
-void EscenarioJuego::siguienteEtapa() {
+void EscenarioJuego::avanzarEtapa() {
+    /* Se desactiva para dar lugar al servidor a hacer otras cosas antes de pasar
+    ** de nivel */
+    cout << "Se avanza una etapa" << endl;
+    desactivar();
     ++itEtapa;
-    if (itEtapa == etapas.end()) {
-        desactivar();
-    } else {
-        comenzarEtapa();
-    }
 }
 
 void EscenarioJuego::comenzarEtapa() {
+    this->activar();
     scrollingOffset = 0;
     posicionY = 0;
     disparos.clear();
@@ -93,7 +94,15 @@ void EscenarioJuego::comenzarEtapa() {
         ++i;
     }
 
+    pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
     // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P
+}
+
+void EscenarioJuego::esperarEtapa() {
+    cout << "Se espera a que termine una etapa" << endl;
+    // NOTE esto podría devolver algún indicador de si corresponde seguir.
+    pthread_join(mainLoopThread, NULL);
+    cout << "Terminó una etapa." << endl;
 }
 
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
@@ -101,7 +110,7 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
     if(posicionY >= getLongitud()){
         // Se termina una etapa y se pasa a la siguiente.
-        this->siguienteEtapa();
+        this->avanzarEtapa();
     }
     if (scrollingOffset > alto){
         scrollingOffset = 0;
@@ -220,6 +229,12 @@ list<Etapa *> EscenarioJuego::getEtapas() {
     // copia de lista de etapas.
     return etapas;
 }
+
+
+bool EscenarioJuego::quedanEtapas() {
+    return itEtapa != etapas.end();
+}
+
 
 bool EscenarioJuego::estaActivo() {
     return this->motorActivado;
