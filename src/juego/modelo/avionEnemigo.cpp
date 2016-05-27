@@ -1,26 +1,15 @@
 #include "avionEnemigo.hpp"
 
-AvionEnemigo::AvionEnemigo(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria){
-    this->posX = posX;
-    this->posY = posY;
-    this->posXInicial = posX;
-    this->posYInicial = posY;
-    this->velocidadX = 0;
-    this->velocidadY = 0;
-    this->velocidad = velocidad;
-    this->velocidadDisparos = velocidadDisparos;
-    this->estadoAnimacion = ESTADO_NORMAL;
-    this->idSprite = idSprite;
-    this->idSpriteDisparos = idSpriteDisparos;
-    this->trayectoria = trayectoria;
-}
-
-AvionEnemigo::~AvionDeEscuadron(){
-
-}
-
 float AvionEnemigo::getVelocidad(){
     return this->velocidad;
+}
+
+float AvionEnemigo::getAngulo() {
+    return this->angulo;
+}
+
+int AvionEnemigo::getEstadoAnimacion() {
+    
 }
 
 float AvionEnemigo::getPosicionX(){
@@ -37,10 +26,10 @@ float AvionEnemigo::getPosicionY(){
     return posicionY;
   }
 
-string Avion::getIdSprite(){
+string AvionEnemigo::getIdSprite(){
       return this->idSprite;
   }
 
-string Avion::getIdSpriteDisparos() {
+string AvionEnemigo::getIdSpriteDisparos() {
       return this->idSpriteDisparos;
   }

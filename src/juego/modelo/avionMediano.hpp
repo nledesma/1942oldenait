@@ -8,11 +8,11 @@
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
 #include "avionEnemigo.hpp"
-#include "trayectoria.hpp"
+#include "trayectoriasEnemigos/trayectoria.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
 
-class AvionMediano: public avionEnemigo {
+class AvionMediano: public AvionEnemigo {
 private:
     float velocidadDisparos;
     float posX;

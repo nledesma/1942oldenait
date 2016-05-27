@@ -8,7 +8,7 @@
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
 #include "avionEnemigo.hpp"
-#include "trayectoria.hpp"
+#include "trayectoriasEnemigos/trayectoria.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
 

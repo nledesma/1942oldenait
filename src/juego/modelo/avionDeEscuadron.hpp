@@ -9,7 +9,7 @@
 #include "../../accesorios/codigo.hpp"
 #include "disparo.hpp"
 #include "avionEnemigo.hpp"
-#include "trayectoria.hpp"
+#include "trayectoriasEnemigos/trayectoria.hpp"
 #include <pthread.h>
 
 class AvionDeEscuadron: public AvionEnemigo {
