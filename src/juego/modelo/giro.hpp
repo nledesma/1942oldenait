@@ -2,6 +2,7 @@
 #define INC_1942OLDENAIT_GIRO_HPP
 
 #include "../../accesorios/trigonomaster.hpp"
+#include "tipoMovimiento.hpp"
 
 class Giro : public TipoMovimiento {
 private:
@@ -9,7 +10,7 @@ private:
     float velocidadAngular;
     float transportarAngulo(float &angulo, float velocidadAngular,float timestep);
 public:
-    Giro(float arg1, float arg2);
+    Giro(float anguloAbarrer, float velocidadAngular);
     ~Giro();
     bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
 };

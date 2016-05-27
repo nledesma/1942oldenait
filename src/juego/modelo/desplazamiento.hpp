@@ -2,8 +2,9 @@
 #define INC_1942OLDENAIT_DESPLAZAMIENTO_HPP
 
 #include "../../accesorios/trigonomaster.hpp"
+#include "tipoMovimiento.hpp"
 
-class Desplazamiento {
+class Desplazamiento : public TipoMovimiento {
 private:
   float cantidadTimesteps;
   float velocidadAngular;

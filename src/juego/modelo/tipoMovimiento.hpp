@@ -5,8 +5,7 @@
 
 class TipoMovimiento {
 public:
-  TipoMovimiento(float parametro1,float parametro2);
-  virtual mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
+  virtual bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep) = 0;
 };
 
 
