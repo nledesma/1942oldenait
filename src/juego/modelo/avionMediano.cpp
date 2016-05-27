@@ -1,18 +1,14 @@
 #include "avionMediano.hpp"
 
-AvionMediano::AvionMediano(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria){
+AvionMediano::AvionMediano(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria){
     this->posX = posX;
     this->posY = posY;
-    this->posXInicial = posX;
-    this->posYInicial = posY;
-    this->velocidadX = 0;
-    this->velocidadY = 0;
     this->velocidad = velocidad;
     this->velocidadDisparos = velocidadDisparos;
-    this->estadoAnimacion = ESTADO_NORMAL;
-    this->idSprite = idSprite;
-    this->idSpriteDisparos = idSpriteDisparos;
-    this-> trayectoria = trayectoria;
+    this->estadoAnimacion = Trigonomaster::getSpriteAngulo(angulo);
+    this->idSprite = SPRITE_AVION_ENEMIGO_MEDIANO;
+    this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
+    this->trayectoria = trayectoria;
 }
 
 AvionMediano::~AvionMediano(){
@@ -23,10 +19,10 @@ Disparo* AvionMediano::disparar(){
 
 }
 
-void AvionMediano::mover(float timeStep){
-
+int AvionMediano::getAncho() {
+    return ANCHO_ENEMIGO_MEDIANO;
 }
 
-void AvionMediano::volverEstadoInicial(){
-
+int AvionMediano::getAlto() {
+    return ALTO_ENEMIGO_MEDIANO;
 }

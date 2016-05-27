@@ -1,17 +1,13 @@
 #include "avionGrande.hpp"
 
-AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria){
+AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria){
     this->posX = posX;
     this->posY = posY;
-    this->posXInicial = posX;
-    this->posYInicial = posY;
-    this->velocidadX = 0;
-    this->velocidadY = 0;
     this->velocidad = velocidad;
     this->velocidadDisparos = velocidadDisparos;
-    this->estadoAnimacion = ESTADO_NORMAL;
-    this->idSprite = idSprite;
-    this->idSpriteDisparos = idSpriteDisparos;
+    this->estadoAnimacion = Trigonomaster::getSpriteAngulo(angulo);
+    this->idSprite = SPRITE_AVION_ENEMIGO_GRANDE;
+    this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
     this->trayectoria = trayectoria;
 }
 
@@ -23,10 +19,10 @@ Disparo* AvionGrande::disparar(){
 
 }
 
-void AvionGrande::mover(float timeStep){
-
+int AvionGrande::getAncho() {
+    return ANCHO_ENEMIGO_GRANDE;
 }
 
-void AvionGrande::volverEstadoInicial(){
-
+int AvionGrande::getAlto() {
+    return ALTO_ENEMIGO_GRANDE;
 }

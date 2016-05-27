@@ -8,6 +8,9 @@
 class Trigonomaster {
 private:
 public:
+    static float getSeno(float angulo);
+    static float getCoseno(float angulo);
+    static int getSpriteAngulo(float angulo);
     static float getSeno(float angulo, int &anguloAnimacion);
     static float getCoseno(float angulo, int &anguloAnimacion);
 };

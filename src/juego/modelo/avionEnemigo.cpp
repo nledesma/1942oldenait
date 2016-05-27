@@ -9,7 +9,7 @@ float AvionEnemigo::getAngulo() {
 }
 
 int AvionEnemigo::getEstadoAnimacion() {
-    
+    return this->estadoAnimacion;
 }
 
 float AvionEnemigo::getPosicionX(){
@@ -32,4 +32,18 @@ string AvionEnemigo::getIdSprite(){
 
 string AvionEnemigo::getIdSpriteDisparos() {
       return this->idSpriteDisparos;
-  }
+}
+
+int AvionEnemigo::getAnchoDisparo() {
+    return ANCHO_DISPARO_ENEMIGO;
+}
+
+int AvionEnemigo::getAltoDisparo() {
+    return ALTO_DISPARO_ENEMIGO;
+}
+
+void AvionEnemigo::mover(float timeStep) {
+    pthread_mutex_lock(&this->mutexMover);
+    this->trayectoria->mover(this->posX, this->posY, this->velocidad, this->angulo, this->estadoAnimacion, timeStep);
+    pthread_mutex_unlock(&this->mutexMover);
+}

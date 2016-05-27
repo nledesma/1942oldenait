@@ -7,12 +7,13 @@
 #include <list>
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
+#include "../../accesorios/default.hpp"
 #include "trayectoriasEnemigos/trayectoria.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
 
 class AvionEnemigo {
-private:
+protected:
     float velocidadDisparos;
     float posX;
     float posY;
@@ -22,7 +23,7 @@ private:
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
-    Trayectoria trayectoria;
+    Trayectoria* trayectoria;
 
 public:
     virtual Disparo* disparar() = 0;
@@ -37,29 +38,15 @@ public:
 
     int getEstadoAnimacion();
 
-    void setVelocidad(float velocidad);
-
-    void setVelocidadX();
-
-    void setVelocidadY();
-
-    void setPosicionX();
-
-    void setPosicionY();
-
-    void setEstadoAnimacion(int estadoAnimacion);
-
     void mover(float timeStep);
 
-    int getAncho();
+    virtual int getAncho() = 0;
 
-    int getAlto();
+    virtual int getAlto() = 0;
 
     int getAnchoDisparo();
 
     int getAltoDisparo();
-
-    void volverEstadoInicial();
 
     string getIdSprite();
 
