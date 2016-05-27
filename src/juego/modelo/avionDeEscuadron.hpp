@@ -8,9 +8,11 @@
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
 #include "disparo.hpp"
+#include "avionEnemigo.hpp"
+#include "trayectoria.hpp"
 #include <pthread.h>
 
-class AvionDeEscuadron {
+class AvionDeEscuadron: public AvionEnemigo {
 private:
     float velocidadDisparos;
     float posX;
@@ -25,9 +27,10 @@ private:
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
+    Trayectoria trayectoria;
 
 public:
-    AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria);
 
     ~AvionDeEscuadron();
 
