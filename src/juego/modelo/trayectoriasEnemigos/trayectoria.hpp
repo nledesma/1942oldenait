@@ -6,8 +6,8 @@
 using namespace std;
 
 class Trayectoria {
-private:
-    queue<TipoMovimiento> colaMovimientos;
+protected:
+    queue<TipoMovimiento*> colaMovimientos;
 public:
     void mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
 };

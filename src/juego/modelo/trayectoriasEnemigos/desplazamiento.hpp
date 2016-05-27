@@ -1,7 +1,7 @@
 #ifndef INC_1942OLDENAIT_DESPLAZAMIENTO_HPP
 #define INC_1942OLDENAIT_DESPLAZAMIENTO_HPP
 
-#include "../../accesorios/trigonomaster.hpp"
+#include "../../../accesorios/trigonomaster.hpp"
 #include "tipoMovimiento.hpp"
 
 class Desplazamiento : public TipoMovimiento {

@@ -1,7 +1,7 @@
 #ifndef INC_1942OLDENAIT_TIPO_MOVIMIENTO_HPP
 #define INC_1942OLDENAIT_TIPO_MOVIMIENTO_HPP
 
-#include "../../accesorios/trigonomaster.hpp"
+#include "../../../accesorios/trigonomaster.hpp"
 
 class TipoMovimiento {
 public:

@@ -4,9 +4,9 @@ void Trayectoria::mover(float &posX, float &posY, float &velocidad, float &angul
                         float timestep) {
     /* Si la cola no está vacía se comporta según el próximo tipo de movimiento */
     if (!this->colaMovimientos.empty()) {
-        TipoMovimiento proximoTipoMovimiento = this->colaMovimientos.front();
+        TipoMovimiento* proximoTipoMovimiento = this->colaMovimientos.front();
         bool termino;
-        termino = proximoTipoMovimiento.mover(posX, posY, velocidad, angulo, estadoAnimacion, timestep);
+        termino = proximoTipoMovimiento->mover(posX, posY, velocidad, angulo, estadoAnimacion, timestep);
 
         if (termino)
             this->colaMovimientos.pop();

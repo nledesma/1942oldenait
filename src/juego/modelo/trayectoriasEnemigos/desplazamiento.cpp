@@ -14,9 +14,5 @@ bool Desplazamiento::mover(float &posX, float &posY, float &velocidad, float &an
 
   cantidadTimesteps--;
 
-  if(cantidadTimesteps > 0){
-    return false;
-  } else {
-    return true;
-  }
+  return (cantidadTimesteps <= 0);
 }

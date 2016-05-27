@@ -17,7 +17,7 @@ bool Giro::mover(float &posX, float &posY, float &velocidad, float &angulo,
 
     this->anguloAbarrer = this->anguloAbarrer - anguloBarrido;
 
-    return  (this->anguloAbarrer > 0);
+    return  (this->anguloAbarrer <= 0);
 }
 
 float Giro::transportarAngulo(float &angulo, float velocidadAngular, float timestep) {
