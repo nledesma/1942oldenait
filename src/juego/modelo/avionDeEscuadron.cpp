@@ -1,6 +1,6 @@
 #include "avionDeEscuadron.hpp"
 
-AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos){
+AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -12,6 +12,7 @@ AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, floa
     this->estadoAnimacion = ESTADO_NORMAL;
     this->idSprite = idSprite;
     this->idSpriteDisparos = idSpriteDisparos;
+    this->trayectoria = trayectoria;
 }
 
 AvionDeEscuadron::~AvionDeEscuadron(){

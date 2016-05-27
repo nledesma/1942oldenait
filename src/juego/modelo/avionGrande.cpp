@@ -1,6 +1,6 @@
 #include "avionGrande.hpp"
 
-AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos){
+AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -12,6 +12,7 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->estadoAnimacion = ESTADO_NORMAL;
     this->idSprite = idSprite;
     this->idSpriteDisparos = idSpriteDisparos;
+    this->trayectoria = trayectoria;
 }
 
 AvionGrande::~AvionGrande(){
