@@ -63,6 +63,7 @@ private:
     /* Sincronización */
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
 
 public:
@@ -84,6 +85,7 @@ public:
     void renderizarElementos();
     void renderizarFondo(float y);
     void renderizarDisparos();
+    void renderizarEnemigos();
     void pushEvento(SDL_Event evento);
     int popEvento();
     void cargarVistasAviones();
@@ -108,6 +110,7 @@ public:
     list<ElementoVista *> &getElementos();
     bool getActivo();
     void setDisparos(list<disparo> disparos);
+    void setEnemigos(list<enemigo> enemigosParam);
     int getAncho();
     int getAlto();
     Figura *getFondo();

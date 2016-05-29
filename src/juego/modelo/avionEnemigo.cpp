@@ -1,5 +1,7 @@
 #include "avionEnemigo.hpp"
 
+AvionEnemigo::~AvionEnemigo() { }
+
 float AvionEnemigo::getVelocidad(){
     return this->velocidad;
 }

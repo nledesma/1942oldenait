@@ -113,6 +113,14 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
 
     this->setDisparos(disparos);
     int cantEnemigos = Decodificador::popInt(infoActualizacion);
+    for (int i = 0; i < cantEnemigos; ++i) {
+        enemigo unEnemigo;
+        unEnemigo.posX = Decodificador::popFloat(infoActualizacion);
+        unEnemigo.posY = Decodificador::popFloat(infoActualizacion);
+        unEnemigo.estadoAnimacion = Decodificador::popInt(infoActualizacion);
+        unEnemigo.tipoEnemigo = Decodificador::popInt(infoActualizacion);
+        enemigos.push_front(unEnemigo);
+    }
     if (infoActualizacion.size() != 0) {
         cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
     }
@@ -158,6 +166,7 @@ int EscenarioVista::mainLoop(){
         this->renderizarElementos();
         this->renderizarAviones();
         this->renderizarDisparos();
+        this->renderizarEnemigos();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -254,6 +263,12 @@ void EscenarioVista::setDisparos(list<disparo> disparosParam){
     pthread_mutex_lock(&this->mutexDisparos);
     this->disparos = disparosParam;
     pthread_mutex_unlock(&this->mutexDisparos);
+}
+
+void EscenarioVista::setEnemigos(list<enemigo> enemigosParam){
+    pthread_mutex_lock(&this->mutexEnemigos);
+    this->enemigos = enemigosParam;
+    pthread_mutex_unlock(&this->mutexEnemigos);
 }
 
 void EscenarioVista::setScrollingOffset(float scrollingOffset){
@@ -360,6 +375,23 @@ void EscenarioVista::renderizarDisparos(){
         disparoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
     }
     pthread_mutex_unlock(&mutexDisparos);
+}
+
+void EscenarioVista::renderizarEnemigos(){
+    pthread_mutex_lock(&mutexEnemigos);
+    for(list<enemigo>::iterator iterador = this->enemigos.begin(); iterador != this->enemigos.end(); ++iterador) {
+        enemigo enemigo1 = *iterador;
+
+        if (enemigo1.tipoEnemigo == TIPO_AVION_PEQUENIO)
+            this->enemigoPequenio->render(enemigo1.posX, enemigo1.posY, enemigo1.estadoAnimacion, this->ventana->getVentanaRenderer());
+        else if (enemigo1.tipoEnemigo == TIPO_AVION_ESCUADRON)
+            this->enemigoDeEscuadron->render(enemigo1.posX, enemigo1.posY, enemigo1.estadoAnimacion, this->ventana->getVentanaRenderer());
+        else if (enemigo1.tipoEnemigo == TIPO_AVION_MEDIANO)
+            this->enemigoMediano->render(enemigo1.posX, enemigo1.posY, enemigo1.estadoAnimacion, this->ventana->getVentanaRenderer());
+        else
+            this->enemigoGrande->render(enemigo1.posX, enemigo1.posY, enemigo1.estadoAnimacion, this->ventana->getVentanaRenderer());
+    }
+    pthread_mutex_unlock(&mutexEnemigos);
 }
 
 void EscenarioVista::actualizar(float offset) {

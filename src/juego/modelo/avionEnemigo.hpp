@@ -27,6 +27,7 @@ protected:
     Trayectoria* trayectoria;
 
 public:
+    virtual ~AvionEnemigo();
     virtual Disparo* disparar() = 0;
     virtual float getVelocidad();
     virtual float getPosicionX();
