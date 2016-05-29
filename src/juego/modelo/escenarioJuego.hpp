@@ -53,6 +53,7 @@ public:
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite);
     ~EscenarioJuego();
     void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    void agregarEnemigo(AvionEnemigo* enemigo);
     /* Etapas */
     void agregarEtapa(Etapa * etapa);
     void avanzarEtapa();

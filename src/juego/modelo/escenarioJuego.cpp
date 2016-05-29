@@ -1,4 +1,5 @@
 #include "escenarioJuego.hpp"
+#include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
 
 EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite) {
     this->velocidadDesplazamientoY = velocidadDesplazamientoY;
@@ -42,6 +43,10 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
     float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
     Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
     this->aviones.push_back(avion);
+}
+
+void EscenarioJuego::agregarEnemigo(AvionEnemigo *enemigo) {
+    this->enemigos.push_back(enemigo);
 }
 
 void EscenarioJuego::agregarEtapa(Etapa * etapa) {
@@ -121,6 +126,9 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
 void *EscenarioJuego::mainLoop_th(void *THIS) {
     EscenarioJuego *escenario = (EscenarioJuego *) THIS;
     escenario->activar();
+    Trayectoria* cuadrada = new TrayectoriaCuadrada();
+    AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
+    escenario->agregarEnemigo(enemigo);
     while (escenario->estaActivo()) {
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
         escenario->temporizador.comenzar();
@@ -131,11 +139,13 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
 }
 
 void EscenarioJuego::actualizarEstado(float timeStep) {
+    cout << "Cantidad de enemigos: " << this->enemigos.size() << endl;
     this->actualizarScrollingOffset(timeStep);
     this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
     this->moverAviones(timeStep);
     this->moverElementos(timeStep);
     this->moverDisparos(timeStep);
+    this->moverEnemigos(timeStep);
     this->manejarProximoEvento();
 }
 

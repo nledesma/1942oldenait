@@ -113,6 +113,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
 
     this->setDisparos(disparos);
     int cantEnemigos = Decodificador::popInt(infoActualizacion);
+    list<enemigo> enemigos;
     for (int i = 0; i < cantEnemigos; ++i) {
         enemigo unEnemigo;
         unEnemigo.posX = Decodificador::popFloat(infoActualizacion);
@@ -121,6 +122,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         unEnemigo.tipoEnemigo = Decodificador::popInt(infoActualizacion);
         enemigos.push_front(unEnemigo);
     }
+    this->setEnemigos(enemigos);
     if (infoActualizacion.size() != 0) {
         cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
     }
@@ -378,6 +380,7 @@ void EscenarioVista::renderizarDisparos(){
 }
 
 void EscenarioVista::renderizarEnemigos(){
+    cout << "cantidad enemigos en cliente: " << this->enemigos.size() << endl;
     pthread_mutex_lock(&mutexEnemigos);
     for(list<enemigo>::iterator iterador = this->enemigos.begin(); iterador != this->enemigos.end(); ++iterador) {
         enemigo enemigo1 = *iterador;
