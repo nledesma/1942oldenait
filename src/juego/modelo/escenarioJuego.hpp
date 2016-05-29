@@ -5,6 +5,11 @@
 #include <map>
 #include <pthread.h>
 #include "avion.hpp"
+#include "avionPequenio.hpp"
+#include "avionMediano.hpp"
+#include "avionGrande.hpp"
+#include "avionDeEscuadron.hpp"
+#include "avionEnemigo.hpp"
 #include "elemento.hpp"
 #include "etapa.hpp"
 #include "../../accesorios/temporizador.hpp"
@@ -19,6 +24,7 @@ private:
     list<Etapa*> etapas;
     list<Etapa*>::iterator itEtapa;
     list<Avion*> aviones;
+    list<AvionEnemigo*> enemigos;
     list<Elemento*> elementos;
     list<Disparo*> disparos;
     /* Specs */
@@ -39,6 +45,7 @@ private:
     ColaConcurrente<pair<int, int>> colaEventos;
     pthread_t mainLoopThread;
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
 
 public:
@@ -65,11 +72,13 @@ public:
     void moverAviones(float timestep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
+    void moverEnemigos(float timestep);
     /* getters & setters */
     float getScrollingOffset();
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
     list<Disparo*> getDisparos();
+    list<AvionEnemigo*> getEnemigos();
     int getAncho();
     int getAlto();
     int getAnchoVentana();

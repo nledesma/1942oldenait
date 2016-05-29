@@ -184,6 +184,19 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     }
 }
 
+void EscenarioJuego::moverEnemigos(float timeStep) {
+    if (this->enemigos.size() > 0) {
+        for (list<AvionEnemigo *>::iterator iterador = enemigos.begin(); iterador != enemigos.end(); iterador++) {
+            if ((*iterador)->mover(timeStep) == 0) {
+                delete (*iterador);
+                pthread_mutex_lock(&this->mutexListaEnemigos);
+                iterador = enemigos.erase(iterador);
+                pthread_mutex_unlock(&this->mutexListaEnemigos);
+            }
+        }
+    }
+}
+
 /* getters & setters */
 list<Avion *> &EscenarioJuego::getAviones() {
     return this->aviones;
@@ -200,6 +213,14 @@ list<Disparo *> EscenarioJuego::getDisparos() {
         listaDisparos = this->disparos;
     pthread_mutex_unlock(&this->mutexListaDisparos);
     return listaDisparos;
+}
+
+list <AvionEnemigo *> EscenarioJuego::getEnemigos() {
+    list<AvionEnemigo *> listaEnemigos;
+    pthread_mutex_lock(&this->mutexListaEnemigos);
+    listaEnemigos = this->enemigos;
+    pthread_mutex_unlock(&this->mutexListaEnemigos);
+    return listaEnemigos;
 }
 
 string EscenarioJuego::getIdSprite() {

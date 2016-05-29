@@ -9,6 +9,7 @@ AvionPequenio::AvionPequenio(float posX, float posY, float velocidad, float angu
     this->idSprite = SPRITE_AVION_ENEMIGO_PEQUENIO;
     this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
     this->trayectoria = trayectoria;
+    this->tipoAvion = TIPO_AVION_PEQUENIO;
 }
 
 AvionPequenio::~AvionPequenio(){
@@ -16,7 +17,7 @@ AvionPequenio::~AvionPequenio(){
 }
 
 Disparo* AvionPequenio::disparar(){
-
+    return NULL;
 }
 
 int AvionPequenio::getAncho() {

@@ -19,6 +19,7 @@ protected:
     float posY;
     float angulo;
     int estadoAnimacion;
+    int tipoAvion;
     float velocidad;
     string idSprite;
     string idSpriteDisparos;
@@ -26,6 +27,8 @@ protected:
     Trayectoria* trayectoria;
 
 public:
+    virtual ~AvionEnemigo();
+
     virtual Disparo* disparar() = 0;
 
     float getVelocidad();
@@ -38,7 +41,9 @@ public:
 
     int getEstadoAnimacion();
 
-    void mover(float timeStep);
+    int getTipoAvion();
+
+    int mover(float timeStep);
 
     virtual int getAncho() = 0;
 

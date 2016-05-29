@@ -2,16 +2,17 @@
 #define ETAPA_H
 
 #include "elemento.hpp"
+#include "avionEnemigo.hpp"
 
 #include <list>
+#include <queue>
 using namespace std;
 
 class Etapa {
 private:
     int longitud;
     list<Elemento *> elementos;
-
-    // NOTE se agregará lista de enemigos.
+    queue<pair<float, AvionEnemigo *> > enemigos;
 public:
     Etapa(int longitud);
     void agregarElemento(Elemento * e);
@@ -20,6 +21,8 @@ public:
     /* getters & setters */
     int getLongitud();
     list<Elemento *> getElementos();
+    AvionEnemigo * getSiguienteEnemigo(float pos);
+
 };
 
 #endif

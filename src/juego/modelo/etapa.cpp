@@ -27,6 +27,18 @@ int Etapa::getLongitud() {
     return longitud;
 }
 
+AvionEnemigo* Etapa::getSiguienteEnemigo(float pos) {
+    if (!this->enemigos.empty()){
+        if (pos >= this->enemigos.front().first){
+            pair <float, AvionEnemigo*> proximoPar;
+            proximoPar = this->enemigos.front();
+            this->enemigos.pop();
+            return proximoPar.second;
+        }
+    }
+    return NULL;
+}
+
 list<Elemento *> Etapa::getElementos() {
     // devuelve una copia de la lista de elementos.
     return elementos;

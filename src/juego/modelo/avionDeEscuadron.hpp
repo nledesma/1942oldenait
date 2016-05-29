@@ -13,32 +13,12 @@
 #include <pthread.h>
 
 class AvionDeEscuadron: public AvionEnemigo {
-private:
-    float velocidadDisparos;
-    float posX;
-    float posY;
-    float velocidadX;
-    float velocidadY;
-    float angulo;
-    int estadoAnimacion;
-    float velocidad;
-    float posXInicial;
-    float posYInicial;
-    string idSprite;
-    string idSpriteDisparos;
-    pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
-    Trayectoria trayectoria;
-
 public:
-    AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, string idSprite, string idSpriteDisparos, Trayectoria trayectoria);
-
+    AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionDeEscuadron();
-
     Disparo* disparar();
-
-    void mover(float timeStep);
-
-    void volverEstadoInicial();
+    int getAncho();
+    int getAlto();
 };
 
 #endif //INC_1942OLDENAIT_AVIONDEESCUADRON_HPP

@@ -111,6 +111,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
 
     this->setDisparos(disparos);
+    int cantEnemigos = Decodificador::popInt(infoActualizacion);
     if (infoActualizacion.size() != 0) {
         cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
     }

@@ -1,6 +1,6 @@
 #include "desplazamiento.hpp"
 
-void Desplazamiento::Desplazamiento(float cantidadTimesteps, float velocidadAngular){
+Desplazamiento::Desplazamiento(float cantidadTimesteps, float velocidadAngular){
   this-> cantidadTimesteps = cantidadTimesteps;
   this-> velocidadAngular = velocidadAngular;
 }

@@ -17,6 +17,7 @@
 #define JUGADOR_2 AZUL
 #define JUGADOR_3 ROJO
 #define JUGADOR_4 VERDE
+
 /* Eventos */
 
 #define EVENTO_VACIO 0
@@ -87,6 +88,13 @@
 #define CODIGO_SONIDO_LOOP 2
 #define CODIGO_SONIDO_EXPLOSION 3
 
+/* Tipos de avion enemigo */
+
+#define TIPO_AVION_PEQUENIO 1
+#define TIPO_AVION_ESCUADRON 2
+#define TIPO_AVION_MEDIANO 3
+#define TIPO_AVION_GRANDE 4
+
 /* Estados avion enemigo */
 
 #define AVION_ENEMIGO_0G 5
@@ -111,6 +119,7 @@
 
 /* Códigos de eventos al cliente */
 #define AVANZAR_ETAPA 0
+
 /* Contador Sonido disparo */
 #define CONTADOR_SONIDO_DISPARO_INICIAL 10
 

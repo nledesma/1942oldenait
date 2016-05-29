@@ -15,10 +15,12 @@ TEMPORIZADOR_PATH = src/accesorios
 XML_PATH = resources/lib
 JUEGO_MODELO_PATH = src/juego/modelo
 JUEGO_VISTA_PATH = src/juego/vista
+TRAYECTORIA_PATH = src/juego/modelo/trayectoriasEnemigos
 
 SRC = app:$(NET_PATH):$(NET_PATH)/cliente:$(NET_PATH)/servidor:\
 	$(NET_PATH)/mensaje:$(COLA_PATH):$(LOGGER_PATH):$(XML_PATH): \
-	$(JUEGO_MODELO_PATH):$(JUEGO_VISTA_PATH):$(TEMPORIZADOR_PATH)
+	$(JUEGO_MODELO_PATH):$(JUEGO_VISTA_PATH):$(TEMPORIZADOR_PATH): \
+	$(TRAYECTORIA_PATH)
 vpath %.cpp $(SRC)
 
 # Compilados.
@@ -26,7 +28,9 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	logger.o colaConcurrente.o avion.o disparo.o clienteParser.o etapa.o etapaVista.o \
 	elemento.o escenarioJuego.o avionVista.o disparoVista.o elementoVista.o \
 	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o parserXML.o \
-	soundboard.o
+	soundboard.o avionEnemigo.o avionPequenio.o avionDeEscuadron.o avionMediano.o \
+	avionGrande.o desplazamiento.o giro.o tipoMovimiento.o trayectoriaCuadrada.o \
+	trayectoria.o trigonomaster.o
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 

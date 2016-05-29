@@ -1,5 +1,7 @@
 #include "avionEnemigo.hpp"
 
+AvionEnemigo::~AvionEnemigo() { }
+
 float AvionEnemigo::getVelocidad(){
     return this->velocidad;
 }
@@ -8,8 +10,15 @@ float AvionEnemigo::getAngulo() {
     return this->angulo;
 }
 
-int AvionEnemigo::getEstadoAnimacion() {
-    return this->estadoAnimacion;
+int AvionEnemigo::getEstadoAnimacion(){
+    pthread_mutex_lock(&this->mutexMover);
+    int estado = this->estadoAnimacion;
+    pthread_mutex_unlock(&this->mutexMover);
+    return estado;
+}
+
+int AvionEnemigo::getTipoAvion() {
+    return this->tipoAvion;
 }
 
 float AvionEnemigo::getPosicionX(){
@@ -42,8 +51,15 @@ int AvionEnemigo::getAltoDisparo() {
     return ALTO_DISPARO_ENEMIGO;
 }
 
-void AvionEnemigo::mover(float timeStep) {
+int AvionEnemigo::mover(float timeStep) {
+    int sigueEnPantalla = 1;
     pthread_mutex_lock(&this->mutexMover);
     this->trayectoria->mover(this->posX, this->posY, this->velocidad, this->angulo, this->estadoAnimacion, timeStep);
+    // TODO: chequear los bordes usando los atributos del escenario
+    if (this->posX > ANCHO_ESCENARIO || this->posX < - this->getAncho()
+        || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
+        sigueEnPantalla = 0;
+    }
     pthread_mutex_unlock(&this->mutexMover);
+    return sigueEnPantalla;
 }
