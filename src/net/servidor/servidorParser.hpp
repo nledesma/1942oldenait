@@ -19,6 +19,10 @@ private:
 	static bool getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracion);
 	static bool getElemento(XMLElement * pNodoElemento, string & pathSprite,
 		float & posx, float & posy);
+	static bool getEnemigo(XMLElement * pNodoElemento, string &tipo, int &cantidad);
+	static bool getPowerUp(XMLElement * pNodoElemento, string &tipo, int &cantidad, int &valor);
+	static bool agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa);
+	static bool agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa);
 	static bool agregarElementos(Etapa* etapa, XMLElement* pNodoEtapa, int altoVentana);
 	static bool agregarAviones(Servidor* servidor, XMLNode * pNodoConfiguracion);
 	static bool agregarEtapas(EscenarioJuego* escenario, XMLElement * pEscenario);

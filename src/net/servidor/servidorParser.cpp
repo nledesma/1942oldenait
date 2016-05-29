@@ -79,7 +79,10 @@ bool ServidorParser::getEtapa(XMLElement * pEtapa, Etapa * & etapa, int altoVent
 	etapa = new Etapa(longitud);
 	// Agregar Elementos.
 	if (!agregarElementos(etapa, pEtapa, altoVentana)) return false;
-	// TODO agregar enemigos, cuando corresponda.
+	// Agregar Enemigos
+	if(!agregarEnemigos(etapa,pEtapa)) return false;
+	//Agregar PowerUps
+	if(!agregarPowerUps(etapa,pEtapa)) return false;
 	return true;
 }
 
@@ -123,6 +126,64 @@ bool ServidorParser::getElemento(XMLElement * pNodoElemento, string & pathSprite
 	if (!getString(pNodoElemento, "spriteIdElemento", pathSprite)) pathSprite = "";
 	if (!getFloat(pNodoElemento, "posx", posx)) return false;
 	if (!getFloat(pNodoElemento, "posy", posy)) return false;
+	return true;
+}
+
+bool ServidorParser::getEnemigo(XMLElement * pNodoElemento, string &tipo, int &cantidad){
+	if (!getString(pNodoElemento, "tipo", tipo)) tipo = "";
+	if (!getInt(pNodoElemento, "cantidad", cantidad)) return false;
+	return true;
+}
+
+bool ServidorParser::getPowerUp(XMLElement * pNodoElemento, string &tipo, int &cantidad, int &valor){
+	if (!getString(pNodoElemento, "tipo", tipo)) tipo = "";
+	if (!getInt(pNodoElemento, "cantidad", cantidad)) return false;
+	if (!getInt(pNodoElemento, "valor", valor)) return false;
+	return true;
+}
+
+bool ServidorParser::agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa){
+	string tipo;
+	int cantidad = 0;
+	int valor = 0;
+	// Nodo power ups
+	XMLElement * pNodoPowerUps = pNodoEtapa -> FirstChildElement()->NextSiblingElement("powerUps");
+	if (!pNodoPowerUps) return false;
+
+	// Iteramos sobre la lista de enemigos
+	XMLElement * pNodoPowerUp = pNodoPowerUps -> FirstChildElement("powerUp");
+
+	while( pNodoPowerUp != NULL ){
+		if (getPowerUp(pNodoPowerUp, tipo, cantidad, valor)) {
+			cout << "Se agregaran " << cantidad << " power ups del tipo " << tipo << " y valor: " << valor << endl;
+		}
+		pNodoPowerUp = pNodoPowerUp -> NextSiblingElement("powerUp");
+	}
+
+	return true;
+}
+
+bool ServidorParser::agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa){
+	string tipo;
+	int cantidad = 0;
+	// Nodo enemigos
+	XMLElement * pNodoEnemigos = pNodoEtapa -> FirstChildElement()->NextSiblingElement("enemigos");
+	if (!pNodoEnemigos) return false;
+
+	// Iteramos sobre la lista de enemigos
+	XMLElement * pNodoEnemigo = pNodoEnemigos -> FirstChildElement("enemigo");
+
+	//FabricaEnemigos * fabrica = new FabricaEnemigos();
+	while( pNodoEnemigo != NULL ){
+
+		if (getEnemigo(pNodoEnemigo, tipo, cantidad)) {
+			cout << "Se agregaran " << cantidad << " aviones del tipo " << tipo << endl;
+			//etapa->agregarEnemigo(fabrica->fabricarEnemigo(tipo, cantidad));
+		}
+
+		pNodoEnemigo = pNodoEnemigo -> NextSiblingElement("enemigo");
+	}
+
 	return true;
 }
 
