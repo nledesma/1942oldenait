@@ -7,7 +7,7 @@
 #define FONDO_POR_DEFECTO "background-default"
 
 #define SPRITE_AVION_ENEMIGO_PEQUENIO "tieFighter-sprite"
-#define SPRITE_AVION_ENEMIGO_MEDIANO "adefinir"
+#define SPRITE_AVION_ENEMIGO_MEDIANO "tieFighter2-sprite"
 #define SPRITE_AVION_ENEMIGO_GRANDE "starFighter-sprite"
 #define SPRITE_DISPARO_ENEMIGO "disparo-enemigo"
 

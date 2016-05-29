@@ -18,8 +18,19 @@
 #include <iterator>
 #include <pthread.h>
 #include "../../accesorios/default.hpp"
+#include "enemigoPequenio.hpp"
+#include "enemigoDeEscuadron.hpp"
+#include "enemigoMediano.hpp"
+#include "enemigoGrande.hpp"
 
 using namespace std;
+
+struct enemigo {
+    float posX;
+    float posY;
+    int estadoAnimacion;
+    int tipoEnemigo;
+};
 
 class EscenarioVista {
 private:
@@ -36,7 +47,12 @@ private:
     list<AvionVista *> aviones;
     list<ElementoVista *> elementos;
     DisparoVista* disparoVista;
+    EnemigoPequenio* enemigoPequenio;
+    EnemigoDeEscuadron* enemigoDeEscuadron;
+    EnemigoMediano* enemigoMediano;
+    EnemigoGrande* enemigoGrande;
     list<disparo> disparos;
+    list<enemigo> enemigos;
     /* Etapas */
     list<EtapaVista*> etapas;
     SoundBoard *soundBoard;
@@ -63,6 +79,7 @@ public:
     void agregarAvionVista(string infoAvion);
     void agregarElementoVista(string codigo);
     void agregarDisparoVista(string pathSprite);
+    void agregarVistasEnemigos();
     void renderizarAviones();
     void renderizarElementos();
     void renderizarFondo(float y);
@@ -72,6 +89,7 @@ public:
     void cargarVistasAviones();
     void cargarVistasElementos();
     void cargarVistaDisparos();
+    void cargarVistaEnemigos();
     void cargarSonidos();
     void actualizar(float offset);
     void cerrar();

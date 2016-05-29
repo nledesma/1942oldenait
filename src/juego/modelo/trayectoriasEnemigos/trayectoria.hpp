@@ -9,7 +9,7 @@ class Trayectoria {
 protected:
     queue<TipoMovimiento*> colaMovimientos;
 public:
-    void mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
+    virtual void mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep) = 0;
 };
 
 

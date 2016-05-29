@@ -39,6 +39,7 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     itEtapa = etapas.begin();
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
+    this->agregarVistasEnemigos();
 }
 
 int EscenarioVista::comenzarEtapa() {
@@ -126,6 +127,7 @@ void EscenarioVista::preloop(){
     cargarVistasAviones();
     cargarVistasElementos();
     cargarVistaDisparos();
+    cargarVistaEnemigos();
     cargarSonidos();
 }
 
@@ -269,6 +271,13 @@ void EscenarioVista::agregarDisparoVista(string pathSprite){
     this->disparoVista = new DisparoVista(pathSprite);
 }
 
+void EscenarioVista::agregarVistasEnemigos(){
+    this->enemigoPequenio = new EnemigoPequenio();
+    this->enemigoDeEscuadron = new EnemigoDeEscuadron();
+    this->enemigoMediano = new EnemigoMediano();
+    this->enemigoGrande = new EnemigoGrande();
+}
+
 void EscenarioVista::cargarVistasAviones(){
     int numeroJugador = 1;
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
@@ -294,6 +303,14 @@ void EscenarioVista::cargarVistasElementos(){
 
 void EscenarioVista::cargarVistaDisparos() {
     this->disparoVista->cargarImagen(this->ventana->getVentanaRenderer());
+}
+
+void EscenarioVista::cargarVistaEnemigos() {
+    this->enemigoPequenio->cargarImagen(this->ventana->getVentanaRenderer());
+    this->enemigoDeEscuadron->cargarImagen(this->ventana->getVentanaRenderer());
+    this->enemigoMediano->cargarImagen(this->ventana->getVentanaRenderer());
+    this->enemigoGrande->cargarImagen(this->ventana->getVentanaRenderer());
+
 }
 
 void EscenarioVista::cargarFondo(){

@@ -1,7 +1,5 @@
 #include "disparoVista.hpp"
 
-#include "disparoVista.hpp"
-
 DisparoVista::DisparoVista(string pathSprite){
     this->figuraDisparo = new Figura();
     this->pathSprite = pathSprite;
