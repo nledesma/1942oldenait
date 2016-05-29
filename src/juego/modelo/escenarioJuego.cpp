@@ -142,9 +142,6 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
 void EscenarioJuego::jugar(bool serverActivo) {
     itEtapa = etapas.begin();
     comenzarEtapa();
-    if (serverActivo){
-        pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
-    }
 }
 
 void EscenarioJuego::manejarProximoEvento() {
