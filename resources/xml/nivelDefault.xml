@@ -14,7 +14,6 @@
             <alto>800</alto>
             <velocidadDesplazamientoY>200</velocidadDesplazamientoY>
         </fondo>
-        <!-- etapa 1 - 3 pantallas -->
         <etapas>
             <etapa>
                 <longitud>3200</longitud>
@@ -35,8 +34,42 @@
                         <posy>3200</posy>
                     </elemento>
                 </elementos>
+                <enemigos>
+                    <enemigo>
+                      <tipo>pequenio</tipo>
+                      <cantidad>10</cantidad>
+                    </enemigo>
+                    <enemigo>
+                      <tipo>escuadron</tipo>
+                      <cantidad>2</cantidad>
+                    </enemigo>
+                    <enemigo>
+                      <tipo>mediano</tipo>
+                      <cantidad>5</cantidad>
+                    </enemigo>
+                    <enemigo>
+                      <tipo>grande</tipo>
+                      <cantidad>1</cantidad>
+                    </enemigo>
+                </enemigos>
+                <powerUps>
+                    <powerUp>
+                      <tipo>bonificacion</tipo>
+                      <cantidad>2</cantidad>
+                      <valor>1000</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>bonificacion</tipo>
+                      <cantidad>1</cantidad>
+                      <valor>500</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>ametralladoras</tipo>
+                      <cantidad>3</cantidad>
+                      <valor>0</valor>
+                    </powerUp>
+                </powerUps>
             </etapa>
-            <!-- etapa 2, 3 pantallas -->
             <etapa>
                 <longitud>3200</longitud>
                 <elementos>
@@ -71,6 +104,41 @@
                         <posy>3200</posy>
                     </elemento>
                 </elementos>
+                <enemigos>
+                    <enemigo>
+                      <tipo>pequenio</tipo>
+                      <cantidad>15</cantidad>
+                    </enemigo>
+                    <enemigo>
+                      <tipo>escuadron</tipo>
+                      <cantidad>3</cantidad>
+                    </enemigo>
+                    <enemigo>
+                      <tipo>mediano</tipo>
+                      <cantidad>5</cantidad>
+                    </enemigo>
+                    <enemigo>
+                      <tipo>grande</tipo>
+                      <cantidad>1</cantidad>
+                    </enemigo>
+                </enemigos>
+                <powerUps>
+                    <powerUp>
+                      <tipo>bonificacion</tipo>
+                      <cantidad>3</cantidad>
+                      <valor>1000</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>bonificacion</tipo>
+                      <cantidad>4</cantidad>
+                      <valor>500</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>ametralladoras</tipo>
+                      <cantidad>2</cantidad>
+                      <valor>0</valor>
+                    </powerUp>
+                </powerUps>
             </etapa>
         </etapas>
     </escenario>
