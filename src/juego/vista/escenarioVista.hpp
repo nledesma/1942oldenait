@@ -11,6 +11,7 @@
 #include "elementoVista.hpp"
 #include "etapaVista.hpp"
 #include "disparoVista.hpp"
+#include "soundboard.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include <list>
@@ -38,6 +39,8 @@ private:
     list<disparo> disparos;
     /* Etapas */
     list<EtapaVista*> etapas;
+    SoundBoard *soundBoard;
+    int contadorSonido;
     list<EtapaVista*>::iterator itEtapa;
     /* Estado */
     bool activo = false;
@@ -69,6 +72,7 @@ public:
     void cargarVistasAviones();
     void cargarVistasElementos();
     void cargarVistaDisparos();
+    void cargarSonidos();
     void actualizar(float offset);
     void cerrar();
     void manejarEvento(int evento);

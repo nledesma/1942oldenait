@@ -12,8 +12,11 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->pathImagen = Decodificador::popIdImg(infoEscenario);
 
     this->scrollingOffset = 0;
-    this->inicializarComponentes(infoEscenario);
+    this->contadorSonido = 0;
     this->fondo = new Figura();
+    this->soundBoard = new SoundBoard();
+    this->soundBoard->inicializar();
+    this->inicializarComponentes(infoEscenario);
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -78,7 +81,18 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     list<AvionVista*>::iterator itAvion;
     for(itAvion = this->getAviones().begin(); itAvion != this->getAviones().end(); itAvion++){
         string avion = Decodificador::popAvion(infoActualizacion);
-        (*itAvion)->actualizar(avion);
+        int sonido = (*itAvion)->actualizar(avion);
+        if (sonido == CODIGO_SONIDO_DISPARO){
+            if (this->contadorSonido == 0){
+                this->contadorSonido = CONTADOR_SONIDO_DISPARO_INICIAL;
+                this->soundBoard->reproducirDisparo();
+            }
+        } else if (sonido == CODIGO_SONIDO_LOOP) {
+            this->soundBoard->reproducirLoop();
+        }
+        if (this->contadorSonido > 0){
+            this->contadorSonido = this->contadorSonido - 1;
+        }
     }
     list<ElementoVista*>::iterator itElemento;
     for(itElemento = this->getElementos().begin(); itElemento != this->getElementos().end(); itElemento++){
@@ -107,16 +121,17 @@ EscenarioVista::~EscenarioVista(){}
 // Carga todas las cosas. Anterior al loop.
 void EscenarioVista::preloop(){
     ventana->iniciar();
-
     cargarFondo();
     cargarVistasAviones();
     cargarVistasElementos();
     cargarVistaDisparos();
+    cargarSonidos();
 }
 
 int EscenarioVista::mainLoop(){
     cout << "se entra al mainLoop" << endl;
     SDL_Event e;
+    this->soundBoard->toggleMusica();
     while(this->getActivo()){
         while ( SDL_PollEvent( &e ) != 0 ) {
             if (e.type == SDL_WINDOWEVENT) {
@@ -176,6 +191,8 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 break;
             case SDLK_x:
                 this->colaEventos.push((int)PRESIONA_X);
+            case SDLK_m:
+                this->soundBoard->toggleMusica();
                 break;
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
@@ -290,6 +307,10 @@ void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer,
 
 void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* renderer){
     elementoVista->cargarImagen(renderer);
+}
+
+void EscenarioVista::cargarSonidos() {
+    this->soundBoard->cargarSonidos();
 }
 
 /* Renderizaciones */

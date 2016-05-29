@@ -43,10 +43,6 @@ public:
 
     float getVelocidad();
 
-    float getVelocidadX();
-
-    float getVelocidadY();
-
     float getPosicionX();
 
     float getPosicionY();
@@ -54,14 +50,6 @@ public:
     int getEstadoAnimacion();
 
     void setVelocidad(float velocidad);
-
-    void setVelocidadX();
-
-    void setVelocidadY();
-
-    void setPosicionX();
-
-    void setPosicionY();
 
     void setEstadoAnimacion(int estadoAnimacion);
 
@@ -74,8 +62,6 @@ public:
     int getAnchoDisparo();
 
     int getAltoDisparo();
-
-    void loop();
 
     void volverEstadoInicial();
 

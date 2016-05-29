@@ -5,7 +5,7 @@ WAR = -Wall -pedantic
 CXXFLAGS = $(DEBUG) $(WAR)
 
 # Librerias.
-LIBS = -lpthread -lSDL2 -lSDL2_image
+LIBS = -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer
 
 # Directorios de código fuente.
 NET_PATH = src/net
@@ -25,7 +25,8 @@ vpath %.cpp $(SRC)
 OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	logger.o colaConcurrente.o avion.o disparo.o clienteParser.o etapa.o etapaVista.o \
 	elemento.o escenarioJuego.o avionVista.o disparoVista.o elementoVista.o \
-	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o parserXML.o
+	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o parserXML.o \
+	soundboard.o
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 

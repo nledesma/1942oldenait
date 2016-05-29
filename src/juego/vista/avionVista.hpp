@@ -53,7 +53,7 @@ public:
 
     void setEstadoAnimacion(int estadoAnimacion);
 
-    void actualizar(string codigo);
+    int actualizar(string codigo);
 
     void cerrar();
 };
