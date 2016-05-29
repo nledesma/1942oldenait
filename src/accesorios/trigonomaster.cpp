@@ -1,5 +1,8 @@
 #include "trigonomaster.hpp"
 #include "codigo.hpp"
+#include <iostream>
+
+using namespace std;
 
 float Trigonomaster::getCoseno(float angulo, int &anguloAnimacion) {
     double porcionAngular = PORCION_ANGULO * angulo;
@@ -286,6 +289,7 @@ int Trigonomaster::getSpriteAngulo(float angulo) {
 
 float Trigonomaster::getSeno(float angulo, int &anguloAnimacion) {
     double porcionAngular = PORCION_ANGULO * angulo;
+
     int porcionAngularEntera = (int) floor(porcionAngular);
     double parteDecimal = porcionAngular - porcionAngularEntera;
     if (parteDecimal >= 0.5){

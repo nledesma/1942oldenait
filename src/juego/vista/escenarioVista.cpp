@@ -380,7 +380,6 @@ void EscenarioVista::renderizarDisparos(){
 }
 
 void EscenarioVista::renderizarEnemigos(){
-    cout << "cantidad enemigos en cliente: " << this->enemigos.size() << endl;
     pthread_mutex_lock(&mutexEnemigos);
     for(list<enemigo>::iterator iterador = this->enemigos.begin(); iterador != this->enemigos.end(); ++iterador) {
         enemigo enemigo1 = *iterador;

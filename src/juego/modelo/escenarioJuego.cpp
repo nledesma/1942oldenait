@@ -139,7 +139,6 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
 }
 
 void EscenarioJuego::actualizarEstado(float timeStep) {
-    cout << "Cantidad de enemigos: " << this->enemigos.size() << endl;
     this->actualizarScrollingOffset(timeStep);
     this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
     this->moverAviones(timeStep);
