@@ -3,9 +3,9 @@
 TrayectoriaCuadrada::~TrayectoriaCuadrada() { }
 
 TrayectoriaCuadrada::TrayectoriaCuadrada() {
-    Desplazamiento * desplazamientoRecto1 = new Desplazamiento(20, 0);
+    Desplazamiento * desplazamientoRecto1 = new Desplazamiento(200, 0);
     Giro * giro1 = new Giro(90, (float)-50);
-    Desplazamiento * desplazamientoRecto2 = new Desplazamiento(10, 0);
+    Desplazamiento * desplazamientoRecto2 = new Desplazamiento(100, 0);
     Giro * giro2 = new Giro(90, (float)-50);
     this->colaMovimientos.push(desplazamientoRecto1);
     this->colaMovimientos.push(giro1);
