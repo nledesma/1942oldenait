@@ -5,6 +5,7 @@ Disparo::Disparo(float posX, float posY, float velocidad){
     this->posX = posX;
     this->posY = posY;
 	this->velocidad = velocidad;
+  this->colisionable = new Colisionable(this->posX, this->posY, ANCHO_DISPARO_COMUN, ALTO_DISPARO_COMUN);
 }
 
 Disparo::~Disparo(){
@@ -21,12 +22,13 @@ float Disparo::getVelocidad(){
 int Disparo::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
     int retorno;
-	this->posY -= this->velocidad * timeStep;
-	if( this->posY < - ALTO_DISPARO_COMUN){
-        retorno = 0;
-	} else {
+  	this->posY -= this->velocidad * timeStep;
+  	if( this->posY < - ALTO_DISPARO_COMUN){
+          retorno = 0;
+  	} else {
         retorno = 1;
     }
+    this->colisionable->setPosY(this->posY);
     pthread_mutex_unlock(&this->mutexMover);
     return retorno;
 }
@@ -53,4 +55,12 @@ int Disparo::getAlto(){
 
 int Disparo::getAncho(){
     return ANCHO_DISPARO_COMUN;
+}
+
+Colisionable* Disparo::getColisionable(){
+    return this->colisionable;
+}
+
+void Disparo::colisionar(){
+  
 }

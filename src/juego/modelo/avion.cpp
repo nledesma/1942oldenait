@@ -9,6 +9,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->posYInicial = posY;
     this->velocidadX = 0;
     this->velocidadY = 0;
+    this->colisionable = new Colisionable(posX, posY, ANCHO_AVION_COMUN, ALTO_AVION_COMUN);
     this->velocidad = velocidad;
     this->velocidadDisparos = velocidadDisparos;
     this->contador = CONTADOR_INICIAL;
@@ -81,12 +82,14 @@ void Avion::mover(float timeStep){
         }else if( this->posX + this->getAncho() > ANCHO_ESCENARIO){
             this->posX = ANCHO_ESCENARIO - this->getAncho();
         }
+        this->colisionable->setPosX(this->posX);
         this->posY += this->velocidadY * timeStep;
         if( this->posY < 0 ){
             this->posY = 0;
         } else if ( this->posY + this->getAlto() > ALTO_ESCENARIO){
             this->posY = ALTO_ESCENARIO - this->getAlto();
         }
+        this->colisionable->setPosY(this->posY);
     } else {
         if(this->estadoAnimacion != DESCONECTADO) {
             if(this->contador > 0) {
@@ -117,7 +120,7 @@ void Avion::mover(float timeStep){
 float Avion::getVelocidad(){
     return this->velocidad;
 }
- 
+
 void Avion::setVelocidad(float velocidad){
     this->velocidad = velocidad;
 }
@@ -174,6 +177,8 @@ Disparo* Avion::disparar(){
 void Avion::volverEstadoInicial(){
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
+    this->colisionable->setPosX(this->posX);
+    this->colisionable->setPosY(this->posY);
     if (this->estadoAnimacion != DESCONECTADO)
         this->estadoAnimacion = ESTADO_NORMAL;
 }
@@ -189,4 +194,12 @@ string Avion::getIdSpriteDisparos() {
 void Avion::setPosicion(float x, float y) {
     posX = x;
     posY = y;
+}
+
+Colisionable* Avion::getColisionable(){
+    return this->colisionable;
+}
+
+void Avion::colisionar(){
+  //TODO
 }

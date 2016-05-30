@@ -5,6 +5,7 @@
 #include <iostream>
 #include <pthread.h>
 #include "../../accesorios/codigo.hpp"
+#include "../../accesorios/colisiones/colisionable.hpp"
 using namespace std;
 
 class Disparo {
@@ -13,6 +14,7 @@ private:
 	float posX;
 	float posY;
 	pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
+	Colisionable* colisionable;
 public:
 	Disparo(float posX, float posY, float velocidad);
 	~Disparo();
@@ -25,5 +27,7 @@ public:
   	float getPosX();
   	int getAlto();
   	int getAncho();
+		Colisionable* getColisionable();
+		void colisionar();
 };
 #endif
