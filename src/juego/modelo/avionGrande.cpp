@@ -5,7 +5,7 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->posY = posY;
     this->velocidad = velocidad;
     this->velocidadDisparos = velocidadDisparos;
-    this->estadoAnimacion = Trigonomaster::getSpriteAngulo(angulo);
+    this->estadoAnimacion = AVION_ENEMIGO_GRANDE_NORMAL;
     this->idSprite = SPRITE_AVION_ENEMIGO_GRANDE;
     this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
     this->trayectoria = trayectoria;

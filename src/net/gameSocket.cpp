@@ -130,7 +130,6 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
 }
 
 int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
-    pthread_mutex_lock(&mutexRecibir);
 
     string cabecera;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
@@ -139,7 +138,6 @@ int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
         int longMensajeInt = Decodificador::popInt(cabecera);
         if (recibirBytes(mensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
             // Decodificador::imprimirBytes(mensaje);
-            pthread_mutex_unlock(&mutexRecibir);
             return MENSAJEOK;
         } else {
             stringstream ss;
@@ -148,13 +146,10 @@ int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
             Logger::instance()->logInfo(ss.str());
         }
     } else if (resultado == PEER_DESCONECTADO) {
-        pthread_mutex_unlock(&mutexRecibir);
         return PEER_DESCONECTADO;
     } else {
         Logger::instance()->logInfo("Error al recibir bytes de la cabecera del mensaje.");
     }
-
-    pthread_mutex_unlock(&mutexRecibir);
 
     return -1;
 }

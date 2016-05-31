@@ -1,5 +1,6 @@
 #include "escenarioJuego.hpp"
 #include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
+#include "trayectoriasEnemigos/trayectoriaAvionGrande.hpp"
 
 EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite) {
     this->velocidadDesplazamientoY = velocidadDesplazamientoY;
@@ -132,7 +133,10 @@ void *EscenarioJuego::mainLoop_th(void *THIS) {
     escenario->activar();
     Trayectoria* cuadrada = new TrayectoriaCuadrada();
     AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
+    Trayectoria* trayectoriaAvionGrande = new TrayectoriaAvionGrande();
+    AvionEnemigo* enemigoGrande = new AvionGrande((float)500,(float)799,(float)100,(float)0,(float)100, trayectoriaAvionGrande);
     escenario->agregarEnemigo(enemigo);
+    escenario->agregarEnemigo(enemigoGrande);
     while (escenario->estaActivo()) {
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
         escenario->temporizador.comenzar();
