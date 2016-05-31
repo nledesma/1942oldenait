@@ -11,6 +11,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->alto = alto;
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
+    this->grilla = new Grilla(10, 10);
 }
 
 void EscenarioJuego::reset() {
@@ -145,6 +146,7 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
     this->moverElementos(timeStep);
     this->moverDisparos(timeStep);
     this->moverEnemigos(timeStep);
+    this->verificarColisiones();
     this->manejarProximoEvento();
 }
 
@@ -288,4 +290,12 @@ int EscenarioJuego::getAnchoVentana() {
 
 int EscenarioJuego::getAltoVentana() {
     return altoVentana;
+}
+
+void EscenarioJuego::verificarColisiones(){
+    this->grilla->ubicarAviones(this->aviones);
+    this->grilla->ubicarDisparosAmigos(this->disparos);
+    this->grilla->ubicarEnemigos(this->enemigos);
+    this->grilla->verificarColisiones();
+    this->grilla->limpiarGrilla();
 }

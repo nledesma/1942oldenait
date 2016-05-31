@@ -48,6 +48,7 @@ private:
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
+    Grilla * grilla;
 
 public:
     void reset();
@@ -93,6 +94,7 @@ public:
     void activar();
     void desactivar();
     Avion* avion(int i);
+    void verificarColisiones();
 };
 
 

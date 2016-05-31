@@ -51,6 +51,10 @@ int AvionEnemigo::getAltoDisparo() {
     return ALTO_DISPARO_ENEMIGO;
 }
 
+Colisionable* AvionEnemigo::getColisionable(){
+    return this->colisionable;
+}
+
 int AvionEnemigo::mover(float timeStep) {
     int sigueEnPantalla = 1;
     pthread_mutex_lock(&this->mutexMover);
@@ -60,6 +64,9 @@ int AvionEnemigo::mover(float timeStep) {
         || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
         sigueEnPantalla = 0;
     }
+    this->colisionable->setPosX(this->posX);
+    this->colisionable->setPosY(this->posY);
+    this->colisionable->setAngulo(this->angulo);
     pthread_mutex_unlock(&this->mutexMover);
     return sigueEnPantalla;
 }

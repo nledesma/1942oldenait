@@ -38,6 +38,15 @@ void Grilla::ubicarDisparosAmigos(list<Disparo*> disparos){
     }
 }
 
+void Grilla::ubicarEnemigos(list<AvionEnemigo*> enemigos){
+    for(list<AvionEnemigo*>::iterator itEnemigos = enemigos.begin(); itEnemigos != enemigos.end(); itEnemigos++){
+        list<Celda*> celdas = this->ubicarEnCeldas((*itEnemigos)->getColisionable());
+        for(list<Celda*>::iterator itCeldas = celdas.begin(); itCeldas != celdas.end(); itCeldas++){
+            (*itCeldas)->agregarEnemigo((*itEnemigos));
+        }
+    }
+}
+
 void Grilla::verificarColisiones(){
     for(list<list<Celda*>>::iterator itFilas = this->grilla.begin(); itFilas != this->grilla.end(); itFilas++){
         for(list<Celda*>::iterator itColumna = (*itFilas).begin(); itColumna != (*itFilas).end(); itColumna++){

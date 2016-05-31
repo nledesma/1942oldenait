@@ -202,4 +202,5 @@ Colisionable* Avion::getColisionable(){
 
 void Avion::colisionar(){
   //TODO
+  cout << "Colisiono!!!!" << endl;
 }

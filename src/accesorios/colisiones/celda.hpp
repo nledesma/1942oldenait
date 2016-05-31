@@ -13,7 +13,7 @@ public:
     Celda();
     void agregarAvion(Avion * avion);
     //TODO faltan enemigos, disparos enemigos y powerups
-    void agregarEnemigos(AvionEnemigo * enemigo);
+    void agregarEnemigo(AvionEnemigo * enemigo);
     void agregarDisparoAmigo(Disparo * disparo);
     void limpiarCelda();
     void verificarColisiones();
