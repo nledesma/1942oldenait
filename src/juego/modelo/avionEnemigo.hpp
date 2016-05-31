@@ -45,6 +45,7 @@ public:
     virtual string getIdSprite();
     virtual string getIdSpriteDisparos();
     Colisionable* getColisionable();
+    virtual void colisionar();
 };
 
 

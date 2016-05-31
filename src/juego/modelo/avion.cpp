@@ -103,6 +103,8 @@ void Avion::mover(float timeStep){
                 this->contador = CONTADOR_INICIAL;
                 if(this->estadoAnimacion == LOOP_ETAPA_17) {
                     this->estadoAnimacion = ESTADO_NORMAL;
+                } else if(this->estadoAnimacion == EXPLOSION_ETAPA_10){
+                    this->volverEstadoInicial();
                 } else {
                     this->estadoAnimacion ++;
                 }
@@ -201,6 +203,5 @@ Colisionable* Avion::getColisionable(){
 }
 
 void Avion::colisionar(){
-  //TODO
-  cout << "Colisiono!!!!" << endl;
+    this->estadoAnimacion = EXPLOSION_ETAPA_1;
 }
