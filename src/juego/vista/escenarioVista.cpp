@@ -17,6 +17,7 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->soundBoard = new SoundBoard();
     this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
+    this->puntaje = 0;
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -40,6 +41,13 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
     this->agregarVistasEnemigos();
+    this->nroAvion = Decodificador::popInt(infoEscenario);
+
+    if (infoEscenario.length() != 0) {
+        cout << "Advertencia: el mensaje de inicialización del escenario todavía tiene bytes sin usar." << endl;
+    }
+
+    cout << "El número del avión es " << nroAvion << endl;
 }
 
 int EscenarioVista::comenzarEtapa() {
@@ -123,6 +131,9 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         enemigos.push_front(unEnemigo);
     }
     this->setEnemigos(enemigos);
+    this->puntaje = Decodificador::popInt(infoActualizacion);
+
+
     if (infoActualizacion.size() != 0) {
         cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
     }
@@ -357,11 +368,23 @@ void EscenarioVista::renderizarElementos(){
     }
 }
 
-void EscenarioVista::renderizarAviones(){
-    for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
-        AvionVista* avion = *iterador;
-        avion->render(this->ventana->getVentanaRenderer());
+void EscenarioVista::renderizarAviones() {
+    list<AvionVista*>::iterator iterador;
+    AvionVista* avionDelCliente;
+
+    int i = 0;
+    for(iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador) {
+        ++i;
+        // Primero dibujamos los aviones que no le correspondan a este cliente.
+        if (i != nroAvion) {
+            AvionVista* avion = *iterador;
+            avion->render(this->ventana->getVentanaRenderer());
+        } else {
+            avionDelCliente = *iterador;
+        }
     }
+    // Último hay que dibujar el del nroAvion, para que esté arriba.
+    avionDelCliente->render(this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::renderizarFondo(float y) {

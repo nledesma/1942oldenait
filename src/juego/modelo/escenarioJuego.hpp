@@ -20,6 +20,7 @@ using namespace std;
 
 class EscenarioJuego {
 private:
+    int puntaje;
     /* Etapas */
     list<Etapa*> etapas;
     list<Etapa*>::iterator itEtapa;
@@ -80,6 +81,7 @@ public:
     list<Elemento*>& getElementos();
     list<Disparo*> getDisparos();
     list<AvionEnemigo*> getEnemigos();
+    int getPuntaje();
     int getAncho();
     int getAlto();
     int getAnchoVentana();

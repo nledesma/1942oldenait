@@ -110,8 +110,11 @@ void *Servidor::cicloAceptar(void *THIS) {
 }
 
 void Servidor::enviarEstadoInicial(int fdCliente) {
-        cout << "se envía el estado inicial." << endl;
-    enviarMensaje(Decodificador::getCodigoEstadoInicial(escenario), fdCliente);
+    cout << "se envía el estado inicial." << endl;
+    string estadoInicial = Decodificador::getCodigoEstadoInicial(escenario);
+    // Se le agrega el número de avión que le corresponde al cliente.
+    Decodificador::pushCantidad(estadoInicial, clientes[fdCliente].nroJugador);
+    enviarMensaje(estadoInicial, fdCliente);
 }
 
 void *Servidor::atenderCliente(void *arg) {

@@ -220,6 +220,7 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, enemigo);
         }
     }
+    Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje());
     return codigo;
 }
 

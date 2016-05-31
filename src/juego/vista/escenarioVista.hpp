@@ -34,6 +34,9 @@ struct enemigo {
 
 class EscenarioVista {
 private:
+    int puntaje;
+    /* Número de avión que le corresponde a este cliente */
+    int nroAvion;
     /* Fondo */
     int ancho;
     int alto;

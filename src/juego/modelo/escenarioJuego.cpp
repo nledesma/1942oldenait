@@ -11,6 +11,8 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->alto = alto;
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
+    // TODO debería haber un puntaje por equipo.
+    this->puntaje = 0;
 }
 
 void EscenarioJuego::reset() {
@@ -62,6 +64,8 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
             if (disparo){
+                // NOTE esto es provisorio.
+                puntaje ++;
                 pthread_mutex_lock(&this->mutexListaDisparos);
                 disparos.push_back(disparo);
                 pthread_mutex_unlock(&this->mutexListaDisparos);
@@ -257,6 +261,9 @@ list<Etapa *> EscenarioJuego::getEtapas() {
     return etapas;
 }
 
+int EscenarioJuego::getPuntaje() {
+    return puntaje;
+}
 
 bool EscenarioJuego::quedanEtapas() {
     return itEtapa != etapas.end();
