@@ -27,6 +27,7 @@ protected:
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     Trayectoria* trayectoria;
     Colisionable * colisionable;
+    int contador;
 
 public:
     virtual ~AvionEnemigo();

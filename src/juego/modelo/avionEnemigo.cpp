@@ -57,16 +57,35 @@ Colisionable* AvionEnemigo::getColisionable(){
 
 int AvionEnemigo::mover(float timeStep) {
     int sigueEnPantalla = 1;
-    pthread_mutex_lock(&this->mutexMover);
-    this->trayectoria->mover(this->posX, this->posY, this->velocidad, this->angulo, this->estadoAnimacion, timeStep);
-    // TODO: chequear los bordes usando los atributos del escenario
-    if (this->posX > ANCHO_ESCENARIO || this->posX < - this->getAncho()
-        || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
-        sigueEnPantalla = 0;
+    if(this->estadoAnimacion < AVION_ENEMIGO_EXPLOSION_ETAPA_1){
+        pthread_mutex_lock(&this->mutexMover);
+        this->trayectoria->mover(this->posX, this->posY, this->velocidad, this->angulo, this->estadoAnimacion, timeStep);
+        // TODO: chequear los bordes usando los atributos del escenario
+        if (this->posX > ANCHO_ESCENARIO || this->posX < - this->getAncho()
+            || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
+            sigueEnPantalla = 0;
+        }
+        this->colisionable->setPosX(this->posX);
+        this->colisionable->setPosY(this->posY);
+        this->colisionable->setAngulo(this->angulo);
+        pthread_mutex_unlock(&this->mutexMover);
+    } else {
+        if(this->contador > 0 ) {
+            this->contador --;
+        } else {
+            if(this->estadoAnimacion == AVION_ENEMIGO_EXPLOSION_ETAPA_5){
+                sigueEnPantalla = 0;
+            } else {
+                this->estadoAnimacion ++;
+            }
+            this->contador = CONTADOR_INICIAL;
+        }
     }
-    this->colisionable->setPosX(this->posX);
-    this->colisionable->setPosY(this->posY);
-    this->colisionable->setAngulo(this->angulo);
-    pthread_mutex_unlock(&this->mutexMover);
     return sigueEnPantalla;
+}
+
+void AvionEnemigo::colisionar(){
+    if(this->estadoAnimacion < AVION_ENEMIGO_EXPLOSION_ETAPA_1){
+        this->estadoAnimacion = AVION_ENEMIGO_EXPLOSION_ETAPA_1;
+    }
 }

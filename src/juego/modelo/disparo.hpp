@@ -15,6 +15,7 @@ private:
 	float posY;
 	pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
 	Colisionable* colisionable;
+	bool colisiono;
 public:
 	Disparo(float posX, float posY, float velocidad);
 	~Disparo();
@@ -27,7 +28,7 @@ public:
   	float getPosX();
   	int getAlto();
   	int getAncho();
-		Colisionable* getColisionable();
-		void colisionar();
+	Colisionable* getColisionable();
+	void colisionar();
 };
 #endif
