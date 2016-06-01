@@ -192,9 +192,7 @@ void EscenarioJuego::moverDisparos(float timeStep) {
         for (list<Disparo *>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++) {
             if ((*iterador)->mover(timeStep) == 0) {
                 // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
-                // TODO que el puntaje sea para el avion/equipo correspondiente.
-                ++puntaje;
-                cout << "El disparo del jugador " << (*iterador)->getNroAvion() << " suma 1 al puntaje: " << puntaje << endl;
+                subirPuntaje(1, (*iterador)->getNroAvion());
                 // Se borra el disparo.
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaDisparos);
@@ -203,6 +201,12 @@ void EscenarioJuego::moverDisparos(float timeStep) {
             }
         }
     }
+}
+
+void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
+    puntaje += puntos;
+    // Por ahora solo se avisa quién fue el responsable. Cuando haya equipos será útil el nroAvion.
+    cout << "El jugador " << nroAvion << " suma " << puntos << " al puntaje: " << puntaje << endl;
 }
 
 void EscenarioJuego::moverEnemigos(float timeStep) {

@@ -50,6 +50,7 @@ private:
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
 
 public:
+    void subirPuntaje(int puntos, int nroAvion);
     void reset();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite);
     ~EscenarioJuego();
