@@ -54,3 +54,11 @@ int Disparo::getAlto(){
 int Disparo::getAncho(){
     return ANCHO_DISPARO_COMUN;
 }
+
+void Disparo::setAvion(int nroAvion){
+    nroAvionDisparador = nroAvion;
+}
+
+int Disparo::getNroAvion(){
+    return nroAvionDisparador;
+}

@@ -64,9 +64,8 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
+            disparo->setAvion(nroAvion);
             if (disparo){
-                // NOTE esto es provisorio.
-                puntaje ++;
                 pthread_mutex_lock(&this->mutexListaDisparos);
                 disparos.push_back(disparo);
                 pthread_mutex_unlock(&this->mutexListaDisparos);
@@ -192,6 +191,11 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     if (this->disparos.size() > 0) {
         for (list<Disparo *>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++) {
             if ((*iterador)->mover(timeStep) == 0) {
+                // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
+                // TODO que el puntaje sea para el avion/equipo correspondiente.
+                ++puntaje;
+                cout << "El disparo del jugador " << (*iterador)->getNroAvion() << " suma 1 al puntaje: " << puntaje << endl;
+                // Se borra el disparo.
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaDisparos);
                 iterador = disparos.erase(iterador);

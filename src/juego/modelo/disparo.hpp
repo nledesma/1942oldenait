@@ -12,6 +12,7 @@ private:
 	float velocidad;
 	float posX;
 	float posY;
+	int nroAvionDisparador;
 	pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
 public:
 	Disparo(float posX, float posY, float velocidad);
@@ -25,5 +26,7 @@ public:
   	float getPosX();
   	int getAlto();
   	int getAncho();
+	void setAvion(int nroAvion);
+	int getNroAvion();
 };
 #endif
