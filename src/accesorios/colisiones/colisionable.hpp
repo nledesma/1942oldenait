@@ -2,6 +2,8 @@
 #define INC_1942OLDENAIT_COLISIONABLE_HPP
 
 #include <iostream>
+#include <list>
+#include "superficie.hpp"
 
 using namespace std;
 
@@ -11,11 +13,15 @@ private:
     float posY;
     float ancho;
     float alto;
-    float angulo;
+    Superficie* superficiePrincipal;
+    list<Superficie*> superficiesSecundarias;
+    void crearAvion(float posX, float posY, float angulo);
+    void crearDisparo(float posX, float posY, float angulo);
+    void crearEnemigo(float posX, float posY, float angulo);
+    void crearDisparoEnemigo(float posX, float posY, float angulo);
 
 public:
-    Colisionable(float x, float y, float ancho, float alto);
-    Colisionable(float x, float y, float ancho, float alto, float angulo);
+    Colisionable(float posX, float posY, float angulo, int tipoDeElemento);
     float getPosX();
     float getPosY();
     void setPosX(float posX);
@@ -25,6 +31,8 @@ public:
     float getAngulo();
     void setAngulo(float angulo);
     bool colisiona(Colisionable * colisionable);
+    Superficie * getSuperficiePrincipal();
+    list<Superficie*> getSuperficiesSecundarias();
 };
 
 

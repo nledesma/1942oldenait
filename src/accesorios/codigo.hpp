@@ -105,6 +105,11 @@
 #define TIPO_AVION_MEDIANO 3
 #define TIPO_AVION_GRANDE 4
 
+
+#define TIPO_AVION 5
+#define TIPO_DISPARO_AVION 6
+#define TIPO_DISPARO_ENEMIGO 7
+
 /* Estados avion enemigo */
 
 #define AVION_ENEMIGO_0G 4
