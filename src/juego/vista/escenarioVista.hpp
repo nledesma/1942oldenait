@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <cstring>
 #include <string>
+#include <vector>
 #include "ventana.hpp"
 #include "avionVista.hpp"
 #include "figura.hpp"
@@ -34,7 +35,9 @@ struct enemigo {
 
 class EscenarioVista {
 private:
-    int puntaje;
+    /* Equipos */
+    bool porEquipos;
+    vector<int> puntajes;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */

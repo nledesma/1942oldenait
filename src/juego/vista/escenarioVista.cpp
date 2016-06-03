@@ -17,7 +17,8 @@ EscenarioVista::EscenarioVista(string infoEscenario){
     this->soundBoard = new SoundBoard();
     this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
-    this->puntaje = 0;
+    puntajes.push_back(0);
+    if (porEquipos) puntajes.push_back(0);
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -41,6 +42,7 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
     this->agregarVistasEnemigos();
+    this->porEquipos = (bool)Decodificador::popInt(infoEscenario);
     this->nroAvion = Decodificador::popInt(infoEscenario);
 
     if (infoEscenario.length() != 0) {
@@ -131,8 +133,19 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         enemigos.push_front(unEnemigo);
     }
     this->setEnemigos(enemigos);
-    this->puntaje = Decodificador::popInt(infoActualizacion);
+    int puntajeAux = Decodificador::popInt(infoActualizacion);
+    if (puntajeAux != puntajes[0]) {
+        cout << "El puntaje del equipo 1 ahora es " << puntajeAux << endl;
+        this->puntajes[0] = puntajeAux;
+    }
 
+    puntajeAux = Decodificador::popInt(infoActualizacion);
+    if (porEquipos) {
+        if (puntajeAux != puntajes[1]) {
+            cout << "El puntaje del equipo 2 ahora es " << puntajeAux << endl;
+            this->puntajes[1] = puntajeAux;
+        }
+    }
 
     if (infoActualizacion.size() != 0) {
         cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
@@ -164,10 +177,12 @@ int EscenarioVista::mainLoop(){
                     this->desactivar();
                     return CERRAR;
                 }
-            } else if (e.key.keysym.sym == SDLK_x) {
-                cout << "Se apretó x" << endl;
-                this->desactivar();
-                return CERRAR;
+            } else if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_x) {
+                    cout << "Se apretó x" << endl;
+                    this->desactivar();
+                    return CERRAR;
+                }
             }
             this->pushEvento(e);
         }

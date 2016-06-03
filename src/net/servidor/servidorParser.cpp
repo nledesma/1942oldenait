@@ -100,6 +100,28 @@ bool ServidorParser::agregarEtapas(EscenarioJuego *escenario, XMLElement *pEscen
 	return true;
 }
 
+bool ServidorParser::getModo(XMLElement * pNodoEscenario, int & modo) {
+	string modoStr;
+	if (!getString(pNodoEscenario, "modo", modoStr)) {
+		Logger::instance()->logWarning("No se encontró modo de juego en el XML");
+		return false;
+	}
+
+	// NOTE por ahí podría ser un bool que se llame modoEquipos.
+	if (modoStr == "equipos") {
+		modo = EQUIPOS;
+		return true;
+	}
+
+	if (modoStr == "colaborativo") {
+		modo = COLABORATIVO;
+		return true;
+	}
+
+	Logger::instance()->logWarning("El modo de juego del XML no es correcto.");
+	return false;
+}
+
 bool ServidorParser::getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracion){
 	// Nodo Escenario
 	XMLElement * pNodoEscenario = pNodoConfiguracion -> FirstChildElement("escenario");
@@ -112,8 +134,12 @@ bool ServidorParser::getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracio
 	string pathSpriteFondo; int anchoFondo, altoFondo; float velocidadY;
 	if (!getFondo(pNodoEscenario, pathSpriteFondo, anchoFondo, altoFondo, velocidadY)) return false;
 
+	// Modo.
+	int modo;
+	if (!getModo(pNodoEscenario, modo)) return false;
+
 	// Se crea el escenario y se lo setea al servidor.
-	EscenarioJuego* escenario = new EscenarioJuego(velocidadY, anchoFondo, altoFondo, anchoVentana, altoVentana, pathSpriteFondo);
+	EscenarioJuego* escenario = new EscenarioJuego(velocidadY, anchoFondo, altoFondo, anchoVentana, altoVentana, pathSpriteFondo, modo);
 
 	// Se agregan las etapas.
 	if (!agregarEtapas(escenario, pNodoEscenario)) return false;

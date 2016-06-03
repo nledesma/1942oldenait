@@ -28,6 +28,7 @@ private:
     int contador;
     float posXInicial;
     float posYInicial;
+    int puntaje;
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
@@ -70,6 +71,12 @@ public:
     string getIdSpriteDisparos();
 
     void setPosicion(float x, float y);
+
+    void sumarPuntos(int puntos);
+
+    void resetPuntos();
+
+    int getPuntaje();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

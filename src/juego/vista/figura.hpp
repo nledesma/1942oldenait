@@ -5,6 +5,7 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+// #include <SDL2/SDL_ttf.h>
 #include <list>
 #include <string>
 #include "../../accesorios/codigo.hpp"
@@ -44,6 +45,7 @@ public:
     ~Figura();
     //Carga la imagen desde el path especificado, utilizando el renderer pasado por parámetro
     bool loadFromFile(string path, SDL_Renderer* renderer, int color = BASE);
+    // bool loadFromRenderedText(string textureText, SDL_Color textColor, TTF_Font *gFont, SDL_Renderer* renderer);
     //Libera la memoria de la textura
     void free();
     //Renderiza la figura en el punto (x,y)
