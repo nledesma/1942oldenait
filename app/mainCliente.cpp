@@ -3,6 +3,7 @@
 #include "../src/net/cliente/cliente.hpp"
 #include "../src/net/cliente/clienteParser.hpp"
 
+//Probando
 bool validarInt(string valor) {
     if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
         return false;
