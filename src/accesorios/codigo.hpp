@@ -151,6 +151,7 @@
 
 /* Códigos de eventos al cliente */
 #define AVANZAR_ETAPA 0
+#define FINALIZAR_JUEGO 1
 
 /* Contador Sonido disparo */
 #define CONTADOR_SONIDO_DISPARO_INICIAL 10

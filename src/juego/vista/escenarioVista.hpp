@@ -107,6 +107,7 @@ public:
     void avanzarEtapa();
     EtapaVista* etapaActual();
     bool quedanEtapas();
+    void finalizarJuego();
     /* getters y setters*/
     float getScrollingOffset();
     void setScrollingOffset(float scrollingOffset);

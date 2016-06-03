@@ -73,12 +73,21 @@ bool EscenarioVista::quedanEtapas() {
     return itEtapa != etapas.end();
 }
 
+void EscenarioVista::finalizarJuego() {
+    avanzarEtapa();
+    // TODO hay que liberar algo acá? O es mejor afuera?
+}
 
 void EscenarioVista::manejarEvento(int evento) {
     switch (evento) {
         case AVANZAR_ETAPA:
             avanzarEtapa();
             Logger::instance()->logInfo("Se avanza de etapa.");
+            break;
+        case FINALIZAR_JUEGO:
+            finalizarJuego();
+            Logger::instance()->logInfo("El juego ha finalizado.");
+            cout << "El juego ha finalizado." << endl;
             break;
         default:
             Logger::instance()->logWarning("El evento que recibió el cliente no existe.");
