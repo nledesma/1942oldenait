@@ -16,6 +16,7 @@ private:
     int alto;
     SDL_Window *sdlWindow = NULL;
     SDL_Renderer *gVentanaRenderer = NULL;
+    Figura* fondo;
 
 public:
     /* Constructor */
@@ -40,6 +41,10 @@ public:
 
     /* Retorna la ventana de SDL */
     SDL_Window *getSdlWindow();
+    void cargarFondo();
+    void renderizarFondo();
+    Figura* getFondo();
+    void limpiar();
 };
 
 #endif //INC_1942OLDENAIT_VENTANA_HPP
