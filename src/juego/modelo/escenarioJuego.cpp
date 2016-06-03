@@ -59,7 +59,7 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
     Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
     this->aviones.push_back(avion);
     // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
-    equipos[aviones.size()%equipos.size()].insert(aviones.size());
+    equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
 }
 
 void EscenarioJuego::agregarEnemigo(AvionEnemigo *enemigo) {

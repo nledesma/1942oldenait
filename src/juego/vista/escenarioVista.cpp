@@ -133,6 +133,8 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         enemigos.push_front(unEnemigo);
     }
     this->setEnemigos(enemigos);
+
+    //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
     if (puntajeAux != puntajes[0]) {
         cout << "El puntaje del equipo 1 ahora es " << puntajeAux << endl;
