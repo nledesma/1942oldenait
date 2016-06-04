@@ -47,7 +47,6 @@ private:
     /* Sincronización */
     Temporizador temporizador;
     ColaConcurrente<pair<int, int>> colaEventos;
-    pthread_t mainLoopThread;
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
@@ -63,7 +62,6 @@ public:
     void agregarEtapa(Etapa * etapa);
     void avanzarEtapa();
     void comenzarEtapa();
-    void esperarEtapa();
     bool quedanEtapas();
     /* Eventos */
     void manejarProximoEvento();
@@ -71,7 +69,7 @@ public:
     void pushEvento(pair<int, int> evento);
     /* mainLoop */
     void jugar(bool serverActivo);
-    static void *mainLoop_th(void* THIS);
+    void mainLoop();
     /* Actualizaciones de estado. */
     void actualizarEstado(float timeStep);
     void actualizarScrollingOffset(float timeStep);
