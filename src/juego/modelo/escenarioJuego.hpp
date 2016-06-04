@@ -62,6 +62,8 @@ public:
     void comenzarEtapa();
     void esperarEtapa();
     bool quedanEtapas();
+    /* Enemigos */
+    void getProximoEnemigo();
     /* Eventos */
     void manejarProximoEvento();
     void manejarEvento(int nroAvion, int evento);

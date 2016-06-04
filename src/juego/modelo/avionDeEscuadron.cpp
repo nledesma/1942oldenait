@@ -3,6 +3,7 @@
 AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria){
     this->posX = posX;
     this->posY = posY;
+    this->angulo = angulo;
     this->velocidad = velocidad;
     this->velocidadDisparos = velocidadDisparos;
     this->estadoAnimacion = Trigonomaster::getSpriteAngulo(angulo);

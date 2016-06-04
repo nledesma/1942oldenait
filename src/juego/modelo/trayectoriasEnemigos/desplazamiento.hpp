@@ -3,6 +3,9 @@
 
 #include "../../../accesorios/trigonomaster.hpp"
 #include "tipoMovimiento.hpp"
+#include <iostream>
+
+using namespace std;
 
 class Desplazamiento : public TipoMovimiento {
 private:

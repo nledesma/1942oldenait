@@ -1,4 +1,5 @@
 #include "servidorParser.hpp"
+#include "../../juego/modelo/trayectoriasEnemigos/fabricaEnemigos.hpp"
 
 void ServidorParser::serializar(Servidor * servidor, string ruta) {
 	XMLDocument doc;
@@ -73,14 +74,19 @@ bool ServidorParser::getFondo(XMLElement * pNodoEscenario, string & spriteId, in
 	return true;
 }
 
-bool ServidorParser::getEtapa(XMLElement * pEtapa, Etapa * & etapa, int altoVentana) {
+bool ServidorParser::getEtapa(XMLElement * pEtapa, Etapa * & etapa, EscenarioJuego* escenarioJuego) {
 	int longitud;
+	int altoVentana = escenarioJuego->getAltoVentana();
+	int anchoFondo = escenarioJuego->getAncho();
+	int altoFondo = escenarioJuego->getAlto();
+
 	if (!getInt(pEtapa, "longitud", longitud)) return false;
 	etapa = new Etapa(longitud);
+	int longitudEtapa = etapa->getLongitud();
 	// Agregar Elementos.
 	if (!agregarElementos(etapa, pEtapa, altoVentana)) return false;
 	// Agregar Enemigos
-	if(!agregarEnemigos(etapa,pEtapa)) return false;
+	if(!agregarEnemigos(etapa,pEtapa, anchoFondo, altoFondo, longitudEtapa)) return false;
 	//Agregar PowerUps
 	if(!agregarPowerUps(etapa,pEtapa)) return false;
 	return true;
@@ -93,7 +99,7 @@ bool ServidorParser::agregarEtapas(EscenarioJuego *escenario, XMLElement *pEscen
 	XMLElement * pEtapa = pEtapas->FirstChildElement("etapa");
 	while (pEtapa != NULL) {
 		Etapa * etapa;
-		if (getEtapa(pEtapa, etapa, escenario->getAltoVentana())) escenario->agregarEtapa(etapa);
+		if (getEtapa(pEtapa, etapa, escenario)) escenario->agregarEtapa(etapa);
 		pEtapa = pEtapa->NextSiblingElement("etapa");
 	}
 
@@ -163,9 +169,14 @@ bool ServidorParser::agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa){
 	return true;
 }
 
-bool ServidorParser::agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa){
+bool ServidorParser::agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo,
+									 int longitudEtapa){
 	string tipo;
 	int cantidad = 0;
+	int cantidadPequenios = 0;
+	int cantidadEscuadrones = 0;
+	int cantidadMedianos = 0;
+	int cantidadGrandes = 0;
 	// Nodo enemigos
 	XMLElement * pNodoEnemigos = pNodoEtapa -> FirstChildElement()->NextSiblingElement("enemigos");
 	if (!pNodoEnemigos) return false;
@@ -177,13 +188,28 @@ bool ServidorParser::agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa){
 	while( pNodoEnemigo != NULL ){
 
 		if (getEnemigo(pNodoEnemigo, tipo, cantidad)) {
+			if (tipo == "pequenio"){
+				cantidadPequenios = cantidad;
+			} else if (tipo == "mediano"){
+				cantidadMedianos = cantidad;
+			} else if (tipo == "escuadron"){
+				cantidadEscuadrones = cantidad;
+			} else if (tipo == "grande"){
+				cantidadGrandes = cantidad;
+			}
 			cout << "Se agregaran " << cantidad << " aviones del tipo " << tipo << endl;
-			//etapa->agregarEnemigo(fabrica->fabricarEnemigo(tipo, cantidad));
 		}
 
 		pNodoEnemigo = pNodoEnemigo -> NextSiblingElement("enemigo");
 	}
 
+	FabricaEnemigos* fabricaEnemigos = new FabricaEnemigos();
+	list< pair<float, AvionEnemigo*> > listaEnemigos = fabricaEnemigos->fabricarEnemigos(cantidadPequenios,
+																						 cantidadEscuadrones,
+																						 cantidadMedianos,
+																						 cantidadGrandes, longitudEtapa,
+																						 anchoFondo, altoFondo);
+	etapa->setEnemigos(listaEnemigos);
 	return true;
 }
 

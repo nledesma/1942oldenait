@@ -32,7 +32,7 @@ AvionEnemigo* Etapa::getSiguienteEnemigo(float pos) {
         if (pos >= this->enemigos.front().first){
             pair <float, AvionEnemigo*> proximoPar;
             proximoPar = this->enemigos.front();
-            this->enemigos.pop();
+            this->enemigos.pop_front();
             return proximoPar.second;
         }
     }
@@ -42,4 +42,8 @@ AvionEnemigo* Etapa::getSiguienteEnemigo(float pos) {
 list<Elemento *> Etapa::getElementos() {
     // devuelve una copia de la lista de elementos.
     return elementos;
+}
+
+void Etapa::setEnemigos(list<pair<float, AvionEnemigo *> > enemigos) {
+    this->enemigos = enemigos;
 }

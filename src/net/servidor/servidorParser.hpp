@@ -21,12 +21,13 @@ private:
 		float & posx, float & posy);
 	static bool getEnemigo(XMLElement * pNodoElemento, string &tipo, int &cantidad);
 	static bool getPowerUp(XMLElement * pNodoElemento, string &tipo, int &cantidad, int &valor);
-	static bool agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa);
+	static bool agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo,
+								int longitudEtapa);
 	static bool agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa);
 	static bool agregarElementos(Etapa* etapa, XMLElement* pNodoEtapa, int altoVentana);
 	static bool agregarAviones(Servidor* servidor, XMLNode * pNodoConfiguracion);
 	static bool agregarEtapas(EscenarioJuego* escenario, XMLElement * pEscenario);
-	static bool getEtapa(XMLElement * pNodoEtapa, Etapa * & etapa, int altoVentana);
+	static bool getEtapa(XMLElement * pNodoEtapa, Etapa * & etapa, EscenarioJuego* escenario);
 public:
 	static Servidor * deserializar(string ruta);
 	static Servidor * deserializarEscenario(string ruta);

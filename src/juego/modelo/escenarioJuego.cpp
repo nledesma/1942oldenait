@@ -114,6 +114,14 @@ void EscenarioJuego::esperarEtapa() {
     cout << "Terminó una etapa." << endl;
 }
 
+void EscenarioJuego::getProximoEnemigo() {
+    Etapa* etapa = this->etapaActual();
+    AvionEnemigo* nuevoEnemigo = etapa->getSiguienteEnemigo(this->posicionY);
+    if (nuevoEnemigo != NULL){
+        this->agregarEnemigo(nuevoEnemigo);
+    }
+}
+
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
@@ -130,12 +138,12 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
 void *EscenarioJuego::mainLoop_th(void *THIS) {
     EscenarioJuego *escenario = (EscenarioJuego *) THIS;
     escenario->activar();
-    Trayectoria* cuadrada = new TrayectoriaCuadrada();
-    AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
-    Trayectoria* trayectoriaAvionGrande = new TrayectoriaAvionGrande();
-    AvionEnemigo* enemigoGrande = new AvionGrande((float)500,(float)799,(float)100,(float)0,(float)100, trayectoriaAvionGrande);
-    escenario->agregarEnemigo(enemigo);
-    escenario->agregarEnemigo(enemigoGrande);
+//    Trayectoria* cuadrada = new TrayectoriaCuadrada();
+//    AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
+//    Trayectoria* trayectoriaAvionGrande = new TrayectoriaAvionGrande();
+//    AvionEnemigo* enemigoGrande = new AvionGrande((float)500,(float)799,(float)100,(float)0,(float)100, trayectoriaAvionGrande);
+//    escenario->agregarEnemigo(enemigo);
+//    escenario->agregarEnemigo(enemigoGrande);
     while (escenario->estaActivo()) {
         float timeStep = escenario->temporizador.getTicks() / 1000.f;
         escenario->temporizador.comenzar();
@@ -153,6 +161,7 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
     this->moverDisparos(timeStep);
     this->moverEnemigos(timeStep);
     this->manejarProximoEvento();
+    this->getProximoEnemigo();
 }
 
 void EscenarioJuego::jugar(bool serverActivo) {
@@ -206,7 +215,6 @@ void EscenarioJuego::moverDisparos(float timeStep) {
 void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
     puntaje += puntos;
     // Por ahora solo se avisa quién fue el responsable. Cuando haya equipos será útil el nroAvion.
-    cout << "El jugador " << nroAvion << " suma " << puntos << " al puntaje: " << puntaje << endl;
 }
 
 void EscenarioJuego::moverEnemigos(float timeStep) {
