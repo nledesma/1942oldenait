@@ -1,6 +1,4 @@
 #include "escenarioJuego.hpp"
-#include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
-#include "trayectoriasEnemigos/trayectoriaAvionGrande.hpp"
 
 EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite, int modo) {
     this->velocidadDesplazamientoY = velocidadDesplazamientoY;
@@ -63,7 +61,9 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
 }
 
 void EscenarioJuego::agregarEnemigo(AvionEnemigo *enemigo) {
+    pthread_mutex_lock(&this->mutexListaEnemigos);
     this->enemigos.push_back(enemigo);
+    pthread_mutex_unlock(&this->mutexListaEnemigos);
 }
 
 void EscenarioJuego::agregarEtapa(Etapa * etapa) {
@@ -117,15 +117,8 @@ void EscenarioJuego::comenzarEtapa() {
         ++i;
     }
 
-    pthread_create(&mainLoopThread, NULL, mainLoop_th, (void *) this);
+    mainLoop();
     // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P
-}
-
-void EscenarioJuego::esperarEtapa() {
-    cout << "Se espera a que termine una etapa" << endl;
-    // NOTE esto podría devolver algún indicador de si corresponde seguir.
-    pthread_join(mainLoopThread, NULL);
-    cout << "Terminó una etapa." << endl;
 }
 
 void EscenarioJuego::getProximoEnemigo() {
@@ -149,22 +142,20 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_unlock(&this->mutexScroll);
 }
 
-void *EscenarioJuego::mainLoop_th(void *THIS) {
-    EscenarioJuego *escenario = (EscenarioJuego *) THIS;
-    escenario->activar();
+void EscenarioJuego::mainLoop() {
+    activar();
 //    Trayectoria* cuadrada = new TrayectoriaCuadrada();
 //    AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
 //    Trayectoria* trayectoriaAvionGrande = new TrayectoriaAvionGrande();
 //    AvionEnemigo* enemigoGrande = new AvionGrande((float)500,(float)799,(float)100,(float)0,(float)100, trayectoriaAvionGrande);
 //    escenario->agregarEnemigo(enemigo);
 //    escenario->agregarEnemigo(enemigoGrande);
-    while (escenario->estaActivo()) {
-        float timeStep = escenario->temporizador.getTicks() / 1000.f;
-        escenario->temporizador.comenzar();
-        escenario->actualizarEstado(timeStep);
+    while (estaActivo()) {
+        float timeStep = temporizador.getTicks() / 1000.f;
+        temporizador.comenzar();
+        actualizarEstado(timeStep);
         usleep(5000);
     }
-    pthread_exit(NULL);
 }
 
 void EscenarioJuego::actualizarEstado(float timeStep) {

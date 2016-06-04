@@ -161,6 +161,7 @@
 #define CERRAR 2
 
 /* Modos de juego */
+
 #define COLABORATIVO 1
 #define EQUIPOS 2
 

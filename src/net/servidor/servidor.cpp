@@ -375,15 +375,13 @@ void Servidor::ejecutar() {
     // Se puede haber cerrado el servidor antes de recibir a todos los jugadores.
     if (servidorActivo()) {
         // Comienza la partida.
-        escenario->jugar(servidorActivo());
         iniciarCicloDesencolaciones();
-        escenario->esperarEtapa();
+        escenario->jugar(servidorActivo());
     }
 
     while (servidorActivo() && escenario->quedanEtapas()) {
         broadcastEvento(AVANZAR_ETAPA);
         escenario->comenzarEtapa();
-        escenario->esperarEtapa();
     }
 
     broadcastEvento(FINALIZAR_JUEGO);

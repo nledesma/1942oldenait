@@ -52,8 +52,8 @@ int AvionEnemigo::getAltoDisparo() {
 }
 
 int AvionEnemigo::mover(float timeStep) {
-    int sigueEnPantalla = 1;
     pthread_mutex_lock(&this->mutexMover);
+    int sigueEnPantalla = 1;
     this->trayectoria->mover(this->posX, this->posY, this->velocidad, this->angulo, this->estadoAnimacion, timeStep);
     // TODO: chequear los bordes usando los atributos del escenario
     if (this->posX > ANCHO_ESCENARIO || this->posX < - this->getAncho()

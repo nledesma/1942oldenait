@@ -11,11 +11,14 @@
 #include "avionGrande.hpp"
 #include "avionDeEscuadron.hpp"
 #include "avionEnemigo.hpp"
+#include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
+#include "trayectoriasEnemigos/trayectoriaAvionGrande.hpp"
 #include "elemento.hpp"
 #include "etapa.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include <unistd.h>
+#include "../../accesorios/codigo.hpp"
 
 using namespace std;
 
@@ -47,7 +50,6 @@ private:
     /* Sincronización */
     Temporizador temporizador;
     ColaConcurrente<pair<int, int>> colaEventos;
-    pthread_t mainLoopThread;
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
@@ -63,7 +65,6 @@ public:
     void agregarEtapa(Etapa * etapa);
     void avanzarEtapa();
     void comenzarEtapa();
-    void esperarEtapa();
     bool quedanEtapas();
     /* Enemigos */
     void getProximoEnemigo();
@@ -73,7 +74,7 @@ public:
     void pushEvento(pair<int, int> evento);
     /* mainLoop */
     void jugar(bool serverActivo);
-    static void *mainLoop_th(void* THIS);
+    void mainLoop();
     /* Actualizaciones de estado. */
     void actualizarEstado(float timeStep);
     void actualizarScrollingOffset(float timeStep);
