@@ -127,7 +127,7 @@ bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_F
 	//Render text surface
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
 	if(textSurface == NULL){
-		cout << "Unable to render text surface! SDL_ttf Error: " << endl;
+		cout << "Unable to render text surface! SDL_ttf Error: " << TTF_GetError() << endl;
 	}else{
 		//Create texture from surface pixels
         textura = SDL_CreateTextureFromSurface(renderer, textSurface);

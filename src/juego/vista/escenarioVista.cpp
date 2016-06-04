@@ -1,10 +1,10 @@
 #include "escenarioVista.hpp"
 using namespace std;
 
-EscenarioVista::EscenarioVista(string infoEscenario){
+EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->anchoVentana = Decodificador::popInt(infoEscenario);
     this->altoVentana = Decodificador::popInt(infoEscenario);
-    this->ventana = new Ventana(this->anchoVentana, this->altoVentana);
+    this->ventana = ventana;
 
     this->ancho = Decodificador::popInt(infoEscenario);
     this->alto = Decodificador::popInt(infoEscenario);

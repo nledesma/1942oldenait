@@ -37,10 +37,12 @@ int BotonEnColaboracion::handleEvent(SDL_Event* e){
 			switch( e->type ){
 				case SDL_MOUSEMOTION:
 				mCurrentSprite = BUTTON_SPRITE_ENCOLABORACION_MOTION;
+				return 0;
 				break;
 
 				case SDL_MOUSEBUTTONDOWN:
 				mCurrentSprite = BUTTON_SPRITE_ENCOLABORACION_DOWN;
+				return 1;
 				break;
 			}
 		}

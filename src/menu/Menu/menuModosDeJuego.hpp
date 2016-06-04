@@ -16,6 +16,7 @@ class MenuModosDeJuego: public Menu{
         BotonModoPractica* botonModoPractica;
         TTF_Font* fuenteModos;
         Figura* figuraFuenteModos;
+        Texto* texto;
     public:
         MenuModosDeJuego();
         bool cargarBotones(Ventana* ventana);

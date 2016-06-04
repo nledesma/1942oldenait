@@ -3,6 +3,7 @@
 #include "../gameSocket.hpp"
 #include "../decodificador.hpp"
 #include "../../juego/vista/escenarioVista.hpp"
+//#include "../../juego/vista/ventana.hpp"
 #include <list>
 #include <string>
 #include <errno.h>
@@ -31,9 +32,10 @@ private:
     EscenarioVista * escenarioVista = NULL;
     string alias;
     pthread_t mainLoopThread;
+	Ventana* ventana;
 
 public:
-    Cliente(string ip, int port);
+    Cliente(string ip, int port, Ventana* ventana);
 	Cliente();
     ~Cliente();
     void inicializar(string serverAddress ,int port);
@@ -54,5 +56,6 @@ public:
     int getPort();
     string getAlias();
     void setAlias(string alias);
+	Ventana* getVentana();
 };
 #endif // CLIENTE_H

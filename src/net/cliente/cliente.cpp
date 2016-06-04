@@ -8,9 +8,10 @@
 #include "cliente.hpp"
 using namespace std;
 
-Cliente::Cliente(string ip, int port):GameSocket(){
+Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket(){
 	this->ip = ip;
 	this->port = port;
+	this->ventana = ventana;
 	cliente_conectado = false;
 	setAddress(ip, port);
 }
@@ -126,7 +127,7 @@ void Cliente::iniciarEscenario(){
 		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
 	}
 	// El primer mensaje que no es un entero es el escenario.
-	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
+	this->escenarioVista = new EscenarioVista(mensajeRespuesta, this->ventana);
 	this->escenarioVista->preloop();
 	int resultadoRender = CONTINUAR;
 	while(escenarioVista->quedanEtapas() && resultadoRender == CONTINUAR) {
@@ -205,4 +206,8 @@ int Cliente::getPort(){
 
 bool Cliente::conectado(){
 	return cliente_conectado;
+}
+
+Ventana* Cliente::getVentana(){
+	return this->ventana;
 }

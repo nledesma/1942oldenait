@@ -5,6 +5,7 @@
 #include "../src/menu/Menu/menuPrincipal.hpp"
 #include "../src/menu/Menu/menuDatosDeUsuario.hpp"
 #include "../src/menu/Menu/menuModosDeJuego.hpp"
+#include "../src/juego/vista/textoDinamico.hpp"
 using namespace std;
 
 bool validarInt(string valor) {
@@ -100,9 +101,7 @@ void conexionManual(Cliente* cliente){
 
 
 void menuConexiones(Cliente * cliente,list<Conexion>* conexionesGuardadas) {
-    separador();
     cout << "Menu de conexiones: " << endl;
-    separador();
     int n = conexionesGuardadas->size();
     // Se imprime el menu.
     list<Conexion>::iterator it;
@@ -151,6 +150,7 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
 			}
 			int respuesta = menuModosDeJuego->getBotonEnColaboracion()[0].handleEvent(&e);
             if(respuesta == 1){
+                cout << "Esta por conectar" << endl;
                 cliente->conectar();
             }
 			menuModosDeJuego->getBotonPorEquipos()[0].handleEvent(&e);
@@ -166,9 +166,12 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
 	menuModosDeJuego->cerrar();
 }
 
-void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, char* &alias, Cliente* cliente){
+void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente){
 	MenuModosDeJuego* menuModosDeJuego = new MenuModosDeJuego();
-	int i = 0;
+    SDL_Color colorNegro = { 0, 0, 0 };
+    string alias = " ";
+    TextoDinamico* textoDinamico = new TextoDinamico(25, colorNegro);
+    textoDinamico->cargarFuente(alias, ventana);
 	bool quit = false;
 	SDL_Event e;
 	while(!quit){
@@ -184,71 +187,56 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 				cargarMenuModosDeJuego(ventana, menuModosDeJuego, cliente);
 			}
 			ventana->limpiar();
-			//Renderizado del fondo
+			//Renderizado
 			ventana->renderizarFondo();
-			//TODO esto podria ir encapsulado en otra funcion.
-			if (e.type == SDL_KEYDOWN){
-				alias[i] = e.key.keysym.sym;
-				i++;
-				//Update swcreen
-				SDL_Color colorNegro = { 0, 0, 0 };
-				TTF_Font* fuenteAlias = menuDatosDeUsuario->getFuenteAlias();
-				fuenteAlias = TTF_OpenFont("../../resources/fonts/STARWARS.ttf",25);
-				menuDatosDeUsuario->getFiguraFuenteAlias()->loadFromRenderedText(alias, colorNegro, fuenteAlias, ventana->getVentanaRenderer());
-                cliente->setAlias(alias);
-            }
+            textoDinamico->manejarEvento(e, ventana);
+            cliente->setAlias(alias);
+
 		}
 		ventana->limpiar();
 		//Renderizado
 		ventana->renderizarFondo();
 		menuDatosDeUsuario->renderizar(ventana);
+        textoDinamico->renderizar(300, 350, ventana->getVentanaRenderer());
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 }
 
-void menuPrincipal(Cliente * cliente) {
-    Ventana* ventana = new Ventana(800, 800);
-	char* alias = new char[10];
+void menuPrincipal(Cliente * cliente, Ventana* ventana) {
 	MenuPrincipal* menuPrincipal = new MenuPrincipal();
 	MenuDatosDeUsuario* menuDatosDeUsuario = new MenuDatosDeUsuario();
 
-	if(!ventana->iniciar()){
-		cout << "No se ha podido inicializar la ventana!"  << endl;
-	}else{
-		ventana->cargarFondo();
-		//TODO esto de cargar los botones deberia ir en un if-else.
-		menuPrincipal->cargarBotones(ventana);
-		bool quit = false;
-		SDL_Event e;
-		while(!quit){
-			while(SDL_PollEvent(&e) != 0){
-				if(e.type == SDL_QUIT){
-					quit = true;
-				}
-				int respuesta = menuPrincipal->getBotonJugar()[0].handleEvent(&e);
-				if(respuesta == 1){
-					menuPrincipal->cerrar();
-					//Arranca el menu de datos del usuario.
-					menuDatosDeUsuario->cargarBotones(ventana);
-					cargarMenuDatosDeUsuario(ventana, menuDatosDeUsuario, alias, cliente);
-				}
-				int respuestaSalir = menuPrincipal->getBotonSalir()[0].handleEvent(&e);
-				if(respuestaSalir == 1){
-					menuPrincipal->cerrar();
-					ventana->cerrar();
-				}
-				ventana->limpiar();
-				//Renderizado
-				ventana->renderizarFondo();
-    			menuPrincipal->renderizar(ventana);
-				SDL_RenderPresent(ventana->getVentanaRenderer());
+	menuPrincipal->cargarBotones(ventana);
+	bool quit = false;
+	SDL_Event e;
+	while(!quit){
+		while(SDL_PollEvent(&e) != 0){
+			if(e.type == SDL_QUIT){
+				quit = true;
 			}
+			int respuesta = menuPrincipal->getBotonJugar()[0].handleEvent(&e);
+			if(respuesta == 1){
+				menuPrincipal->cerrar();
+				//Arranca el menu de datos del usuario.
+				menuDatosDeUsuario->cargarBotones(ventana);
+				cargarMenuDatosDeUsuario(ventana, menuDatosDeUsuario, cliente);
+			}
+			int respuestaSalir = menuPrincipal->getBotonSalir()[0].handleEvent(&e);
+			if(respuestaSalir == 1){
+				menuPrincipal->cerrar();
+				ventana->cerrar();
+			}
+			ventana->limpiar();
+			//Renderizado
+			menuPrincipal->renderizar(ventana);
+			SDL_RenderPresent(ventana->getVentanaRenderer());
 		}
-		menuDatosDeUsuario->cerrar();
 	}
-	//Free y cerrado de SDL
-	menuPrincipal->cerrar();
-	ventana->cerrar();
+	menuDatosDeUsuario->cerrar();
+
+    //Free y cerrado de SDL
+    menuPrincipal->cerrar();
+    ventana->cerrar();
 }
     //TODO
     // int opcion = -1;
@@ -278,9 +266,9 @@ void menuPrincipal(Cliente * cliente) {
 //}
 
 int main(){
-    Cliente* cliente = new Cliente("127.0.0.1", 8080);
-    // Levanto las conexiones del archivo de conexiones guardadas.
-    //list<Conexion> c = ClienteParser::levantarConexiones();
-    menuPrincipal(cliente);
+    Ventana* ventana = new Ventana(800, 800);
+    ventana->iniciar();
+    Cliente* cliente = new Cliente("127.0.0.1", 8000, ventana);
+    menuPrincipal(cliente, ventana);
     return 0;
 }
