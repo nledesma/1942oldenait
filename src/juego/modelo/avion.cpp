@@ -15,6 +15,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->estadoAnimacion = ESTADO_NORMAL;
     this->idSprite = idSprite;
     this->idSpriteDisparos = idSpriteDisparos;
+    this->puntaje = 0;
 }
 
 Avion::~Avion(){
@@ -117,7 +118,7 @@ void Avion::mover(float timeStep){
 float Avion::getVelocidad(){
     return this->velocidad;
 }
- 
+
 void Avion::setVelocidad(float velocidad){
     this->velocidad = velocidad;
 }
@@ -189,4 +190,16 @@ string Avion::getIdSpriteDisparos() {
 void Avion::setPosicion(float x, float y) {
     posX = x;
     posY = y;
+}
+
+void Avion::sumarPuntos(int puntos) {
+    puntaje += puntos;
+}
+
+void Avion::resetPuntos() {
+    puntaje = 0;
+}
+
+int Avion::getPuntaje() {
+    return puntaje;
 }

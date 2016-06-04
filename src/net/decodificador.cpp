@@ -188,6 +188,7 @@ string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
         }
     }
     Decodificador::pushInicialDisparo(codigo, aviones.front()->getIdSpriteDisparos());
+    Decodificador::pushCantidad(codigo, escenarioJuego->porEquipos());
     return codigo;
 }
 
@@ -220,7 +221,11 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, enemigo);
         }
     }
-    Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje());
+    Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(0));
+    // Si es por equipos encolamos el puntaje del segundo.
+    if (escenarioJuego->porEquipos())
+        Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(1));
+
     return codigo;
 }
 

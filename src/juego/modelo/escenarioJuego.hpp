@@ -3,6 +3,7 @@
 
 #include <list>
 #include <map>
+#include <set>
 #include <pthread.h>
 #include "avion.hpp"
 #include "avionPequenio.hpp"
@@ -20,7 +21,9 @@ using namespace std;
 
 class EscenarioJuego {
 private:
-    int puntaje;
+    /* Equipos */
+    vector<set<int>> equipos;
+    int modoPorEquipos;
     /* Etapas */
     list<Etapa*> etapas;
     list<Etapa*>::iterator itEtapa;
@@ -52,7 +55,7 @@ private:
 public:
     void subirPuntaje(int puntos, int nroAvion);
     void reset();
-    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite);
+    EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite, int modo);
     ~EscenarioJuego();
     void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
     void agregarEnemigo(AvionEnemigo* enemigo);
@@ -84,7 +87,7 @@ public:
     list<Elemento*>& getElementos();
     list<Disparo*> getDisparos();
     list<AvionEnemigo*> getEnemigos();
-    int getPuntaje();
+    int getPuntaje(int nroEquipo);
     int getAncho();
     int getAlto();
     int getAnchoVentana();
@@ -96,6 +99,7 @@ public:
     bool estaActivo();
     void activar();
     void desactivar();
+    bool porEquipos();
     Avion* avion(int i);
 };
 

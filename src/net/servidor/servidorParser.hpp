@@ -16,6 +16,7 @@ private:
 	static bool getVentana(XMLElement * pNodoEscenario, int & ancho, int & alto);
 	static bool getFondo(XMLElement * pNodoEscenario, string & pathSprite,
 		int & ancho, int & alto, float & velocidadY);
+	static bool getModo(XMLElement * pNodoEscenario, int & modo);
 	static bool getEscenario(Servidor* servidor, XMLNode* pNodoConfiguracion);
 	static bool getElemento(XMLElement * pNodoElemento, string & pathSprite,
 		float & posx, float & posy);

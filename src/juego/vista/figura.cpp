@@ -76,6 +76,30 @@ void Figura::free(){
         this->mHeight = 0;
     }
 }
+//
+// bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_Font *gFont, SDL_Renderer* renderer){
+// 	// Quitamos texturas preexistentes.
+// 	free();
+// 	// Superficie.
+// 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+// 	if(textSurface == NULL){
+// 		cout << "Unable to render text surface! SDL_ttf Error: " << endl;
+// 	}else{
+// 		//Create texture from surface pixels
+//         textura = SDL_CreateTextureFromSurface(renderer, textSurface);
+// 		if(textura == NULL){
+// 			cout << "Unable to create texture from rendered text! SDL Error: " << SDL_GetError() << endl;
+// 		}else{
+// 			//Get image dimensions
+// 			mWidth = textSurface->w;
+// 			mHeight = textSurface->h;
+// 		}
+// 		//Get rid of old surface
+// 		SDL_FreeSurface(textSurface);
+// 	}
+//
+// 	return textura != NULL;
+// }
 
 void Figura::render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip){
     SDL_Rect renderQuad = { x, y, this->mWidth, this->mHeight };

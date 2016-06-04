@@ -2,7 +2,7 @@
 #include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
 #include "trayectoriasEnemigos/trayectoriaAvionGrande.hpp"
 
-EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite) {
+EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite, int modo) {
     this->velocidadDesplazamientoY = velocidadDesplazamientoY;
     scrollingOffset = 0;
     posicionY = 0;
@@ -12,8 +12,20 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->alto = alto;
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
-    // TODO debería haber un puntaje por equipo.
-    this->puntaje = 0;
+
+    // Inicio el vector de equipos.
+    set<int> equipo1;
+    equipos.push_back(equipo1);
+    if (modo == COLABORATIVO){
+        modoPorEquipos = false;
+    } else if (modo == EQUIPOS) {
+        modoPorEquipos = true;
+        set<int> equipo2;
+        equipos.push_back(equipo2);
+    } else {
+        // TODO excepcion
+    }
+
 }
 
 void EscenarioJuego::reset() {
@@ -46,6 +58,8 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
     float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
     Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
     this->aviones.push_back(avion);
+    // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
+    equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
 }
 
 void EscenarioJuego::agregarEnemigo(AvionEnemigo *enemigo) {
@@ -213,8 +227,7 @@ void EscenarioJuego::moverDisparos(float timeStep) {
 }
 
 void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
-    puntaje += puntos;
-    // Por ahora solo se avisa quién fue el responsable. Cuando haya equipos será útil el nroAvion.
+    avion(nroAvion)->sumarPuntos(puntos);
 }
 
 void EscenarioJuego::moverEnemigos(float timeStep) {
@@ -281,7 +294,12 @@ list<Etapa *> EscenarioJuego::getEtapas() {
     return etapas;
 }
 
-int EscenarioJuego::getPuntaje() {
+int EscenarioJuego::getPuntaje(int nroEquipo) {
+    int puntaje = 0;
+    set<int>::iterator it;
+    for (it = equipos[nroEquipo].begin(); it != equipos[nroEquipo].end(); ++it) {
+        puntaje += avion((*it))->getPuntaje();
+    }
     return puntaje;
 }
 
@@ -315,4 +333,8 @@ int EscenarioJuego::getAnchoVentana() {
 
 int EscenarioJuego::getAltoVentana() {
     return altoVentana;
+}
+
+bool EscenarioJuego::porEquipos() {
+    return modoPorEquipos;
 }

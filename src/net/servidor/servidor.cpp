@@ -385,6 +385,8 @@ void Servidor::ejecutar() {
         escenario->comenzarEtapa();
         escenario->esperarEtapa();
     }
+
+    broadcastEvento(FINALIZAR_JUEGO);
 }
 
 /* Getters y Setters */
