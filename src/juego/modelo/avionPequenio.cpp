@@ -11,10 +11,12 @@ AvionPequenio::AvionPequenio(float posX, float posY, float velocidad, float angu
     this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
     this->trayectoria = trayectoria;
     this->tipoAvion = TIPO_AVION_PEQUENIO;
+    this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_PEQUENIO);
+    this->contador = CONTADOR_INICIAL;
 }
 
 AvionPequenio::~AvionPequenio(){
-
+    delete this->colisionable;
 }
 
 Disparo* AvionPequenio::disparar(){

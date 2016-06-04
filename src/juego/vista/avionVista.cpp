@@ -144,6 +144,56 @@ void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
     this->clipsAnimacion[DESCONECTADO].w = ANCHO_AVION_COMUN;
     this->clipsAnimacion[DESCONECTADO].h = ALTO_AVION_COMUN;
 
+    //Explotar
+    this->clipsAnimacion[EXPLOSION_ETAPA_1].x = 0;
+    this->clipsAnimacion[EXPLOSION_ETAPA_1].y = 0 + ALTO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_1].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_1].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_2].x = 0 + ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_2].y = 0 + ALTO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_2].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_2].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_3].x = 0 + ANCHO_AVION_COMUN * 2;
+    this->clipsAnimacion[EXPLOSION_ETAPA_3].y = 0 + ALTO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_3].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_3].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_4].x = 0 + ANCHO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_4].y = 0 + ALTO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_4].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_4].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_5].x = 0 + ANCHO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_5].y = 0 + ALTO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_5].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_5].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_6].x = 0;
+    this->clipsAnimacion[EXPLOSION_ETAPA_6].y = 0 + ALTO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_6].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_6].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_7].x = 0 + ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_7].y = 0 + ALTO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_7].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_7].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_8].x = 0 + ANCHO_AVION_COMUN * 2;
+    this->clipsAnimacion[EXPLOSION_ETAPA_8].y = 0 + ALTO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_8].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_8].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_9].x = 0 + ANCHO_AVION_COMUN * 3;
+    this->clipsAnimacion[EXPLOSION_ETAPA_9].y = 0 + ALTO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_9].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_9].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[EXPLOSION_ETAPA_10].x = 0 + ANCHO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_10].y = 0 + ALTO_AVION_COMUN * 4;
+    this->clipsAnimacion[EXPLOSION_ETAPA_10].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[EXPLOSION_ETAPA_10].h = ALTO_AVION_COMUN;
 }
 
 int AvionVista::actualizar(string codigo){

@@ -7,6 +7,7 @@
 #include <list>
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
+#include "../../accesorios/colisiones/colisionable.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
 
@@ -32,6 +33,7 @@ private:
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
+    Colisionable* colisionable;
 
 public:
     Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
@@ -73,6 +75,10 @@ public:
     void setPosicion(float x, float y);
 
     void sumarPuntos(int puntos);
+
+    Colisionable * getColisionable();
+
+    void colisionar();
 
     void resetPuntos();
 
