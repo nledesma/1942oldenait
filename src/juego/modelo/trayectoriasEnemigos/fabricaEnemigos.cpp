@@ -113,6 +113,63 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
         listaEnemigos.push_back(parTriggerEnemigo);
     }
 
+    vector<float> posicionesEscuadrones = this->obtenerTriggerRandom(cantidadEscuadrones, longitudEscenario);
+    for (int i = 0; i < cantidadEscuadrones; i ++){
+        float posXavion = 0;
+        float posYavion = 0;
+        float angulo = 0;
+        int lado = this->obtenerLado();
+        if (lado == IZQUIERDA) {
+            posXavion = 0;
+        } else if (lado == DERECHA) {
+            posXavion = anchoEscenario - ANCHO_ENEMIGO_PEQUENIO;
+        } else if (lado == ARRIBA){
+            posYavion = 0;
+        }
+
+        if (lado != ARRIBA){
+            posYavion = obtenerPosYRandom( altoEscenario, ALTO_ENEMIGO_PEQUENIO);
+        } else {
+            posXavion = obtenerPosXRandom( anchoEscenario, ANCHO_ENEMIGO_PEQUENIO);
+        }
+
+        angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
+
+        Trayectoria* cuadrada = new TrayectoriaCuadrada();
+        AvionEnemigo* enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+        float trigger = posicionesEscuadrones[i];
+        pair <float, AvionEnemigo*> parTriggerEnemigo;
+        parTriggerEnemigo.first = trigger;
+        parTriggerEnemigo.second = enemigo;
+        listaEnemigos.push_back(parTriggerEnemigo);
+
+        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+        trigger = trigger + 100;
+        parTriggerEnemigo.first = trigger;
+        parTriggerEnemigo.second = enemigo;
+        listaEnemigos.push_back(parTriggerEnemigo);
+
+        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+        trigger = trigger + 100;
+        parTriggerEnemigo.first = trigger;
+        parTriggerEnemigo.second = enemigo;
+        listaEnemigos.push_back(parTriggerEnemigo);
+
+        cuadrada = new TrayectoriaCuadrada();
+        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+        trigger = trigger + 100;
+        parTriggerEnemigo.first = trigger;
+        parTriggerEnemigo.second = enemigo;
+        listaEnemigos.push_back(parTriggerEnemigo);
+
+        cuadrada = new TrayectoriaCuadrada();
+        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+        trigger = trigger + 100;
+        parTriggerEnemigo.first = trigger;
+        parTriggerEnemigo.second = enemigo;
+        listaEnemigos.push_back(parTriggerEnemigo);
+    }
+
     vector<float> posicionesMedianos = this->obtenerTriggerRandom(cantidadMedianos, longitudEscenario);
     for (int i = 0; i < cantidadMedianos; i ++){
         float posXavion = 0;
