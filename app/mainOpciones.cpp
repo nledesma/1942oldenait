@@ -4,7 +4,7 @@ int main(){
     Ventana ventana(800, 800);
     ventana.iniciar();
 
-    ListaDeSeleccion* lista = new ListaDeSeleccion(&ventana);
+    ListaDeSeleccion* lista = new ListaDeSeleccion(&ventana, 10, 10);
 
     lista->agregarOpcion("Opcion 1");
     lista->agregarOpcion("Opcion 2");
@@ -12,12 +12,16 @@ int main(){
 
     bool quit = false;
     SDL_Event e;
+    int x, y; // Para los clicks.
 
     while( !quit ){
 		while( SDL_PollEvent( &e ) != 0 ){
 			if(e.type == SDL_QUIT) {
 				quit = true;
-			}
+			} else if(e.type == SDL_MOUSEBUTTONDOWN) {
+                SDL_GetMouseState( &x, &y );
+                lista->clickEn(x, y);
+            }
 		}
         ventana.limpiar();
         lista->renderizar();

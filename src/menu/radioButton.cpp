@@ -38,3 +38,15 @@ void RadioButton::renderizar(int x, int y, SDL_Renderer* renderer){
 }
 
 void RadioButton::manejarEvento(){}
+
+void RadioButton::seleccionar(){
+    seleccionado = true;
+}
+
+void RadioButton::deseleccionar(){
+    seleccionado = false;
+}
+
+int RadioButton::getRadio(){
+    return RADIO_BOTON;
+}

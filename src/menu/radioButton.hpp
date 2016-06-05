@@ -1,6 +1,10 @@
 #ifndef RADIOBUTTON_HPP
 #define RADIOBUTTON_HPP
+
 #include "../juego/vista/texto.hpp"
+
+#define RADIO_BOTON 36
+
 class RadioButton{
     private:
         Figura* figuraRadioButton;
@@ -16,6 +20,8 @@ class RadioButton{
         void setearSprites();
         void renderizar(int x, int y, SDL_Renderer* renderer);
         void manejarEvento();
-
+        void seleccionar();
+        void deseleccionar();
+        int getRadio();
 };
 #endif
