@@ -169,9 +169,8 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
 void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente){
 	MenuModosDeJuego* menuModosDeJuego = new MenuModosDeJuego();
     SDL_Color colorNegro = { 0, 0, 0 };
-    string alias = " ";
-    TextoDinamico* textoDinamico = new TextoDinamico(25, colorNegro);
-    textoDinamico->cargarFuente(alias, ventana);
+    TextoDinamico* textoDinamico = new TextoDinamico(25, colorNegro, ventana);
+    textoDinamico->cambiarTexto("");
 	bool quit = false;
 	SDL_Event e;
 	while(!quit){
@@ -189,15 +188,15 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			ventana->limpiar();
 			//Renderizado
 			ventana->renderizarFondo();
-            textoDinamico->manejarEvento(e, ventana);
-            cliente->setAlias(alias);
+            textoDinamico->manejarEvento(e);
+            cliente->setAlias(textoDinamico->getTexto());
 
 		}
 		ventana->limpiar();
 		//Renderizado
 		ventana->renderizarFondo();
 		menuDatosDeUsuario->renderizar(ventana);
-        textoDinamico->renderizar(300, 350, ventana->getVentanaRenderer());
+        textoDinamico->renderizar(300, 350);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
 }

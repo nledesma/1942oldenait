@@ -10,13 +10,13 @@ MenuPrincipal::MenuPrincipal(){
 
 bool MenuPrincipal::cargarBotones(Ventana* ventana){
     bool success = true;
-    if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/espacio.png")){
+    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/espacio.png")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
-    if(!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/jugarSprite.png" ))){
+    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/jugarSprite.png" ))){
         cout << "Failed to load button sprite texture!" << endl;
         success = false;
-    }else{
+    } else {
         //Set sprites
         this->getBotonJugar()->setSprites(ventana->getVentanaRenderer());
         //Setea los botones en las posiciones
@@ -24,10 +24,10 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
     }
 
 
-    if(!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/salirSprite.png"))){
+    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/salirSprite.png"))){
 		cout << "Failed to load button sprite texture!" << endl;
 		success = false;
-    }else{
+    } else {
         //Set sprites
         this->getBotonSalir()->setSprites(ventana->getVentanaRenderer());
         //Setea los botones en las posiciones
@@ -35,8 +35,8 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
     }
     //Agrego a partir de aca
     SDL_Color colorNegro = { 0, 0, 0 };
-    this->texto = new Texto(50, colorNegro);
-    this->texto->cargarFuente("1942 OLDENAIT", ventana);
+    this->texto = new Texto(50, colorNegro, ventana);
+    this->texto->cargarFuente("1942 OLDENAIT");
 
     // this->textoUsuario = TTF_OpenFont("../../resources/fonts/STARWARS.ttf",50);
     // if(!this->textoUsuario){
@@ -53,7 +53,7 @@ void MenuPrincipal::renderizar(Ventana* ventana){
     this->getBotonJugar()[0].render(ventana->getVentanaRenderer());
     this->getBotonSalir()[0].render(ventana->getVentanaRenderer());
     //this->getFiguraTextoUsuario()->renderMenu(ventana->getVentanaRenderer(), 160, 150, NULL, 0, NULL, (SDL_RendererFlip)NULL);
-    this->texto->renderizar(160, 150, ventana->getVentanaRenderer());
+    this->texto->renderizar(160, 150);
 }
 
 BotonJugar* MenuPrincipal::getBotonJugar(){

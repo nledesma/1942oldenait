@@ -121,39 +121,37 @@ void Figura::render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip){
 }
 
 bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_Font *gFont, SDL_Renderer* renderer){
-	// cout << "ENTRO A RENDERIZAR EL TEXTO" << endl;
-	//Get rid of preexisting texture
+    // Liberamos texturas preexistentes.
 	free();
-	//Render text surface
+	// Se renderiza una superficie auxiliar con el texto.
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
-	if(textSurface == NULL){
-		cout << "Unable to render text surface! SDL_ttf Error: " << TTF_GetError() << endl;
-	}else{
-		//Create texture from surface pixels
+	if (textSurface == NULL) {
+		cout << "No se ha podido renderizar el texto sobre la superficie. SDL_ttf Error: " << TTF_GetError() << endl;
+	} else {
+		// Se crea la textura a partir de la superficie.
         textura = SDL_CreateTextureFromSurface(renderer, textSurface);
-		if(textura == NULL){
-			cout << "Unable to create texture from rendered text! SDL Error: " << SDL_GetError() << endl;
-		}else{
-			//Get image dimensions
+		if (textura == NULL) {
+			cout << "No se ha podido crear la textura a partir de la superficie. SDL Error: " << SDL_GetError() << endl;
+		} else {
 			mWidth = textSurface->w;
 			mHeight = textSurface->h;
 		}
-		//Get rid of old surface
+		// Se libera la superficie auxiliar.
 		SDL_FreeSurface(textSurface);
 	}
-	//Return success
-	// cout << "MTEXTURE: " << mTexture << endl;
+
 	return textura != NULL;
 }
+
 void Figura::renderMenu(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip){
-	//Set rendering space and render to screen
+	// Set rendering space and render to screen
 	SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-	//Set clip rendering dimensions
-	if(clip != NULL){
+	// Set clip rendering dimensions
+	if(clip != NULL) {
 		renderQuad.w = clip->w;
 		renderQuad.h = clip->h;
 	}
-	//Render to screen
+	// Render to screen
 	SDL_RenderCopyEx(renderer, textura, clip, &renderQuad, angle, center, flip);
 }
 

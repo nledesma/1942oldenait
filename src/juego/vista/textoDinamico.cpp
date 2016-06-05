@@ -1,46 +1,43 @@
 #include "textoDinamico.hpp"
-TextoDinamico::TextoDinamico(int tamanioFuente, SDL_Color color): Texto(tamanioFuente, color){
+
+TextoDinamico::TextoDinamico(int tamanioFuente, SDL_Color color, Ventana * ventana): Texto(tamanioFuente, color, ventana){
 
 }
 
-void TextoDinamico::cambiarTexto(Ventana* ventana){
-    this->texto->loadFromRenderedText(this->caracteres, this->color, this->fuente, ventana->getVentanaRenderer());
-}
-
-void TextoDinamico::manejarEvento(SDL_Event evento, Ventana* ventana){
-    bool renderText = false;
-    if(evento.type == SDL_KEYDOWN){
-		if(evento.key.keysym.sym == SDLK_BACKSPACE && caracteres.length() > 0){
-            cout << "hola" << endl;
-            //lop off character
-			caracteres.pop_back();
-			renderText = true;
-		}
-
-    }else if(evento.type == SDL_TEXTINPUT){
-            cout << "entro" << endl;
-			caracteres += evento.text.text;
-			renderText = true;
-	}
-         cout << "hola2" << endl;
-
-
-    //Rerender text if needed
-    if(renderText){
-        //cambiarTexto(ventana);
-    	//Text is empty
-        //Text is not empty
-		if(caracteres!= "" ){
-			//Render new text
-            //cambiarTexto
-			this->texto->loadFromRenderedText(caracteres.c_str(), this->color, this->fuente, ventana->getVentanaRenderer());
-		}
-		//Text is empty
-		else{
-			//Render space texture
-			this->texto->loadFromRenderedText( " ", this->color, this->fuente, ventana->getVentanaRenderer());
-		}
+void TextoDinamico::recargarTexto() {
+    if(caracteres != "") {
+        // Si hay caracteres se carga el nuevo texto.
+        this->texto->loadFromRenderedText(caracteres.c_str(), this->color, this->fuente, ventana->getVentanaRenderer());
+    } else {
+        // Si no, se carga un espacio.
+        this->texto->loadFromRenderedText( " ", this->color, this->fuente, ventana->getVentanaRenderer());
     }
-    cout << "Alias: " << caracteres << endl;
+}
 
+// Esta función se utiliza para cambiar el texto sin eventos. Ej: puntaje.
+void TextoDinamico::cambiarTexto(string textoNuevo) {
+    caracteres = textoNuevo;
+    recargarTexto();
+}
+
+void TextoDinamico::manejarEvento(SDL_Event evento){
+    bool cambiaElTexto = false;
+
+    if(evento.type == SDL_KEYDOWN){
+        // Para borrar.
+		if(evento.key.keysym.sym == SDLK_BACKSPACE && caracteres.length() > 0) {
+			caracteres.pop_back();
+			cambiaElTexto = true;
+		}
+    } else if(evento.type == SDL_TEXTINPUT) {
+        // Para ingreso de texto.
+		caracteres += evento.text.text;
+		cambiaElTexto = true;
+	}
+
+    if (cambiaElTexto) recargarTexto();
+}
+
+string TextoDinamico::getTexto() {
+    return caracteres;
 }
