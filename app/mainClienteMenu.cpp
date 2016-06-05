@@ -159,7 +159,6 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
 		}
 		ventana->limpiar();
 		//Renderizar
-		ventana->renderizarFondo();
 		menuModosDeJuego->renderizar(ventana);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
@@ -187,14 +186,12 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			}
 			ventana->limpiar();
 			//Renderizado
-			ventana->renderizarFondo();
             textoDinamico->manejarEvento(e);
             cliente->setAlias(textoDinamico->getTexto());
 
 		}
 		ventana->limpiar();
 		//Renderizado
-		ventana->renderizarFondo();
 		menuDatosDeUsuario->renderizar(ventana);
         textoDinamico->renderizar(300, 350);
 		SDL_RenderPresent(ventana->getVentanaRenderer());

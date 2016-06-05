@@ -16,7 +16,6 @@ private:
     int alto;
     SDL_Window *sdlWindow = NULL;
     SDL_Renderer *gVentanaRenderer = NULL;
-    Figura* fondo;
 
 public:
     /* Constructor */
