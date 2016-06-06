@@ -12,7 +12,7 @@ PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicion
   	this->idSprite = SPRITE_POWERUP_BONIFICACION;
 }
 
-PowerUpDestruirEnemigos::~PowerUpDestruirEnemigos() { }
+//PowerUpDestruirEnemigos::~PowerUpDestruirEnemigos() { }
 
 /*
 powerUpDestruirEnemigos::aplicarPowerUp(){}

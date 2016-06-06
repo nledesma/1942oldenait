@@ -1,6 +1,6 @@
 #include "powerUp.hpp"
 
-PowerUp::~PowerUp(){ }
+//PowerUp::~PowerUp(){ }
 
 /*
 void PowerUp::aplicarPowerUp(){}

@@ -11,7 +11,7 @@ PowerUpAvionesSecundarios::PowerUpAvionesSecundarios(float posicionX, float posi
   	this->idSprite = SPRITE_POWERUP_BONIFICACION;
 }
 
-PowerUpAvionesSecundarios::~PowerUpAvionesSecundarios() {}
+//PowerUpAvionesSecundarios::~PowerUpAvionesSecundarios() {}
 
 /*
 powerUpAvionesSecundarios::aplicarPowerUp(){

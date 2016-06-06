@@ -21,7 +21,7 @@ protected:
   int estadoAnimacion;
   string idSprite;
 public:
-    virtual ~PowerUp();
+    //virtual ~PowerUp();
     //virtual void aplicarPowerUp() = 0;
     //virtual float getPosicionX();
     //virtual float getPosicionY();
