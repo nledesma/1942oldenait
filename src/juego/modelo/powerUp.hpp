@@ -21,7 +21,7 @@ protected:
   int estadoAnimacion;
   string idSprite;
 public:
-    //virtual ~PowerUp();
+    virtual ~PowerUp();
     //virtual void aplicarPowerUp() = 0;
     //virtual float getPosicionX();
     //virtual float getPosicionY();
@@ -31,7 +31,7 @@ public:
     //virtual int getAlto() = 0;
     //virtual string getIdSprite();
     //virtual void mover(float timeStep, float velocidadY) = 0;
-    //virtual void volverEstadoInicial();
+    virtual void volverEstadoInicial();
 };
 
 #endif //INC_1942OLDENAIT_POWERUP_HPP

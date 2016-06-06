@@ -11,7 +11,7 @@ PowerUpDosAmetralladoras::PowerUpDosAmetralladoras(float posX, float posY, int v
   	this->idSprite = SPRITE_POWERUP_DOS_AMETRALLADORAS;
 }
 
-//PowerUpDosAmetralladoras::~PowerUpDosAmetralladoras() { }
+PowerUpDosAmetralladoras::~PowerUpDosAmetralladoras() { }
 
 /*
 powerUpDosAmetralladoras::aplicarPowerUp(){}

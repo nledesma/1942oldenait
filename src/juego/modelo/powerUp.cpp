@@ -1,6 +1,8 @@
 #include "powerUp.hpp"
 
-//PowerUp::~PowerUp(){ }
+PowerUp::~PowerUp(){ 
+
+}
 
 /*
 void PowerUp::aplicarPowerUp(){}
@@ -28,8 +30,9 @@ string PowerUp::getIdSprite(){
 void PowerUp::mover(float timeStep, float velocidadY){
     this->posY += velocidadY * timeStep;
 }
+*/
 
 void PowerUp::volverEstadoInicial(){
     this->posX = posXInicial;
     this->posY = posYInicial;
-}/*
+}
