@@ -42,6 +42,14 @@ int Superficie::getAncho(){
     return this->ancho;
 }
 
+int Superficie::getOffsetX(){
+    return this->offSetX;
+}
+
+int Superficie::getOffsetY() {
+    return this->offSetY;
+}
+
 void Superficie::rotar(float angulo, float x, float y){
     if (angulo > 0) {
         this->izqAbajo->rotar(angulo, x, y);

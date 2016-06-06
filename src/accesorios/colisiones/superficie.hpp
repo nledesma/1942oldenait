@@ -24,6 +24,8 @@ public:
     Punto* getIzqArriba();
     Punto* getDerArriba();
     Punto* getDerAbajo();
+    int getOffsetX();
+    int getOffsetY();
     int getAncho();
     int getAlto();
     pair<float, float> proyectar(Superficie * superficie, Punto * punto);
