@@ -10,6 +10,7 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->idSprite = SPRITE_AVION_ENEMIGO_GRANDE;
     this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
     this->trayectoria = trayectoria;
+    this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_GRANDE);
     this->tipoAvion = TIPO_AVION_GRANDE;
 }
 

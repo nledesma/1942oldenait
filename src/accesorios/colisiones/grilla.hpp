@@ -11,6 +11,8 @@
 class Grilla {
 private:
     list<list<Celda*>> grilla;
+    int cantFilas;
+    int cantColumnas;
     float anchoCeldas;
     float altoCeldas;
     list<Celda*> ubicarEnCeldas(Colisionable * colisionable);

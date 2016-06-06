@@ -3,6 +3,8 @@
 Grilla::Grilla(int cantFilas, int cantColumnas){
     this->anchoCeldas = ANCHO_ESCENARIO / cantColumnas;
     this->altoCeldas = ALTO_ESCENARIO / cantFilas;
+    this->cantFilas = cantFilas;
+    this->cantColumnas = cantColumnas;
     for(int i = 0; i < cantFilas; i++){
         list<Celda*> fila;
         for(int j = 0; j < cantColumnas; j++){
@@ -70,33 +72,39 @@ list<Celda*> Grilla::ubicarEnCeldas(Colisionable * colisionable){
     int colIzquierda = colisionable->getExtremoIzquierdo() / this->anchoCeldas;
     int filaAbajo = colisionable->getExtremoInferior() / this->altoCeldas;
     int filaArriba = colisionable->getExtremoSuperior() / this->altoCeldas;
+
     list<Celda*> celdas;
-    list<list<Celda*>>::iterator itFilas = this->grilla.begin();
-    advance(itFilas, filaAbajo);
-    list<Celda*>::iterator itColumna = (*itFilas).begin();
-    advance(itColumna, colIzquierda);
-    celdas.push_back((*itColumna));
-    if((filaAbajo == filaArriba) && (colIzquierda == colDerecha)){
-        return celdas;
-    }
-    if((filaAbajo == filaArriba) && (colIzquierda != colDerecha)){
-        int columnas = colIzquierda - colDerecha;
-        for(int i = 0; i < columnas; i++){
-            advance(itColumna, 1);
-            celdas.push_back((*itColumna));
-        }
-        return celdas;
-    }
-    int cantFilas = filaArriba - filaAbajo - 1;
-    for(int i = 0; i < cantFilas; i++){
-        advance(itFilas, 1);
-        itColumna = (*itFilas).begin();
+    if (filaAbajo >= 0 && filaAbajo < this->cantFilas && filaArriba >= 0 && filaArriba < this->cantFilas &&
+            colIzquierda >= 0 && colIzquierda < this->cantColumnas && colDerecha >= 0 && colDerecha < this->cantColumnas){
+        list<list<Celda*>>::iterator itFilas = this->grilla.begin();
+        advance(itFilas, filaAbajo);
+        list<Celda*>::iterator itColumna = (*itFilas).begin();
         advance(itColumna, colIzquierda);
         celdas.push_back((*itColumna));
-        int columnas = colIzquierda - colDerecha;
-        for(int i = 0; i < columnas; i++){
-            advance(itColumna, 1);
+        if((filaAbajo == filaArriba) && (colIzquierda == colDerecha)){
+            return celdas;
+        }
+
+
+        if((filaAbajo == filaArriba) && (colIzquierda != colDerecha)){
+            int columnas = colIzquierda - colDerecha;
+            for(int i = 0; i < columnas; i++){
+                advance(itColumna, 1);
+                celdas.push_back((*itColumna));
+            }
+            return celdas;
+        }
+        int cantFilas = filaArriba - filaAbajo - 1;
+        for(int i = 0; i < cantFilas; i++){
+            advance(itFilas, 1);
+            itColumna = (*itFilas).begin();
+            advance(itColumna, colIzquierda);
             celdas.push_back((*itColumna));
+            int columnas = colIzquierda - colDerecha;
+            for(int i = 0; i < columnas; i++){
+                advance(itColumna, 1);
+                celdas.push_back((*itColumna));
+            }
         }
     }
     return celdas;

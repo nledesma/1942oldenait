@@ -10,6 +10,7 @@ AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, floa
     this->idSprite = SPRITE_AVION_ENEMIGO_PEQUENIO;
     this->idSpriteDisparos = SPRITE_DISPARO_ENEMIGO;
     this->trayectoria = trayectoria;
+    this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_ESCUADRON);
     this->tipoAvion = TIPO_AVION_ESCUADRON;
 }
 
