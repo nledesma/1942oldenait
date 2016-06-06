@@ -80,8 +80,8 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
-            disparo->setAvion(nroAvion);
-            if (disparo){
+            if (disparo != NULL) {
+                disparo->setAvion(nroAvion);
                 pthread_mutex_lock(&this->mutexListaDisparos);
                 disparos.push_back(disparo);
                 pthread_mutex_unlock(&this->mutexListaDisparos);
