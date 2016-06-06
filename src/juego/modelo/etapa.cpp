@@ -44,6 +44,15 @@ list<Elemento *> Etapa::getElementos() {
     return elementos;
 }
 
+list<PowerUp*> Etapa::getPowerUps(){
+  return powerUps;
+}
+
 void Etapa::setEnemigos(list<pair<float, AvionEnemigo *> > enemigos) {
     this->enemigos = enemigos;
+}
+
+void Etapa::setPowerUps(list<PowerUp*> powerUps){
+  this->powerUps = powerUps;
+  cout << "Se agrego una lista de power ups a la etapa que tiene " << powerUps.size() << " elementos" << endl;
 }

@@ -3,9 +3,13 @@
 
 #include <string>
 #include <sstream>
+#include <list>
 #include "servidor.hpp"
 #include "../../accesorios/parserXML.hpp"
 #include "../../logger/logger.hpp"
+#include "../../accesorios/powerUpParseado.hpp"
+#include "../../accesorios/fabricaPowerUps.hpp"
+
 using namespace std;
 
 class ServidorParser : public ParserXML {
@@ -24,7 +28,7 @@ private:
 	static bool getPowerUp(XMLElement * pNodoElemento, string &tipo, int &cantidad, int &valor);
 	static bool agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo,
 								int longitudEtapa);
-	static bool agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa);
+	static bool agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo, int longitudEtapa);
 	static bool agregarElementos(Etapa* etapa, XMLElement* pNodoEtapa, int altoVentana);
 	static bool agregarAviones(Servidor* servidor, XMLNode * pNodoConfiguracion);
 	static bool agregarEtapas(EscenarioJuego* escenario, XMLElement * pEscenario);

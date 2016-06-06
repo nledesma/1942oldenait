@@ -88,7 +88,7 @@ bool ServidorParser::getEtapa(XMLElement * pEtapa, Etapa * & etapa, EscenarioJue
 	// Agregar Enemigos
 	if(!agregarEnemigos(etapa,pEtapa, anchoFondo, altoFondo, longitudEtapa)) return false;
 	//Agregar PowerUps
-	if(!agregarPowerUps(etapa,pEtapa)) return false;
+	if(!agregarPowerUps(etapa,pEtapa,anchoFondo,altoFondo,longitudEtapa)) return false;
 	return true;
 }
 
@@ -174,24 +174,35 @@ bool ServidorParser::getPowerUp(XMLElement * pNodoElemento, string &tipo, int &c
 	return true;
 }
 
-bool ServidorParser::agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa){
+bool ServidorParser::agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo, int longitudEtapa){
+
 	string tipo;
 	int cantidad = 0;
 	int valor = 0;
+	list <PowerUpParseado*> powerUpsParseados;
 	// Nodo power ups
 	XMLElement * pNodoPowerUps = pNodoEtapa -> FirstChildElement()->NextSiblingElement("powerUps");
 	if (!pNodoPowerUps) return false;
 
-	// Iteramos sobre la lista de enemigos
+	// Iteramos sobre la lista de powerUps
 	XMLElement * pNodoPowerUp = pNodoPowerUps -> FirstChildElement("powerUp");
 
 	while( pNodoPowerUp != NULL ){
+		PowerUpParseado* unPowerUpParseado = new PowerUpParseado();
 		if (getPowerUp(pNodoPowerUp, tipo, cantidad, valor)) {
-			cout << "Se agregaran " << cantidad << " power ups del tipo " << tipo << " y valor: " << valor << endl;
+			unPowerUpParseado->setTipo(tipo);
+			unPowerUpParseado->setCantidad(cantidad);
+			unPowerUpParseado->setValor(valor);
+			powerUpsParseados.push_back(unPowerUpParseado);
 		}
 		pNodoPowerUp = pNodoPowerUp -> NextSiblingElement("powerUp");
 	}
 
+	FabricaPowerUps* fabricaPowerUps = new FabricaPowerUps();
+	list <PowerUp*> listaPowerUps = fabricaPowerUps->fabricarPowerUps(powerUpsParseados,longitudEtapa,anchoFondo,altoFondo);
+
+	//TODO: Descomentar esto cuando tenga la lista de PowerUps
+	etapa->setPowerUps(listaPowerUps);
 	return true;
 }
 
