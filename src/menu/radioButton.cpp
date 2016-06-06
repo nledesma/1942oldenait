@@ -37,8 +37,6 @@ void RadioButton::renderizar(int x, int y, SDL_Renderer* renderer){
     this->figuraRadioButton->render(x, y, renderer, &spritesAnimacion[getSprite()]);
 }
 
-void RadioButton::manejarEvento(){}
-
 void RadioButton::seleccionar(){
     seleccionado = true;
 }

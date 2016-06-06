@@ -3,6 +3,7 @@
 
 #include "../juego/vista/texto.hpp"
 
+// TODO fusionar esto con ancho y alto.
 #define RADIO_BOTON 36
 
 class RadioButton{
@@ -19,7 +20,6 @@ class RadioButton{
         void cargarSprite(SDL_Renderer* renderer);
         void setearSprites();
         void renderizar(int x, int y, SDL_Renderer* renderer);
-        void manejarEvento();
         void seleccionar();
         void deseleccionar();
         int getRadio();

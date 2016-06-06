@@ -4,7 +4,7 @@ int main(){
     Ventana ventana(800, 800);
     ventana.iniciar();
 
-    ListaDeSeleccion* lista = new ListaDeSeleccion(&ventana, 10, 10);
+    ListaDeSeleccion* lista = new ListaDeSeleccion(&ventana, 100, 100);
 
     lista->agregarOpcion("Opcion 1");
     lista->agregarOpcion("Opcion 2");

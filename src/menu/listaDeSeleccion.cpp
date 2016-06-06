@@ -4,6 +4,7 @@ ListaDeSeleccion::ListaDeSeleccion(Ventana * ventana, int x, int y) {
     this->ventana = ventana;
     this->x = x;
     this->y = y;
+    cout << "Se crea la lista en x: " << x << " - y: " << y << endl;
 }
 
 // NOTE esto debe hacerse antes de cerrar la ventana. Quizás convenga un método cerrar.
@@ -30,21 +31,21 @@ void ListaDeSeleccion::agregarOpcion(string strOpcion) {
 
 void ListaDeSeleccion::renderizar() {
     list <pair <RadioButton*, Texto*> > ::iterator iterador;
-    int yOpcion = this->y;
+    int yOpcion = 0;
     for(iterador = opciones.begin(); iterador != opciones.end(); iterador++) {
-        iterador->first->renderizar(x, y + yOpcion - 10, this->ventana->getVentanaRenderer());
-        iterador->second->renderizar(x + PADDING, y + yOpcion);
+        iterador->first->renderizar(x, y + yOpcion, this->ventana->getVentanaRenderer());
+        iterador->second->renderizar(x + PADDING, y + yOpcion + 10);
         yOpcion += DISTANCIA_BOTONES;
     }
 }
 
-
 void ListaDeSeleccion::clickEn(int x, int y){
-    int radio = RADIO_BOTON;
-    int alto = radio*opciones.size();
+    int lado = PADDING;
+    int altoTotal = PADDING*opciones.size();
     // Si el click está en el área de los botones.
-    if (x >= this->x && x <= this->x + radio && y >= this->y && y <= this->y + alto) {
-        int nroBoton = (y - this->y)/RADIO_BOTON;
+    if ((x >= this->x) && (x <= this->x + lado) &&
+        (y >= this->y) && (y <= this->y + altoTotal)) {
+        int nroBoton = (y - this->y)/PADDING;
         cambiarSeleccion(nroBoton);
     }
 }
