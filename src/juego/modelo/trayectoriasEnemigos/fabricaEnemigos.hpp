@@ -7,6 +7,8 @@
 #include "../avionDeEscuadron.hpp"
 #include "../avionMediano.hpp"
 #include "../avionGrande.hpp"
+#include "trayectoriaCuadrada.hpp"
+#include "trayectoriaAvionGrande.hpp"
 #include <vector>
 #include <list>
 #include <string>
