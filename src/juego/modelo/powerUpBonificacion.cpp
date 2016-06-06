@@ -11,7 +11,7 @@ PowerUpBonificacion::PowerUpBonificacion(float posX, float posY, int valor) {
   	this->idSprite = SPRITE_POWERUP_BONIFICACION;
 }
 
-//PowerUpBonificacion::~PowerUpBonificacion() {}
+PowerUpBonificacion::~PowerUpBonificacion() {}
 
 /*
 powerUpBonificacion::aplicarPowerUp(){

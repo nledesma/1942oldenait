@@ -16,7 +16,7 @@ protected:
 
 public:
 		PowerUpDestruirEnemigos(float posicionX, float posicionY, int valor);
-    //~PowerUpDestruirEnemigos();
+        ~PowerUpDestruirEnemigos();
     //virtual void aplicarPowerUp() = 0;
     //int getAncho();
     //int getAlto();
