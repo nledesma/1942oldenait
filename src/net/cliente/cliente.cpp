@@ -16,7 +16,8 @@ Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket(){
 	setAddress(ip, port);
 }
 
-Cliente::Cliente():GameSocket(){
+Cliente::Cliente(Ventana* ventana):GameSocket(){
+	this->ventana = ventana;
 	cliente_conectado = false;
 }
 

@@ -143,7 +143,7 @@ EscenarioVista::~EscenarioVista(){}
 
 // Carga todas las cosas. Anterior al loop.
 void EscenarioVista::preloop(){
-    ventana->iniciar();
+    // ventana->iniciar();
     cargarFondo();
     cargarVistasAviones();
     cargarVistasElementos();

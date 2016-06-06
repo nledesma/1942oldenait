@@ -35,8 +35,8 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	enemigoMediano.o enemigoDeEscuadron.o enemigoGrande.o movimientoAvionGrandeEtapa1.o \
 	movimientoAvionGrandeEtapa2.o trayectoriaAvionGrande.o boton.o botonEnColaboracion.o \
 	botonJugar.o botonModoPractica.o botonPorEquipos.o botonSalir.o botonSiguiente.o \
-	menu.o menuDatosDeUsuario.o menuModosDeJuego.o menuPrincipal.o texto.o textoDinamico.o \
-	radioButton.o listaDeSeleccion.o
+	menu.o menuDatosDeUsuario.o menuModosDeJuego.o menuPrincipal.o menuConexiones.o texto.o \
+	textoDinamico.o radioButton.o listaDeSeleccion.o
 
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
