@@ -219,7 +219,7 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
 
 void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente){
 	MenuModosDeJuego* menuModosDeJuego = new MenuModosDeJuego();
-    SDL_Color colorNegro = { 0, 0, 0 };
+    SDL_Color colorNegro = {255, 232, 32 };
     TextoDinamico* textoDinamico = new TextoDinamico(25, colorNegro, ventana);
     textoDinamico->cambiarTexto("");
 	bool quit = false;

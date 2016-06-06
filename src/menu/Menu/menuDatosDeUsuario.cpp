@@ -11,7 +11,7 @@ MenuDatosDeUsuario::MenuDatosDeUsuario(){
 bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
     cout << "esta por cargar el fondo en datos de usuario" << endl;
     bool success = true;
-    if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/espacio.png")){
+    if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")){
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
 
@@ -25,12 +25,12 @@ bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
         this->botonSiguiente[0].setPosition(350, 450);
     }
     //TODO hacer con el Texto.
-    SDL_Color colorNegro2 = { 0, 0, 0 };
+    SDL_Color colorNegro2 = { 255, 232, 32 };
     fuenteTitulo = TTF_OpenFont("../../resources/fonts/STARWARS.ttf",30);
     if(fuenteTitulo == NULL){
         cout << "NO SE PUDO CARGAR LA FUENTE" << endl;
     }
-    this->getFiguraFuenteTitulo()->loadFromRenderedText("Ingrese un alias: ", colorNegro2, fuenteTitulo, ventana->getVentanaRenderer());
+    this->getFiguraFuenteTitulo()->loadFromRenderedText("INGRESE UN ALIAS: ", colorNegro2, fuenteTitulo, ventana->getVentanaRenderer());
 
     return success;
 }

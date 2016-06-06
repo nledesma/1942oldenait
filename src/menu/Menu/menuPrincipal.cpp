@@ -10,7 +10,7 @@ MenuPrincipal::MenuPrincipal(){
 
 bool MenuPrincipal::cargarBotones(Ventana* ventana){
     bool success = true;
-    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/espacio.png")) {
+    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
     if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/jugarSprite.png" ))){
@@ -34,7 +34,7 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
         this->botonSalir[0].setPosition(250, 370);
     }
     //Agrego a partir de aca
-    SDL_Color colorNegro = { 0, 0, 0 };
+    SDL_Color colorNegro = { 255, 232, 32 };
     this->texto = new Texto(50, colorNegro, ventana);
     this->texto->cargarFuente("1942 OLDENAIT");
 

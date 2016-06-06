@@ -12,7 +12,7 @@ MenuModosDeJuego::MenuModosDeJuego(){
 bool MenuModosDeJuego::cargarBotones(Ventana* ventana){
     bool success = true;
     // TODO constantes para los sprites de estos métodos.
-    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/espacio.png")) {
+    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
 
@@ -46,9 +46,9 @@ bool MenuModosDeJuego::cargarBotones(Ventana* ventana){
         this->botonModoPractica[0].setPosition(280, 440);
     }
 
-    SDL_Color colorNegro = { 0, 0, 0 };
+    SDL_Color colorNegro = { 255, 232, 32 };
     this->texto = new Texto(30, colorNegro, ventana);
-    this->texto->cargarFuente("Elija un modo de juego: ");
+    this->texto->cargarFuente("ELIJA UN MODO DE JUEGO: ");
     //this->fuenteModos = TTF_OpenFont("../../resources/fonts/STARWARS.ttf",30);
     //this->getFiguraFuenteModosDeJuego()->loadFromRenderedText("Elija un modo de juego: ", colorNegro2, fuenteModos, ventana->getVentanaRenderer());
 

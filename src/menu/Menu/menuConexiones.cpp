@@ -6,7 +6,7 @@ MenuConexiones::MenuConexiones(){
 
 bool MenuConexiones::cargarBotones(Ventana* ventana){
     bool success = true;
-    if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/espacio.png")){
+    if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")){
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
 
