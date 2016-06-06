@@ -300,8 +300,10 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
 void Servidor::quitarCliente(int clienteFd) {
     nombres[clientes[clienteFd].nombreJugador] = false;
     list<Avion*>::iterator itAviones = this->escenario->getAviones().begin();
-    advance(itAviones, clientes[clienteFd].nroJugador -1);
-    (*itAviones)->setEstadoAnimacion(DESCONECTADO);
+    advance(itAviones, clientes[clienteFd].nroJugador - 1);
+    if(partidaEnJuego) {
+        (*itAviones)->setEstadoAnimacion(DESCONECTADO);
+    }
     clientes[clienteFd].conectado = false;
     clientes[clienteFd].colaSalida.avisar();
     string msj = "Cliente en la dirección " + direcciones[clienteFd] + " desconectado.";
@@ -385,6 +387,7 @@ void Servidor::ejecutar() {
     }
 
     broadcastEvento(FINALIZAR_JUEGO);
+    partidaEnJuego = false;
 }
 
 /* Getters y Setters */
