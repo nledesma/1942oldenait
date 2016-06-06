@@ -1,5 +1,4 @@
 #include "fabricaEnemigos.hpp"
-#include "trayectoriaCuadrada.hpp"
 
 using namespace std;
 
@@ -81,125 +80,149 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
 
     list< pair<float , AvionEnemigo*> > listaEnemigos;
 
-    vector<float> posicionesPequenios = this->obtenerTriggerRandom(cantidadPequenios, longitudEscenario);
-    for (int i = 0; i < cantidadPequenios; i ++){
-        float posXavion = 0;
-        float posYavion = 0;
-        float angulo = 0;
-        int lado = this->obtenerLado();
-        if (lado == IZQUIERDA) {
-            posXavion = 0;
-        } else if (lado == DERECHA) {
-            posXavion = anchoEscenario - ANCHO_ENEMIGO_PEQUENIO;
-        } else if (lado == ARRIBA){
-            posYavion = 0;
+    if (cantidadPequenios < 0) {
+        vector<float> triggersPequenios = this->obtenerTriggerRandom(cantidadPequenios, longitudEscenario);
+        for (int i = 0; i < cantidadPequenios; i++) {
+            float posXavion = 0;
+            float posYavion = 0;
+            float angulo = 0;
+            int lado = this->obtenerLado();
+            if (lado == IZQUIERDA) {
+                posXavion = 0;
+            } else if (lado == DERECHA) {
+                posXavion = anchoEscenario - ANCHO_ENEMIGO_PEQUENIO;
+            } else if (lado == ARRIBA) {
+                posYavion = 0;
+            }
+
+            if (lado != ARRIBA) {
+                posYavion = obtenerPosYRandom(altoEscenario, ALTO_ENEMIGO_PEQUENIO);
+            } else {
+                posXavion = obtenerPosXRandom(anchoEscenario, ANCHO_ENEMIGO_PEQUENIO);
+            }
+
+            angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
+
+            Trayectoria *cuadrada = new TrayectoriaCuadrada();
+            AvionEnemigo *enemigo = new AvionPequenio(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            float trigger = triggersPequenios[i];
+
+            pair<float, AvionEnemigo *> parTriggerEnemigo;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
         }
-
-        if (lado != ARRIBA){
-            posYavion = obtenerPosYRandom( altoEscenario, ALTO_ENEMIGO_PEQUENIO);
-        } else {
-            posXavion = obtenerPosXRandom( anchoEscenario, ANCHO_ENEMIGO_PEQUENIO);
-        }
-
-        angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
-
-        Trayectoria* cuadrada = new TrayectoriaCuadrada();
-        AvionEnemigo* enemigo = new AvionPequenio(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        float trigger = posicionesPequenios[i];
-
-        pair <float, AvionEnemigo*> parTriggerEnemigo;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
     }
 
-    vector<float> posicionesEscuadrones = this->obtenerTriggerRandom(cantidadEscuadrones, longitudEscenario);
-    for (int i = 0; i < cantidadEscuadrones; i ++){
-        float posXavion = 0;
-        float posYavion = 0;
-        float angulo = 0;
-        int lado = this->obtenerLado();
-        if (lado == IZQUIERDA) {
-            posXavion = 0;
-        } else if (lado == DERECHA) {
-            posXavion = anchoEscenario - ANCHO_ENEMIGO_PEQUENIO;
-        } else if (lado == ARRIBA){
-            posYavion = 0;
+    if (cantidadEscuadrones > 0) {
+        vector<float> triggersEscuadrones = this->obtenerTriggerRandom(cantidadEscuadrones, longitudEscenario);
+        for (int i = 0; i < cantidadEscuadrones; i++) {
+            float posXavion = 0;
+            float posYavion = 0;
+            float angulo = 0;
+            int lado = this->obtenerLado();
+            if (lado == IZQUIERDA) {
+                posXavion = 0;
+            } else if (lado == DERECHA) {
+                posXavion = anchoEscenario - ANCHO_ENEMIGO_PEQUENIO;
+            } else if (lado == ARRIBA) {
+                posYavion = 0;
+            }
+
+            if (lado != ARRIBA) {
+                posYavion = obtenerPosYRandom(altoEscenario, ALTO_ENEMIGO_PEQUENIO);
+            } else {
+                posXavion = obtenerPosXRandom(anchoEscenario, ANCHO_ENEMIGO_PEQUENIO);
+            }
+
+            angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
+
+            Trayectoria *cuadrada = new TrayectoriaCuadrada();
+            AvionEnemigo *enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            float trigger = triggersEscuadrones[i];
+            pair<float, AvionEnemigo *> parTriggerEnemigo;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
+
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            trigger = trigger + 100;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
+
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            trigger = trigger + 100;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
+
+            cuadrada = new TrayectoriaCuadrada();
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            trigger = trigger + 100;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
+
+            cuadrada = new TrayectoriaCuadrada();
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            trigger = trigger + 100;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
         }
-
-        if (lado != ARRIBA){
-            posYavion = obtenerPosYRandom( altoEscenario, ALTO_ENEMIGO_PEQUENIO);
-        } else {
-            posXavion = obtenerPosXRandom( anchoEscenario, ANCHO_ENEMIGO_PEQUENIO);
-        }
-
-        angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
-
-        Trayectoria* cuadrada = new TrayectoriaCuadrada();
-        AvionEnemigo* enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        float trigger = posicionesEscuadrones[i];
-        pair <float, AvionEnemigo*> parTriggerEnemigo;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
-
-        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        trigger = trigger + 100;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
-
-        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        trigger = trigger + 100;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
-
-        cuadrada = new TrayectoriaCuadrada();
-        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        trigger = trigger + 100;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
-
-        cuadrada = new TrayectoriaCuadrada();
-        enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        trigger = trigger + 100;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
     }
 
-    vector<float> posicionesMedianos = this->obtenerTriggerRandom(cantidadMedianos, longitudEscenario);
-    for (int i = 0; i < cantidadMedianos; i ++){
-        float posXavion = 0;
-        float posYavion = 0;
-        float angulo = 0;
-        int lado = this->obtenerLado();
-        if (lado == IZQUIERDA) {
-            posXavion = 0;
-        } else if (lado == DERECHA) {
-            posXavion = anchoEscenario - ANCHO_ENEMIGO_MEDIANO;
-        } else if (lado == ARRIBA){
-            posYavion = 0;
+    if (cantidadMedianos>0) {
+        vector<float> triggersMedianos = this->obtenerTriggerRandom(cantidadMedianos, longitudEscenario);
+        for (int i = 0; i < cantidadMedianos; i++) {
+            float posXavion = 0;
+            float posYavion = 0;
+            float angulo = 0;
+            int lado = this->obtenerLado();
+            if (lado == IZQUIERDA) {
+                posXavion = 0;
+            } else if (lado == DERECHA) {
+                posXavion = anchoEscenario - ANCHO_ENEMIGO_MEDIANO;
+            } else if (lado == ARRIBA) {
+                posYavion = 0;
+            }
+
+            if (lado != ARRIBA) {
+                posYavion = obtenerPosYRandom(altoEscenario, ALTO_ENEMIGO_MEDIANO);
+            } else {
+                posXavion = obtenerPosXRandom(anchoEscenario, ANCHO_ENEMIGO_MEDIANO);
+            }
+
+            angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
+
+            Trayectoria *cuadrada = new TrayectoriaCuadrada();
+            AvionEnemigo *enemigo = new AvionMediano(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            float trigger = triggersMedianos[i];
+
+            pair<float, AvionEnemigo *> parTriggerEnemigo;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
         }
+    }
 
-        if (lado != ARRIBA){
-            posYavion = obtenerPosYRandom( altoEscenario, ALTO_ENEMIGO_MEDIANO);
-        } else {
-            posXavion = obtenerPosXRandom( anchoEscenario, ANCHO_ENEMIGO_MEDIANO);
+    if (cantidadGrandes>0) {
+        vector<float> triggersGrandes = this->obtenerTriggerRandom(cantidadGrandes, longitudEscenario);
+        for (int i = 0; i < cantidadGrandes; i++) {
+            float posXavion = obtenerPosXRandom(anchoEscenario, ANCHO_ENEMIGO_GRANDE);
+            float posYavion = 800;
+            float angulo = 90;
+
+            Trayectoria *trayAvionGrande = new TrayectoriaAvionGrande();
+            AvionEnemigo *enemigo = new AvionGrande(posXavion, posYavion, 200.f, angulo, 200.f, trayAvionGrande);
+            float trigger = triggersGrandes[i];
+
+            pair<float, AvionEnemigo *> parTriggerEnemigo;
+            parTriggerEnemigo.first = trigger;
+            parTriggerEnemigo.second = enemigo;
+            listaEnemigos.push_back(parTriggerEnemigo);
         }
-
-        angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
-
-        Trayectoria* cuadrada = new TrayectoriaCuadrada();
-        AvionEnemigo* enemigo = new AvionMediano(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
-        float trigger = posicionesMedianos[i];
-
-        pair <float, AvionEnemigo*> parTriggerEnemigo;
-        parTriggerEnemigo.first = trigger;
-        parTriggerEnemigo.second = enemigo;
-        listaEnemigos.push_back(parTriggerEnemigo);
     }
 
     listaEnemigos.sort(pairCompare);
