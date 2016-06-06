@@ -10,11 +10,13 @@ void PowerUp::aplicarPowerUp(){}
 int PowerUp::getEstadoAnimacion(){
     return this->estadoAnimacion;
 }
+*/
 
-int PowerUp::getTipo() {
+int PowerUp::getTipoPowerUp() {
     return this->tipo;
 }
 
+/*
 float PowerUp::getPosicionX(){
     return this->posX;;
 }
@@ -26,11 +28,12 @@ float PowerUp::getPosicionY(){
 string PowerUp::getIdSprite(){
       return this->idSprite;
   }
+*/
 
 void PowerUp::mover(float timeStep, float velocidadY){
     this->posY += velocidadY * timeStep;
 }
-*/
+
 
 void PowerUp::volverEstadoInicial(){
     this->posX = posXInicial;

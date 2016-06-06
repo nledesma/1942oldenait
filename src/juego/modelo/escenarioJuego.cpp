@@ -114,6 +114,8 @@ void EscenarioJuego::comenzarEtapa() {
     posicionY = 0;
     disparos.clear();
     elementos = etapaActual()->getElementos();
+    powerUps = etapaActual()->getPowerUps();
+    cout << "Se agrego a la etapa actual una lista de tamaño " << powerUps.size() << endl;
 
     /* Se fijan las posiciones de los aviones */
     float d = ancho/(aviones.size() + 1);
@@ -173,6 +175,7 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
     this->moverElementos(timeStep);
     this->moverDisparos(timeStep);
     this->moverEnemigos(timeStep);
+    this->moverPowerUps(timeStep); //hijo de puta que trae problemas
     this->verificarColisiones();
     this->manejarProximoEvento();
     this->getProximoEnemigo();
@@ -226,6 +229,16 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     }
 }
 
+void EscenarioJuego::moverPowerUps(float timeStep) {
+    cout << "El tamaño de la lista es " << getPowerUps().size() << endl;
+    for (list<PowerUp *>::iterator iterador = this->getPowerUps().begin();
+         iterador != this->getPowerUps().end(); ++iterador) {
+        PowerUp *powerUp = *iterador;
+        cout << "Este es un powerUp de tipo" << powerUp->getTipoPowerUp() << endl;
+        //powerUp->mover(timeStep, this->velocidadDesplazamientoY);
+    }   
+}
+
 void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
     avion(nroAvion)->sumarPuntos(puntos);
 }
@@ -251,6 +264,10 @@ list<Avion *> &EscenarioJuego::getAviones() {
 
 list<Elemento *> &EscenarioJuego::getElementos() {
     return this->elementos;
+}
+
+list<PowerUp *> &EscenarioJuego::getPowerUps(){
+    return this->powerUps;
 }
 
 list<Disparo *> EscenarioJuego::getDisparos() {

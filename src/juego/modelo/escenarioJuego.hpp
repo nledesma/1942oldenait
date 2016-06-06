@@ -90,12 +90,14 @@ public:
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
     void moverEnemigos(float timestep);
+    void moverPowerUps(float timestep);
     /* getters & setters */
     float getScrollingOffset();
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
     list<Disparo*> getDisparos();
     list<AvionEnemigo*> getEnemigos();
+    list<PowerUp*> &getPowerUps();
     int getPuntaje(int nroEquipo);
     int getAncho();
     int getAlto();

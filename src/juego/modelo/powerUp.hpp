@@ -26,11 +26,11 @@ public:
     //virtual float getPosicionX();
     //virtual float getPosicionY();
     //virtual int getEstadoAnimacion();
-    //virtual int getTipoPowerUp();
+    virtual int getTipoPowerUp();
     //virtual int getAncho() = 0;
     //virtual int getAlto() = 0;
     //virtual string getIdSprite();
-    //virtual void mover(float timeStep, float velocidadY) = 0;
+    virtual void mover(float timeStep, float velocidadY);
     virtual void volverEstadoInicial();
 };
 
