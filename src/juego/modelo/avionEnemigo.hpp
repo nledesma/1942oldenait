@@ -9,6 +9,7 @@
 #include "../../accesorios/codigo.hpp"
 #include "../../accesorios/default.hpp"
 #include "trayectoriasEnemigos/trayectoria.hpp"
+#include "../../accesorios/colisiones/colisionable.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
 
@@ -25,6 +26,8 @@ protected:
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     Trayectoria* trayectoria;
+    Colisionable * colisionable;
+    int contador;
 
 public:
     virtual ~AvionEnemigo();
@@ -42,6 +45,8 @@ public:
     int getAltoDisparo();
     string getIdSprite();
     string getIdSpriteDisparos();
+    Colisionable* getColisionable();
+    virtual void colisionar();
 };
 
 

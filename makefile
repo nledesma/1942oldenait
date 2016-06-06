@@ -12,6 +12,7 @@ NET_PATH = src/net
 LOGGER_PATH = src/logger
 COLA_PATH = src/accesorios/colaConcurrente
 TEMPORIZADOR_PATH = src/accesorios
+COLISIONES_PATH = src/accesorios/colisiones
 XML_PATH = resources/lib
 JUEGO_MODELO_PATH = src/juego/modelo
 JUEGO_VISTA_PATH = src/juego/vista
@@ -20,7 +21,7 @@ TRAYECTORIA_PATH = src/juego/modelo/trayectoriasEnemigos
 SRC = app:$(NET_PATH):$(NET_PATH)/cliente:$(NET_PATH)/servidor:\
 	$(NET_PATH)/mensaje:$(COLA_PATH):$(LOGGER_PATH):$(XML_PATH): \
 	$(JUEGO_MODELO_PATH):$(JUEGO_VISTA_PATH):$(TEMPORIZADOR_PATH): \
-	$(TRAYECTORIA_PATH)
+	$(TRAYECTORIA_PATH):$(COLISIONES_PATH)
 vpath %.cpp $(SRC)
 
 # Compilados.
@@ -34,7 +35,7 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	enemigoMediano.o enemigoDeEscuadron.o enemigoGrande.o movimientoAvionGrandeEtapa1.o \
 	movimientoAvionGrandeEtapa2.o trayectoriaAvionGrande.o powerUpParseado.o fabricaPowerUps.o \
 	powerUpBonificacion.o powerUpDosAmetralladoras.o powerUpDestruirEnemigos.o powerUpAvionesSecundarios.o \
-
+    punto.o superficie.o celda.o colisionable.o grilla.o
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 

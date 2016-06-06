@@ -4,7 +4,9 @@ Disparo::Disparo(float posX, float posY, float velocidad){
 
     this->posX = posX;
     this->posY = posY;
-	this->velocidad = velocidad;
+    this->velocidad = velocidad;
+    this->colisionable = new Colisionable(this->posX, this->posY, 0, TIPO_DISPARO_AVION);
+    this->colisiono = false;
 }
 
 Disparo::~Disparo(){
@@ -20,12 +22,15 @@ float Disparo::getVelocidad(){
 
 int Disparo::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-    int retorno;
-	this->posY -= this->velocidad * timeStep;
-	if( this->posY < - ALTO_DISPARO_COMUN){
-        retorno = 0;
-	} else {
-        retorno = 1;
+    int retorno = 0;
+    if(!this->colisiono){
+        this->posY -= this->velocidad * timeStep;
+        if( this->posY < - ALTO_DISPARO_COMUN){
+            retorno = 0;
+        } else {
+            retorno = 1;
+        }
+        this->colisionable->mover(this->posX, this->posY, 0);
     }
     pthread_mutex_unlock(&this->mutexMover);
     return retorno;
@@ -61,4 +66,12 @@ void Disparo::setAvion(int nroAvion){
 
 int Disparo::getNroAvion(){
     return nroAvionDisparador;
+}
+
+Colisionable* Disparo::getColisionable(){
+    return this->colisionable;
+}
+
+void Disparo::colisionar(){
+    this->colisiono = true;
 }

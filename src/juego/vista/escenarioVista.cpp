@@ -146,14 +146,12 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
     if (puntajeAux != puntajes[0]) {
-        cout << "El puntaje del equipo 1 ahora es " << puntajeAux << endl;
         this->puntajes[0] = puntajeAux;
     }
 
     puntajeAux = Decodificador::popInt(infoActualizacion);
     if (porEquipos) {
         if (puntajeAux != puntajes[1]) {
-            cout << "El puntaje del equipo 2 ahora es " << puntajeAux << endl;
             this->puntajes[1] = puntajeAux;
         }
     }

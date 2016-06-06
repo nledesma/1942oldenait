@@ -22,6 +22,7 @@
 #include "etapa.hpp"
 #include "../../accesorios/temporizador.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
+#include "../../accesorios/colisiones/grilla.hpp"
 #include <unistd.h>
 #include "../../accesorios/codigo.hpp"
 
@@ -59,6 +60,7 @@ private:
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
+    Grilla * grilla;
 
 public:
     void subirPuntaje(int puntos, int nroAvion);
@@ -108,6 +110,7 @@ public:
     void desactivar();
     bool porEquipos();
     Avion* avion(int i);
+    void verificarColisiones();
 };
 
 
