@@ -15,7 +15,7 @@ using namespace std;
 class PowerUpAvionesSecundarios: public PowerUp {
 public:
 		PowerUpAvionesSecundarios(float posicionX, float posicionY, int valor);
-    virtual ~PowerUpAvionesSecundarios();
+    ~PowerUpAvionesSecundarios();
     //virtual void aplicarPowerUp() = 0;
     //int getAncho();
     //int getAlto();

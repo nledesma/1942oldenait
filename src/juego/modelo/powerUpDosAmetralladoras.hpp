@@ -17,7 +17,7 @@ protected:
 
 public:
 		PowerUpDosAmetralladoras(float posX, float posY, int valor);
-    virtual ~PowerUpDosAmetralladoras();
+    ~PowerUpDosAmetralladoras();
     //virtual void aplicarPowerUp() = 0;
     //int getAncho();
     //int getAlto();

@@ -6,6 +6,8 @@ PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicion
   	this->valor = valor;
   	this->posX = posX;
   	this->posY = posY;
+		this->posXInicial = posX;
+		this->posYInicial = posY;
   	this->estadoAnimacion = POWER_UP_BONIFICACION_NORMAL;
   	this->idSprite = SPRITE_POWERUP_BONIFICACION;
 }

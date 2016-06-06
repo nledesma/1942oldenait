@@ -32,9 +32,14 @@ void EscenarioJuego::reset() {
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
         (*itAviones)->volverEstadoInicial();
     }
+
     for (list<Elemento *>::iterator itElementos = elementos.begin(); itElementos != elementos.end(); itElementos++) {
         (*itElementos)->volverEstadoInicial();
     }
+
+    //for (list<PowerUp *>::iterator itPowerUps = powerUps.begin(); itPowerUps != powerUps.end(); itPowerUps++) {
+    //    (*itPowerUps)->volverEstadoInicial();
+    //}
 }
 
 // Se destruyen todas las listas.

@@ -11,6 +11,11 @@
 #include "avionGrande.hpp"
 #include "avionDeEscuadron.hpp"
 #include "avionEnemigo.hpp"
+#include "powerUp.hpp"
+#include "powerUpBonificacion.hpp"
+#include "powerUpDestruirEnemigos.hpp"
+#include "powerUpDosAmetralladoras.hpp"
+#include "powerUpAvionesSecundarios.hpp"
 #include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
 #include "trayectoriasEnemigos/trayectoriaAvionGrande.hpp"
 #include "elemento.hpp"
@@ -34,6 +39,7 @@ private:
     list<AvionEnemigo*> enemigos;
     list<Elemento*> elementos;
     list<Disparo*> disparos;
+    list<PowerUp*> powerUps;
     /* Specs */
     float velocidadDesplazamientoY;
     float posicionY;
