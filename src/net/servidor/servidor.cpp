@@ -301,7 +301,8 @@ void Servidor::quitarCliente(int clienteFd) {
     nombres[clientes[clienteFd].nombreJugador] = false;
     list<Avion*>::iterator itAviones = this->escenario->getAviones().begin();
     advance(itAviones, clientes[clienteFd].nroJugador -1);
-    (*itAviones)->setEstadoAnimacion(DESCONECTADO);
+    if (this->escenario->estaActivo())
+        (*itAviones)->setEstadoAnimacion(DESCONECTADO);
     clientes[clienteFd].conectado = false;
     clientes[clienteFd].colaSalida.avisar();
     string msj = "Cliente en la dirección " + direcciones[clienteFd] + " desconectado.";
