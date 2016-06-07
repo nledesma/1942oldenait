@@ -176,7 +176,7 @@ EnemigoDeEscuadron::EnemigoDeEscuadron() {
 }
 
 void EnemigoDeEscuadron::cargarImagen(SDL_Renderer * renderer){
-    this->figuraEnemigo->loadFromFile(this->pathSprite, renderer, 2);
+    this->figuraEnemigo->loadFromFile(this->pathSprite, renderer, ROJO);
 }
 
 void EnemigoDeEscuadron::render(float posX, float posY, int estadoAnimacion, SDL_Renderer *renderer) {

@@ -230,11 +230,9 @@ void EscenarioJuego::moverDisparos(float timeStep) {
 }
 
 void EscenarioJuego::moverPowerUps(float timeStep) {
-    cout << "El tamaño de la lista es " << getPowerUps().size() << endl;
     for (list<PowerUp *>::iterator iterador = this->getPowerUps().begin();
          iterador != this->getPowerUps().end(); ++iterador) {
         PowerUp *powerUp = *iterador;
-        cout << "Este es un powerUp de tipo" << powerUp->getTipoPowerUp() << endl;
         //powerUp->mover(timeStep, this->velocidadDesplazamientoY);
     }   
 }

@@ -1,5 +1,7 @@
 #include "fabricaEnemigos.hpp"
 #include "trayectoriaRandom.hpp"
+#include "trayectoriaIdaYvuelta.hpp"
+#include "trayectoriaRulo.hpp"
 
 using namespace std;
 
@@ -79,8 +81,9 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
                                                       int longitudEscenario, int anchoEscenario, int altoEscenario) {
     srand ((unsigned int)time(NULL));
 
-    list< pair<float , AvionEnemigo*> > listaEnemigos;
+    list< pair<float , AvionEnemigo*> > listaEnemigos; /* Lista con todos los enemigos */
 
+    /* Inicializacion enemigos pequeños */
     if (cantidadPequenios > 0) {
         vector<float> triggersPequenios = this->obtenerTriggerRandom(cantidadPequenios, longitudEscenario);
         for (int i = 0; i < cantidadPequenios; i++) {
@@ -104,8 +107,26 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
 
             angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
 
-            Trayectoria *cuadrada = new TrayectoriaRandom();
-            AvionEnemigo *enemigo = new AvionPequenio(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            Trayectoria *trayectoria;
+            int randomTrayectoria = rand() % 5;
+            if (randomTrayectoria == 0){
+                trayectoria = new TrayectoriaRandom();
+            } else if (randomTrayectoria == 1){
+                trayectoria = new TrayectoriaCuadrada();
+            } else {
+                trayectoria = new TrayectoriaIdaYvuelta();
+                posXavion = obtenerPosXRandom(anchoEscenario, ANCHO_ENEMIGO_PEQUENIO);
+                posYavion = 0;
+                int randomAngulo = rand() % 2;
+                if (randomAngulo == 0){
+                    angulo = 270 - 22.5f;
+                } else if (randomAngulo == 1){
+                    angulo = 270;
+                } else {
+                    angulo = 270 + 22.5f;
+                }
+            }
+            AvionEnemigo *enemigo = new AvionPequenio(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria);
             float trigger = triggersPequenios[i];
 
             pair<float, AvionEnemigo *> parTriggerEnemigo;
@@ -115,6 +136,7 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
         }
     }
 
+    /* Inicialización escuadrones. */
     if (cantidadEscuadrones > 0) {
         vector<float> triggersEscuadrones = this->obtenerTriggerRandom(cantidadEscuadrones, longitudEscenario);
         for (int i = 0; i < cantidadEscuadrones; i++) {
@@ -138,37 +160,53 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
 
             angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
 
-            Trayectoria *cuadrada = new TrayectoriaCuadrada();
-            AvionEnemigo *enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            Trayectoria *trayectoria1;
+            Trayectoria *trayectoria2;
+            Trayectoria *trayectoria3;
+            Trayectoria *trayectoria4;
+            Trayectoria *trayectoria5;
+
+            int trayectoriaRandom = rand() % 2;
+
+            if (trayectoriaRandom == 0){
+                trayectoria1 = new TrayectoriaCuadrada();
+                trayectoria2 = new TrayectoriaCuadrada();
+                trayectoria3 = new TrayectoriaCuadrada();
+                trayectoria4 = new TrayectoriaCuadrada();
+                trayectoria5 = new TrayectoriaCuadrada();
+            } else {
+                trayectoria1 = new TrayectoriaRulo();
+                trayectoria2 = new TrayectoriaRulo();
+                trayectoria3 = new TrayectoriaRulo();
+                trayectoria4 = new TrayectoriaRulo();
+                trayectoria5 = new TrayectoriaRulo();
+            }
+            AvionEnemigo *enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria1);
             float trigger = triggersEscuadrones[i];
             pair<float, AvionEnemigo *> parTriggerEnemigo;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            cuadrada = new TrayectoriaCuadrada();
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria2);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            cuadrada = new TrayectoriaCuadrada();
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria3);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            cuadrada = new TrayectoriaCuadrada();
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria4);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            cuadrada = new TrayectoriaCuadrada();
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria5);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
@@ -176,6 +214,7 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
         }
     }
 
+    /* Inicialización enemigos medianos. */
     if (cantidadMedianos>0) {
         vector<float> triggersMedianos = this->obtenerTriggerRandom(cantidadMedianos, longitudEscenario);
         for (int i = 0; i < cantidadMedianos; i++) {
@@ -199,8 +238,8 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
 
             angulo = this->obtenerAnguloRandom(lado, posXavion, posYavion, anchoEscenario, altoEscenario);
 
-            Trayectoria *cuadrada = new TrayectoriaCuadrada();
-            AvionEnemigo *enemigo = new AvionMediano(posXavion, posYavion, 200.f, angulo, 200.f, cuadrada);
+            Trayectoria *trayectoriaRandom = new TrayectoriaRandom();
+            AvionEnemigo *enemigo = new AvionMediano(posXavion, posYavion, 160.f, angulo, 200.f, trayectoriaRandom);
             float trigger = triggersMedianos[i];
 
             pair<float, AvionEnemigo *> parTriggerEnemigo;
@@ -210,6 +249,7 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
         }
     }
 
+    /* Inicializacion enemigos grandes. */
     if (cantidadGrandes>0) {
         vector<float> triggersGrandes = this->obtenerTriggerRandom(cantidadGrandes, longitudEscenario);
         for (int i = 0; i < cantidadGrandes; i++) {
@@ -218,7 +258,7 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
             float angulo = 90;
 
             Trayectoria *trayAvionGrande = new TrayectoriaAvionGrande();
-            AvionEnemigo *enemigo = new AvionGrande(posXavion, posYavion, 200.f, angulo, 200.f, trayAvionGrande);
+            AvionEnemigo *enemigo = new AvionGrande(posXavion, posYavion, 100.f, angulo, 200.f, trayAvionGrande);
             float trigger = triggersGrandes[i];
 
             pair<float, AvionEnemigo *> parTriggerEnemigo;
