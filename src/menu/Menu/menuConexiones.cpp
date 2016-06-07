@@ -1,7 +1,8 @@
 #include "menuConexiones.hpp"
-MenuConexiones::MenuConexiones(){
+MenuConexiones::MenuConexiones(Ventana* ventana){
     this->botonSiguiente = new BotonSiguiente();
     this->fondo = new Figura();
+    this->lista = new ListaDeSeleccion(ventana, 100, 200);
 }
 
 bool MenuConexiones::cargarBotones(Ventana* ventana){
@@ -20,24 +21,24 @@ bool MenuConexiones::cargarBotones(Ventana* ventana){
         this->botonSiguiente[0].setPosition(350, 550);
     }
 
-
     return success;
 }
 
 void MenuConexiones::renderizar(Ventana* ventana){
     this->fondo->render(0, 0, ventana->getVentanaRenderer());
     this->getBotonSiguiente()[0].render(ventana->getVentanaRenderer());
-    // this->getFiguraFuenteAlias()->renderMenu(ventana->getVentanaRenderer(), (800 - this->getFiguraFuenteAlias()->getWidth()) / 2, (800 - this->getFiguraFuenteAlias()->getHeight()) / 2, NULL, 0, NULL, (SDL_RendererFlip)NULL);
+    this->lista->renderizar();
 }
 
 BotonSiguiente* MenuConexiones::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
+ListaDeSeleccion* & MenuConexiones::getListaDeSeleccion(){
+    return this->lista;
+}
+
 void MenuConexiones::cerrar(){
     this->getBotonSiguiente()->getFigura()->free();
-	//Quit SDL subsystems
-    // TTF_Quit();
-	// IMG_Quit();
-	// SDL_Quit();
+    delete this->lista;
 }

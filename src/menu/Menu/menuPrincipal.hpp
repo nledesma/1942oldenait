@@ -11,8 +11,6 @@ class MenuPrincipal: public Menu{
         BotonJugar* botonJugar;
         BotonSalir* botonSalir;
         Texto* texto;
-        // TTF_Font* textoUsuario;
-        // Figura* figuraTextoUsuario;
     public:
         MenuPrincipal();
         bool cargarBotones(Ventana* ventana);

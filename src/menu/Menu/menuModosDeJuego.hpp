@@ -14,15 +14,11 @@ class MenuModosDeJuego: public Menu{
         BotonEnColaboracion* botonEnColaboracion;
         BotonPorEquipos* botonPorEquipos;
         BotonModoPractica* botonModoPractica;
-        TTF_Font* fuenteModos;
-        Figura* figuraFuenteModos;
         Texto* texto;
     public:
         MenuModosDeJuego();
         bool cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
-        TTF_Font* getFuenteModosDeJuego();
-        Figura* getFiguraFuenteModosDeJuego();
         BotonEnColaboracion* getBotonEnColaboracion();
         BotonPorEquipos* getBotonPorEquipos();
         BotonModoPractica* getBotonModoPractica();

@@ -10,6 +10,8 @@
 #include "../src/menu/listaDeSeleccion.hpp"
 using namespace std;
 
+//TODO faltaria poner los botones con los otros modos de juego.
+
 bool validarInt(string valor) {
     if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
         return false;
@@ -102,94 +104,48 @@ void conexionManual(Cliente* cliente){
 }
 
 void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas){
-    cout << "Entro a levantar conexiones" << endl;
     list<Conexion>::iterator it;
     int opcion = numeroSeleccionado;
-    cout << "Opcion: " << opcion << endl;
-    // opcion = numeroSeleccionado;
     it = conexionesGuardadas->begin();
     advance(it, opcion);
-    cout << "IP: " << it->ip << endl;
-    cout << "Puerto: " << it->puerto << endl;
     cliente->setAddress(it->ip,it->puerto);
-    cout << "Se hace el set adress" << endl;
     cliente->conectar();
 }
 
 void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* menuConexiones) {
-    cout << "Entro a cargar el menu de conexiones" << endl;
     list<Conexion> conexionesGuardadas = ClienteParser::levantarConexiones();
-    ListaDeSeleccion* lista = new ListaDeSeleccion(ventana, 100, 200);
-    // cout << "Menu de conexiones: " << endl;
-    // int n = conexionesGuardadas->size();
-    // Se imprime el menu.
     list<Conexion>::iterator it;
-    int i = 1;
     for(it = conexionesGuardadas.begin(); it != conexionesGuardadas.end(); it ++){
-        //cout << i << ": " << it->nombre << ". IP: " << it->ip << ". Puerto: " << it->puerto << endl;
         string conexion = it->nombre + ". IP: " + it->ip + ". Puerto: " + to_string(it->puerto);
-        lista->agregarOpcion(conexion);
-        i++;
+        menuConexiones->getListaDeSeleccion()->agregarOpcion(conexion);
     }
     bool quit = false;
     SDL_Event e;
     int x, y; // Para los clicks.
 
     while(!quit){
-		while( SDL_PollEvent( &e ) != 0 ){
+		while(SDL_PollEvent(&e) != 0){
 			if(e.type == SDL_QUIT) {
 				quit = true;
-			} else if(e.type == SDL_MOUSEBUTTONDOWN) {
+			} else if(e.type == SDL_MOUSEBUTTONDOWN){
                 SDL_GetMouseState( &x, &y );
-                lista->clickEn(x, y);
+                menuConexiones->getListaDeSeleccion()->clickEn(x, y);
                 int respuesta = menuConexiones->getBotonSiguiente()[0].handleEvent(&e);
                 if(respuesta == 1){
-                    int numeroSeleccionado = lista->getNroBotonSeleccionado();
-                    cout << "ESTA POR LEVANTAR CONEXIONES" << endl;
+                    int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();
                     levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas);
-                    //cout << lista->getNroBotonSeleccionado() << endl;
                 }
             }
 		}
         ventana->limpiar();
         menuConexiones->renderizar(ventana);
-        lista->renderizar();
         SDL_RenderPresent(ventana->getVentanaRenderer());
     }
-
-    delete lista;
-    // cout << n + 1 << ": Conexión Manual." << endl;
-    // cout << n + 2 << ": Cancelar." << endl;
-    // separador();
-
-    // Se lee la opción.
-    // int opcion = -1;
-    // opcion = leerInt();
-    // separador();
-
-    // while (opcion < 1 || opcion > n + 2) {
-    //     cout << "Opción no válida" << endl;
-    //     opcion = leerInt();
-    //     separador();
-    // }
-
-    // Se conecta.
-    // if (opcion == n + 1){
-    //     conexionManual(cliente);
-    // } else if (opcion != n + 2){
-    //
-    //     it = conexionesGuardadas->begin();
-    //     advance(it, opcion - 1);
-    //     cout << "Ingrese un alias" << endl;
-    //     string alias;
-    //     cin >> alias;
-    //     cliente->setAlias(alias);
-    //     cliente->setAddress(it->ip,it->puerto);
-    //     cliente->conectar();
-    // }
+    menuConexiones->cerrar();
 }
+
 void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego, Cliente* cliente){
-    MenuConexiones* menuConexiones = new MenuConexiones();
+    MenuConexiones* menuConexiones = new MenuConexiones(ventana);
 	bool quit = false;
 	SDL_Event e;
 	while( !quit ){
@@ -202,8 +158,6 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
                 menuModosDeJuego->cerrar();
                 menuConexiones->cargarBotones(ventana);
                 cargarMenuConexiones(cliente, ventana, menuConexiones);
-                // cout << "Esta por conectar" << endl;
-                //cliente->conectar();
             }
 			menuModosDeJuego->getBotonPorEquipos()[0].handleEvent(&e);
 			menuModosDeJuego->getBotonModoPractica()[0].handleEvent(&e);
@@ -219,8 +173,8 @@ void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego
 
 void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente){
 	MenuModosDeJuego* menuModosDeJuego = new MenuModosDeJuego();
-    SDL_Color colorNegro = {255, 232, 32 };
-    TextoDinamico* textoDinamico = new TextoDinamico(25, colorNegro, ventana);
+    SDL_Color color = {255, 232, 32};
+    TextoDinamico* textoDinamico = new TextoDinamico(25, color, ventana);
     textoDinamico->cambiarTexto("");
 	bool quit = false;
 	SDL_Event e;
@@ -229,9 +183,8 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta2 = menuDatosDeUsuario->getBotonSiguiente()[0].handleEvent(&e);
-			if(respuesta2 == 1){
-				cout << "ABRIR MENU MODOS DE JUEGO" << endl;
+			int respuesta = menuDatosDeUsuario->getBotonSiguiente()[0].handleEvent(&e);
+			if(respuesta == 1){
 				menuDatosDeUsuario->cerrar();
 				menuModosDeJuego->cargarBotones(ventana);
 				cargarMenuModosDeJuego(ventana, menuModosDeJuego, cliente);
@@ -286,32 +239,6 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
     menuPrincipal->cerrar();
     ventana->cerrar();
 }
-    //TODO
-    // int opcion = -1;
-    // while (opcion != 3){
-    //     imprimirMenu();
-    //     opcion = leerInt();
-    //     separador();
-    //     cout << "Opción elegida: " << opcion << endl;
-    //     switch (opcion) {
-    //         case 1:
-    //             menuConexiones(cliente, conexionesGuardadas);
-    //             break;
-    //         case 2:
-    //             if (cliente->conectado()){
-    //                 cliente->cerrar();
-    //             } else {
-    //                 cout << "El cliente no está conectado." << endl;
-    //             }
-    //             break;
-    //         case 3:
-    //             break;
-    //         default:
-    //             cout << "Opcion invalida. Seleccione una opción válida y pulse ENTER para continuar." << endl;
-    //             break;
-    //     }
-    // }
-//}
 
 int main(){
 

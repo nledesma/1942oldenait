@@ -3,8 +3,6 @@ MenuModosDeJuego::MenuModosDeJuego(){
      this->botonEnColaboracion = new BotonEnColaboracion();
      this->botonPorEquipos = new BotonPorEquipos();
      this->botonModoPractica = new BotonModoPractica();
-     this->fuenteModos = NULL;
-     this->figuraFuenteModos = new Figura();
      this->fondo = new Figura();
      this->texto = NULL;
 }
@@ -46,11 +44,9 @@ bool MenuModosDeJuego::cargarBotones(Ventana* ventana){
         this->botonModoPractica[0].setPosition(280, 440);
     }
 
-    SDL_Color colorNegro = { 255, 232, 32 };
-    this->texto = new Texto(30, colorNegro, ventana);
+    SDL_Color color = { 255, 232, 32 };
+    this->texto = new Texto(30, color, ventana);
     this->texto->cargarFuente("ELIJA UN MODO DE JUEGO: ");
-    //this->fuenteModos = TTF_OpenFont("../../resources/fonts/STARWARS.ttf",30);
-    //this->getFiguraFuenteModosDeJuego()->loadFromRenderedText("Elija un modo de juego: ", colorNegro2, fuenteModos, ventana->getVentanaRenderer());
 
     return success;
 }
@@ -60,16 +56,7 @@ void MenuModosDeJuego::renderizar(Ventana* ventana){
     this->getBotonEnColaboracion()[0].render(ventana->getVentanaRenderer());
     this->getBotonPorEquipos()[0].render(ventana->getVentanaRenderer());
     this->getBotonModoPractica()[0].render(ventana->getVentanaRenderer());
-    //this->getFiguraFuenteModosDeJuego()->renderMenu(ventana->getVentanaRenderer(), 200, 210, NULL, 0, NULL, (SDL_RendererFlip)NULL);
     this->texto->renderizar(200, 210);
-}
-
-TTF_Font* MenuModosDeJuego::getFuenteModosDeJuego(){
-    return this->fuenteModos;
-}
-
-Figura* MenuModosDeJuego::getFiguraFuenteModosDeJuego(){
-    return this->figuraFuenteModos;
 }
 
 BotonEnColaboracion* MenuModosDeJuego::getBotonEnColaboracion(){
@@ -85,19 +72,7 @@ BotonModoPractica* MenuModosDeJuego::getBotonModoPractica(){
 }
 
 void MenuModosDeJuego::cerrar(){
-	//Free loaded images
     this->getBotonEnColaboracion()->getFigura()->free();
     this->getBotonPorEquipos()->getFigura()->free();
     this->getBotonModoPractica()->getFigura()->free();
-    //TODO liberar textura de la fuente.
-    TTF_CloseFont(fuenteModos);
-    this->fuenteModos = NULL;
-	//Destroy window
-	// SDL_DestroyRenderer(this->getVentana()->getVentanaRenderer());
-	// SDL_DestroyWindow(this->getVentana()->getWindow());
-	// this->getVentana()->cerrar();
-	//Quit SDL subsystems
-    // TTF_Quit();
-	//IMG_Quit();
-	//SDL_Quit();
 }

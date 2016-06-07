@@ -1,11 +1,8 @@
 #include "menuDatosDeUsuario.hpp"
 MenuDatosDeUsuario::MenuDatosDeUsuario(){
-    this->fuenteAlias = NULL;
-    this->fuenteTitulo = NULL;
-    this->figuraFuenteAlias = new Figura();
-    this->figuraFuenteTitulo = new Figura();
     this->botonSiguiente = new BotonSiguiente();
     this->fondo = new Figura();
+     this->texto = NULL;
 }
 
 bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
@@ -24,13 +21,10 @@ bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
         //Setea los botones en las posiciones
         this->botonSiguiente[0].setPosition(350, 450);
     }
-    //TODO hacer con el Texto.
-    SDL_Color colorNegro2 = { 255, 232, 32 };
-    fuenteTitulo = TTF_OpenFont("../../resources/fonts/STARWARS.ttf",30);
-    if(fuenteTitulo == NULL){
-        cout << "NO SE PUDO CARGAR LA FUENTE" << endl;
-    }
-    this->getFiguraFuenteTitulo()->loadFromRenderedText("INGRESE UN ALIAS: ", colorNegro2, fuenteTitulo, ventana->getVentanaRenderer());
+
+    SDL_Color color = { 255, 232, 32 };
+    this->texto = new Texto(30, color, ventana);
+    this->texto->cargarFuente("INGRESE UN ALIAS: ");
 
     return success;
 }
@@ -38,40 +32,14 @@ bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
 void MenuDatosDeUsuario::renderizar(Ventana* ventana){
     this->fondo->render(0, 0, ventana->getVentanaRenderer());
     this->getBotonSiguiente()[0].render(ventana->getVentanaRenderer());
-    this->getFiguraFuenteTitulo()->renderMenu(ventana->getVentanaRenderer(), 200, 250, NULL, 0, NULL, (SDL_RendererFlip)NULL);
-    // this->getFiguraFuenteAlias()->renderMenu(ventana->getVentanaRenderer(), (800 - this->getFiguraFuenteAlias()->getWidth()) / 2, (800 - this->getFiguraFuenteAlias()->getHeight()) / 2, NULL, 0, NULL, (SDL_RendererFlip)NULL);
+    this->texto->renderizar(200, 250);
 }
 
 BotonSiguiente* MenuDatosDeUsuario::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
-TTF_Font* MenuDatosDeUsuario::getFuenteAlias(){
-    return this->fuenteAlias;
-}
-
-TTF_Font* MenuDatosDeUsuario::getFuenteTitulo(){
-    return this->fuenteTitulo;
-}
-
-Figura* MenuDatosDeUsuario::getFiguraFuenteAlias(){
-    return this->figuraFuenteAlias;
-}
-
-Figura* MenuDatosDeUsuario::getFiguraFuenteTitulo(){
-    return this->figuraFuenteTitulo;
-}
-
 void MenuDatosDeUsuario::cerrar(){
     this->getBotonSiguiente()->getFigura()->free();
-    this->figuraFuenteAlias->free();
-	this->figuraFuenteTitulo->free();
-	TTF_CloseFont(fuenteAlias);
-	TTF_CloseFont(fuenteTitulo);
-	fuenteAlias = NULL;
-	fuenteTitulo = NULL;
-	//Quit SDL subsystems
-    // TTF_Quit();
-	// IMG_Quit();
-	// SDL_Quit();
+    this->texto->getFigura()->free();
 }
