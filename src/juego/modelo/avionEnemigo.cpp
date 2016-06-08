@@ -88,3 +88,17 @@ void AvionEnemigo::colisionar(){
     }
 }
 
+DisparoEnemigo* AvionEnemigo::disparar(float xObjetivo, float yObjetivo){
+    float difX = (float) pow(xObjetivo - this->posX, 2);
+    float difY = (float) pow(yObjetivo - this->posY, 2);
+    float norma = (float) sqrt(difX + difY);
+
+    float versorX = (xObjetivo - this->posX) / norma;
+    float versorY = (yObjetivo - this->posY) / norma;
+
+    float posInicialX = this->posX + this->getAncho() /2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
+    float posInicialY = this->posY + this->getAlto() / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
+    DisparoEnemigo* disparo = new DisparoEnemigo(posInicialX, posInicialY, 200, versorX, versorY);
+
+    return disparo;
+}

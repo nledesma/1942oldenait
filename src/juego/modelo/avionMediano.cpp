@@ -18,10 +18,6 @@ AvionMediano::~AvionMediano(){
 
 }
 
-Disparo* AvionMediano::disparar(){
-    return NULL;
-}
-
 int AvionMediano::getAncho() {
     return ANCHO_ENEMIGO_MEDIANO;
 }

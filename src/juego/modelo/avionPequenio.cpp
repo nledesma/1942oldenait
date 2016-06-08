@@ -19,10 +19,6 @@ AvionPequenio::~AvionPequenio(){
     delete this->colisionable;
 }
 
-Disparo* AvionPequenio::disparar(){
-    return NULL;
-}
-
 int AvionPequenio::getAncho() {
     return ANCHO_ENEMIGO_PEQUENIO;
 }

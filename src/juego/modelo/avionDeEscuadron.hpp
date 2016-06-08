@@ -16,7 +16,6 @@ class AvionDeEscuadron: public AvionEnemigo {
 public:
     AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionDeEscuadron();
-    Disparo* disparar();
     int getAncho();
     int getAlto();
 };

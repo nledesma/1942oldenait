@@ -18,10 +18,6 @@ AvionDeEscuadron::~AvionDeEscuadron(){
 
 }
 
-Disparo* AvionDeEscuadron::disparar(){
-    return NULL;
-}
-
 int AvionDeEscuadron::getAncho() {
     return ANCHO_ENEMIGO_PEQUENIO;
 }

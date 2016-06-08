@@ -12,7 +12,7 @@
             <spriteIdFondo>galaxia</spriteIdFondo>
             <ancho>800</ancho>
             <alto>800</alto>
-            <velocidadDesplazamientoY>200</velocidadDesplazamientoY>
+            <velocidadDesplazamientoY>180</velocidadDesplazamientoY>
         </fondo>
         <modo>equipos</modo>
         <etapas>
@@ -27,7 +27,12 @@
                     <elemento>
                         <spriteIdElemento>planeta</spriteIdElemento>
                         <posx>600</posx>
-                        <posy>1600</posy>
+                        <posy>1100</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>death-star</spriteIdElemento>
+                        <posx>0</posx>
+                        <posy>2500</posy>
                     </elemento>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
