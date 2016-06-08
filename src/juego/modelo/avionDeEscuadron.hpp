@@ -18,6 +18,7 @@ public:
     ~AvionDeEscuadron();
     int getAncho();
     int getAlto();
+    vector<DisparoEnemigo*> disparar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONDEESCUADRON_HPP

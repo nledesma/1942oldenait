@@ -11,8 +11,7 @@ DisparoEnemigo::DisparoEnemigo(float posX, float posY, float velocidad,float ver
     this->colisiono = false;
 }
 
-DisparoEnemigo::~DisparoEnemigo(){
-}
+DisparoEnemigo::~DisparoEnemigo(){ }
 
 float DisparoEnemigo::getVelocidad(){
     return this->velocidad;

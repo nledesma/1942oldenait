@@ -26,3 +26,5 @@ int AvionPequenio::getAncho() {
 int AvionPequenio::getAlto() {
     return ALTO_ENEMIGO_PEQUENIO;
 }
+
+vector<DisparoEnemigo*> AvionPequenio::disparar(){  vector<DisparoEnemigo*> disparos; return disparos;  }

@@ -30,6 +30,7 @@ public:
     ~AvionMediano();
     int getAncho();
     int getAlto();
+    vector<DisparoEnemigo*> disparar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONMEDIANO_HPP
