@@ -74,7 +74,7 @@ private:
 
 public:
     /* Constructor y destructor */
-    EscenarioVista(string infoEscenario);
+    EscenarioVista(string infoEscenario, Ventana* ventana);
     void inicializarComponentes(string infoEscenario);
     void actualizarComponentes(string infoActualizacion);
     ~EscenarioVista();
