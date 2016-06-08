@@ -270,3 +270,5 @@ void AvionVista::setFigura(Figura * figura){
 void AvionVista::setEstadoAnimacion(int estadoAnimacion){
     this->estadoAnimacion = estadoAnimacion;
 }
+
+//

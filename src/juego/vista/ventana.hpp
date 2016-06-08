@@ -40,6 +40,8 @@ public:
 
     /* Retorna la ventana de SDL */
     SDL_Window *getSdlWindow();
+    Figura* getFondo();
+    void limpiar();
 };
 
 #endif //INC_1942OLDENAIT_VENTANA_HPP
