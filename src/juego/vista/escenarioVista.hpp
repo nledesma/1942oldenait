@@ -40,10 +40,10 @@ struct enemigo {
 struct powerUp{
   float posX;
   float posY;
-  int estadoAnimacion:
+  int estadoAnimacion;
   int tipoPowerUp;
   int valorPowerUp;  
-}
+};
 
 class EscenarioVista {
 private:
@@ -118,7 +118,7 @@ public:
     void cargarVistasElementos();
     void cargarVistaDisparos();
     void cargarVistaEnemigos();
-    cargarVistasPowerUps();
+    void cargarVistasPowerUps();
     void cargarSonidos();
     void actualizar(float offset);
     void cerrar();
@@ -139,6 +139,7 @@ public:
     bool getActivo();
     void setDisparos(list<disparo> disparos);
     void setEnemigos(list<enemigo> enemigosParam);
+    void setPowerUps(list<powerUp> powerUpsParam);
     int getAncho();
     int getAlto();
     Figura *getFondo();

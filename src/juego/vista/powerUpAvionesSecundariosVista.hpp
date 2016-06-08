@@ -2,8 +2,9 @@
 #define INC_1942OLDENAIT_POWERUP_AVIONES_SECUNDARIOS_VISTA_HPP
 
 #include "powerUpVista.hpp"
+#include "../../accesorios/codigo.hpp"
 
-class PowerUpAvionesSecundariosVista : public EnemigoVista {
+class PowerUpAvionesSecundariosVista : public PowerUpVista {
 public:
     PowerUpAvionesSecundariosVista();
     ~PowerUpAvionesSecundariosVista();

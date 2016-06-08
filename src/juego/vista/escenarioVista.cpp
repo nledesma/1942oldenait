@@ -27,6 +27,7 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
         string avion = Decodificador::popAvionInicial(infoEscenario);
         this->agregarAvionVista(avion);
     }
+    cout << "Inicializo los aviones, ahora inicializa las etapas" << endl;
     int cantEtapas = Decodificador::popInt(infoEscenario);
     for (int i = 0; i < cantEtapas; ++i) {
         int cantElementos = Decodificador::popInt(infoEscenario);
@@ -41,8 +42,11 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     itEtapa = etapas.begin();
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
+    cout << "agrego los disparos" << endl;
     this->agregarVistasEnemigos();
+    cout << "agrego los enemigos" << endl;
     this->agregarVistasPowerUps();
+    cout << "agrego los powerups" << endl;
     this->porEquipos = (bool)Decodificador::popInt(infoEscenario);
     this->nroAvion = Decodificador::popInt(infoEscenario);
 
@@ -133,6 +137,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
 
     this->setDisparos(disparos);
     int cantEnemigos = Decodificador::popInt(infoActualizacion);
+    cout << "cantidad enemigos: " << cantEnemigos << endl;
     list<enemigo> enemigos;
     for (int i = 0; i < cantEnemigos; ++i) {
         enemigo unEnemigo;
@@ -143,6 +148,20 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         enemigos.push_front(unEnemigo);
     }
     this->setEnemigos(enemigos);
+
+    int cantidadPowerUps = Decodificador::popFloat(infoActualizacion);
+    list <powerUp> powerUps;
+    for(int i = 0; i < cantidadPowerUps; ++i){
+        powerUp unPowerUp;
+        unPowerUp.posX = Decodificador::popFloat(infoActualizacion);
+        unPowerUp.posY = Decodificador::popFloat(infoActualizacion);
+        unPowerUp.estadoAnimacion = Decodificador::popInt(infoActualizacion);
+        unPowerUp.tipoPowerUp = Decodificador::popInt(infoActualizacion);
+        unPowerUp.valorPowerUp = Decodificador::popInt(infoActualizacion);
+        powerUps.push_front(unPowerUp);
+    }
+    this->setPowerUps(powerUps);
+
 
     //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
@@ -169,10 +188,15 @@ void EscenarioVista::preloop(){
     ventana->iniciar();
     cargarFondo();
     cargarVistasAviones();
+    cout << "cargo la vista de los aviones" << endl;
     cargarVistasElementos();
+    cout << "cargo la vista de los elementos" << endl;
     cargarVistasPowerUps();
+    cout << "cargo la vista de los powerUps" << endl;
     cargarVistaDisparos();
+    cout << "cargo la vista de los disparos" << endl;
     cargarVistaEnemigos();
+    cout << "cargo la vista de los enemigos" << endl;
     cargarSonidos();
 }
 
@@ -203,10 +227,15 @@ int EscenarioVista::mainLoop(){
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
         this->renderizarElementos();
+        cout << "renderizo los elementos" << endl;
         this->renderizarAviones();
+        cout << "renderizo los aviones" << endl;
         this->renderizarDisparos();
+        cout << "renderizo los disparos" << endl;
         this->renderizarEnemigos();
+        cout << "renderizo los enemigos" << endl;        
         this->renderizarPowerUps();
+        cout << "renderizo los powerups" << endl;        
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -311,6 +340,12 @@ void EscenarioVista::setEnemigos(list<enemigo> enemigosParam){
     pthread_mutex_unlock(&this->mutexEnemigos);
 }
 
+void EscenarioVista::setPowerUps(list<powerUp> powerUpsParam){
+    pthread_mutex_lock(&this->mutexPowerUps);
+    this->powerUps = powerUpsParam;
+    pthread_mutex_unlock(&this->mutexPowerUps);
+}
+
 void EscenarioVista::setScrollingOffset(float scrollingOffset){
     this->scrollingOffset = scrollingOffset;
 }
@@ -334,10 +369,10 @@ void EscenarioVista::agregarVistasEnemigos(){
 }
 
 void EscenarioVista::agregarVistasPowerUps(){
-  this->powerUpBonificacion = new PowerUpBonificacion();
-  this->powerUpDosAmetralladoras = new PowerUpDosAmetralladoras();
-  this->powerUpDestruirEnemigos = new powerUpDestruirEnemigos();
-  this->powerUpAvionesSecundarios = new powerUpAvionesSecundarios();
+  this->powerUpBonificacion = new PowerUpBonificacionVista();
+  this->powerUpDosAmetralladoras = new PowerUpDosAmetralladorasVista();
+  this->powerUpDestruirEnemigos = new PowerUpDestruirEnemigosVista();
+  this->powerUpAvionesSecundarios = new PowerUpAvionesSecundariosVista();
 }
 
 void EscenarioVista::cargarVistasAviones(){
@@ -382,11 +417,15 @@ void EscenarioVista::cargarFondo(){
 }
 
 void EscenarioVista::cargarVistasPowerUps() {
+    cout << "Esta por cargar la vista de los powerUps" << endl;
     this->powerUpBonificacion->cargarImagen(this->ventana->getVentanaRenderer());
+    cout << "Esta por cargar la vista de los powerUpsBonificacion" << endl;
     this->powerUpDestruirEnemigos->cargarImagen(this->ventana->getVentanaRenderer());
+    cout << "Esta por cargar la vista de los powerUpDestruirEnemigos" << endl;
     this->powerUpDosAmetralladoras->cargarImagen(this->ventana->getVentanaRenderer());
+    cout << "Esta por cargar la vista de los powerUpDosAmetralladoras" << endl;
     this->powerUpAvionesSecundarios->cargarImagen(this->ventana->getVentanaRenderer());
-
+    cout << "Esta por cargar la vista de los PowerUpAvionesSecundarios" << endl;
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){
@@ -472,7 +511,7 @@ void EscenarioVista::renderizarPowerUps(){
       this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS)
       this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    else (unPowerUp.tipoPowerUp == TIPO_POWERUP_AVIONES_SECUNDARIOS)
+    else 
       this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
   }
   pthread_mutex_unlock(&mutexPowerUps);

@@ -3,7 +3,7 @@
 
 #include "powerUpVista.hpp"
 
-class PowerUpBonificacionVista : public EnemigoVista {
+class PowerUpBonificacionVista : public PowerUpVista {
 public:
     PowerUpBonificacionVista();
     ~PowerUpBonificacionVista();

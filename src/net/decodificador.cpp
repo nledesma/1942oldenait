@@ -36,7 +36,7 @@ string Decodificador::popAvion(string & codigo){
 }
 
 /* Push y pop de powerUps */
-void Decodificador::pushPowerUp(string &codigo, PowerUp *powerUp){
+void Decodificador::push(string &codigo, PowerUp *powerUp){
   push(codigo, powerUp->getPosicionX());
   push(codigo, powerUp->getPosicionY());
   push(codigo, powerUp->getEstadoAnimacion());

@@ -1,14 +1,15 @@
 #include "powerUpVista.hpp"
 
-void EnemigoVista::cargarImagen(SDL_Renderer * renderer){
+void PowerUpVista::cargarImagen(SDL_Renderer * renderer){
+	cout << "El path del sprite es: " << this->pathSprite << endl;
     this->figuraPowerUp->loadFromFile(this->pathSprite, renderer);
 }
 
-void EnemigoVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer* renderer){
+void PowerUpVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer* renderer){
     this->estadoAnimacion = estadoAnimacion;
     this->figuraPowerUp->render((int)posX, (int)posY, renderer, &clipsAnimacion[estadoAnimacion]);
 }
 
-void EnemigoVista::cerrar() {
+void PowerUpVista::cerrar() {
     this->figuraPowerUp->free();
 }

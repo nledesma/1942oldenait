@@ -37,6 +37,7 @@ public:
     static string popEscenario(string & codigo);
     static string popDisparo(string & codigo);
     static string popAvionInicial(string & codigo);
+    static string popPowerUpInicial(string &codigo);
     static string popElementoInicial(string & codigo);
     static string popEscenarioInicial(string & codigo);
     static string popDisparoInicial(string & codigo);

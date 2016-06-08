@@ -29,15 +29,12 @@ int PowerUp::getValor(){
     return this->posY;
 }
 
-/*
 string PowerUp::getIdSprite(){
       return this->idSprite;
   }
-*/
 
 void PowerUp::mover(float timeStep, float velocidadY){
     this->posY += velocidadY * timeStep;
-    cout << "La posicion es del powerUp es " << posY << endl;
 }
 
 

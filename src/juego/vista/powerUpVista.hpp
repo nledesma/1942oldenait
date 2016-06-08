@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class EnemigoVista {
+class PowerUpVista {
 protected:
     Figura * figuraPowerUp;
     string pathSprite;

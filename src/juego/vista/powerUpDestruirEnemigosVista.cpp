@@ -1,4 +1,4 @@
-#include "powerUpDestruirEnemigos.hpp"
+#include "powerUpDestruirEnemigosVista.hpp"
 
 PowerUpDestruirEnemigosVista::~PowerUpDestruirEnemigosVista() { }
 

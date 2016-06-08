@@ -3,7 +3,7 @@
 
 #include "powerUpVista.hpp"
 
-class PowerUpDosAmetralladorasVista : public EnemigoVista {
+class PowerUpDosAmetralladorasVista : public PowerUpVista {
 public:
     PowerUpDosAmetralladorasVista();
     ~PowerUpDosAmetralladorasVista();
