@@ -23,6 +23,10 @@
 #include "enemigoDeEscuadron.hpp"
 #include "enemigoMediano.hpp"
 #include "enemigoGrande.hpp"
+#include "powerUpBonificacionVista.hpp"
+#include "powerUpDosAmetralladorasVista.hpp"
+#include "powerUpDestruirEnemigosVista.hpp"
+#include "powerUpAvionesSecundariosVista.hpp"
 
 using namespace std;
 
@@ -32,6 +36,14 @@ struct enemigo {
     int estadoAnimacion;
     int tipoEnemigo;
 };
+
+struct powerUp{
+  float posX;
+  float posY;
+  int estadoAnimacion:
+  int tipoPowerUp;
+  int valorPowerUp;  
+}
 
 class EscenarioVista {
 private:
@@ -57,8 +69,13 @@ private:
     EnemigoDeEscuadron* enemigoDeEscuadron;
     EnemigoMediano* enemigoMediano;
     EnemigoGrande* enemigoGrande;
+    list<powerUp> powerUps;
     list<disparo> disparos;
     list<enemigo> enemigos;
+    PowerUpAvionesSecundariosVista* powerUpAvionesSecundarios;
+    PowerUpBonificacionVista* powerUpBonificacion;
+    PowerUpDestruirEnemigosVista* powerUpDestruirEnemigos;
+    PowerUpDosAmetralladorasVista* powerUpDosAmetralladoras;
     /* Etapas */
     list<EtapaVista*> etapas;
     SoundBoard *soundBoard;
@@ -70,6 +87,7 @@ private:
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
 
 public:
@@ -87,17 +105,20 @@ public:
     void agregarElementoVista(string codigo);
     void agregarDisparoVista(string pathSprite);
     void agregarVistasEnemigos();
+    void agregarVistasPowerUps();
     void renderizarAviones();
     void renderizarElementos();
     void renderizarFondo(float y);
     void renderizarDisparos();
     void renderizarEnemigos();
+    void renderizarPowerUps();
     void pushEvento(SDL_Event evento);
     int popEvento();
     void cargarVistasAviones();
     void cargarVistasElementos();
     void cargarVistaDisparos();
     void cargarVistaEnemigos();
+    cargarVistasPowerUps();
     void cargarSonidos();
     void actualizar(float offset);
     void cerrar();

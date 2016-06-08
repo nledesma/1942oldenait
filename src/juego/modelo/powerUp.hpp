@@ -23,13 +23,12 @@ protected:
 public:
     virtual ~PowerUp();
     //virtual void aplicarPowerUp() = 0;
-    //virtual float getPosicionX();
-    //virtual float getPosicionY();
-    //virtual int getEstadoAnimacion();
+    virtual float getPosicionX();
+    virtual float getPosicionY();
+    virtual int getEstadoAnimacion();
     virtual int getTipoPowerUp();
-    //virtual int getAncho() = 0;
-    //virtual int getAlto() = 0;
-    //virtual string getIdSprite();
+    virtual int getValor();
+    virtual string getIdSprite();
     virtual void mover(float timeStep, float velocidadY);
     virtual void volverEstadoInicial();
 };

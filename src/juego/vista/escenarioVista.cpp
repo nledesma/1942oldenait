@@ -42,6 +42,7 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
     this->agregarVistasEnemigos();
+    this->agregarVistasPowerUps();
     this->porEquipos = (bool)Decodificador::popInt(infoEscenario);
     this->nroAvion = Decodificador::popInt(infoEscenario);
 
@@ -169,6 +170,7 @@ void EscenarioVista::preloop(){
     cargarFondo();
     cargarVistasAviones();
     cargarVistasElementos();
+    cargarVistasPowerUps();
     cargarVistaDisparos();
     cargarVistaEnemigos();
     cargarSonidos();
@@ -204,6 +206,7 @@ int EscenarioVista::mainLoop(){
         this->renderizarAviones();
         this->renderizarDisparos();
         this->renderizarEnemigos();
+        this->renderizarPowerUps();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -330,6 +333,13 @@ void EscenarioVista::agregarVistasEnemigos(){
     this->enemigoGrande = new EnemigoGrande();
 }
 
+void EscenarioVista::agregarVistasPowerUps(){
+  this->powerUpBonificacion = new PowerUpBonificacion();
+  this->powerUpDosAmetralladoras = new PowerUpDosAmetralladoras();
+  this->powerUpDestruirEnemigos = new powerUpDestruirEnemigos();
+  this->powerUpAvionesSecundarios = new powerUpAvionesSecundarios();
+}
+
 void EscenarioVista::cargarVistasAviones(){
     int numeroJugador = 1;
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
@@ -369,6 +379,14 @@ void EscenarioVista::cargarFondo(){
     if(!this->fondo->loadFromFile(this->pathImagen, this->ventana->getVentanaRenderer())){
         this->fondo->loadFromFile(FONDO_POR_DEFECTO, this->ventana->getVentanaRenderer());
     }
+}
+
+void EscenarioVista::cargarVistasPowerUps() {
+    this->powerUpBonificacion->cargarImagen(this->ventana->getVentanaRenderer());
+    this->powerUpDestruirEnemigos->cargarImagen(this->ventana->getVentanaRenderer());
+    this->powerUpDosAmetralladoras->cargarImagen(this->ventana->getVentanaRenderer());
+    this->powerUpAvionesSecundarios->cargarImagen(this->ventana->getVentanaRenderer());
+
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){
@@ -441,6 +459,23 @@ void EscenarioVista::renderizarEnemigos(){
             this->enemigoGrande->render(enemigo1.posX, enemigo1.posY, enemigo1.estadoAnimacion, this->ventana->getVentanaRenderer());
     }
     pthread_mutex_unlock(&mutexEnemigos);
+}
+
+void EscenarioVista::renderizarPowerUps(){
+  pthread_mutex_lock(&mutexPowerUps);
+  for(list<powerUp>::iterator iterador = this->powerUps.begin(); iterador != this->powerUps.end(); iterador++){
+    powerUp unPowerUp = *iterador;
+
+    if (unPowerUp.tipoPowerUp == TIPO_POWERUP_BONIFICACION)
+      this->powerUpBonificacion->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DOS_AMETRALLADORAS)
+      this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS)
+      this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    else (unPowerUp.tipoPowerUp == TIPO_POWERUP_AVIONES_SECUNDARIOS)
+      this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+  }
+  pthread_mutex_unlock(&mutexPowerUps);
 }
 
 void EscenarioVista::actualizar(float offset) {

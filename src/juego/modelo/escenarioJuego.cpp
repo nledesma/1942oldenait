@@ -175,7 +175,7 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
     this->moverElementos(timeStep);
     this->moverDisparos(timeStep);
     this->moverEnemigos(timeStep);
-    this->moverPowerUps(timeStep); //hijo de puta que trae problemas
+    this->moverPowerUps(timeStep);
     this->verificarColisiones();
     this->manejarProximoEvento();
     this->getProximoEnemigo();
@@ -233,8 +233,8 @@ void EscenarioJuego::moverPowerUps(float timeStep) {
     for (list<PowerUp *>::iterator iterador = this->getPowerUps().begin();
          iterador != this->getPowerUps().end(); ++iterador) {
         PowerUp *powerUp = *iterador;
-        //powerUp->mover(timeStep, this->velocidadDesplazamientoY);
-    }   
+        powerUp->mover(timeStep, this->velocidadDesplazamientoY);
+    }
 }
 
 void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
