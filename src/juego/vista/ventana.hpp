@@ -40,8 +40,6 @@ public:
 
     /* Retorna la ventana de SDL */
     SDL_Window *getSdlWindow();
-    void cargarFondo();
-    void renderizarFondo();
     Figura* getFondo();
     void limpiar();
 };
