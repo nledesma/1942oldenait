@@ -17,8 +17,7 @@ class AvionPequenio: public AvionEnemigo {
 public:
     AvionPequenio(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionPequenio();
-    int getAncho();
-    int getAlto();
+    bool correspondeDisparar(float timestep);
     vector<DisparoEnemigo*> disparar();
 };
 

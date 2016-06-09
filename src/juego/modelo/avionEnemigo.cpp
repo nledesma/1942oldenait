@@ -17,6 +17,32 @@ int AvionEnemigo::getEstadoAnimacion(){
     return estado;
 }
 
+int AvionEnemigo::getAncho() {
+    int tipo = this->tipoAvion;
+    int ancho;
+    if (tipo == TIPO_AVION_PEQUENIO || tipo == TIPO_AVION_ESCUADRON)
+        ancho = ANCHO_ENEMIGO_PEQUENIO;
+    else if (tipo == TIPO_AVION_MEDIANO)
+        ancho = ANCHO_ENEMIGO_MEDIANO;
+    else
+        ancho = ANCHO_ENEMIGO_GRANDE;
+    return ancho;
+}
+
+
+int AvionEnemigo::getAlto() {
+    int tipo = this->tipoAvion;
+    int alto;
+    if (tipo == TIPO_AVION_PEQUENIO || tipo == TIPO_AVION_ESCUADRON)
+        alto = ALTO_ENEMIGO_PEQUENIO;
+    else if (tipo == TIPO_AVION_MEDIANO)
+        alto = ALTO_ENEMIGO_MEDIANO;
+    else
+        alto = ALTO_ENEMIGO_GRANDE;
+    return alto;
+}
+
+
 int AvionEnemigo::getTipoAvion() {
     return this->tipoAvion;
 }
@@ -89,16 +115,25 @@ void AvionEnemigo::colisionar(){
 }
 
 DisparoEnemigo* AvionEnemigo::disparar(float xObjetivo, float yObjetivo){
-    float difX = (float) pow(xObjetivo - this->posX, 2);
-    float difY = (float) pow(yObjetivo - this->posY, 2);
-    float norma = (float) sqrt(difX + difY);
+    DisparoEnemigo * disparo;
+    if (this->posX != 0) {
+        cout << "posX recibida: " << this->posX << " posY recibida: " << this->posY << endl;
+        float difX = (float) pow(xObjetivo - this->posX, 2);
+        float difY = (float) pow(yObjetivo - this->posY, 2);
+        float norma = (float) sqrt(difX + difY);
 
-    float versorX = (xObjetivo - this->posX) / norma;
-    float versorY = (yObjetivo - this->posY) / norma;
+        float versorX = (xObjetivo - this->posX) / norma;
+        float versorY = (yObjetivo - this->posY) / norma;
 
-    float posInicialX = this->posX + this->getAncho() /2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
-    float posInicialY = this->posY + this->getAlto() / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
-    DisparoEnemigo* disparo = new DisparoEnemigo(posInicialX, posInicialY, 200, versorX, versorY);
+        float anchoAvion = this->getAncho();
+        float altoAvion = this->getAlto();
+        float posInicialX = this->posX + anchoAvion / 2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
+        float posInicialY = this->posY + altoAvion / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
+        cout << "posX mandada: " << this->posX << " posY mandada: " << this->posY << endl;
+        disparo = new DisparoEnemigo(posInicialX, posInicialY, 200, versorX, versorY);
+    } else {
+        disparo = NULL;
+    }
 
     return disparo;
 }

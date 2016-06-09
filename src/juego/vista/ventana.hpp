@@ -16,7 +16,7 @@ private:
     int alto;
     SDL_Window *sdlWindow = NULL;
     SDL_Renderer *gVentanaRenderer = NULL;
-
+    TTF_Font* fuenteStarWars;
 public:
     /* Constructor */
     Ventana(int ancho, int alto);

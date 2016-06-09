@@ -27,6 +27,13 @@
 #include "powerUpDosAmetralladorasVista.hpp"
 #include "powerUpDestruirEnemigosVista.hpp"
 #include "powerUpAvionesSecundariosVista.hpp"
+#include "disparoEnemigoVista.hpp"
+#include "textoDinamico.hpp"
+#include <sstream>
+
+#define POSX_PUNTAJE1 10
+#define POSX_PUNTAJE2 600
+#define POSY_PUNTAJES 10
 
 using namespace std;
 
@@ -42,7 +49,7 @@ struct powerUp{
   float posY;
   int estadoAnimacion;
   int tipoPowerUp;
-  int valorPowerUp;  
+  int valorPowerUp;
 };
 
 class EscenarioVista {
@@ -50,6 +57,7 @@ private:
     /* Equipos */
     bool porEquipos;
     vector<int> puntajes;
+    vector<TextoDinamico *> textosPuntaje;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */
@@ -65,12 +73,14 @@ private:
     list<AvionVista *> aviones;
     list<ElementoVista *> elementos;
     DisparoVista* disparoVista;
+    DisparoEnemigoVista* disparoEnemigoVista;
     EnemigoPequenio* enemigoPequenio;
     EnemigoDeEscuadron* enemigoDeEscuadron;
     EnemigoMediano* enemigoMediano;
     EnemigoGrande* enemigoGrande;
     list<powerUp> powerUps;
     list<disparo> disparos;
+    list<disparoEnemigo> disparosEnemigos;
     list<enemigo> enemigos;
     PowerUpAvionesSecundariosVista* powerUpAvionesSecundarios;
     PowerUpBonificacionVista* powerUpBonificacion;
@@ -86,10 +96,11 @@ private:
     /* Sincronización */
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexDisparosEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
-
+    void actualizarImagenPuntajes();
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);
@@ -104,19 +115,23 @@ public:
     void agregarAvionVista(string infoAvion);
     void agregarElementoVista(string codigo);
     void agregarDisparoVista(string pathSprite);
+    void agregarDisparoEnemigoVista();
     void agregarVistasEnemigos();
     void agregarVistasPowerUps();
     void renderizarAviones();
     void renderizarElementos();
     void renderizarFondo(float y);
     void renderizarDisparos();
+    void renderizarDisparosEnemigos();
     void renderizarEnemigos();
     void renderizarPowerUps();
+    void renderizarPuntajes();
     void pushEvento(SDL_Event evento);
     int popEvento();
     void cargarVistasAviones();
     void cargarVistasElementos();
     void cargarVistaDisparos();
+    void cargarVistaDisparosEnemigos();
     void cargarVistaEnemigos();
     void cargarVistasPowerUps();
     void cargarSonidos();
@@ -138,6 +153,7 @@ public:
     list<ElementoVista *> &getElementos();
     bool getActivo();
     void setDisparos(list<disparo> disparos);
+    void setDisparosEnemigos(list<disparoEnemigo> disparosEnemigos);
     void setEnemigos(list<enemigo> enemigosParam);
     void setPowerUps(list<powerUp> powerUpsParam);
     int getAncho();

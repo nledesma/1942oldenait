@@ -43,7 +43,7 @@
                 <enemigos>
                     <enemigo>
                       <tipo>pequenio</tipo>
-                      <cantidad>10</cantidad>
+                      <cantidad>0</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>escuadron</tipo>
@@ -51,7 +51,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>mediano</tipo>
-                      <cantidad>5</cantidad>
+                      <cantidad>20</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>grande</tipo>

@@ -5,20 +5,25 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->anchoVentana = Decodificador::popInt(infoEscenario);
     this->altoVentana = Decodificador::popInt(infoEscenario);
     this->ventana = ventana;
-
     this->ancho = Decodificador::popInt(infoEscenario);
     this->alto = Decodificador::popInt(infoEscenario);
-
     this->pathImagen = Decodificador::popIdImg(infoEscenario);
-
     this->scrollingOffset = 0;
     this->contadorSonido = 0;
     this->fondo = new Figura();
     this->soundBoard = new SoundBoard();
     this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
+
     puntajes.push_back(0);
     if (porEquipos) puntajes.push_back(0);
+
+    textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+    textosPuntaje[0]->cambiarTexto("0");
+    if (porEquipos) {
+        textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+        textosPuntaje[1]->cambiarTexto("0");
+    }
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -42,6 +47,7 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     itEtapa = etapas.begin();
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
+    this->agregarDisparoEnemigoVista();
     cout << "agrego los disparos" << endl;
     this->agregarVistasEnemigos();
     cout << "agrego los enemigos" << endl;
@@ -134,8 +140,8 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         unDisparo.posY = Decodificador::popFloat(infoActualizacion);
         disparos.push_front(unDisparo);
     }
-
     this->setDisparos(disparos);
+
     int cantEnemigos = Decodificador::popInt(infoActualizacion);
     list<enemigo> enemigos;
     for (int i = 0; i < cantEnemigos; ++i) {
@@ -147,6 +153,18 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         enemigos.push_front(unEnemigo);
     }
     this->setEnemigos(enemigos);
+
+    list<disparoEnemigo> disparosEnemigos;
+    int cantDisparosEnemigos = Decodificador::popInt(infoActualizacion);
+    if (cantDisparosEnemigos != 0) {
+    }
+    for (int i = 0; i < cantDisparosEnemigos; ++i) {
+        disparoEnemigo unDisparoEnemigo;
+        unDisparoEnemigo.posX = Decodificador::popFloat(infoActualizacion);
+        unDisparoEnemigo.posY = Decodificador::popFloat(infoActualizacion);
+        disparosEnemigos.push_front(unDisparoEnemigo);
+    }
+    this->setDisparosEnemigos(disparosEnemigos);
 
     int cantidadPowerUps = Decodificador::popInt(infoActualizacion);
     list <powerUp> powerUps;
@@ -161,18 +179,11 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
     this->setPowerUps(powerUps);
 
-
-    //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
-    if (puntajeAux != puntajes[0]) {
-        this->puntajes[0] = puntajeAux;
-    }
-
-    puntajeAux = Decodificador::popInt(infoActualizacion);
+    this->puntajes[0] = puntajeAux;
     if (porEquipos) {
-        if (puntajeAux != puntajes[1]) {
-            this->puntajes[1] = puntajeAux;
-        }
+        puntajeAux = Decodificador::popInt(infoActualizacion);
+        this->puntajes[1] = puntajeAux;
     }
 
     if (infoActualizacion.size() != 0) {
@@ -191,6 +202,7 @@ void EscenarioVista::preloop(){
     cargarVistasPowerUps();
     cargarVistaDisparos();
     cargarVistaEnemigos();
+    cargarVistaDisparosEnemigos();
     cargarSonidos();
 }
 
@@ -216,15 +228,17 @@ int EscenarioVista::mainLoop(){
             this->pushEvento(e);
         }
         // TODO por ahí conviene agregar un mutex.
-        SDL_SetRenderDrawColor(this->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-        SDL_RenderClear(this->getVentana()->getVentanaRenderer());
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
         this->renderizarElementos();
         this->renderizarPowerUps();
         this->renderizarAviones();
         this->renderizarDisparos();
+        this->renderizarDisparosEnemigos();
         this->renderizarEnemigos();
+        // NOTE esta imágen se recarga si hubo cambios y debe estar en este thread.
+        this->actualizarImagenPuntajes();
+        this->renderizarPuntajes();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -323,6 +337,12 @@ void EscenarioVista::setDisparos(list<disparo> disparosParam){
     pthread_mutex_unlock(&this->mutexDisparos);
 }
 
+void EscenarioVista::setDisparosEnemigos(list<disparoEnemigo> disparosEnemigosParam){
+    pthread_mutex_lock(&this->mutexDisparosEnemigos);
+    this->disparosEnemigos = disparosEnemigosParam;
+    pthread_mutex_unlock(&this->mutexDisparosEnemigos);
+}
+
 void EscenarioVista::setEnemigos(list<enemigo> enemigosParam){
     pthread_mutex_lock(&this->mutexEnemigos);
     this->enemigos = enemigosParam;
@@ -348,6 +368,10 @@ void EscenarioVista::agregarAvionVista(string infoAvion){
 
 void EscenarioVista::agregarDisparoVista(string pathSprite){
     this->disparoVista = new DisparoVista(pathSprite);
+}
+
+void EscenarioVista::agregarDisparoEnemigoVista(){
+    this->disparoEnemigoVista = new DisparoEnemigoVista();
 }
 
 void EscenarioVista::agregarVistasEnemigos(){
@@ -389,6 +413,10 @@ void EscenarioVista::cargarVistasElementos(){
 
 void EscenarioVista::cargarVistaDisparos() {
     this->disparoVista->cargarImagen(this->ventana->getVentanaRenderer());
+}
+
+void EscenarioVista::cargarVistaDisparosEnemigos() {
+    this->disparoEnemigoVista->cargarImagen(this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::cargarVistaEnemigos() {
@@ -433,6 +461,21 @@ void EscenarioVista::renderizarElementos(){
     }
 }
 
+void EscenarioVista::actualizarImagenPuntajes() {
+    stringstream ss; ss << puntajes[0];
+    textosPuntaje[0]->cambiarTexto(ss.str());
+    if (porEquipos) {
+        stringstream ss2; ss2 << puntajes[1];
+        textosPuntaje[1]->cambiarTexto(ss2.str());
+    }
+}
+
+void EscenarioVista::renderizarPuntajes() {
+    textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
+    if (porEquipos)
+        textosPuntaje[1]->renderizar(POSX_PUNTAJE2, POSY_PUNTAJES);
+}
+
 void EscenarioVista::renderizarAviones() {
     list<AvionVista*>::iterator iterador;
     AvionVista* avionDelCliente;
@@ -467,6 +510,15 @@ void EscenarioVista::renderizarDisparos(){
     pthread_mutex_unlock(&mutexDisparos);
 }
 
+void EscenarioVista::renderizarDisparosEnemigos(){
+    pthread_mutex_lock(&mutexDisparosEnemigos);
+    for(list<disparoEnemigo>::iterator iterador = this->disparosEnemigos.begin(); iterador != this->disparosEnemigos.end(); ++iterador) {
+        disparoEnemigo disparo1 = *iterador;
+        disparoEnemigoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
+    }
+    pthread_mutex_unlock(&mutexDisparosEnemigos);
+}
+
 void EscenarioVista::renderizarEnemigos(){
     pthread_mutex_lock(&mutexEnemigos);
     for(list<enemigo>::iterator iterador = this->enemigos.begin(); iterador != this->enemigos.end(); ++iterador) {
@@ -495,7 +547,7 @@ void EscenarioVista::renderizarPowerUps(){
       this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS)
       this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    else 
+    else
       this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
   }
   pthread_mutex_unlock(&mutexPowerUps);

@@ -18,14 +18,6 @@ AvionGrande::~AvionGrande(){
 
 }
 
-int AvionGrande::getAncho() {
-    return ANCHO_ENEMIGO_GRANDE;
-}
-
-int AvionGrande::getAlto() {
-    return ALTO_ENEMIGO_GRANDE;
-}
-
 bool AvionGrande::correspondeDisparar(float timestep) {
     if ((this->contadorTimesteps + timestep) >= FRECUENCIA_DISPAROS){
         this->contadorTimesteps = 0;
@@ -47,8 +39,8 @@ vector<DisparoEnemigo*> AvionGrande::disparar(){
     float versorX = (xObjetivo - this->posX) / norma;
     float versorY = (yObjetivo - this->posY) / norma;
 
-    float posInicialX = this->posX + this->getAncho() /2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
-    float posInicialY = this->posY + this->getAlto() / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
+    float posInicialX = this->posX + ANCHO_ENEMIGO_GRANDE /2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
+    float posInicialY = this->posY + ALTO_ENEMIGO_GRANDE / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
     DisparoEnemigo* disparo1 = new DisparoEnemigo(posInicialX, posInicialY, 200, versorX, versorY);
     disparos.push_back(disparo1);
 
@@ -61,8 +53,6 @@ vector<DisparoEnemigo*> AvionGrande::disparar(){
     versorX = (xObjetivo - this->posX) / norma;
     versorY = (yObjetivo - this->posY) / norma;
 
-    posInicialX = this->posX + this->getAncho() /2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
-    posInicialY = this->posY + this->getAlto() / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
     DisparoEnemigo* disparo2 = new DisparoEnemigo(posInicialX, posInicialY, 200, versorX, versorY);
     disparos.push_back(disparo2);
 
@@ -75,8 +65,6 @@ vector<DisparoEnemigo*> AvionGrande::disparar(){
     versorX = (xObjetivo - this->posX) / norma;
     versorY = (yObjetivo - this->posY) / norma;
 
-    posInicialX = this->posX + this->getAncho() /2.f - ANCHO_DISPARO_ENEMIGO / 2.f;
-    posInicialY = this->posY + this->getAlto() / 2.f - ALTO_DISPARO_ENEMIGO / 2.f;
     DisparoEnemigo* disparo3 = new DisparoEnemigo(posInicialX, posInicialY, 200, versorX, versorY);
     disparos.push_back(disparo3);
 

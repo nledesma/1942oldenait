@@ -33,7 +33,7 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
     }
     //Agrego a partir de aca
     SDL_Color color = { 255, 232, 32 };
-    this->texto = new Texto(50, color, ventana);
+    this->texto = new Texto(50, color, STAR_WARS_FONT, ventana);
     this->texto->cargarFuente("1942 OLDENAIT");
 
     return success;

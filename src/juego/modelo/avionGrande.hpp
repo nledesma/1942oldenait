@@ -36,7 +36,7 @@
 #include <pthread.h>
 #include <vector>
 
-#define FRECUENCIA_DISPAROS 30
+#define FRECUENCIA_DISPAROS 2.5
 #define ALTURA_INICIO_DISPAROS 300
 
 class AvionGrande: public AvionEnemigo {
@@ -45,8 +45,6 @@ private:
 public:
     AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionGrande();
-    int getAncho();
-    int getAlto();
     bool correspondeDisparar(float timestep);
     vector<DisparoEnemigo*> disparar();
 };

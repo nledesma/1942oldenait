@@ -18,12 +18,6 @@ AvionDeEscuadron::~AvionDeEscuadron(){
 
 }
 
-int AvionDeEscuadron::getAncho() {
-    return ANCHO_ENEMIGO_PEQUENIO;
-}
-
-int AvionDeEscuadron::getAlto() {
-    return ALTO_ENEMIGO_PEQUENIO;
-}
+bool AvionDeEscuadron::correspondeDisparar(float timestep) { return true; }
 
 vector<DisparoEnemigo*> AvionDeEscuadron::disparar(){ vector<DisparoEnemigo*> disparos; return disparos; }
