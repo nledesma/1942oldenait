@@ -6,7 +6,6 @@ TextoDinamico::TextoDinamico(int tamanioFuente, SDL_Color color, string fuente, 
 
 void TextoDinamico::recargarTexto() {
     if(caracteres != "") {
-        cout << caracteres << endl;
         // Si hay caracteres se carga el nuevo texto.
         this->cargarFuente(caracteres);
     } else {

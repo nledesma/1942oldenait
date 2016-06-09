@@ -26,6 +26,10 @@
 #include "textoDinamico.hpp"
 #include <sstream>
 
+#define POSX_PUNTAJE1 10
+#define POSX_PUNTAJE2 600
+#define POSY_PUNTAJES 10
+
 using namespace std;
 
 struct enemigo {
@@ -40,8 +44,7 @@ private:
     /* Equipos */
     bool porEquipos;
     vector<int> puntajes;
-    TextoDinamico * textoPuntaje1;
-    TextoDinamico * textoPuntaje2;
+    vector<TextoDinamico *> textosPuntaje;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */
@@ -76,7 +79,7 @@ private:
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPuntajes = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
-
+    void actualizarImagenPuntajes();
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);

@@ -21,10 +21,12 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     puntajes.push_back(0);
     if (porEquipos) puntajes.push_back(0);
 
-    textoPuntaje1 = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    textoPuntaje1->cambiarTexto("100000");
-    textoPuntaje2 = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    textoPuntaje2->cambiarTexto("100000");
+    textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+    textosPuntaje[0]->cambiarTexto("0");
+    if (porEquipos) {
+        textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+        textosPuntaje[1]->cambiarTexto("0");
+    }
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -149,15 +151,9 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
     this->setEnemigos(enemigos);
 
-    //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
+    // NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
     this->puntajes[0] = puntajeAux;
-    stringstream ss; ss << puntajeAux;
-
-    pthread_mutex_lock(&mutexPuntajes);
-    this->textoPuntaje1->cambiarTexto(ss.str());
-    pthread_mutex_unlock(&mutexPuntajes);
-
     if (porEquipos) {
         puntajeAux = Decodificador::popInt(infoActualizacion);
         this->puntajes[1] = puntajeAux;
@@ -209,6 +205,8 @@ int EscenarioVista::mainLoop(){
         this->renderizarAviones();
         this->renderizarDisparos();
         this->renderizarEnemigos();
+        // NOTE esta imágen se recarga si hubo cambios y debe estar en este thread.
+        this->actualizarImagenPuntajes();
         this->renderizarPuntajes();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
@@ -398,11 +396,19 @@ void EscenarioVista::renderizarElementos(){
     }
 }
 
+void EscenarioVista::actualizarImagenPuntajes() {
+    stringstream ss; ss << puntajes[0];
+    textosPuntaje[0]->cambiarTexto(ss.str());
+    if (porEquipos) {
+        stringstream ss2; ss2 << puntajes[1];
+        textosPuntaje[1]->cambiarTexto(ss2.str());
+    }
+}
+
 void EscenarioVista::renderizarPuntajes() {
-    pthread_mutex_lock(&mutexPuntajes);
-    this->textoPuntaje1->renderizar(10, 10);
-    this->textoPuntaje2->renderizar(300, 10);
-    pthread_mutex_unlock(&mutexPuntajes);
+    textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
+    if (porEquipos)
+        textosPuntaje[1]->renderizar(POSX_PUNTAJE2, POSY_PUNTAJES);
 }
 
 void EscenarioVista::renderizarAviones() {
