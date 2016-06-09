@@ -1,10 +1,11 @@
 #include <iostream>
+#include <cstdlib>
 #include "../src/net/servidor/servidor.hpp"
 #include "../src/net/cliente/cliente.hpp"
 #include "../src/net/cliente/clienteParser.hpp"
 #include "../src/menu/Menu/menuPrincipal.hpp"
 #include "../src/menu/Menu/menuDatosDeUsuario.hpp"
-#include "../src/menu/Menu/menuModosDeJuego.hpp"
+#include "../src/menu/Menu/menuConexionManual.hpp"
 #include "../src/menu/Menu/menuConexiones.hpp"
 #include "../src/juego/vista/textoDinamico.hpp"
 #include "../src/menu/listaDeSeleccion.hpp"
@@ -76,6 +77,47 @@ bool esIpValida(string ip){
 	return false;
 }
 
+void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones){
+    MenuConexionManual* menuConexionManual = new MenuConexionManual();
+    SDL_Color color = {255, 232, 32};
+    TextoDinamico* textoDinamicoIP = new TextoDinamico(25, color, ventana);
+    textoDinamicoIP->cambiarTexto("");
+    // TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color, ventana);
+    // textoDinamicoPuerto->cambiarTexto("");
+    menuConexionManual->cargarBotones(ventana);
+    bool quit = false;
+	SDL_Event e;
+	while(!quit){
+		while(SDL_PollEvent( &e ) != 0){
+			if(e.type == SDL_QUIT){
+				quit = true;
+			}
+			int respuesta = menuConexionManual->getBotonSiguiente()[0].handleEvent(&e);
+			if(respuesta == 1){
+				menuConexiones->cerrar();
+                cliente->setAddress(textoDinamicoIP->getTexto(), 8000);
+                cliente->conectar();
+
+			}
+			ventana->limpiar();
+			//Renderizado
+            textoDinamicoIP->manejarEvento(e);
+            //textoDinamicoPuerto->manejarEvento(e);
+            // const char* ipChar = textoDinamicoPuerto->getTexto().c_str();
+            // int ip = atoi(ipChar);
+
+		}
+		ventana->limpiar();
+		//Renderizado
+		menuConexionManual->renderizar(ventana);
+        textoDinamicoIP->renderizar(300, 350);
+        // textoDinamicoPuerto->renderizar(400, 450);
+		SDL_RenderPresent(ventana->getVentanaRenderer());
+	}
+    menuConexionManual->cerrar();
+
+}
+
 void conexionManual(Cliente* cliente){
     string ip;
     int puerto;
@@ -103,13 +145,18 @@ void conexionManual(Cliente* cliente){
     }
 }
 
-void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas){
+void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones){
     list<Conexion>::iterator it;
     int opcion = numeroSeleccionado;
-    it = conexionesGuardadas->begin();
-    advance(it, opcion);
-    cliente->setAddress(it->ip,it->puerto);
-    cliente->conectar();
+    cout << "Opcion: " << opcion << endl;
+    if(opcion == 6){
+        cargarMenuConexionManual(cliente, ventana, menuConexiones);
+    }else{
+        it = conexionesGuardadas->begin();
+        advance(it, opcion);
+        cliente->setAddress(it->ip, it->puerto);
+        cliente->conectar();
+    }
 }
 
 void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* menuConexiones) {
@@ -119,6 +166,8 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
         string conexion = it->nombre + ". IP: " + it->ip + ". Puerto: " + to_string(it->puerto);
         menuConexiones->getListaDeSeleccion()->agregarOpcion(conexion);
     }
+    menuConexiones->getListaDeSeleccion()->agregarOpcion("CONEXION MANUAL");
+    menuConexiones->cargarBotones(ventana);
     bool quit = false;
     SDL_Event e;
     int x, y; // Para los clicks.
@@ -133,7 +182,7 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
                 int respuesta = menuConexiones->getBotonSiguiente()[0].handleEvent(&e);
                 if(respuesta == 1){
                     int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();
-                    levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas);
+                    levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
                 }
             }
 		}
@@ -144,35 +193,8 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
     menuConexiones->cerrar();
 }
 
-void cargarMenuModosDeJuego(Ventana* ventana, MenuModosDeJuego* menuModosDeJuego, Cliente* cliente){
-    MenuConexiones* menuConexiones = new MenuConexiones(ventana);
-	bool quit = false;
-	SDL_Event e;
-	while( !quit ){
-		while( SDL_PollEvent( &e ) != 0 ){
-			if(e.type == SDL_QUIT){
-				quit = true;
-			}
-			int respuesta = menuModosDeJuego->getBotonEnColaboracion()[0].handleEvent(&e);
-            if(respuesta == 1){
-                menuModosDeJuego->cerrar();
-                menuConexiones->cargarBotones(ventana);
-                cargarMenuConexiones(cliente, ventana, menuConexiones);
-            }
-			menuModosDeJuego->getBotonPorEquipos()[0].handleEvent(&e);
-			menuModosDeJuego->getBotonModoPractica()[0].handleEvent(&e);
-
-		}
-		ventana->limpiar();
-		//Renderizar
-		menuModosDeJuego->renderizar(ventana);
-		SDL_RenderPresent(ventana->getVentanaRenderer());
-	}
-	menuModosDeJuego->cerrar();
-}
-
 void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente){
-	MenuModosDeJuego* menuModosDeJuego = new MenuModosDeJuego();
+	MenuConexiones* menuConexiones = new MenuConexiones(ventana);
     SDL_Color color = {255, 232, 32};
     TextoDinamico* textoDinamico = new TextoDinamico(25, color, ventana);
     textoDinamico->cambiarTexto("");
@@ -186,8 +208,7 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			int respuesta = menuDatosDeUsuario->getBotonSiguiente()[0].handleEvent(&e);
 			if(respuesta == 1){
 				menuDatosDeUsuario->cerrar();
-				menuModosDeJuego->cargarBotones(ventana);
-				cargarMenuModosDeJuego(ventana, menuModosDeJuego, cliente);
+				cargarMenuConexiones(cliente, ventana, menuConexiones);
 			}
 			ventana->limpiar();
 			//Renderizado
@@ -234,8 +255,6 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
 		}
 	}
 	menuDatosDeUsuario->cerrar();
-
-    //Free y cerrado de SDL
     menuPrincipal->cerrar();
     ventana->cerrar();
 }

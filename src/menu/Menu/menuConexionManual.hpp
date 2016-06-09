@@ -1,21 +1,21 @@
-#ifndef MENUDATOSDEUSUARIO_H
-#define MENUDATOSDEUSUARIO_H
+#ifndef MENUCONEXIONMANUAL_H
+#define MENUCONEXIONMANUAL_H
 
-#include "menu.hpp"
 #include "../Boton/botonSiguiente.hpp"
+#include "menu.hpp"
 using namespace std;
 
-class MenuDatosDeUsuario: public Menu{
+class MenuConexionManual: public Menu{
     private:
         BotonSiguiente* botonSiguiente;
-        Texto* texto;
+        Texto* textoIP;
+        Texto* textoPuerto;
     public:
-        MenuDatosDeUsuario();
+        MenuConexionManual();
         bool cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
         BotonSiguiente* getBotonSiguiente();
         void cerrar();
-
 };
 
 #endif

@@ -39,7 +39,7 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	powerUpDestruirEnemigos.o powerUpAvionesSecundarios.o punto.o superficie.o celda.o \
 	colisionable.o grilla.o trayectoriaIdaYvuelta.o trayectoriaRulo.o boton.o botonEnColaboracion.o \
 	botonJugar.o botonModoPractica.o botonPorEquipos.o botonSalir.o botonSiguiente.o \
-	menu.o menuDatosDeUsuario.o menuModosDeJuego.o menuPrincipal.o menuConexiones.o texto.o \
+	menu.o menuDatosDeUsuario.o menuConexionManual.o menuPrincipal.o menuConexiones.o texto.o \
 	textoDinamico.o radioButton.o listaDeSeleccion.o disparoEnemigo.o powerUpDestruirEnemigosVista.o \
 	powerUpVista.o powerUpBonificacionVista.o powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o \
 	disparoEnemigoVista.o
