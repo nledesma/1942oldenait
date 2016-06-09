@@ -12,8 +12,6 @@
 #include "../src/menu/listaDeSeleccion.hpp"
 using namespace std;
 
-//TODO faltaria poner los botones con los otros modos de juego.
-
 bool validarInt(string valor) {
     if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
         return false;
@@ -37,19 +35,6 @@ int leerInt(){
     ss << lectura;
     ss >> n;
     return n;
-}
-
-void separador(){
-    cout << "-----------------------------------------------------" << endl;
-}
-
-void imprimirMenu(){
-    separador();
-    cout << "Bienvenido, Elija la opcion que desee:" << endl;
-    cout << "1. Conectar" << endl;
-    cout << "2. Desconectar" << endl;
-    cout << "3. Salir" << endl;
-    separador();
 }
 
 int validarPuerto(){
@@ -148,32 +133,6 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 
 }
 
-void conexionManual(Cliente* cliente){
-    string ip;
-    int puerto;
-    string alias;
-
-    if (cliente->conectado()){
-        cout << "El cliente ya está conectado." << endl;
-    } else {
-        cout << "Ingrese IP: " << endl;
-        cin >> ip;
-        while (!(esIpValida(ip))){
-        	cout << "La dirección IP ingresada no tiene un formato válido" << endl;
-        	cin >> ip;
-        }
-
-        cout << "Ingrese un puerto: " << endl;
-       	puerto = validarPuerto();
-
-        cliente->setAddress(ip, puerto);
-        cout << "Ingrese un alias: ";
-        cin >> alias;
-        cliente->setAlias(alias);
-        cout << "Se ha ingresado el alias " << alias << endl;
-        cliente->conectar();
-    }
-}
 
 void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones){
     list<Conexion>::iterator it;

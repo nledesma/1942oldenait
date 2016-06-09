@@ -38,7 +38,6 @@ BotonSiguiente* MenuConexionPuerto::getBotonSiguiente(){
 }
 
 void MenuConexionPuerto::cerrar(){
-	//Free loaded images
     this->getBotonSiguiente()->getFigura()->free();
     this->textoPuerto->getFigura()->free();
 }

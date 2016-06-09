@@ -37,7 +37,6 @@ BotonSiguiente* MenuConexionManual::getBotonSiguiente(){
 }
 
 void MenuConexionManual::cerrar(){
-	//Free loaded images
     this->getBotonSiguiente()->getFigura()->free();
     this->textoIP->getFigura()->free();
 }

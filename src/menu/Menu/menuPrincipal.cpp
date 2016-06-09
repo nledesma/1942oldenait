@@ -31,7 +31,6 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
         //Setea los botones en las posiciones
         this->botonSalir[0].setPosition(250, 370);
     }
-    //Agrego a partir de aca
     SDL_Color color = { 255, 232, 32 };
     this->texto = new Texto(50, color, STAR_WARS_FONT, ventana);
     this->texto->cargarFuente("1942 OLDENAIT");
@@ -55,7 +54,6 @@ BotonSalir* MenuPrincipal::getBotonSalir(){
 }
 
 void MenuPrincipal::cerrar(){
-	//Free loaded images
     this->getBotonJugar()->getFigura()->free();
     this->getBotonSalir()->getFigura()->free();
     this->texto->getFigura()->free();
