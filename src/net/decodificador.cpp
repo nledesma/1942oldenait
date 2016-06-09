@@ -230,6 +230,14 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, enemigo);
         }
     }
+    list<PowerUp*> powerUps = escenarioJuego->getPowerUps();
+    Decodificador::pushCantidad(codigo, (int) powerUps.size());
+    if(!powerUps.empty()){
+        for(list<PowerUp*>::iterator iterador = powerUps.begin(); iterador != powerUps.end(); ++iterador) {
+            PowerUp* powerUp = *iterador;
+            Decodificador::push(codigo, powerUp);
+        }
+    }
     Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(0));
     // Si es por equipos encolamos el puntaje del segundo.
     if (escenarioJuego->porEquipos())

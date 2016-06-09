@@ -137,7 +137,6 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
 
     this->setDisparos(disparos);
     int cantEnemigos = Decodificador::popInt(infoActualizacion);
-    cout << "cantidad enemigos: " << cantEnemigos << endl;
     list<enemigo> enemigos;
     for (int i = 0; i < cantEnemigos; ++i) {
         enemigo unEnemigo;
@@ -149,7 +148,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
     this->setEnemigos(enemigos);
 
-    int cantidadPowerUps = Decodificador::popFloat(infoActualizacion);
+    int cantidadPowerUps = Decodificador::popInt(infoActualizacion);
     list <powerUp> powerUps;
     for(int i = 0; i < cantidadPowerUps; ++i){
         powerUp unPowerUp;
@@ -188,15 +187,10 @@ void EscenarioVista::preloop(){
     ventana->iniciar();
     cargarFondo();
     cargarVistasAviones();
-    cout << "cargo la vista de los aviones" << endl;
     cargarVistasElementos();
-    cout << "cargo la vista de los elementos" << endl;
     cargarVistasPowerUps();
-    cout << "cargo la vista de los powerUps" << endl;
     cargarVistaDisparos();
-    cout << "cargo la vista de los disparos" << endl;
     cargarVistaEnemigos();
-    cout << "cargo la vista de los enemigos" << endl;
     cargarSonidos();
 }
 
@@ -227,15 +221,10 @@ int EscenarioVista::mainLoop(){
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
         this->renderizarElementos();
-        cout << "renderizo los elementos" << endl;
-        this->renderizarAviones();
-        cout << "renderizo los aviones" << endl;
-        this->renderizarDisparos();
-        cout << "renderizo los disparos" << endl;
-        this->renderizarEnemigos();
-        cout << "renderizo los enemigos" << endl;        
         this->renderizarPowerUps();
-        cout << "renderizo los powerups" << endl;        
+        this->renderizarAviones();
+        this->renderizarDisparos();
+        this->renderizarEnemigos();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -417,15 +406,10 @@ void EscenarioVista::cargarFondo(){
 }
 
 void EscenarioVista::cargarVistasPowerUps() {
-    cout << "Esta por cargar la vista de los powerUps" << endl;
     this->powerUpBonificacion->cargarImagen(this->ventana->getVentanaRenderer());
-    cout << "Esta por cargar la vista de los powerUpsBonificacion" << endl;
     this->powerUpDestruirEnemigos->cargarImagen(this->ventana->getVentanaRenderer());
-    cout << "Esta por cargar la vista de los powerUpDestruirEnemigos" << endl;
     this->powerUpDosAmetralladoras->cargarImagen(this->ventana->getVentanaRenderer());
-    cout << "Esta por cargar la vista de los powerUpDosAmetralladoras" << endl;
     this->powerUpAvionesSecundarios->cargarImagen(this->ventana->getVentanaRenderer());
-    cout << "Esta por cargar la vista de los PowerUpAvionesSecundarios" << endl;
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){

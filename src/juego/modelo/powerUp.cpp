@@ -18,15 +18,21 @@ int PowerUp::getTipoPowerUp() {
 }
 
 float PowerUp::getPosicionX(){
-    return this->posX;;
+    pthread_mutex_lock(&this->mutexMover);
+    float posX = this->posX;
+    pthread_mutex_unlock(&this->mutexMover);
+    return posX;
 }
 
 float PowerUp::getPosicionY(){
-    return this->posY;
+    pthread_mutex_lock(&this->mutexMover);
+    float posY = this->posY;
+    pthread_mutex_unlock(&this->mutexMover);
+    return posY;
 }
 
 int PowerUp::getValor(){
-    return this->posY;
+    return this->valor;
 }
 
 string PowerUp::getIdSprite(){
@@ -34,7 +40,24 @@ string PowerUp::getIdSprite(){
   }
 
 void PowerUp::mover(float timeStep, float velocidadY){
+    pthread_mutex_lock(&this->mutexMover);
     this->posY += velocidadY * timeStep;
+    this->animar(timeStep);
+    pthread_mutex_unlock(&this->mutexMover);
+}
+
+void PowerUp::animar(float timeStep) {
+    if (this->estadoAnimacion != POWER_UP_COLISIONADO) {
+        if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+            this->contadorTiempoAnimacion = 0;
+            if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+                this->estadoAnimacion += 1;
+            else
+                this->estadoAnimacion = POWER_UP_NORMAL;
+        } else {
+            this->contadorTiempoAnimacion += timeStep;
+        }
+    }
 }
 
 

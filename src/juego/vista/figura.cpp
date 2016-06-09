@@ -16,17 +16,13 @@ Figura::~Figura(){
 }
 
 bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
-    cout << "entro al load from file" << endl;
     //Si existe una textura cargada de antes, se libera la memoria asociada a esa textura.
     free();
-    cout << "hizo el free" << endl;
     //Se declara la textura que va a cargarse en la figura.
     SDL_Texture* nuevaTextura = NULL;
     //Se carga la imagen desde el path especificado.
     string basePath = PATH_IMG;
-    cout << "Este es el basePath " << basePath << endl;
     string fullPath = basePath + path + ".bmp";
-    cout << "Este es el path de la imagen " << fullPath << endl;
     SDL_Surface* loadedSurface = SDL_LoadBMP(fullPath.c_str());
     if(loadedSurface == NULL){
         Logger::instance()->logError(errno, "No se ha podido cargar la imagen" + path);
@@ -73,14 +69,12 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
 
 void Figura::free(){
     //Se libera la textura si es necesario, y se redefinen los atributos por default.
-    cout << "va a hacer el free de la figura" << endl;
     if(this->textura != NULL){
         SDL_DestroyTexture(this->textura);
         this->textura = NULL;
         this->mWidth = 0;
         this->mHeight = 0;
     }
-    cout << "esta por salir del free de la figura" << endl;
 }
 //
 // bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_Font *gFont, SDL_Renderer* renderer){
