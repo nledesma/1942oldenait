@@ -18,7 +18,7 @@ ListaDeSeleccion::~ListaDeSeleccion() {
 
 void ListaDeSeleccion::agregarOpcion(string strOpcion) {
     SDL_Color color = {255, 232, 32};
-    Texto* texto = new Texto(20, color, this->ventana);
+    Texto* texto = new Texto(20, color, STAR_WARS_FONT, this->ventana);
     texto->cargarFuente(strOpcion);
     RadioButton* boton = new RadioButton(this->ventana->getVentanaRenderer());
     if (opciones.size() == 0) {

@@ -79,8 +79,7 @@ bool esIpValida(string ip){
 
 void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones){
     MenuConexionManual* menuConexionManual = new MenuConexionManual();
-    SDL_Color color = {255, 232, 32};
-    TextoDinamico* textoDinamicoIP = new TextoDinamico(25, color, ventana);
+    TextoDinamico* textoDinamicoIP = new TextoDinamico(25, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     textoDinamicoIP->cambiarTexto("");
     // TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color, ventana);
     // textoDinamicoPuerto->cambiarTexto("");
@@ -195,11 +194,11 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
 
 void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente){
 	MenuConexiones* menuConexiones = new MenuConexiones(ventana);
-    SDL_Color color = {255, 232, 32};
-    TextoDinamico* textoDinamico = new TextoDinamico(25, color, ventana);
+    TextoDinamico* textoDinamico = new TextoDinamico(25, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     textoDinamico->cambiarTexto("");
 	bool quit = false;
 	SDL_Event e;
+    SDL_StartTextInput();
 	while(!quit){
 		while(SDL_PollEvent( &e ) != 0){
 			if(e.type == SDL_QUIT){
@@ -222,6 +221,7 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
         textoDinamico->renderizar(300, 350);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
+    SDL_StopTextInput();
 }
 
 void menuPrincipal(Cliente * cliente, Ventana* ventana) {

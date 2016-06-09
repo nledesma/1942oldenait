@@ -14,8 +14,16 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->soundBoard = new SoundBoard();
     this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
+
     puntajes.push_back(0);
     if (porEquipos) puntajes.push_back(0);
+
+    textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+    textosPuntaje[0]->cambiarTexto("0");
+    if (porEquipos) {
+        textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+        textosPuntaje[1]->cambiarTexto("0");
+    }
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -171,18 +179,11 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
     this->setPowerUps(powerUps);
 
-
-    //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
-    if (puntajeAux != puntajes[0]) {
-        this->puntajes[0] = puntajeAux;
-    }
-
-    puntajeAux = Decodificador::popInt(infoActualizacion);
+    this->puntajes[0] = puntajeAux;
     if (porEquipos) {
-        if (puntajeAux != puntajes[1]) {
-            this->puntajes[1] = puntajeAux;
-        }
+        puntajeAux = Decodificador::popInt(infoActualizacion);
+        this->puntajes[1] = puntajeAux;
     }
 
     if (infoActualizacion.size() != 0) {
@@ -227,8 +228,6 @@ int EscenarioVista::mainLoop(){
             this->pushEvento(e);
         }
         // TODO por ahí conviene agregar un mutex.
-        SDL_SetRenderDrawColor(this->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-        SDL_RenderClear(this->getVentana()->getVentanaRenderer());
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
         this->renderizarElementos();
@@ -237,6 +236,9 @@ int EscenarioVista::mainLoop(){
         this->renderizarDisparos();
         this->renderizarDisparosEnemigos();
         this->renderizarEnemigos();
+        // NOTE esta imágen se recarga si hubo cambios y debe estar en este thread.
+        this->actualizarImagenPuntajes();
+        this->renderizarPuntajes();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -459,6 +461,21 @@ void EscenarioVista::renderizarElementos(){
     }
 }
 
+void EscenarioVista::actualizarImagenPuntajes() {
+    stringstream ss; ss << puntajes[0];
+    textosPuntaje[0]->cambiarTexto(ss.str());
+    if (porEquipos) {
+        stringstream ss2; ss2 << puntajes[1];
+        textosPuntaje[1]->cambiarTexto(ss2.str());
+    }
+}
+
+void EscenarioVista::renderizarPuntajes() {
+    textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
+    if (porEquipos)
+        textosPuntaje[1]->renderizar(POSX_PUNTAJE2, POSY_PUNTAJES);
+}
+
 void EscenarioVista::renderizarAviones() {
     list<AvionVista*>::iterator iterador;
     AvionVista* avionDelCliente;
@@ -530,7 +547,7 @@ void EscenarioVista::renderizarPowerUps(){
       this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS)
       this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    else 
+    else
       this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
   }
   pthread_mutex_unlock(&mutexPowerUps);

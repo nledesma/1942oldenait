@@ -28,6 +28,12 @@
 #include "powerUpDestruirEnemigosVista.hpp"
 #include "powerUpAvionesSecundariosVista.hpp"
 #include "disparoEnemigoVista.hpp"
+#include "textoDinamico.hpp"
+#include <sstream>
+
+#define POSX_PUNTAJE1 10
+#define POSX_PUNTAJE2 600
+#define POSY_PUNTAJES 10
 
 using namespace std;
 
@@ -43,7 +49,7 @@ struct powerUp{
   float posY;
   int estadoAnimacion;
   int tipoPowerUp;
-  int valorPowerUp;  
+  int valorPowerUp;
 };
 
 class EscenarioVista {
@@ -51,6 +57,7 @@ private:
     /* Equipos */
     bool porEquipos;
     vector<int> puntajes;
+    vector<TextoDinamico *> textosPuntaje;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */
@@ -93,7 +100,7 @@ private:
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
-
+    void actualizarImagenPuntajes();
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);
@@ -118,6 +125,7 @@ public:
     void renderizarDisparosEnemigos();
     void renderizarEnemigos();
     void renderizarPowerUps();
+    void renderizarPuntajes();
     void pushEvento(SDL_Event evento);
     int popEvento();
     void cargarVistasAviones();

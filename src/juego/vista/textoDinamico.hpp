@@ -8,7 +8,7 @@ class TextoDinamico: public Texto{
         string caracteres;
         void recargarTexto();
     public:
-        TextoDinamico(int tamanioFuente, SDL_Color color, Ventana * ventana);
+        TextoDinamico(int tamanioFuente, SDL_Color color, string fuente, Ventana * ventana);
         void cambiarTexto(string textoNuevo);
         void manejarEvento(SDL_Event evento);
         string getTexto();

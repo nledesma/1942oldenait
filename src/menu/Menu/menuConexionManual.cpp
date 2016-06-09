@@ -21,8 +21,7 @@ bool MenuConexionManual::cargarBotones(Ventana* ventana){
         this->botonSiguiente[0].setPosition(450, 400);
     }
 
-    SDL_Color color = { 255, 232, 32 };
-    this->textoIP = new Texto(35, color, ventana);
+    this->textoIP = new Texto(35, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     this->textoIP->cargarFuente("INGRESE IP: ");
     // this->textoPuerto = new Texto(35, color, ventana);
     // this->textoPuerto->cargarFuente("INGRESE PUERTO: ");

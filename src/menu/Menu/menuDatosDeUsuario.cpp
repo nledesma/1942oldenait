@@ -23,7 +23,7 @@ bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
     }
 
     SDL_Color color = { 255, 232, 32 };
-    this->texto = new Texto(30, color, ventana);
+    this->texto = new Texto(30, color, STAR_WARS_FONT, ventana);
     this->texto->cargarFuente("INGRESE UN ALIAS: ");
 
     return success;
