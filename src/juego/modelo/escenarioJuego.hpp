@@ -61,6 +61,7 @@ private:
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaDisparosEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     Grilla * grilla;
 
@@ -102,7 +103,7 @@ public:
     list<Disparo*> getDisparos();
     list<DisparoEnemigo*> getDisparosEnemigos();
     list<AvionEnemigo*> getEnemigos();
-    list<PowerUp*> &getPowerUps();
+    list<PowerUp*> getPowerUps();
     int getPuntaje(int nroEquipo);
     int getAncho();
     int getAlto();

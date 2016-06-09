@@ -7,7 +7,7 @@ PowerUpDosAmetralladoras::PowerUpDosAmetralladoras(float posX, float posY, int v
   	this->posY = posY;
 		this->posXInicial = posX;
 		this->posYInicial = posY;
-  	this->estadoAnimacion = POWER_UP_DOS_AMETRALLADORAS_NORMAL;
+  	this->estadoAnimacion = POWER_UP_NORMAL;
   	this->idSprite = SPRITE_POWERUP_DOS_AMETRALLADORAS;
 }
 

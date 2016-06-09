@@ -175,7 +175,7 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
     this->moverElementos(timeStep);
     this->moverDisparos(timeStep);
     this->moverEnemigos(timeStep);
-    this->moverPowerUps(timeStep); //hijo de puta que trae problemas
+    this->moverPowerUps(timeStep);
     this->verificarColisiones();
     this->manejarProximoEvento();
     this->getProximoEnemigo();
@@ -273,11 +273,13 @@ void EscenarioJuego::moverDisparosEnemigos(float timeStep) {
 }
 
 void EscenarioJuego::moverPowerUps(float timeStep) {
-    for (list<PowerUp *>::iterator iterador = this->getPowerUps().begin();
-         iterador != this->getPowerUps().end(); ++iterador) {
+    int i = 1;
+    for (list<PowerUp *>::iterator iterador = powerUps.begin();
+         iterador != powerUps.end(); ++iterador) {
         PowerUp *powerUp = *iterador;
-        //powerUp->mover(timeStep, this->velocidadDesplazamientoY);
-    }   
+        powerUp->mover(timeStep, this->velocidadDesplazamientoY);
+        i++;
+    }
 }
 
 void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
@@ -307,8 +309,12 @@ list<Elemento *> &EscenarioJuego::getElementos() {
     return this->elementos;
 }
 
-list<PowerUp *> &EscenarioJuego::getPowerUps(){
-    return this->powerUps;
+list<PowerUp *> EscenarioJuego::getPowerUps(){
+    list<PowerUp *> listaPowerUps;
+    pthread_mutex_lock(&this->mutexPowerUps);
+    listaPowerUps = this->powerUps;
+    pthread_mutex_unlock(&this->mutexPowerUps);
+    return listaPowerUps;
 }
 
 list<Disparo *> EscenarioJuego::getDisparos() {

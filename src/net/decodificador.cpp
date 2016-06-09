@@ -35,6 +35,15 @@ string Decodificador::popAvion(string & codigo){
     return popBytes(codigo, 2*sizeof(float) + 1);
 }
 
+/* Push y pop de powerUps */
+void Decodificador::push(string &codigo, PowerUp *powerUp){
+  push(codigo, powerUp->getPosicionX());
+  push(codigo, powerUp->getPosicionY());
+  push(codigo, powerUp->getEstadoAnimacion());
+  push(codigo, powerUp->getTipoPowerUp());
+  push(codigo, powerUp->getValor());
+}
+
 /* Push y pop de disparo. */
 void Decodificador::push(string & codigo, Disparo *d) {
     push(codigo, d->getPosX());
@@ -219,6 +228,14 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
         for(list<AvionEnemigo*>::iterator iterador = enemigos.begin(); iterador != enemigos.end(); ++iterador) {
             AvionEnemigo* enemigo = *iterador;
             Decodificador::push(codigo, enemigo);
+        }
+    }
+    list<PowerUp*> powerUps = escenarioJuego->getPowerUps();
+    Decodificador::pushCantidad(codigo, (int) powerUps.size());
+    if(!powerUps.empty()){
+        for(list<PowerUp*>::iterator iterador = powerUps.begin(); iterador != powerUps.end(); ++iterador) {
+            PowerUp* powerUp = *iterador;
+            Decodificador::push(codigo, powerUp);
         }
     }
     Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(0));

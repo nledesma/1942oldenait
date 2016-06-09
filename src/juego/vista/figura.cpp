@@ -101,7 +101,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
 
 void Figura::free(){
     //Se libera la textura si es necesario, y se redefinen los atributos por default.
-    if(textura != NULL){
+    if(this->textura != NULL){
         SDL_DestroyTexture(this->textura);
         this->textura = NULL;
         this->mWidth = 0;
