@@ -21,7 +21,7 @@ bool MenuConexionPuerto::cargarBotones(Ventana* ventana){
     }
 
     SDL_Color color = { 255, 232, 32 };
-    this->textoPuerto = new Texto(35, color, ventana);
+    this->textoPuerto = new Texto(35, color,  STAR_WARS_FONT, ventana);
     this->textoPuerto->cargarFuente("INGRESE PUERTO: ");
 
     return success;

@@ -81,7 +81,7 @@ bool esIpValida(string ip){
 void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexionManual* menu){
     MenuConexionPuerto* menuConexionPuerto = new MenuConexionPuerto();
     SDL_Color color = {255, 232, 32};
-    TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color, ventana);
+    TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color,  STAR_WARS_FONT, ventana);
     textoDinamicoPuerto->cambiarTexto("");
     menuConexionPuerto->cargarBotones(ventana);
     bool quit = false;
