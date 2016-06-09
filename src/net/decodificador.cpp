@@ -50,6 +50,12 @@ void Decodificador::push(string & codigo, Disparo *d) {
     push(codigo, d->getPosY());
 }
 
+/* Push y pop de disparo enemigo. */
+void Decodificador::push(string & codigo, DisparoEnemigo *d) {
+    push(codigo, d->getPosX());
+    push(codigo, d->getPosY());
+}
+
 string Decodificador::popDisparo(string & codigo) {
     return popBytes(codigo, 2*sizeof(float));
 }
@@ -230,6 +236,15 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, enemigo);
         }
     }
+    list<DisparoEnemigo*> disparosEnemigos = escenarioJuego->getDisparosEnemigos();
+    Decodificador::pushCantidad(codigo, (int) disparosEnemigos.size());
+    if(!disparosEnemigos.empty()){
+        for(list<DisparoEnemigo*>::iterator iterador = disparosEnemigos.begin(); iterador != disparosEnemigos.end(); ++iterador) {
+            DisparoEnemigo* disparoEnemigo = *iterador;
+            Decodificador::push(codigo, disparoEnemigo);
+        }
+    }
+
     list<PowerUp*> powerUps = escenarioJuego->getPowerUps();
     Decodificador::pushCantidad(codigo, (int) powerUps.size());
     if(!powerUps.empty()){
