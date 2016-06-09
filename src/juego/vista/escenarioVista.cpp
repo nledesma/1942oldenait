@@ -17,8 +17,14 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->soundBoard = new SoundBoard();
     this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
+
     puntajes.push_back(0);
     if (porEquipos) puntajes.push_back(0);
+
+    textoPuntaje1 = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    textoPuntaje1->cambiarTexto("100000");
+    textoPuntaje2 = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    textoPuntaje2->cambiarTexto("100000");
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -145,15 +151,16 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
 
     //NOTE Todos estos chequeos y couts son provisorios hasta que se dibujen los puntajes en la pantalla.
     int puntajeAux = Decodificador::popInt(infoActualizacion);
-    if (puntajeAux != puntajes[0]) {
-        this->puntajes[0] = puntajeAux;
-    }
+    this->puntajes[0] = puntajeAux;
+    stringstream ss; ss << puntajeAux;
 
-    puntajeAux = Decodificador::popInt(infoActualizacion);
+    pthread_mutex_lock(&mutexPuntajes);
+    this->textoPuntaje1->cambiarTexto(ss.str());
+    pthread_mutex_unlock(&mutexPuntajes);
+
     if (porEquipos) {
-        if (puntajeAux != puntajes[1]) {
-            this->puntajes[1] = puntajeAux;
-        }
+        puntajeAux = Decodificador::popInt(infoActualizacion);
+        this->puntajes[1] = puntajeAux;
     }
 
     if (infoActualizacion.size() != 0) {
@@ -196,14 +203,13 @@ int EscenarioVista::mainLoop(){
             this->pushEvento(e);
         }
         // TODO por ahí conviene agregar un mutex.
-        SDL_SetRenderDrawColor(this->getVentana()->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
-        SDL_RenderClear(this->getVentana()->getVentanaRenderer());
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
         this->renderizarElementos();
         this->renderizarAviones();
         this->renderizarDisparos();
         this->renderizarEnemigos();
+        this->renderizarPuntajes();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -390,6 +396,13 @@ void EscenarioVista::renderizarElementos(){
         ElementoVista* elementoVista = *iterador;
         elementoVista->render(this->ventana->getVentanaRenderer());
     }
+}
+
+void EscenarioVista::renderizarPuntajes() {
+    pthread_mutex_lock(&mutexPuntajes);
+    this->textoPuntaje1->renderizar(10, 10);
+    this->textoPuntaje2->renderizar(300, 10);
+    pthread_mutex_unlock(&mutexPuntajes);
 }
 
 void EscenarioVista::renderizarAviones() {

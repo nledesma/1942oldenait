@@ -1,23 +1,26 @@
 #include "textoDinamico.hpp"
 
-TextoDinamico::TextoDinamico(int tamanioFuente, SDL_Color color, Ventana * ventana): Texto(tamanioFuente, color, ventana){
+TextoDinamico::TextoDinamico(int tamanioFuente, SDL_Color color, string fuente, Ventana * ventana): Texto(tamanioFuente, color, fuente, ventana){
 
 }
 
 void TextoDinamico::recargarTexto() {
     if(caracteres != "") {
+        cout << caracteres << endl;
         // Si hay caracteres se carga el nuevo texto.
-        this->texto->loadFromRenderedText(caracteres.c_str(), this->color, this->fuente, ventana->getVentanaRenderer());
+        this->cargarFuente(caracteres);
     } else {
         // Si no, se carga un espacio.
-        this->texto->loadFromRenderedText( " ", this->color, this->fuente, ventana->getVentanaRenderer());
+        this->cargarFuente(" ");
     }
 }
 
 // Esta función se utiliza para cambiar el texto sin eventos. Ej: puntaje.
 void TextoDinamico::cambiarTexto(string textoNuevo) {
-    caracteres = textoNuevo;
-    recargarTexto();
+    if (caracteres != textoNuevo) {
+        caracteres.assign(textoNuevo);
+        recargarTexto();
+    }
 }
 
 void TextoDinamico::manejarEvento(SDL_Event evento){

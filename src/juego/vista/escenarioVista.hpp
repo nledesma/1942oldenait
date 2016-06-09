@@ -23,6 +23,8 @@
 #include "enemigoDeEscuadron.hpp"
 #include "enemigoMediano.hpp"
 #include "enemigoGrande.hpp"
+#include "textoDinamico.hpp"
+#include <sstream>
 
 using namespace std;
 
@@ -38,6 +40,8 @@ private:
     /* Equipos */
     bool porEquipos;
     vector<int> puntajes;
+    TextoDinamico * textoPuntaje1;
+    TextoDinamico * textoPuntaje2;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */
@@ -70,6 +74,7 @@ private:
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPuntajes = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
 
 public:
@@ -92,6 +97,7 @@ public:
     void renderizarFondo(float y);
     void renderizarDisparos();
     void renderizarEnemigos();
+    void renderizarPuntajes();
     void pushEvento(SDL_Event evento);
     int popEvento();
     void cargarVistasAviones();
