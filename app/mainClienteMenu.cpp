@@ -5,6 +5,7 @@
 #include "../src/net/cliente/clienteParser.hpp"
 #include "../src/menu/Menu/menuPrincipal.hpp"
 #include "../src/menu/Menu/menuDatosDeUsuario.hpp"
+#include "../src/menu/Menu/menuConexionPuerto.hpp"
 #include "../src/menu/Menu/menuConexionManual.hpp"
 #include "../src/menu/Menu/menuConexiones.hpp"
 #include "../src/juego/vista/textoDinamico.hpp"
@@ -77,13 +78,49 @@ bool esIpValida(string ip){
 	return false;
 }
 
+void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexionManual* menu){
+    MenuConexionPuerto* menuConexionPuerto = new MenuConexionPuerto();
+    SDL_Color color = {255, 232, 32};
+    TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color, ventana);
+    textoDinamicoPuerto->cambiarTexto("");
+    menuConexionPuerto->cargarBotones(ventana);
+    bool quit = false;
+	SDL_Event e;
+	while(!quit){
+		while(SDL_PollEvent( &e ) != 0){
+			if(e.type == SDL_QUIT){
+				quit = true;
+			}
+			int respuesta = menuConexionPuerto->getBotonSiguiente()[0].handleEvent(&e);
+			if(respuesta == 1){
+				menu->cerrar();
+
+                const char* puertoChar = textoDinamicoPuerto->getTexto().c_str();
+                int puerto = atoi (puertoChar);
+                cliente->setAddress(ip, puerto);
+                cliente->conectar();
+
+			}
+			ventana->limpiar();
+			//Renderizado
+            textoDinamicoPuerto->manejarEvento(e);
+
+		}
+		ventana->limpiar();
+		//Renderizado
+		menuConexionPuerto->renderizar(ventana);
+        textoDinamicoPuerto->renderizar(300, 250);
+		SDL_RenderPresent(ventana->getVentanaRenderer());
+	}
+    menuConexionPuerto->cerrar();
+
+}
+
 void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones){
     MenuConexionManual* menuConexionManual = new MenuConexionManual();
     SDL_Color color = {255, 232, 32};
     TextoDinamico* textoDinamicoIP = new TextoDinamico(25, color, ventana);
     textoDinamicoIP->cambiarTexto("");
-    // TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color, ventana);
-    // textoDinamicoPuerto->cambiarTexto("");
     menuConexionManual->cargarBotones(ventana);
     bool quit = false;
 	SDL_Event e;
@@ -95,23 +132,17 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 			int respuesta = menuConexionManual->getBotonSiguiente()[0].handleEvent(&e);
 			if(respuesta == 1){
 				menuConexiones->cerrar();
-                cliente->setAddress(textoDinamicoIP->getTexto(), 8000);
-                cliente->conectar();
-
+                cargarMenuPuerto(textoDinamicoIP->getTexto(), cliente, ventana, menuConexionManual);
 			}
 			ventana->limpiar();
 			//Renderizado
             textoDinamicoIP->manejarEvento(e);
-            //textoDinamicoPuerto->manejarEvento(e);
-            // const char* ipChar = textoDinamicoPuerto->getTexto().c_str();
-            // int ip = atoi(ipChar);
 
 		}
 		ventana->limpiar();
 		//Renderizado
 		menuConexionManual->renderizar(ventana);
-        textoDinamicoIP->renderizar(300, 350);
-        // textoDinamicoPuerto->renderizar(400, 450);
+        textoDinamicoIP->renderizar(300, 250);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
     menuConexionManual->cerrar();

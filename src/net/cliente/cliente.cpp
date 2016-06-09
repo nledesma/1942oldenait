@@ -24,8 +24,6 @@ Cliente::Cliente(Ventana* ventana):GameSocket(){
 Cliente::~Cliente() {}
 
 void Cliente::setAddress(string serverAddress, int port){
-	cout << "En set adrress: " << serverAddress << endl;
-	cout << "En set Adrress: " << port << endl;
 	this->addr_info.sin_family = AF_INET; // Se setea la familia de direcciones IPv4
 	this->addr_info.sin_port = htons(port); // Se setea el puerto en formato corto de red
 	this->addr_info.sin_addr.s_addr = inet_addr(serverAddress.c_str()); // Se setea la dirección del server
@@ -35,7 +33,6 @@ void Cliente::setAddress(string serverAddress, int port){
 
 int Cliente::conectar(){
 	// Me conecto a la direccion.
-	cout << "En conectar la ip es: " << this->ip << "y el puerto: " << this->port << endl;
 	iniciarSocket();
 	int conexion;
 	try {

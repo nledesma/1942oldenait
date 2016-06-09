@@ -1,11 +1,11 @@
-#include "menuConexionManual.hpp"
-MenuConexionManual::MenuConexionManual(){
+#include "menuConexionPuerto.hpp"
+MenuConexionPuerto::MenuConexionPuerto(){
      this->botonSiguiente = new BotonSiguiente();
-     this->textoIP = NULL;
+     this->textoPuerto = NULL;
      this->fondo = new Figura();
 }
 
-bool MenuConexionManual::cargarBotones(Ventana* ventana){
+bool MenuConexionPuerto::cargarBotones(Ventana* ventana){
     bool success = true;
     if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
@@ -21,24 +21,24 @@ bool MenuConexionManual::cargarBotones(Ventana* ventana){
     }
 
     SDL_Color color = { 255, 232, 32 };
-    this->textoIP = new Texto(35, color, ventana);
-    this->textoIP->cargarFuente("INGRESE IP: ");
+    this->textoPuerto = new Texto(35, color, ventana);
+    this->textoPuerto->cargarFuente("INGRESE PUERTO: ");
 
     return success;
 }
 
-void MenuConexionManual::renderizar(Ventana* ventana){
+void MenuConexionPuerto::renderizar(Ventana* ventana){
     this->fondo->render(0, 0, ventana->getVentanaRenderer());
     this->getBotonSiguiente()[0].render(ventana->getVentanaRenderer());
-    this->textoIP->renderizar(160, 150);
+    this->textoPuerto->renderizar(160, 150);
 }
 
-BotonSiguiente* MenuConexionManual::getBotonSiguiente(){
+BotonSiguiente* MenuConexionPuerto::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
-void MenuConexionManual::cerrar(){
+void MenuConexionPuerto::cerrar(){
 	//Free loaded images
     this->getBotonSiguiente()->getFigura()->free();
-    this->textoIP->getFigura()->free();
+    this->textoPuerto->getFigura()->free();
 }
