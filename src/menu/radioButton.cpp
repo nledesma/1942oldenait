@@ -17,7 +17,7 @@ int RadioButton::getSprite(){
 }
 
 void RadioButton::cargarSprite(SDL_Renderer* renderer){
-    this->figuraRadioButton->loadFromFilePNG(renderer, "../../resources/img/SpritesBotones/radioButton.png");
+    this->figuraRadioButton->loadFromFilePNG(renderer, "SpritesBotones/radioButton");
 }
 
 void RadioButton::setearSprites(){

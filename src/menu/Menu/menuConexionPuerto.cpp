@@ -7,10 +7,10 @@ MenuConexionPuerto::MenuConexionPuerto(){
 
 bool MenuConexionPuerto::cargarBotones(Ventana* ventana){
     bool success = true;
-    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")) {
+    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
-    if (!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/siguienteSprite.png" ))){
+    if (!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/siguienteSprite" ))){
         cout << "Failed to load button sprite texture!" << endl;
         success = false;
     } else {

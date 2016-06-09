@@ -10,7 +10,6 @@ using namespace std;
 
 class Menu{
     private:
-        //Ventana* ventana;
         TTF_Font *gFont;
         Figura* textTexture;
     protected:

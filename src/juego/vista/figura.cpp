@@ -21,7 +21,9 @@ bool Figura::loadFromFilePNG(SDL_Renderer* renderer, string path){
 	//The final texture
 	SDL_Texture* newTexture = NULL;
 	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    string basePath = PATH_IMG;
+    string fullPath = basePath + path + ".png";
+	SDL_Surface* loadedSurface = IMG_Load(fullPath.c_str());
 	if(loadedSurface == NULL){
 		cout << "Unable to load image! SDL_image Error:" << IMG_GetError() << endl;
 	}

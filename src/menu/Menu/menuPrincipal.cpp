@@ -8,10 +8,10 @@ MenuPrincipal::MenuPrincipal(){
 
 bool MenuPrincipal::cargarBotones(Ventana* ventana){
     bool success = true;
-    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")) {
+    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
-    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/jugarSprite.png" ))){
+    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/jugarSprite" ))){
         cout << "Failed to load button sprite texture!" << endl;
         success = false;
     } else {
@@ -22,7 +22,7 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
     }
 
 
-    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/salirSprite.png"))){
+    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/salirSprite"))){
 		cout << "Failed to load button sprite texture!" << endl;
 		success = false;
     } else {
