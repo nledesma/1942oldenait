@@ -242,6 +242,7 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
 			if(respuestaSalir == 1) {
 				menuPrincipal->cerrar();
 				ventana->cerrar();
+                quit = true;
 			}
 			ventana->limpiar();
 			//Renderizado
