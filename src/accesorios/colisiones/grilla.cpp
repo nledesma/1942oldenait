@@ -24,7 +24,8 @@ Grilla::~Grilla(){
 
 void Grilla::ubicarAviones(list<Avion*> aviones){
     for(list<Avion*>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++){
-        list<Celda*> celdas = this->ubicarEnCeldas((*itAviones)->getColisionable());
+        int* posCeldas;
+        list<Celda*> celdas = this->ubicarEnCeldas((*itAviones)->getColisionable(), posCeldas);
         for(list<Celda*>::iterator itCeldas = celdas.begin(); itCeldas != celdas.end(); itCeldas++){
             (*itCeldas)->agregarAvion((*itAviones));
         }
@@ -33,7 +34,10 @@ void Grilla::ubicarAviones(list<Avion*> aviones){
 
 void Grilla::ubicarDisparosAmigos(list<Disparo*> disparos){
     for(list<Disparo*>::iterator itDisparos = disparos.begin(); itDisparos != disparos.end(); itDisparos++){
-        list<Celda*> celdas = this->ubicarEnCeldas((*itDisparos)->getColisionable());
+        int* posCeldas;
+        list<Celda*> celdas = this->ubicarEnCeldas((*itDisparos)->getColisionable(), posCeldas);
+        (*itDisparos)->getColisionable()->setPosCeldas(posCeldas);
+        cout << posCeldas[0] << " " << posCeldas[1] << " " << posCeldas[2] << " " << posCeldas[3] << endl;
         for(list<Celda*>::iterator itCeldas = celdas.begin(); itCeldas != celdas.end(); itCeldas++){
             (*itCeldas)->agregarDisparoAmigo((*itDisparos));
         }
@@ -42,7 +46,9 @@ void Grilla::ubicarDisparosAmigos(list<Disparo*> disparos){
 
 void Grilla::ubicarEnemigos(list<AvionEnemigo*> enemigos){
     for(list<AvionEnemigo*>::iterator itEnemigos = enemigos.begin(); itEnemigos != enemigos.end(); itEnemigos++){
-        list<Celda*> celdas = this->ubicarEnCeldas((*itEnemigos)->getColisionable());
+        int* posCeldas;
+        list<Celda*> celdas = this->ubicarEnCeldas((*itEnemigos)->getColisionable(), posCeldas);
+        (*itEnemigos)->getColisionable()->setPosCeldas(posCeldas);
         for(list<Celda*>::iterator itCeldas = celdas.begin(); itCeldas != celdas.end(); itCeldas++){
             (*itCeldas)->agregarEnemigo((*itEnemigos));
         }
@@ -66,13 +72,20 @@ void Grilla::limpiarGrilla(){
 }
 
 
-list<Celda*> Grilla::ubicarEnCeldas(Colisionable * colisionable){
+list<Celda*> Grilla::ubicarEnCeldas(Colisionable * colisionable, int *&posCelda){
 
     int colDerecha = colisionable->getExtremoDerecho() / this->anchoCeldas;
     int colIzquierda = colisionable->getExtremoIzquierdo() / this->anchoCeldas;
     int filaAbajo = colisionable->getExtremoInferior() / this->altoCeldas;
     int filaArriba = colisionable->getExtremoSuperior() / this->altoCeldas;
 
+    //cout << colDerecha << " "  << colIzquierda << " " << filaAbajo << " " << filaArriba << endl;
+    int* posicionesCeldas = new int[4];
+    posicionesCeldas[0] = colDerecha;
+    posicionesCeldas[1] = colIzquierda;
+    posicionesCeldas[2] = filaAbajo;
+    posicionesCeldas[3] = filaArriba;
+    posCelda = posicionesCeldas;
     list<Celda*> celdas;
     if (filaAbajo >= 0 && filaAbajo < this->cantFilas && filaArriba >= 0 && filaArriba < this->cantFilas &&
             colIzquierda >= 0 && colIzquierda < this->cantColumnas && colDerecha >= 0 && colDerecha < this->cantColumnas){

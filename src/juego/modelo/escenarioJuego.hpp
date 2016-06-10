@@ -113,6 +113,7 @@ public:
     bool porEquipos();
     Avion* avion(int i);
     void verificarColisiones();
+    void proyectarDisparos(float timeStep);
 };
 
 

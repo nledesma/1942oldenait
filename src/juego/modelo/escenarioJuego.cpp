@@ -10,7 +10,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->alto = alto;
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
-    this->grilla = new Grilla(10, 10);
+    this->grilla = new Grilla(12, 12);
 
 
     // Inicio el vector de equipos.
@@ -173,10 +173,11 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
     this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
     this->moverAviones(timeStep);
     this->moverElementos(timeStep);
-    this->moverDisparos(timeStep);
     this->moverEnemigos(timeStep);
     this->moverPowerUps(timeStep); //hijo de puta que trae problemas
+    this->proyectarDisparos(timeStep);
     this->verificarColisiones();
+    this->moverDisparos(timeStep);
     this->manejarProximoEvento();
     this->getProximoEnemigo();
 }
@@ -355,9 +356,53 @@ bool EscenarioJuego::porEquipos() {
 }
 
 void EscenarioJuego::verificarColisiones(){
-    this->grilla->ubicarAviones(this->aviones);
+    /*this->grilla->ubicarAviones(this->aviones);
     this->grilla->ubicarDisparosAmigos(this->disparos);
     this->grilla->ubicarEnemigos(this->enemigos);
     this->grilla->verificarColisiones();
-    this->grilla->limpiarGrilla();
+    this->grilla->limpiarGrilla();*/
+/*
+    for(list<AvionEnemigo*>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++) {
+        for (list<Disparo *>::iterator itDisparos = this->disparos.begin();
+             itDisparos != this->disparos.end(); itDisparos++) {
+            if ((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable())) {
+                (*itEnemigos)->colisionar();
+                (*itDisparos)->colisionar();
+            }
+        }
+    }
+*/
+
+    for(list<Disparo*>::iterator itDisparos = this->disparos.begin(); itDisparos != this->disparos.end(); itDisparos++){
+        AvionEnemigo* enemigoAColisionar = NULL;
+        //TODO refactor, esto se usa para ver cual es el avion enemigo más cercano al enemigo, pero el codigo quedó horrible
+        float cercano = 0;
+        for(list<AvionEnemigo*>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++){
+            if((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable())) {
+                if((*itEnemigos)->getPosicionY() > cercano) {
+                    cercano = (*itEnemigos)->getPosicionY();
+                    enemigoAColisionar = (*itEnemigos);
+                }
+            }
+        }
+        if(enemigoAColisionar != NULL){
+            enemigoAColisionar->colisionar();
+            (*itDisparos)->colisionar();
+        }
+    }
+
+    for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
+        for(list<AvionEnemigo*>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++){
+            if((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())){
+                (*itAviones)->colisionar();
+                (*itEnemigos)->colisionar();
+            }
+        }
+    }
+}
+
+void EscenarioJuego::proyectarDisparos(float timeStep) {
+    for(list<Disparo*>::iterator itDisparos = this->disparos.begin(); itDisparos != this->disparos.end(); itDisparos++){
+        (*itDisparos)->getColisionable()->proyectarColisionable(timeStep);
+    }
 }

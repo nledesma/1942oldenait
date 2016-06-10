@@ -15,7 +15,7 @@ private:
     int cantColumnas;
     float anchoCeldas;
     float altoCeldas;
-    list<Celda*> ubicarEnCeldas(Colisionable * colisionable);
+    list<Celda*> ubicarEnCeldas(Colisionable * colisionable, int*& posCeldas);
 
 public:
     Grilla(int cantFilas, int cantColumnas);
