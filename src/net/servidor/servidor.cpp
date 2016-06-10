@@ -398,7 +398,7 @@ void Servidor::entreEtapas() {
     Decodificador::pushCantidad(mensaje, (int)escenario->porEquipos());
     mensaje += Decodificador::getPuntajes(escenario);
     broadcastMensaje(mensaje);
-    entretenerClientes(5);
+    entretenerClientes(10);
     // TODO ver si hay que mandar vacíos.
     broadcastEvento(FIN_ENTRE_ETAPAS);
 }

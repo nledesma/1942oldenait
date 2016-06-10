@@ -2,9 +2,12 @@
 
 EspacioEntreEtapas::EspacioEntreEtapas(Ventana * ventana, string mensaje) {
     this->ventana = ventana;
+    this->fondo = new Figura();
+    // TODO path constante.
+    this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png");
     porEquipos = (bool) Decodificador::popInt(mensaje);
     decodificarPuntos(mensaje);
-    renderLoop();
+    dibujar = true;
 }
 
 EspacioEntreEtapas::~EspacioEntreEtapas() {
@@ -21,14 +24,39 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
     while(mensaje.length() != 0) {
         equipo = Decodificador::popInt(mensaje);
         puntos = Decodificador::popInt(mensaje);
-        // por ahora solo hace couts. Luego va a dibujar.
-        cout << "Avión: " << nroAvion;
-        cout << " - Equipo: " << equipo;
-        cout << " - puntos: " << puntos << endl;
+        // Se agrega un texto.
+        Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+        stringstream ss;
+        ss << "Avion: " << nroAvion;
+        ss << " - Equipo: " << equipo;
+        ss << " - puntos: " << puntos;
+        textoAux->cargarFuente(ss.str());
+        textos.push_back(textoAux);
         ++nroAvion;
     }
+
 }
 
 void EspacioEntreEtapas::renderLoop() {
+    // TODO mejorar x e y.
+    while(dibujar) {
+        fondo->render(0, 0, ventana->getVentanaRenderer());
+        renderTextos();
+        SDL_RenderPresent(ventana->getVentanaRenderer());
+    }
+    cout << "FIN RENDER LOOP";
+}
 
+void EspacioEntreEtapas::renderTextos() {
+    list<Texto*>::iterator it;
+    int x = 10;
+    int y = 10;
+    for (it = textos.begin(); it != textos.end(); ++it) {
+        (*it)->renderizar(x, y);
+        y += 40;
+    }
+}
+
+void EspacioEntreEtapas::finalizar() {
+    dibujar = false;
 }

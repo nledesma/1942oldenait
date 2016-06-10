@@ -171,15 +171,24 @@ void Cliente::cicloMensajes(){
 }
 
 void Cliente::entreEtapas() {
+	Logger::instance()->logInfo("Entrando al espacio entre etapas");
 	string mensaje;
 	if (recibirMensaje(mensaje) != MENSAJEOK) {
 		this->cerrar(); // TODO debug.
 	} else {
 		EspacioEntreEtapas e(ventana, mensaje);
-		//TODO ver si se necesita ciclo.
-		recibirMensaje(mensaje);
-		esperarEvento(FIN_ENTRE_ETAPAS);
+		// hilo que espera al fin entre etapas.
+		ArgsEsperarEntreEtapas args = {
+			.cliente = this,
+			.espacioEntreEtapas = &e,
+			.evento = FIN_ENTRE_ETAPAS
+		};
+		pthread_t esperar_id;
+		pthread_create(&esperar_id, NULL, esperarEvento_th, (void*) &args);
+		// Render entre etapas.
+		e.renderLoop();
 	}
+	Logger::instance()->logInfo("Saliendo del espacio entre etapas");
 }
 
 void Cliente::esperarEvento(int evento) {
@@ -193,10 +202,18 @@ void Cliente::esperarEvento(int evento) {
 			eventoRecibido = Decodificador::popInt(mensaje);
 		else
 			eventoRecibido = -1;
-
 		res = recibirMensaje(mensaje);
 	}
 }
+
+// Versión concurrente del método anterior.
+void* Cliente::esperarEvento_th(void* argsVoid) {
+	ArgsEsperarEntreEtapas * args = (ArgsEsperarEntreEtapas*) argsVoid;
+	args->cliente->esperarEvento(args->evento);
+	args->espacioEntreEtapas->finalizar();
+	pthread_exit(NULL);
+}
+
 
 void Cliente::actualizarEscenario(string mensaje){
 	if (mensaje.size() == sizeof(int)){

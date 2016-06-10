@@ -45,6 +45,7 @@ public:
     void cerrar();
     int enviarEvento(int evento);
 	void esperarEvento(int evento);
+	static void* esperarEvento_th(void* args);
     int recibirMensaje(string & mensaje);
     void iniciarEscenario();
     void actualizarEscenario(string mensaje);
@@ -60,4 +61,11 @@ public:
     void setAlias(string alias);
 	Ventana* getVentana();
 };
+
+struct ArgsEsperarEntreEtapas {
+	Cliente * cliente;
+	EspacioEntreEtapas * espacioEntreEtapas;
+	int evento;
+};
+
 #endif // CLIENTE_H
