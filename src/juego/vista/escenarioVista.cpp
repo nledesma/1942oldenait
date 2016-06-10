@@ -24,6 +24,9 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
         textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
         textosPuntaje[1]->cambiarTexto("0");
     }
+
+    this->textoVidas = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    textoVidas->cambiarTexto("5");
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -238,7 +241,9 @@ int EscenarioVista::mainLoop(){
         this->renderizarEnemigos();
         // NOTE esta imágen se recarga si hubo cambios y debe estar en este thread.
         this->actualizarImagenPuntajes();
+        this->actualizarImagenVidas();
         this->renderizarPuntajes();
+        this->renderizarVidas();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -470,10 +475,25 @@ void EscenarioVista::actualizarImagenPuntajes() {
     }
 }
 
+void EscenarioVista::actualizarImagenVidas() {
+    list<AvionVista*>::iterator it = aviones.begin();
+    advance (it, this->nroAvion - 1);
+    AvionVista *avionVida = *it;
+
+    stringstream ss; ss << (avionVida)->getVidas();
+    cout << "esto es el getVidas: " <<  (avionVida)->getVidas() << endl;
+    textoVidas->cambiarTexto(ss.str());
+}
+
+
 void EscenarioVista::renderizarPuntajes() {
     textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
     if (porEquipos)
         textosPuntaje[1]->renderizar(POSX_PUNTAJE2, POSY_PUNTAJES);
+}
+
+void EscenarioVista::renderizarVidas(){
+    textoVidas->renderizar(POSX_VIDAS,POSY_VIDAS);
 }
 
 void EscenarioVista::renderizarAviones() {

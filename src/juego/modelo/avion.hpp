@@ -33,7 +33,9 @@ private:
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexVidas = PTHREAD_MUTEX_INITIALIZER;
     Colisionable* colisionable;
+    int vidas;
 
 public:
     Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
@@ -83,6 +85,10 @@ public:
     void resetPuntos();
 
     int getPuntaje();
+
+    int getVidas();
+
+    void quitarUnaVida();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

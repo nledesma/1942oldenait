@@ -29,10 +29,11 @@ void Decodificador::push(string & codigo, Avion* a) {
     push(codigo, a->getPosicionX());
     push(codigo, a->getPosicionY());
     push(codigo, (char) a->getEstadoAnimacion());
+    push(codigo, (int)a->getVidas());
 }
 
 string Decodificador::popAvion(string & codigo){
-    return popBytes(codigo, 2*sizeof(float) + 1);
+    return popBytes(codigo, 2*sizeof(float) + sizeof(int) + 1);
 }
 
 /* Push y pop de powerUps */

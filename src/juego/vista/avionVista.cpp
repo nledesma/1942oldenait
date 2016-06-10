@@ -2,12 +2,14 @@
 
 AvionVista::AvionVista(float posX, float posY, string pathSprite){
     this->iniciarAvion(posX, posY, pathSprite);
+    this->vidas = 0;
 }
 
 AvionVista::AvionVista(string infoAvion){
     float posX = Decodificador::popFloat(infoAvion);
     float posY = Decodificador::popFloat(infoAvion);
     this->iniciarAvion(posX, posY, infoAvion);
+    this->vidas = 0;
 }
 
 AvionVista::~AvionVista() { }
@@ -201,7 +203,10 @@ int AvionVista::actualizar(string codigo){
     pthread_mutex_lock(&mutexActualizar);
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
+    Decodificador::imprimirBytes(codigo);
+    cout << "VIDAS EN AVION VISTA ACTUALIZAR: " << this->vidas << endl;
     int estadoAnimacionActual = Decodificador::popByte(codigo);
+    this->vidas = Decodificador::popInt(codigo);
     if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_LOOP){
         sonido = CODIGO_SONIDO_DISPARO;
         estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_DISPARO;
@@ -271,4 +276,7 @@ void AvionVista::setEstadoAnimacion(int estadoAnimacion){
     this->estadoAnimacion = estadoAnimacion;
 }
 
+int AvionVista::getVidas(){
+    return this->vidas;
+}
 //
