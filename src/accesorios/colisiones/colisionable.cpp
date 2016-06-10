@@ -27,21 +27,21 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
         case TIPO_DISPARO_ENEMIGO:
             this->crearDisparoEnemigo(x, y, angulo);
             break;
-        case TIPO_POWERUP_BONIFICACION:
-            this->crearPowerUp(x,y,angulo);
-            break;
-        case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
-            this->crearPowerUp(x,y,angulo);
-            break;
-        case TIPO_POWERUP_DOS_AMETRALLADORAS:
-            this->crearPowerUp(x,y,angulo);
-            break;
-        case TIPO_POWERUP_AVIONES_SECUNDARIOS:
-            this->crearPowerUp(x,y,angulo);
-            break;
-        case TIPO_POWERUP_BONIFICACION_1500:
-            this->crearPowerUp(x,y,angulo);
-            break;
+        // case TIPO_POWERUP_BONIFICACION:
+        //     this->crearPowerUp(x,y,angulo);
+        //     break;
+        // case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
+        //     this->crearPowerUp(x,y,angulo);
+        //     break;
+        // case TIPO_POWERUP_DOS_AMETRALLADORAS:
+        //     this->crearPowerUp(x,y,angulo);
+        //     break;
+        // case TIPO_POWERUP_AVIONES_SECUNDARIOS:
+        //     this->crearPowerUp(x,y,angulo);
+        //     break;
+        // case TIPO_POWERUP_BONIFICACION_1500:
+        //     this->crearPowerUp(x,y,angulo);
+        //     break;
     }
 }
 
