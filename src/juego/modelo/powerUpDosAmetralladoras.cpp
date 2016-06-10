@@ -13,33 +13,22 @@ PowerUpDosAmetralladoras::PowerUpDosAmetralladoras(float posX, float posY, int v
 
 PowerUpDosAmetralladoras::~PowerUpDosAmetralladoras() { }
 
-/*
-powerUpDosAmetralladoras::aplicarPowerUp(){}
-
-int powerUpDosAmetralladoras::getAncho(){
-	return this->ancho;
+void PowerUpDosAmetralladoras::colisionar(){
+	if(this->estadoAnimacion <= POWER_UP_ROTACION_6){
+			this->estadoAnimacion = POWER_UP_COLISIONADO_DOS_AMETRALLADORAS;
+	}
 }
 
-int powerUpDosAmetralladoras::getAlto(){
-	return this->alto;
+void PowerUpDosAmetralladoras::animar(float timeStep){
+	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DOS_AMETRALLADORAS) {
+			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+					this->contadorTiempoAnimacion = 0;
+					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+							this->estadoAnimacion += 1;
+					else
+							this->estadoAnimacion = POWER_UP_NORMAL;
+			} else {
+					this->contadorTiempoAnimacion += timeStep;
+			}
+	}
 }
-
-float powerUpDosAmetralladoras::getPosicionX(){
-	return this->posX;
-}
-
-float powerUpDosAmetralladoras::getPosicionY(){
-	return this->posY;
-}
-
-int powerUpDosAmetralladoras::getEstadoAnimacion(){
-	return this->estadoAnimacion;
-}
-
-int powerUpDosAmetralladoras::getTipo(){
-	return this->tipo;
-}
-
-string powerUpDosAmetralladoras::getIdSprite(){
-	return this->idSprite;
-}*/

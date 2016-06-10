@@ -42,17 +42,17 @@ PowerUpAvionesSecundariosVista::PowerUpAvionesSecundariosVista() {
     this->clipsAnimacion[POWER_UP_ROTACION_5].w = ANCHO_POWERUP;
     this->clipsAnimacion[POWER_UP_ROTACION_5].h = ALTO_POWERUP;
 
-    //Moneda normal 
+    //Moneda normal
     this->clipsAnimacion[POWER_UP_ROTACION_6].x = 0 + ANCHO_POWERUP * 6;
     this->clipsAnimacion[POWER_UP_ROTACION_6].y = 0;
     this->clipsAnimacion[POWER_UP_ROTACION_6].w = ANCHO_POWERUP;
     this->clipsAnimacion[POWER_UP_ROTACION_6].h = ALTO_POWERUP;
 
     //Moneda despues de ser colisionada
-    this->clipsAnimacion[POWER_UP_COLISIONADO].x = 0;
-    this->clipsAnimacion[POWER_UP_COLISIONADO].y = 0 + ALTO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO].w = ANCHO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO].h = ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS].x = 0;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS].y = 0 + ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS].w = ANCHO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS].h = ALTO_POWERUP;
 }
 
 void PowerUpAvionesSecundariosVista::cargarImagen(SDL_Renderer *renderer) {

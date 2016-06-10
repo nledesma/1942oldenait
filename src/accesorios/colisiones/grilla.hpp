@@ -5,6 +5,7 @@
 #include "../../juego/modelo/avion.hpp"
 #include "../../juego/modelo/disparo.hpp"
 #include "../../juego/modelo/avionEnemigo.hpp"
+#include "../../juego/modelo/powerUp.hpp"
 #include <list>
 #include "colisionable.hpp"
 
@@ -23,6 +24,7 @@ public:
     void ubicarAviones(list<Avion*> aviones);
     void ubicarEnemigos(list<AvionEnemigo*> enemigos);
     void ubicarDisparosAmigos(list<Disparo*> disparos);
+    void ubicarPowerUps(list<PowerUp*>powerUps);
     void verificarColisiones();
     void limpiarGrilla();
 };

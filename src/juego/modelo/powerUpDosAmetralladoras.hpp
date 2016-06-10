@@ -17,15 +17,9 @@ protected:
 
 public:
 		PowerUpDosAmetralladoras(float posX, float posY, int valor);
-        ~PowerUpDosAmetralladoras();
-    //virtual void aplicarPowerUp() = 0;
-    //int getAncho();
-    //int getAlto();
-    //float getPosicionX();
-    //float getPosicionY();
-    //int getEstadoAnimacion();
-    //int getTipo();
-    //string getIdSprite();
+    ~PowerUpDosAmetralladoras();
+		void colisionar();
+		void animar(float timeStep);
 };
 
 #endif //INC_1942OLDENAIT_POWERUPDOSAMETRALLADORAS_HPP

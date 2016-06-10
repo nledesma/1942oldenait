@@ -14,34 +14,22 @@ PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicion
 
 PowerUpDestruirEnemigos::~PowerUpDestruirEnemigos() { }
 
-/*
-powerUpDestruirEnemigos::aplicarPowerUp(){}
-
-int powerUpDestruirEnemigos::getAncho(){
-	return this->ancho;
+void PowerUpDestruirEnemigos::colisionar(){
+	if(this->estadoAnimacion <= POWER_UP_ROTACION_6){
+			this->estadoAnimacion = POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS;
+	}
 }
 
-int powerUpDestruirEnemigos::getAlto(){
-	return this->alto;
+void PowerUpDestruirEnemigos::animar(float timeStep){
+	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS) {
+			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+					this->contadorTiempoAnimacion = 0;
+					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+							this->estadoAnimacion += 1;
+					else
+							this->estadoAnimacion = POWER_UP_NORMAL;
+			} else {
+					this->contadorTiempoAnimacion += timeStep;
+			}
+	}
 }
-
-float powerUpDestruirEnemigos::getPosicionX(){
-	return this->posX;
-}
-
-float powerUpDestruirEnemigos::getPosicionY(){
-	return this->posY;
-}
-
-int powerUpDestruirEnemigos::getEstadoAnimacion(){
-	return this->estadoAnimacion;
-}
-
-int powerUpDestruirEnemigos::getTipo(){
-	return this->tipo;
-}
-
-string powerUpDestruirEnemigos::getIdSprite(){
-	return this->idSprite;
-}
-*/

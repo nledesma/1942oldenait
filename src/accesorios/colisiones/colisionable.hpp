@@ -23,7 +23,7 @@ private:
     void crearAvion(float posX, float posY, float angulo);
     void crearDisparo(float posX, float posY, float angulo);
     void crearDisparoEnemigo(float posX, float posY, float angulo);
-
+    void crearPowerUp(float posX, float posY, float angulo);
 
 
 public:
@@ -44,6 +44,7 @@ public:
     float getExtremoDerecho();
     float getExtremoSuperior();
     float getExtremoInferior();
+
 };
 
 

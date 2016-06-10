@@ -49,6 +49,15 @@ void Grilla::ubicarEnemigos(list<AvionEnemigo*> enemigos){
     }
 }
 
+void Grilla::ubicarPowerUps(list<PowerUp*> powerUps){
+    for(list<PowerUp*>::iterator itPowerUps = powerUps.begin(); itPowerUps != powerUps.end(); itPowerUps++){
+        list<Celda*> celdas = this->ubicarEnCeldas((*itPowerUps)->getColisionable());
+        for(list<Celda*>::iterator itCeldas = celdas.begin(); itCeldas != celdas.end(); itCeldas++){
+            (*itCeldas)->agregarPowerUp((*itPowerUps));
+        }
+    }
+}
+
 void Grilla::verificarColisiones(){
     for(list<list<Celda*>>::iterator itFilas = this->grilla.begin(); itFilas != this->grilla.end(); itFilas++){
         for(list<Celda*>::iterator itColumna = (*itFilas).begin(); itColumna != (*itFilas).end(); itColumna++){

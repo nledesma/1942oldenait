@@ -210,6 +210,11 @@ void Avion::colisionar(){
         this->estadoAnimacion = EXPLOSION_ETAPA_1;
 }
 
+void Avion::colisionarConPowerUp(){
+    if (this->estadoAnimacion < EXPLOSION_ETAPA_1 )
+        this->estadoAnimacion = AVION_CON_POWERUP;
+}
+
 void Avion::resetPuntos() {
     puntaje = 0;
 }

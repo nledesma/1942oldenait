@@ -83,6 +83,8 @@ public:
     void resetPuntos();
 
     int getPuntaje();
+
+    void colisionarConPowerUp();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

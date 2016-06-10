@@ -49,10 +49,10 @@ PowerUpDosAmetralladorasVista::PowerUpDosAmetralladorasVista() {
     this->clipsAnimacion[POWER_UP_ROTACION_6].h = ALTO_POWERUP;
 
     //Moneda despues de ser colisionada
-    this->clipsAnimacion[POWER_UP_COLISIONADO].x = 0;
-    this->clipsAnimacion[POWER_UP_COLISIONADO].y = 0 + ALTO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO].w = ANCHO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO].h = ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].x = 0;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].y = 0 + ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].w = ANCHO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].h = ALTO_POWERUP;
 }
 
 void PowerUpDosAmetralladorasVista::cargarImagen(SDL_Renderer *renderer) {

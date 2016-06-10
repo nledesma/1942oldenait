@@ -16,10 +16,15 @@ void Celda::agregarDisparoAmigo(Disparo * disparo){
     disparosAmigos.push_back(disparo);
 }
 
+void Celda::agregarPowerUp(PowerUp* powerUp){
+  powerUps.push_back(powerUp);
+}
+
 void Celda::limpiarCelda(){
     aviones.clear();
     disparosAmigos.clear();
     enemigos.clear();
+    powerUps.clear();
 }
 
 void Celda::verificarColisiones(){
@@ -42,6 +47,15 @@ void Celda::verificarColisiones(){
             if((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable())){
                 (*itEnemigos)->colisionar();
                 (*itDisparos)->colisionar();
+            }
+        }
+    }
+
+    for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
+        for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
+            if((*itAviones)->getColisionable()->colisiona((*itPowerUps)->getColisionable())){
+                (*itAviones)->colisionarConPowerUp();
+                (*itPowerUps)->colisionar();
             }
         }
     }

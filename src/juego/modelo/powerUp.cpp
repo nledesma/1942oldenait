@@ -7,7 +7,13 @@ PowerUp::~PowerUp(){
 /*
 void PowerUp::aplicarPowerUp(){}
 */
+Colisionable* PowerUp::getColisionable(){
+    return this->colisionable;
+}
 
+void PowerUp::colisionar(){
+
+}
 
 int PowerUp::getEstadoAnimacion(){
     return this->estadoAnimacion;
@@ -47,17 +53,7 @@ void PowerUp::mover(float timeStep, float velocidadY){
 }
 
 void PowerUp::animar(float timeStep) {
-    if (this->estadoAnimacion != POWER_UP_COLISIONADO) {
-        if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
-            this->contadorTiempoAnimacion = 0;
-            if (this->estadoAnimacion < POWER_UP_ROTACION_6)
-                this->estadoAnimacion += 1;
-            else
-                this->estadoAnimacion = POWER_UP_NORMAL;
-        } else {
-            this->contadorTiempoAnimacion += timeStep;
-        }
-    }
+
 }
 
 
