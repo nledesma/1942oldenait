@@ -4,7 +4,7 @@ EspacioEntreEtapas::EspacioEntreEtapas(Ventana * ventana, string mensaje) {
     this->ventana = ventana;
     this->fondo = new Figura();
     // TODO path constante.
-    this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png");
+    this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas");
     porEquipos = (bool) Decodificador::popInt(mensaje);
     decodificarPuntos(mensaje);
     dibujar = true;
@@ -28,7 +28,7 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
         Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
         stringstream ss;
         ss << "Avion: " << nroAvion;
-        ss << " - Equipo: " << equipo;
+        ss << " - Equipo: " << equipo + 1;
         ss << " - puntos: " << puntos;
         textoAux->cargarFuente(ss.str());
         textos.push_back(textoAux);
