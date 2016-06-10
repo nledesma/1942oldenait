@@ -36,6 +36,12 @@ void Colisionable::crearAvionPequenio(float posX, float posY, float angulo){
     float xCentro = (posX + ANCHO_AVION_COMUN) / 2;
     float yCentro = (posY + ALTO_AVION_COMUN) / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
+    Superficie *superficie1 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_1, ANCHO_AVION_PEQUENIO_1, 0, AVION_PEQUENIO_OFFSET_ALTO);
+    Superficie *superficie2 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_2, ALTO_AVION_PEQUENIO_2, 0, 0);
+    Superficie *superficie3 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_2, ALTO_AVION_PEQUENIO_2, AVION_PEQUENIO_OFFSET_ANCHO, 0);
+    this->superficiesSecundarias.push_back(superficie1);
+    this->superficiesSecundarias.push_back(superficie2);
+    this->superficiesSecundarias.push_back(superficie3);
 }
 
 void Colisionable::crearAvionEscuadron(float posX, float posY, float angulo){
@@ -67,7 +73,7 @@ void Colisionable::crearAvion(float posX, float posY, float angulo){
 }
 
 void Colisionable::crearDisparo(float posX, float posY, float angulo){
-    this->superficiePrincipal = new Superficie(posX, posY, ANCHO_DISPARO_COMUN, ALTO_DISPARO_COMUN, 0, 0);
+    this->superficiePrincipal = new Superficie(posX, posY, ANCHO_SUPERFICIE_DISPARO, ALTO_SUPERFICIE_DISPARO, 0, 0);
     float xCentro = (posX + ANCHO_DISPARO_COMUN) / 2;
     float yCentro = (posY + ALTO_DISPARO_COMUN) / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
@@ -153,23 +159,26 @@ void Colisionable::setPosY(float posY){
 // }
 
 bool Colisionable::colisiona(Colisionable *colisionable){
-    bool resultado = this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal());
-    // if(this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal())){
-    //     bool colisiona = false;
-    //     list<Superficie*>::iterator itSuperficies = this->superficiesSecundarias.begin();
-    //     while(!colisiona && itSuperficies != this->superficiesSecundarias.end()){
-    //         list<Superficie*>::iterator itSuperficiesColisionable = colisionable->getSuperficiesSecundarias().begin();
-    //         while(!colisiona && itSuperficiesColisionable != colisionable->getSuperficiesSecundarias().end()){
-    //             colisiona = (*itSuperficies)->colisiona((*itSuperficiesColisionable));
-    //             itSuperficiesColisionable++;
-    //         }
-    //         itSuperficies++;
-    //     }
-    //     return colisiona;
-    // } else {
-    //     return false;
-    // }
-    return resultado;
+    bool colisiona = this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal());
+    if(colisiona && this->superficiesSecundarias.size() > 0){
+        colisiona = false;
+         list<Superficie*>::iterator itSuperficies = this->superficiesSecundarias.begin();
+         while(!colisiona && itSuperficies != this->superficiesSecundarias.end()) {
+             if(colisionable->getSuperficiePrincipal()->colisiona((*itSuperficies))){
+                 if(colisionable->getSuperficiesSecundarias().size() == 0) {
+                     colisiona = true;
+                 } else {
+                     list<Superficie *>::iterator itSuperficiesColisionable = colisionable->getSuperficiesSecundarias().begin();
+                     while (!colisiona && itSuperficiesColisionable != colisionable->getSuperficiesSecundarias().end()) {
+                         colisiona = (*itSuperficies)->colisiona((*itSuperficiesColisionable));
+                         itSuperficiesColisionable++;
+                     }
+                 }
+             }
+             itSuperficies++;
+         }
+     }
+    return colisiona;
 }
 
 Superficie* Colisionable::getSuperficiePrincipal(){
@@ -253,4 +262,19 @@ float Colisionable::getExtremoInferior(){
     }
 
     return extremoInferior;
+}
+
+void Colisionable::setPosCeldas(int *posCelda) {
+    this->posCelda = posCelda;
+}
+
+int * Colisionable::getPosCeldas(){
+    return this->posCelda;
+}
+
+void Colisionable::proyectarColisionable(float timeStep) {
+    float posY = this->superficiePrincipal->getDerArriba()->getPosY();
+    posY += posY * timeStep;
+    this->superficiePrincipal->getDerArriba()->setPosY(posY);
+    this->superficiePrincipal->getIzqArriba()->setPosY(posY);
 }

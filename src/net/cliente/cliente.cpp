@@ -138,8 +138,7 @@ void Cliente::iniciarEscenario(){
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
 		cout << "terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
-		entreEtapas();
-
+		if (resultadoRender == CONTINUAR) entreEtapas();
 	}
 	if (!escenarioVista->quedanEtapas()) cout << "todas las etapas finalizadas" << endl;
 	if (resultadoRender != CONTINUAR) cout << "el resultado de render no fue de continuar" << endl;

@@ -84,7 +84,7 @@ void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexio
                 int puerto = atoi (puertoChar);
                 cliente->setAddress(ip, puerto);
                 cliente->conectar();
-
+                quit = true;
 			}
 			ventana->limpiar();
 			//Renderizado
@@ -198,7 +198,9 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			if(respuesta == 1){
 				menuDatosDeUsuario->cerrar();
 				cargarMenuConexiones(cliente, ventana, menuConexiones);
+                quit = true;
 			}
+
 			ventana->limpiar();
 			//Renderizado
             textoDinamico->manejarEvento(e);
@@ -223,20 +225,24 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
 	SDL_Event e;
 	while(!quit){
 		while(SDL_PollEvent(&e) != 0){
-			if(e.type == SDL_QUIT){
+			if(e.type == SDL_QUIT) {
 				quit = true;
 			}
 			int respuesta = menuPrincipal->getBotonJugar()[0].handleEvent(&e);
-			if(respuesta == 1){
+			if(respuesta == 1) {
 				menuPrincipal->cerrar();
 				//Arranca el menu de datos del usuario.
 				menuDatosDeUsuario->cargarBotones(ventana);
 				cargarMenuDatosDeUsuario(ventana, menuDatosDeUsuario, cliente);
+                quit = true;
+                menuDatosDeUsuario->cerrar();
+                menuPrincipal->cerrar();
 			}
 			int respuestaSalir = menuPrincipal->getBotonSalir()[0].handleEvent(&e);
-			if(respuestaSalir == 1){
+			if(respuestaSalir == 1) {
 				menuPrincipal->cerrar();
 				ventana->cerrar();
+                quit = true;
 			}
 			ventana->limpiar();
 			//Renderizado
@@ -244,8 +250,6 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
 			SDL_RenderPresent(ventana->getVentanaRenderer());
 		}
 	}
-	menuDatosDeUsuario->cerrar();
-    menuPrincipal->cerrar();
     ventana->cerrar();
 }
 

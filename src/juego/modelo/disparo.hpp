@@ -17,6 +17,8 @@ private:
 	pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
 	Colisionable* colisionable;
 	bool colisiono;
+	float alturaDeMuerte;
+
 public:
 	Disparo(float posX, float posY, float velocidad);
 	~Disparo();
