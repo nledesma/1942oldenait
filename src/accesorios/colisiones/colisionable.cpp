@@ -3,8 +3,8 @@
 Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
     this->posX = x;
     this->posY = y;
-    this->ancho = ancho;
-    this->alto = alto;
+    // this->ancho = ancho;
+    // this->alto = alto;
     switch (tipoDeElemento) {
         case TIPO_AVION_PEQUENIO:
             this->crearAvionPequenio(x, y, angulo);
@@ -30,10 +30,10 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
         case TIPO_POWERUP_BONIFICACION:
             this->crearPowerUp(x,y,angulo);
             break;
-        case TIPO_POWERUP_DOS_AMETRALLADORAS:
+        case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
             this->crearPowerUp(x,y,angulo);
             break;
-        case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
+        case TIPO_POWERUP_DOS_AMETRALLADORAS:
             this->crearPowerUp(x,y,angulo);
             break;
         case TIPO_POWERUP_AVIONES_SECUNDARIOS:

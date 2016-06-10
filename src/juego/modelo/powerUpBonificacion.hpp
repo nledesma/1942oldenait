@@ -14,10 +14,10 @@ using namespace std;
 
 class PowerUpBonificacion: public PowerUp {
 public:
-		PowerUpBonificacion(float posX, float posY, int valor);
+	PowerUpBonificacion(float posX, float posY, int valor);
     ~PowerUpBonificacion();
-		void colisionar();
-		void animar(float timeStep);
+	void colisionar();
+	void animar(float timeStep);
 };
 
 #endif //INC_1942OLDENAIT_POWERUPBONIFICACION_HPP

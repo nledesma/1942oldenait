@@ -3,6 +3,7 @@
 PowerUpDestruirEnemigosVista::~PowerUpDestruirEnemigosVista() { }
 
 PowerUpDestruirEnemigosVista::PowerUpDestruirEnemigosVista() {
+    cout << "ENTRO A CREAR EL POWER UP ENEMIGOS VISTA" << endl;
     this->figuraPowerUp = new Figura();
     this->pathSprite = SPRITE_POWERUP_DESTRUIR_ENEMIGOS;
 
@@ -53,12 +54,16 @@ PowerUpDestruirEnemigosVista::PowerUpDestruirEnemigosVista() {
     this->clipsAnimacion[POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS].y = 0 + ALTO_POWERUP;
     this->clipsAnimacion[POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS].w = ANCHO_POWERUP;
     this->clipsAnimacion[POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS].h = ALTO_POWERUP;
+
+    cout << "TERMINO DE CREAR EL POWER UP ENEMIGOS VISTA" << endl;
 }
 
 void PowerUpDestruirEnemigosVista::cargarImagen(SDL_Renderer *renderer) {
+    cout << "ENTRO A CARGAR LA IMAGEN DE POWER UP ENEMIGOS" << endl;
     PowerUpVista::cargarImagen(renderer);
 }
 
 void PowerUpDestruirEnemigosVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer *renderer) {
+    cout << "ENTRO A RENDER DE POWER UP ENEMIGOS" << endl;
     PowerUpVista::render(posX, posY, estadoAnimacion, renderer);
 }

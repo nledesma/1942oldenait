@@ -56,10 +56,11 @@ PowerUpBonificacionVista::PowerUpBonificacionVista() {
 }
 
 void PowerUpBonificacionVista::cargarImagen(SDL_Renderer *renderer) {
-    cout << "va a cargar la imagen " << endl;
+    cout << "ENTRO A CARGAR LA IMAGEN DE POWER UP BONIFICACION" << endl;
     PowerUpVista::cargarImagen(renderer);
 }
 
 void PowerUpBonificacionVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer *renderer) {
+    cout << "ENTRO A RENDER DE POWER UP BONIFICACION" << endl;
     PowerUpVista::render(posX, posY, estadoAnimacion, renderer);
 }

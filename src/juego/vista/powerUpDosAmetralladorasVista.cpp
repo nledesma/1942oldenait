@@ -3,6 +3,7 @@
 PowerUpDosAmetralladorasVista::~PowerUpDosAmetralladorasVista() { }
 
 PowerUpDosAmetralladorasVista::PowerUpDosAmetralladorasVista() {
+    cout << "ENTRO A CREAR EL POWER UP DOS AMETRALLADORAS VISTA" << endl;
     this->figuraPowerUp = new Figura();
     this->pathSprite = SPRITE_POWERUP_DOS_AMETRALLADORAS;
 
@@ -53,12 +54,16 @@ PowerUpDosAmetralladorasVista::PowerUpDosAmetralladorasVista() {
     this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].y = 0 + ALTO_POWERUP;
     this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].w = ANCHO_POWERUP;
     this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].h = ALTO_POWERUP;
+
+    cout << "TERMINO DE CREAR EL POWER UP DOS AMETRALLADORAS VISTA" << endl;
 }
 
 void PowerUpDosAmetralladorasVista::cargarImagen(SDL_Renderer *renderer) {
+    cout << "ENTRO A CARGAR LA IMAGEN DE POWER UP DOS AMETRALLADORAS" << endl;
     PowerUpVista::cargarImagen(renderer);
 }
 
 void PowerUpDosAmetralladorasVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer *renderer) {
+    cout << "ENTRO A RENDER DE POWER UP DOS AMETRALLADORAS" << endl;
     PowerUpVista::render(posX, posY, estadoAnimacion, renderer);
 }

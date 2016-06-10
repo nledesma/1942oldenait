@@ -15,10 +15,10 @@ class PowerUpDestruirEnemigos: public PowerUp {
 protected:
 
 public:
-		PowerUpDestruirEnemigos(float posicionX, float posicionY, int valor);
+	PowerUpDestruirEnemigos(float posicionX, float posicionY, int valor);
     ~PowerUpDestruirEnemigos();
-		void colisionar();
-		void animar(float timeStep);
+	void colisionar();
+	void animar(float timeStep);
 };
 
 #endif //INC_1942OLDENAIT_POWERUPDESTRUIRENEMIGOS_HPP
