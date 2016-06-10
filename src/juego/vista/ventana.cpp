@@ -29,14 +29,23 @@ int Ventana::iniciar() {
     } else {
         SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     }
+    //Initialize SDL_ttf
+    if(TTF_Init() == -1){
+        cout << "SDL_ttf could not initialize! SDL_ttf Error:" << TTF_GetError() << endl;
+        success = false;
+    }
+
     return success;
 }
 
 void Ventana::cerrar() {
     SDL_DestroyRenderer(gVentanaRenderer);
     SDL_DestroyWindow(sdlWindow);
+    gVentanaRenderer = NULL;
     sdlWindow = NULL;
     SDL_Quit();
+    IMG_Quit();
+    TTF_Quit();
 }
 
 int Ventana::getAncho() {
@@ -61,4 +70,9 @@ SDL_Renderer *Ventana::getVentanaRenderer() {
 
 SDL_Window *Ventana::getSdlWindow() {
     return this->sdlWindow;
+}
+
+void Ventana::limpiar(){
+  SDL_SetRenderDrawColor(this->getVentanaRenderer(), 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(this->getVentanaRenderer());
 }

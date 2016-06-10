@@ -28,9 +28,8 @@ class AvionMediano: public AvionEnemigo {
 public:
     AvionMediano(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionMediano();
-    Disparo* disparar();
-    int getAncho();
-    int getAlto();
+    bool correspondeDisparar(float timestep);
+    vector<DisparoEnemigo*> disparar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONMEDIANO_HPP

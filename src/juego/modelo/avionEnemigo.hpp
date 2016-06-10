@@ -11,6 +11,7 @@
 #include "trayectoriasEnemigos/trayectoria.hpp"
 #include "../../accesorios/colisiones/colisionable.hpp"
 #include "disparo.hpp"
+#include "disparoEnemigo.hpp"
 #include <pthread.h>
 
 class AvionEnemigo {
@@ -31,9 +32,8 @@ protected:
 
 public:
     virtual ~AvionEnemigo();
-    virtual Disparo* disparar() = 0;
-    virtual int getAncho() = 0;
-    virtual int getAlto() = 0;
+    int getAncho();
+    int getAlto();
     float getVelocidad();
     float getPosicionX();
     float getPosicionY();
@@ -47,6 +47,9 @@ public:
     string getIdSpriteDisparos();
     Colisionable* getColisionable();
     virtual void colisionar();
+    DisparoEnemigo* disparar(float xObjetivo, float yObjetivo);
+    virtual bool correspondeDisparar(float timestep) = 0;
+    virtual vector<DisparoEnemigo*> disparar() = 0;
 };
 
 

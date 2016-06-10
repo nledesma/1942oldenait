@@ -19,14 +19,6 @@ AvionPequenio::~AvionPequenio(){
     delete this->colisionable;
 }
 
-Disparo* AvionPequenio::disparar(){
-    return NULL;
-}
+bool AvionPequenio::correspondeDisparar(float timestep) { return true; }
 
-int AvionPequenio::getAncho() {
-    return ANCHO_ENEMIGO_PEQUENIO;
-}
-
-int AvionPequenio::getAlto() {
-    return ALTO_ENEMIGO_PEQUENIO;
-}
+vector<DisparoEnemigo*> AvionPequenio::disparar(){  vector<DisparoEnemigo*> disparos; return disparos;  }

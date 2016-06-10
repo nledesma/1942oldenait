@@ -8,14 +8,16 @@
 #include "cliente.hpp"
 using namespace std;
 
-Cliente::Cliente(string ip, int port):GameSocket(){
+Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket(){
 	this->ip = ip;
 	this->port = port;
+	this->ventana = ventana;
 	cliente_conectado = false;
 	setAddress(ip, port);
 }
 
-Cliente::Cliente():GameSocket(){
+Cliente::Cliente(Ventana* ventana):GameSocket(){
+	this->ventana = ventana;
 	cliente_conectado = false;
 }
 
@@ -126,7 +128,7 @@ void Cliente::iniciarEscenario(){
 		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
 	}
 	// El primer mensaje que no es un entero es el escenario.
-	this->escenarioVista = new EscenarioVista(mensajeRespuesta);
+	this->escenarioVista = new EscenarioVista(mensajeRespuesta, this->ventana);
 	this->escenarioVista->preloop();
 	int resultadoRender = CONTINUAR;
 	while(escenarioVista->quedanEtapas() && resultadoRender == CONTINUAR) {
@@ -136,6 +138,8 @@ void Cliente::iniciarEscenario(){
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
 		cout << "terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
+		entreEtapas();
+
 	}
 	if (!escenarioVista->quedanEtapas()) cout << "todas las etapas finalizadas" << endl;
 	if (resultadoRender != CONTINUAR) cout << "el resultado de render no fue de continuar" << endl;
@@ -162,6 +166,51 @@ void* Cliente::cicloMensajes_th(void * THIS){
 void Cliente::cicloMensajes(){
 	pthread_create(&mainLoopThread, NULL, cicloMensajes_th, (void*)this);
 }
+
+void Cliente::entreEtapas() {
+	Logger::instance()->logInfo("Entrando al espacio entre etapas");
+	string mensaje;
+	if (recibirMensaje(mensaje) != MENSAJEOK) {
+		this->cerrar(); // TODO debug.
+	} else {
+		EspacioEntreEtapas e(ventana, mensaje);
+		// hilo que espera al fin entre etapas.
+		ArgsEsperarEntreEtapas args = {
+			.cliente = this,
+			.espacioEntreEtapas = &e,
+			.evento = FIN_ENTRE_ETAPAS
+		};
+		pthread_t esperar_id;
+		pthread_create(&esperar_id, NULL, esperarEvento_th, (void*) &args);
+		// Render entre etapas.
+		e.renderLoop();
+	}
+	Logger::instance()->logInfo("Saliendo del espacio entre etapas");
+}
+
+void Cliente::esperarEvento(int evento) {
+	string mensaje = "";
+	// TODO ver problemas de conexión.
+	int res = MENSAJEOK;
+	int eventoRecibido = -1;
+
+	while(res == MENSAJEOK && eventoRecibido != evento) {
+		if (mensaje.size() == 4)
+			eventoRecibido = Decodificador::popInt(mensaje);
+		else
+			eventoRecibido = -1;
+		res = recibirMensaje(mensaje);
+	}
+}
+
+// Versión concurrente del método anterior.
+void* Cliente::esperarEvento_th(void* argsVoid) {
+	ArgsEsperarEntreEtapas * args = (ArgsEsperarEntreEtapas*) argsVoid;
+	args->cliente->esperarEvento(args->evento);
+	args->espacioEntreEtapas->finalizar();
+	pthread_exit(NULL);
+}
+
 
 void Cliente::actualizarEscenario(string mensaje){
 	if (mensaje.size() == sizeof(int)){
@@ -205,4 +254,8 @@ int Cliente::getPort(){
 
 bool Cliente::conectado(){
 	return cliente_conectado;
+}
+
+Ventana* Cliente::getVentana(){
+	return this->ventana;
 }

@@ -70,6 +70,8 @@ public:
     void esperarPartida(int fdCliente);
     void enviarEstadoInicial(int fdCliente);
     void ejecutar();
+    void entreEtapas();
+    void entretenerClientes(int segundos);
     static void *atenderCliente(void *arg);
     static void *responderCliente(void *arg);
     static void *cicloAceptar(void *THIS);

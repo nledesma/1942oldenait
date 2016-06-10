@@ -170,16 +170,65 @@ void EscenarioJuego::mainLoop() {
 
 void EscenarioJuego::actualizarEstado(float timeStep) {
     this->actualizarScrollingOffset(timeStep);
+    this->sortearDisparosEnemigos(timeStep);
     this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
     this->moverAviones(timeStep);
     this->moverElementos(timeStep);
     this->moverEnemigos(timeStep);
-    this->moverPowerUps(timeStep); //hijo de puta que trae problemas
+    this->moverPowerUps(timeStep);
     this->proyectarDisparos(timeStep);
+    this->moverDisparosEnemigos(timeStep);
     this->verificarColisiones();
     this->moverDisparos(timeStep);
     this->manejarProximoEvento();
     this->getProximoEnemigo();
+}
+
+void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
+    int randomDisparo = rand() % 400;
+    int cantidadEnemigos = (int) this->getEnemigos().size();
+    if (randomDisparo == 0 && cantidadEnemigos != 0){
+        int randomEnemigo = rand() % cantidadEnemigos;
+
+        AvionEnemigo* enemigo = this->avionEnemigo(randomEnemigo);
+
+        if (enemigo->getTipoAvion() != TIPO_AVION_GRANDE){
+            int cantidadAviones = (int) this->getAviones().size();
+            int randomAliado = rand() % cantidadAviones;
+            Avion* aliado = this->avion(randomAliado + 1);
+            float xObjetivo = aliado->getPosicionX();
+            float yObjetivo = aliado->getPosicionY();
+
+            pthread_mutex_lock(&mutexListaEnemigos);
+            DisparoEnemigo* disparoEnemigo = enemigo->disparar(xObjetivo, yObjetivo);
+            pthread_mutex_unlock(&mutexListaEnemigos);
+
+            if (disparoEnemigo != NULL){
+                cout << disparoEnemigo->getPosX() << endl;
+                pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+                this->disparosEnemigos.push_back(disparoEnemigo);
+                pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+            }
+        }
+    }
+
+    if (this->motorActivado && enemigos.size() > 0) {
+        for (list<AvionEnemigo *>::iterator iterador = enemigos.begin();
+             iterador != enemigos.end(); ++iterador) {
+            AvionEnemigo *avionEnemigo = *iterador;
+            if (avionEnemigo->getTipoAvion() == TIPO_AVION_GRANDE) {
+                if (avionEnemigo->correspondeDisparar(timeStep)) {
+                    vector<DisparoEnemigo*> disparos = avionEnemigo->disparar();
+                    for (vector<DisparoEnemigo *>::iterator it = disparos.begin(); it != disparos.end(); ++it) {
+                        DisparoEnemigo *disparoEnemigoGrande = *it;
+                        pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+                        this->disparosEnemigos.push_back(disparoEnemigoGrande);
+                        pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void EscenarioJuego::jugar(bool serverActivo) {
@@ -230,12 +279,28 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     }
 }
 
+void EscenarioJuego::moverDisparosEnemigos(float timeStep) {
+    if (this->disparosEnemigos.size() > 0) {
+        for (list<DisparoEnemigo *>::iterator iterador = disparosEnemigos.begin(); iterador != disparosEnemigos.end(); iterador++) {
+            if ((*iterador)->mover(timeStep) == 0) {
+                // Se borra el disparo.
+                delete (*iterador);
+                pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+                iterador = disparosEnemigos.erase(iterador);
+                pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+            }
+        }
+    }
+}
+
 void EscenarioJuego::moverPowerUps(float timeStep) {
-    for (list<PowerUp *>::iterator iterador = this->getPowerUps().begin();
-         iterador != this->getPowerUps().end(); ++iterador) {
+    int i = 1;
+    for (list<PowerUp *>::iterator iterador = powerUps.begin();
+         iterador != powerUps.end(); ++iterador) {
         PowerUp *powerUp = *iterador;
-        //powerUp->mover(timeStep, this->velocidadDesplazamientoY);
-    }   
+        powerUp->mover(timeStep, this->velocidadDesplazamientoY);
+        i++;
+    }
 }
 
 void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
@@ -265,20 +330,32 @@ list<Elemento *> &EscenarioJuego::getElementos() {
     return this->elementos;
 }
 
-list<PowerUp *> &EscenarioJuego::getPowerUps(){
-    return this->powerUps;
+list<PowerUp *> EscenarioJuego::getPowerUps(){
+    list<PowerUp*> listaPowerUps;
+    pthread_mutex_lock(&this->mutexPowerUps);
+    listaPowerUps = this->powerUps;
+    pthread_mutex_unlock(&this->mutexPowerUps);
+    return listaPowerUps;
 }
 
 list<Disparo *> EscenarioJuego::getDisparos() {
-    list<Disparo *> listaDisparos;
+    list<Disparo*> listaDisparos;
     pthread_mutex_lock(&this->mutexListaDisparos);
-        listaDisparos = this->disparos;
+    listaDisparos = this->disparos;
     pthread_mutex_unlock(&this->mutexListaDisparos);
     return listaDisparos;
 }
 
+list<DisparoEnemigo *> EscenarioJuego::getDisparosEnemigos() {
+    list<DisparoEnemigo *> listaDisparosEnemigos;
+    pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+    listaDisparosEnemigos = this->disparosEnemigos;
+    pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+    return listaDisparosEnemigos;
+}
+
 list <AvionEnemigo *> EscenarioJuego::getEnemigos() {
-    list<AvionEnemigo *> listaEnemigos;
+    list<AvionEnemigo*> listaEnemigos;
     pthread_mutex_lock(&this->mutexListaEnemigos);
     listaEnemigos = this->enemigos;
     pthread_mutex_unlock(&this->mutexListaEnemigos);
@@ -339,6 +416,12 @@ void EscenarioJuego::activar() {
 
 Avion* EscenarioJuego::avion(int i){
     list<Avion*>::iterator it = aviones.begin();
+    advance (it, i - 1);
+    return *it;
+}
+
+AvionEnemigo* EscenarioJuego::avionEnemigo(int i){
+    list<AvionEnemigo*>::iterator it = enemigos.begin();
     advance (it, i - 1);
     return *it;
 }
@@ -405,4 +488,20 @@ void EscenarioJuego::proyectarDisparos(float timeStep) {
     for(list<Disparo*>::iterator itDisparos = this->disparos.begin(); itDisparos != this->disparos.end(); itDisparos++){
         (*itDisparos)->getColisionable()->proyectarColisionable(timeStep);
     }
+}
+
+list< pair<int,int> > EscenarioJuego::getPuntajes() {
+    list<pair<int,int> > equipoPuntaje;
+
+    for (int i = 0; i < equipos.size(); ++i) {
+        set<int>::iterator it;
+        pair<int,int> par;
+        par.first = i;
+        for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
+            par.second = avion(*it)->getPuntaje();
+            equipoPuntaje.push_back(par);
+        }
+    }
+    
+    return equipoPuntaje;
 }

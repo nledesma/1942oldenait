@@ -40,6 +40,7 @@ private:
     list<AvionEnemigo*> enemigos;
     list<Elemento*> elementos;
     list<Disparo*> disparos;
+    list<DisparoEnemigo*> disparosEnemigos;
     list<PowerUp*> powerUps;
     /* Specs */
     float velocidadDesplazamientoY;
@@ -58,7 +59,9 @@ private:
     Temporizador temporizador;
     ColaConcurrente<pair<int, int>> colaEventos;
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexListaDisparosEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     Grilla * grilla;
 
@@ -89,15 +92,18 @@ public:
     void moverAviones(float timestep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
+    void moverDisparosEnemigos(float timeStep);
     void moverEnemigos(float timestep);
     void moverPowerUps(float timestep);
+    void sortearDisparosEnemigos(float timeStep);
     /* getters & setters */
     float getScrollingOffset();
     list<Avion*>& getAviones();
     list<Elemento*>& getElementos();
     list<Disparo*> getDisparos();
+    list<DisparoEnemigo*> getDisparosEnemigos();
     list<AvionEnemigo*> getEnemigos();
-    list<PowerUp*> &getPowerUps();
+    list<PowerUp*> getPowerUps();
     int getPuntaje(int nroEquipo);
     int getAncho();
     int getAlto();
@@ -112,8 +118,11 @@ public:
     void desactivar();
     bool porEquipos();
     Avion* avion(int i);
+    AvionEnemigo* avionEnemigo(int i);
     void verificarColisiones();
     void proyectarDisparos(float timeStep);
+    list<pair<int,int> > getPuntajes();
+
 };
 
 

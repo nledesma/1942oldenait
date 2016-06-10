@@ -173,7 +173,7 @@ Disparo* Avion::disparar(){
         return NULL;
     }
     this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
-    return new Disparo(this->posX + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, posY, velocidadDisparos);
+    return new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos);
 }
 
 void Avion::volverEstadoInicial(){

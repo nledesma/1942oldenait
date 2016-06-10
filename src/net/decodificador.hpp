@@ -5,6 +5,7 @@
 #include "../juego/modelo/avion.hpp"
 #include "../juego/modelo/escenarioJuego.hpp"
 #include "../juego/modelo/disparo.hpp"
+#include "../juego/modelo/powerUp.hpp"
 #include "../accesorios/codigo.hpp"
 #include <utility> // pair
 #include <cstring> // memcpy
@@ -21,8 +22,10 @@ public:
     static void push(string & codigo, Elemento *e);
     static void push(string & codigo, Avion *a);
     static void push(string & codigo, Disparo *d);
+    static void push(string & codigo, DisparoEnemigo *d);
     static void push(string & codigo, AvionEnemigo *enemigo);
     static void push(string & codigo, EscenarioJuego *e);
+    static void push(string & codigo, PowerUp *powerUp);
     static void pushInicial(string & codigo, Avion *a);
     static void pushInicial(string & codigo, Elemento *e);
     static void pushInicial(string & codigo, EscenarioJuego *e);
@@ -35,6 +38,7 @@ public:
     static string popEscenario(string & codigo);
     static string popDisparo(string & codigo);
     static string popAvionInicial(string & codigo);
+    static string popPowerUpInicial(string &codigo);
     static string popElementoInicial(string & codigo);
     static string popEscenarioInicial(string & codigo);
     static string popDisparoInicial(string & codigo);
@@ -48,6 +52,7 @@ public:
     static void imprimirBytes(string codigo);
     static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
     static string getCodigoEstadoActual(EscenarioJuego * escenarioJuego);
+    static string getPuntajes(EscenarioJuego * escenarioJuego);
 };
 
 #endif

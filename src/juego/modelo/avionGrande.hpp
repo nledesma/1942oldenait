@@ -34,14 +34,19 @@
 #include "disparo.hpp"
 #include "avionEnemigo.hpp"
 #include <pthread.h>
+#include <vector>
+
+#define FRECUENCIA_DISPAROS 2.5
+#define ALTURA_INICIO_DISPAROS 300
 
 class AvionGrande: public AvionEnemigo {
+private:
+    float contadorTimesteps = 0;
 public:
     AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionGrande();
-    Disparo* disparar();
-    int getAncho();
-    int getAlto();
+    bool correspondeDisparar(float timestep);
+    vector<DisparoEnemigo*> disparar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONGRANDE_HPP

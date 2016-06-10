@@ -18,14 +18,7 @@ AvionMediano::~AvionMediano(){
 
 }
 
-Disparo* AvionMediano::disparar(){
-    return NULL;
-}
+bool AvionMediano::correspondeDisparar(float timestep) { return true; }
 
-int AvionMediano::getAncho() {
-    return ANCHO_ENEMIGO_MEDIANO;
-}
 
-int AvionMediano::getAlto() {
-    return ALTO_ENEMIGO_MEDIANO;
-}
+vector<DisparoEnemigo*> AvionMediano::disparar(){  vector<DisparoEnemigo*> disparos; return disparos;  }

@@ -17,9 +17,8 @@ class AvionPequenio: public AvionEnemigo {
 public:
     AvionPequenio(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionPequenio();
-    Disparo* disparar();
-    int getAncho();
-    int getAlto();
+    bool correspondeDisparar(float timestep);
+    vector<DisparoEnemigo*> disparar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONPEQUENIO_HPP

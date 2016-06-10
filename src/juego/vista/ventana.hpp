@@ -16,7 +16,7 @@ private:
     int alto;
     SDL_Window *sdlWindow = NULL;
     SDL_Renderer *gVentanaRenderer = NULL;
-
+    TTF_Font* fuenteStarWars;
 public:
     /* Constructor */
     Ventana(int ancho, int alto);
@@ -40,6 +40,8 @@ public:
 
     /* Retorna la ventana de SDL */
     SDL_Window *getSdlWindow();
+    Figura* getFondo();
+    void limpiar();
 };
 
 #endif //INC_1942OLDENAIT_VENTANA_HPP

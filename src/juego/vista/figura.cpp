@@ -15,6 +15,40 @@ Figura::~Figura(){
     free();
 }
 
+bool Figura::loadFromFilePNG(SDL_Renderer* renderer, string path){
+	//Get rid of preexisting texture
+	free();
+	//The final texture
+	SDL_Texture* newTexture = NULL;
+	//Load image at specified path
+    string basePath = PATH_IMG;
+    string fullPath = basePath + path + ".png";
+	SDL_Surface* loadedSurface = IMG_Load(fullPath.c_str());
+	if(loadedSurface == NULL){
+		cout << "Unable to load image! SDL_image Error:" << IMG_GetError() << endl;
+	}
+	else{
+		//Color key image
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+		//Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+		if( newTexture == NULL ){
+			cout << "Unable to create texture from ! SDL Error:" << SDL_GetError() << endl;
+		}
+		else{
+			//Get image dimensions
+			mWidth = loadedSurface->w;
+			mHeight = loadedSurface->h;
+		}
+		//Get rid of old loaded surface
+		SDL_FreeSurface( loadedSurface );
+	}
+
+	//Return success
+	textura = newTexture;
+	return textura != NULL;
+}
+
 bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
     //Si existe una textura cargada de antes, se libera la memoria asociada a esa textura.
     free();
@@ -69,7 +103,7 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
 
 void Figura::free(){
     //Se libera la textura si es necesario, y se redefinen los atributos por default.
-    if(textura != NULL){
+    if(this->textura != NULL){
         SDL_DestroyTexture(this->textura);
         this->textura = NULL;
         this->mWidth = 0;
@@ -111,6 +145,42 @@ void Figura::render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip){
 
     SDL_RenderCopy(renderer, this->textura, clip, &renderQuad);
 }
+
+bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_Font *gFont, SDL_Renderer* renderer){
+    // Liberamos texturas preexistentes.
+	free();
+	// Se renderiza una superficie auxiliar con el texto.
+	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+	if (textSurface == NULL) {
+		cout << "No se ha podido renderizar el texto sobre la superficie. SDL_ttf Error: " << TTF_GetError() << endl;
+	} else {
+		// Se crea la textura a partir de la superficie.
+        textura = SDL_CreateTextureFromSurface(renderer, textSurface);
+		if (textura == NULL) {
+			cout << "No se ha podido crear la textura a partir de la superficie. SDL Error: " << SDL_GetError() << endl;
+		} else {
+			mWidth = textSurface->w;
+			mHeight = textSurface->h;
+		}
+		// Se libera la superficie auxiliar.
+		SDL_FreeSurface(textSurface);
+	}
+
+	return textura != NULL;
+}
+
+void Figura::renderMenu(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip){
+	// Set rendering space and render to screen
+	SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+	// Set clip rendering dimensions
+	if(clip != NULL) {
+		renderQuad.w = clip->w;
+		renderQuad.h = clip->h;
+	}
+	// Render to screen
+	SDL_RenderCopyEx(renderer, textura, clip, &renderQuad, angle, center, flip);
+}
+
 
 int Figura::getWidth(){
     return mWidth;

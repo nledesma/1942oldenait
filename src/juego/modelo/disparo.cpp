@@ -1,12 +1,12 @@
 #include "disparo.hpp"
 
 Disparo::Disparo(float posX, float posY, float velocidad){
-
     this->posX = posX;
     this->posY = posY;
     this->velocidad = velocidad;
     this->colisionable = new Colisionable(this->posX, this->posY, 0, TIPO_DISPARO_AVION);
     this->colisiono = false;
+    this->alturaDeMuerte = -1;
 }
 
 Disparo::~Disparo(){
@@ -31,6 +31,13 @@ int Disparo::mover(float timeStep){
             retorno = 1;
         }
         this->colisionable->mover(this->posX, this->posY, 0);
+    }
+    else {
+        if(this->alturaDeMuerte != -1 && this->posY <= this->alturaDeMuerte ){
+            retorno = 0;
+        } else {
+            retorno = 1;
+        }
     }
     pthread_mutex_unlock(&this->mutexMover);
     return retorno;
@@ -74,4 +81,5 @@ Colisionable* Disparo::getColisionable(){
 
 void Disparo::colisionar(){
     this->colisiono = true;
+    this->alturaDeMuerte = this->colisionable->getExtremoSuperior();
 }

@@ -11,14 +11,14 @@ float FabricaPowerUps::generarPosicionX(int anchoEscenario) {
     int anchuraPosible = anchoEscenario - ANCHO_POWERUP;
     int posicionX = rand() % anchuraPosible + 1;
 
-    return posicionX;
+    return (float) posicionX;
 }
 
 float FabricaPowerUps::generarPosicionY(int altoEscenario) {
     int alturaPosible = altoEscenario - ALTO_POWERUP;
     int posicionY = rand() % alturaPosible + 1;
 
-    return posicionY;
+    return (float)posicionY;
 }
 
 list <PowerUp*> FabricaPowerUps::fabricarPowerUps(list<PowerUpParseado*> powerUpsParseados,int longitudEscenario, int anchoEscenario, int altoEscenario) {
@@ -35,16 +35,17 @@ list <PowerUp*> FabricaPowerUps::fabricarPowerUps(list<PowerUpParseado*> powerUp
         cout << "se toma un elemento de tipo " << tipo << " y cantidad " << cantidad << endl;
         for(int i = 0; i < cantidad; i++){
           float posicionX = generarPosicionX( anchoEscenario);
-          float posicionY = generarPosicionY( altoEscenario);
+          float posicionY = generarPosicionY( longitudEscenario);
+          posicionY = altoEscenario - posicionY;
 
           if (tipo == TIPO_POWERUP_BONIFICACION){
-            generarPowerUpBonificacion(valor, posicionX, posicionY, listaPowerUps);
+            generarPowerUpBonificacion(posicionX, posicionY, valor,listaPowerUps);
           } else if (tipo == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
-            generarPowerUpDestruirEnemigos(valor, posicionX, posicionY, listaPowerUps);
+            generarPowerUpDestruirEnemigos(posicionX, posicionY, valor, listaPowerUps);
           } else if(tipo == TIPO_POWERUP_DOS_AMETRALLADORAS){
-            generarPowerUpDosAmetralladoras(valor, posicionX, posicionY, listaPowerUps);
+            generarPowerUpDosAmetralladoras(posicionX, posicionY, valor, listaPowerUps);
           } else if (tipo == TIPO_POWERUP_AVIONES_SECUNDARIOS){
-            generarPowerUpAvionesSecundarios(valor, posicionX, posicionY, listaPowerUps);
+            generarPowerUpAvionesSecundarios(posicionX, posicionY, valor, listaPowerUps);
           }
         }
     }
@@ -53,21 +54,21 @@ list <PowerUp*> FabricaPowerUps::fabricarPowerUps(list<PowerUpParseado*> powerUp
 }
 
 void FabricaPowerUps::generarPowerUpBonificacion(float posicionX, float posicionY, int valor, list<PowerUp*>&listaPowerUps){
-  PowerUp* powerUp = new PowerUpBonificacion(valor,posicionX,posicionY);
+  PowerUp* powerUp = new PowerUpBonificacion(posicionX,posicionY, valor);
   listaPowerUps.push_back(powerUp);
 }
 
 void FabricaPowerUps::generarPowerUpDestruirEnemigos(float posicionX, float posicionY, int valor, list<PowerUp*>&listaPowerUps){
-  PowerUp* powerUp = new PowerUpDestruirEnemigos(valor,posicionX,posicionY);
+  PowerUp* powerUp = new PowerUpDestruirEnemigos(posicionX,posicionY, valor);
   listaPowerUps.push_back(powerUp);
 }
 
 void FabricaPowerUps::generarPowerUpDosAmetralladoras(float posicionX, float posicionY, int valor, list<PowerUp*>&listaPowerUps){
-  PowerUp* powerUp = new PowerUpDosAmetralladoras(valor,posicionX,posicionY);
+  PowerUp* powerUp = new PowerUpDosAmetralladoras(posicionX,posicionY, valor);
   listaPowerUps.push_back(powerUp);
 }
 
 void FabricaPowerUps::generarPowerUpAvionesSecundarios(float posicionX, float posicionY, int valor, list<PowerUp*>&listaPowerUps){
-  PowerUp* powerUp = new PowerUpAvionesSecundarios(valor,posicionX,posicionY);
+  PowerUp* powerUp = new PowerUpAvionesSecundarios(posicionX,posicionY, valor);
   listaPowerUps.push_back(powerUp);
 }

@@ -35,8 +35,23 @@ string Decodificador::popAvion(string & codigo){
     return popBytes(codigo, 2*sizeof(float) + 1);
 }
 
+/* Push y pop de powerUps */
+void Decodificador::push(string &codigo, PowerUp *powerUp){
+  push(codigo, powerUp->getPosicionX());
+  push(codigo, powerUp->getPosicionY());
+  push(codigo, powerUp->getEstadoAnimacion());
+  push(codigo, powerUp->getTipoPowerUp());
+  push(codigo, powerUp->getValor());
+}
+
 /* Push y pop de disparo. */
 void Decodificador::push(string & codigo, Disparo *d) {
+    push(codigo, d->getPosX());
+    push(codigo, d->getPosY());
+}
+
+/* Push y pop de disparo enemigo. */
+void Decodificador::push(string & codigo, DisparoEnemigo *d) {
     push(codigo, d->getPosX());
     push(codigo, d->getPosY());
 }
@@ -221,12 +236,40 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, enemigo);
         }
     }
+    list<DisparoEnemigo*> disparosEnemigos = escenarioJuego->getDisparosEnemigos();
+    Decodificador::pushCantidad(codigo, (int) disparosEnemigos.size());
+    if(!disparosEnemigos.empty()){
+        for(list<DisparoEnemigo*>::iterator iterador = disparosEnemigos.begin(); iterador != disparosEnemigos.end(); ++iterador) {
+            DisparoEnemigo* disparoEnemigo = *iterador;
+            Decodificador::push(codigo, disparoEnemigo);
+        }
+    }
+
+    list<PowerUp*> powerUps = escenarioJuego->getPowerUps();
+    Decodificador::pushCantidad(codigo, (int) powerUps.size());
+    if(!powerUps.empty()){
+        for(list<PowerUp*>::iterator iterador = powerUps.begin(); iterador != powerUps.end(); ++iterador) {
+            PowerUp* powerUp = *iterador;
+            Decodificador::push(codigo, powerUp);
+        }
+    }
     Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(0));
     // Si es por equipos encolamos el puntaje del segundo.
     if (escenarioJuego->porEquipos())
         Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(1));
 
     return codigo;
+}
+
+string Decodificador::getPuntajes(EscenarioJuego * escenario) {
+    string mensaje;
+    list<pair<int,int>> listaPuntajes = escenario->getPuntajes();
+    list<pair<int,int>>::iterator it;
+    for (it = listaPuntajes.begin(); it != listaPuntajes.end(); ++it) {
+        Decodificador::push(mensaje, it->first);
+        Decodificador::push(mensaje, it->second);
+    }
+    return mensaje;
 }
 
 float Decodificador::popFloat(string & codigo) {

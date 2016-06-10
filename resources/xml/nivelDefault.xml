@@ -12,7 +12,7 @@
             <spriteIdFondo>galaxia</spriteIdFondo>
             <ancho>800</ancho>
             <alto>800</alto>
-            <velocidadDesplazamientoY>200</velocidadDesplazamientoY>
+            <velocidadDesplazamientoY>180</velocidadDesplazamientoY>
         </fondo>
         <modo>equipos</modo>
         <etapas>
@@ -27,7 +27,12 @@
                     <elemento>
                         <spriteIdElemento>planeta</spriteIdElemento>
                         <posx>600</posx>
-                        <posy>1600</posy>
+                        <posy>1100</posy>
+                    </elemento>
+                    <elemento>
+                        <spriteIdElemento>death-star</spriteIdElemento>
+                        <posx>0</posx>
+                        <posy>2500</posy>
                     </elemento>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
@@ -38,7 +43,7 @@
                 <enemigos>
                     <enemigo>
                       <tipo>pequenio</tipo>
-                      <cantidad>10</cantidad>
+                      <cantidad>0</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>escuadron</tipo>
@@ -46,7 +51,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>mediano</tipo>
-                      <cantidad>5</cantidad>
+                      <cantidad>20</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>grande</tipo>
@@ -151,7 +156,7 @@
     <aviones>
         <avion>
             <velocidadDesplazamiento>500</velocidadDesplazamiento>
-            <velocidadDisparos>500</velocidadDisparos>
+            <velocidadDisparos>350</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
         </avion>
