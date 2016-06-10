@@ -8,10 +8,10 @@ MenuPrincipal::MenuPrincipal(){
 
 bool MenuPrincipal::cargarBotones(Ventana* ventana){
     bool success = true;
-    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/estrellas.png")) {
+    if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
-    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/jugarSprite.png" ))){
+    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/jugarSprite" ))){
         cout << "Failed to load button sprite texture!" << endl;
         success = false;
     } else {
@@ -22,7 +22,7 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
     }
 
 
-    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "../../resources/img/SpritesBotones/salirSprite.png"))){
+    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/salirSprite"))){
 		cout << "Failed to load button sprite texture!" << endl;
 		success = false;
     } else {
@@ -31,7 +31,6 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
         //Setea los botones en las posiciones
         this->botonSalir[0].setPosition(250, 370);
     }
-    //Agrego a partir de aca
     SDL_Color color = { 255, 232, 32 };
     this->texto = new Texto(50, color, STAR_WARS_FONT, ventana);
     this->texto->cargarFuente("1942 OLDENAIT");
@@ -55,7 +54,6 @@ BotonSalir* MenuPrincipal::getBotonSalir(){
 }
 
 void MenuPrincipal::cerrar(){
-	//Free loaded images
     this->getBotonJugar()->getFigura()->free();
     this->getBotonSalir()->getFigura()->free();
     this->texto->getFigura()->free();

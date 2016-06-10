@@ -1,11 +1,11 @@
-#include "menuConexionManual.hpp"
-MenuConexionManual::MenuConexionManual(){
+#include "menuConexionPuerto.hpp"
+MenuConexionPuerto::MenuConexionPuerto(){
      this->botonSiguiente = new BotonSiguiente();
-     this->textoIP = NULL;
+     this->textoPuerto = NULL;
      this->fondo = new Figura();
 }
 
-bool MenuConexionManual::cargarBotones(Ventana* ventana){
+bool MenuConexionPuerto::cargarBotones(Ventana* ventana){
     bool success = true;
     if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
@@ -20,23 +20,24 @@ bool MenuConexionManual::cargarBotones(Ventana* ventana){
         this->botonSiguiente[0].setPosition(450, 400);
     }
 
-    this->textoIP = new Texto(35, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    this->textoIP->cargarFuente("INGRESE IP: ");
+    SDL_Color color = { 255, 232, 32 };
+    this->textoPuerto = new Texto(35, color,  STAR_WARS_FONT, ventana);
+    this->textoPuerto->cargarFuente("INGRESE PUERTO: ");
 
     return success;
 }
 
-void MenuConexionManual::renderizar(Ventana* ventana){
+void MenuConexionPuerto::renderizar(Ventana* ventana){
     this->fondo->render(0, 0, ventana->getVentanaRenderer());
     this->getBotonSiguiente()[0].render(ventana->getVentanaRenderer());
-    this->textoIP->renderizar(160, 150);
+    this->textoPuerto->renderizar(160, 150);
 }
 
-BotonSiguiente* MenuConexionManual::getBotonSiguiente(){
+BotonSiguiente* MenuConexionPuerto::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
-void MenuConexionManual::cerrar(){
+void MenuConexionPuerto::cerrar(){
     this->getBotonSiguiente()->getFigura()->free();
-    this->textoIP->getFigura()->free();
+    this->textoPuerto->getFigura()->free();
 }

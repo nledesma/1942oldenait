@@ -5,13 +5,12 @@
 #include "../src/net/cliente/clienteParser.hpp"
 #include "../src/menu/Menu/menuPrincipal.hpp"
 #include "../src/menu/Menu/menuDatosDeUsuario.hpp"
+#include "../src/menu/Menu/menuConexionPuerto.hpp"
 #include "../src/menu/Menu/menuConexionManual.hpp"
 #include "../src/menu/Menu/menuConexiones.hpp"
 #include "../src/juego/vista/textoDinamico.hpp"
 #include "../src/menu/listaDeSeleccion.hpp"
 using namespace std;
-
-//TODO faltaria poner los botones con los otros modos de juego.
 
 bool validarInt(string valor) {
     if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
@@ -36,19 +35,6 @@ int leerInt(){
     ss << lectura;
     ss >> n;
     return n;
-}
-
-void separador(){
-    cout << "-----------------------------------------------------" << endl;
-}
-
-void imprimirMenu(){
-    separador();
-    cout << "Bienvenido, Elija la opcion que desee:" << endl;
-    cout << "1. Conectar" << endl;
-    cout << "2. Desconectar" << endl;
-    cout << "3. Salir" << endl;
-    separador();
 }
 
 int validarPuerto(){
@@ -77,12 +63,48 @@ bool esIpValida(string ip){
 	return false;
 }
 
+void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexionManual* menu){
+    MenuConexionPuerto* menuConexionPuerto = new MenuConexionPuerto();
+    SDL_Color color = {255, 232, 32};
+    TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color,  STAR_WARS_FONT, ventana);
+    textoDinamicoPuerto->cambiarTexto("");
+    menuConexionPuerto->cargarBotones(ventana);
+    bool quit = false;
+	SDL_Event e;
+	while(!quit){
+		while(SDL_PollEvent( &e ) != 0){
+			if(e.type == SDL_QUIT){
+				quit = true;
+			}
+			int respuesta = menuConexionPuerto->getBotonSiguiente()[0].handleEvent(&e);
+			if(respuesta == 1){
+				menu->cerrar();
+
+                const char* puertoChar = textoDinamicoPuerto->getTexto().c_str();
+                int puerto = atoi (puertoChar);
+                cliente->setAddress(ip, puerto);
+                cliente->conectar();
+
+			}
+			ventana->limpiar();
+			//Renderizado
+            textoDinamicoPuerto->manejarEvento(e);
+
+		}
+		ventana->limpiar();
+		//Renderizado
+		menuConexionPuerto->renderizar(ventana);
+        textoDinamicoPuerto->renderizar(300, 250);
+		SDL_RenderPresent(ventana->getVentanaRenderer());
+	}
+    menuConexionPuerto->cerrar();
+
+}
+
 void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones){
     MenuConexionManual* menuConexionManual = new MenuConexionManual();
     TextoDinamico* textoDinamicoIP = new TextoDinamico(25, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     textoDinamicoIP->cambiarTexto("");
-    // TextoDinamico* textoDinamicoPuerto = new TextoDinamico(25, color, ventana);
-    // textoDinamicoPuerto->cambiarTexto("");
     menuConexionManual->cargarBotones(ventana);
     bool quit = false;
 	SDL_Event e;
@@ -94,55 +116,23 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 			int respuesta = menuConexionManual->getBotonSiguiente()[0].handleEvent(&e);
 			if(respuesta == 1){
 				menuConexiones->cerrar();
-                cliente->setAddress(textoDinamicoIP->getTexto(), 8000);
-                cliente->conectar();
-
+                cargarMenuPuerto(textoDinamicoIP->getTexto(), cliente, ventana, menuConexionManual);
 			}
 			ventana->limpiar();
 			//Renderizado
             textoDinamicoIP->manejarEvento(e);
-            //textoDinamicoPuerto->manejarEvento(e);
-            // const char* ipChar = textoDinamicoPuerto->getTexto().c_str();
-            // int ip = atoi(ipChar);
 
 		}
 		ventana->limpiar();
 		//Renderizado
 		menuConexionManual->renderizar(ventana);
-        textoDinamicoIP->renderizar(300, 350);
-        // textoDinamicoPuerto->renderizar(400, 450);
+        textoDinamicoIP->renderizar(300, 250);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
     menuConexionManual->cerrar();
 
 }
 
-void conexionManual(Cliente* cliente){
-    string ip;
-    int puerto;
-    string alias;
-
-    if (cliente->conectado()){
-        cout << "El cliente ya está conectado." << endl;
-    } else {
-        cout << "Ingrese IP: " << endl;
-        cin >> ip;
-        while (!(esIpValida(ip))){
-        	cout << "La dirección IP ingresada no tiene un formato válido" << endl;
-        	cin >> ip;
-        }
-
-        cout << "Ingrese un puerto: " << endl;
-       	puerto = validarPuerto();
-
-        cliente->setAddress(ip, puerto);
-        cout << "Ingrese un alias: ";
-        cin >> alias;
-        cliente->setAlias(alias);
-        cout << "Se ha ingresado el alias " << alias << endl;
-        cliente->conectar();
-    }
-}
 
 void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones){
     list<Conexion>::iterator it;
