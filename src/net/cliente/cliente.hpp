@@ -3,7 +3,7 @@
 #include "../gameSocket.hpp"
 #include "../decodificador.hpp"
 #include "../../juego/vista/escenarioVista.hpp"
-//#include "../../juego/vista/ventana.hpp"
+#include "../../juego/vista/espacioEntreEtapas.hpp"
 #include <list>
 #include <string>
 #include <errno.h>
@@ -44,12 +44,14 @@ public:
     bool conectado();
     void cerrar();
     int enviarEvento(int evento);
+	void esperarEvento(int evento);
     int recibirMensaje(string & mensaje);
     void iniciarEscenario();
     void actualizarEscenario(string mensaje);
     void cicloMensajes();
     static void * cicloMensajes_th(void* THIS);
     bool sePuedeEntrar();
+	void entreEtapas();
     /* getters */
     EscenarioVista * getEscenario();
     string getIP();

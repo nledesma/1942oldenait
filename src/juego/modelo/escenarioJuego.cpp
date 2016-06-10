@@ -444,3 +444,19 @@ void EscenarioJuego::verificarColisiones(){
     this->grilla->verificarColisiones();
     this->grilla->limpiarGrilla();
 }
+
+list< pair<int,int> > EscenarioJuego::getPuntajes() {
+    list<pair<int,int> > equipoPuntaje;
+
+    for (int i = 0; i < equipos.size(); ++i) {
+        set<int>::iterator it;
+        pair<int,int> par;
+        par.first = i;
+        for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
+            par.second = avion(*it)->getPuntaje();
+            equipoPuntaje.push_back(par);
+        }
+    }
+    
+    return equipoPuntaje;
+}

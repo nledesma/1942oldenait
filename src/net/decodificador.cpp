@@ -261,6 +261,17 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     return codigo;
 }
 
+string Decodificador::getPuntajes(EscenarioJuego * escenario) {
+    string mensaje;
+    list<pair<int,int>> listaPuntajes = escenario->getPuntajes();
+    list<pair<int,int>>::iterator it;
+    for (it = listaPuntajes.begin(); it != listaPuntajes.end(); ++it) {
+        Decodificador::push(mensaje, it->first);
+        Decodificador::push(mensaje, it->second);
+    }
+    return mensaje;
+}
+
 float Decodificador::popFloat(string & codigo) {
     return stringToFloat(popBytes(codigo, sizeof(float)));
 }

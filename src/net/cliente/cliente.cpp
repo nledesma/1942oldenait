@@ -141,6 +141,8 @@ void Cliente::iniciarEscenario(){
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
 		cout << "terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
+		entreEtapas();
+
 	}
 	if (!escenarioVista->quedanEtapas()) cout << "todas las etapas finalizadas" << endl;
 	if (resultadoRender != CONTINUAR) cout << "el resultado de render no fue de continuar" << endl;
@@ -166,6 +168,34 @@ void* Cliente::cicloMensajes_th(void * THIS){
 
 void Cliente::cicloMensajes(){
 	pthread_create(&mainLoopThread, NULL, cicloMensajes_th, (void*)this);
+}
+
+void Cliente::entreEtapas() {
+	string mensaje;
+	if (recibirMensaje(mensaje) != MENSAJEOK) {
+		this->cerrar(); // TODO debug.
+	} else {
+		EspacioEntreEtapas e(ventana, mensaje);
+		//TODO ver si se necesita ciclo.
+		recibirMensaje(mensaje);
+		esperarEvento(FIN_ENTRE_ETAPAS);
+	}
+}
+
+void Cliente::esperarEvento(int evento) {
+	string mensaje = "";
+	// TODO ver problemas de conexión.
+	int res = MENSAJEOK;
+	int eventoRecibido = -1;
+
+	while(res == MENSAJEOK && eventoRecibido != evento) {
+		if (mensaje.size() == 4)
+			eventoRecibido = Decodificador::popInt(mensaje);
+		else
+			eventoRecibido = -1;
+
+		res = recibirMensaje(mensaje);
+	}
 }
 
 void Cliente::actualizarEscenario(string mensaje){

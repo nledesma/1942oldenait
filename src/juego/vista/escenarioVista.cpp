@@ -328,7 +328,7 @@ void EscenarioVista::cerrar() {
         elementoVista->cerrar();
     }
     this->disparoVista->cerrar();
-    this->ventana->cerrar();
+    // this->ventana->cerrar();
 }
 
 void EscenarioVista::setDisparos(list<disparo> disparosParam){

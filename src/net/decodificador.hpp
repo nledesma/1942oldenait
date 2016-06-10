@@ -52,6 +52,7 @@ public:
     static void imprimirBytes(string codigo);
     static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
     static string getCodigoEstadoActual(EscenarioJuego * escenarioJuego);
+    static string getPuntajes(EscenarioJuego * escenarioJuego);
 };
 
 #endif

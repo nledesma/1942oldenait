@@ -25,6 +25,8 @@ SRC = app:$(NET_PATH):$(NET_PATH)/cliente:$(NET_PATH)/servidor:\
 	$(TRAYECTORIA_PATH):$(COLISIONES_PATH):$(MENU_PATH):$(MENU_PATH)/Menu:$(MENU_PATH)/Boton
 vpath %.cpp $(SRC)
 
+# ESTO ESTA FUERA DE CONTROLLLL
+
 # Compilados.
 OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	logger.o colaConcurrente.o avion.o disparo.o clienteParser.o etapa.o etapaVista.o \
@@ -42,7 +44,7 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	menu.o menuDatosDeUsuario.o menuConexionManual.o menuPrincipal.o menuConexiones.o texto.o \
 	textoDinamico.o radioButton.o listaDeSeleccion.o disparoEnemigo.o powerUpDestruirEnemigosVista.o \
 	powerUpVista.o powerUpBonificacionVista.o powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o \
-	disparoEnemigoVista.o
+	disparoEnemigoVista.o espacioEntreEtapas.o
 
 
 DIR_OBJS = compilados

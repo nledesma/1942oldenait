@@ -120,6 +120,7 @@ public:
     Avion* avion(int i);
     AvionEnemigo* avionEnemigo(int i);
     void verificarColisiones();
+    list<pair<int,int> > getPuntajes();
 };
 
 

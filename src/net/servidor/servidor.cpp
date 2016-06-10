@@ -379,15 +379,35 @@ void Servidor::ejecutar() {
         // Comienza la partida.
         iniciarCicloDesencolaciones();
         escenario->jugar(servidorActivo());
+        broadcastEvento(AVANZAR_ETAPA);
+        entreEtapas();
     }
 
     while (servidorActivo() && escenario->quedanEtapas()) {
-        broadcastEvento(AVANZAR_ETAPA);
         escenario->comenzarEtapa();
+        broadcastEvento(AVANZAR_ETAPA);
+        entreEtapas();
     }
 
     broadcastEvento(FINALIZAR_JUEGO);
     partidaEnJuego = false;
+}
+
+void Servidor::entreEtapas() {
+    string mensaje;
+    Decodificador::pushCantidad(mensaje, (int)escenario->porEquipos());
+    mensaje += Decodificador::getPuntajes(escenario);
+    broadcastMensaje(mensaje);
+    entretenerClientes(5);
+    // TODO ver si hay que mandar vacíos.
+    broadcastEvento(FIN_ENTRE_ETAPAS);
+}
+
+void Servidor::entretenerClientes(int segundos) {
+    for (int i = 0; i < segundos; ++i) {
+        broadcastEvento(MENSAJE_VACIO);
+        sleep(1);
+    }
 }
 
 /* Getters y Setters */
