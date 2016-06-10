@@ -15,12 +15,12 @@ PowerUpBonificacion::~PowerUpBonificacion() {}
 
 void PowerUpBonificacion::colisionar(){
 	if(this->estadoAnimacion <= POWER_UP_ROTACION_6){
-			this->estadoAnimacion = POWER_UP_COLISIONADO_BONIFICACION;
+			this->estadoAnimacion = POWER_UP_COLISIONADO;
 	}
 }
 
 void PowerUpBonificacion::animar(float timeStep){
-	if (this->estadoAnimacion != POWER_UP_COLISIONADO_BONIFICACION) {
+	if (this->estadoAnimacion != POWER_UP_COLISIONADO) {
 			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
 					this->contadorTiempoAnimacion = 0;
 					if (this->estadoAnimacion < POWER_UP_ROTACION_6)

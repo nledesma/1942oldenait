@@ -19,6 +19,7 @@ PowerUpDosAmetralladorasVista::PowerUpDosAmetralladorasVista() {
     this->clipsAnimacion[POWER_UP_ROTACION_1].w = ANCHO_POWERUP;
     this->clipsAnimacion[POWER_UP_ROTACION_1].h = ALTO_POWERUP;
 
+
     //Moneda rotada 2
     this->clipsAnimacion[POWER_UP_ROTACION_2].x = 0 + ANCHO_POWERUP * 2;
     this->clipsAnimacion[POWER_UP_ROTACION_2].y = 0;
@@ -50,10 +51,10 @@ PowerUpDosAmetralladorasVista::PowerUpDosAmetralladorasVista() {
     this->clipsAnimacion[POWER_UP_ROTACION_6].h = ALTO_POWERUP;
 
     //Moneda despues de ser colisionada
-    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].x = 0;
-    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].y = 0 + ALTO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].w = ANCHO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO_DOS_AMETRALLADORAS].h = ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].x = 0;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].y = 0 + ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].w = ANCHO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].h = ALTO_POWERUP;
 
     cout << "TERMINO DE CREAR EL POWER UP DOS AMETRALLADORAS VISTA" << endl;
 }

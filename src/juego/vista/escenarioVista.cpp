@@ -382,10 +382,10 @@ void EscenarioVista::agregarVistasEnemigos(){
 }
 
 void EscenarioVista::agregarVistasPowerUps(){
-  this->powerUpBonificacion = new PowerUpBonificacionVista();
-  this->powerUpDosAmetralladoras = new PowerUpDosAmetralladorasVista();
-  this->powerUpDestruirEnemigos = new PowerUpDestruirEnemigosVista();
-  this->powerUpAvionesSecundarios = new PowerUpAvionesSecundariosVista();
+    this->powerUpBonificacion = new PowerUpBonificacionVista();
+    this->powerUpDestruirEnemigos = new PowerUpDestruirEnemigosVista();
+    this->powerUpAvionesSecundarios = new PowerUpAvionesSecundariosVista();
+    this->powerUpDosAmetralladoras = new PowerUpDosAmetralladorasVista();
 }
 
 void EscenarioVista::cargarVistasAviones(){
@@ -436,8 +436,8 @@ void EscenarioVista::cargarFondo(){
 void EscenarioVista::cargarVistasPowerUps() {
     this->powerUpBonificacion->cargarImagen(this->ventana->getVentanaRenderer());
     this->powerUpDestruirEnemigos->cargarImagen(this->ventana->getVentanaRenderer());
-    this->powerUpDosAmetralladoras->cargarImagen(this->ventana->getVentanaRenderer());
     this->powerUpAvionesSecundarios->cargarImagen(this->ventana->getVentanaRenderer());
+    this->powerUpDosAmetralladoras->cargarImagen(this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){

@@ -17,7 +17,7 @@ protected:
 
 public:
 		PowerUpDosAmetralladoras(float posX, float posY, int valor);
-    ~PowerUpDosAmetralladoras();
+    	~PowerUpDosAmetralladoras();
 		void colisionar();
 		void animar(float timeStep);
 };

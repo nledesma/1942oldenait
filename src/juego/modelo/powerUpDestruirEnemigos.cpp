@@ -15,12 +15,12 @@ PowerUpDestruirEnemigos::~PowerUpDestruirEnemigos() { }
 
 void PowerUpDestruirEnemigos::colisionar(){
 	if(this->estadoAnimacion <= POWER_UP_ROTACION_6){
-			this->estadoAnimacion = POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS;
+			this->estadoAnimacion = POWER_UP_COLISIONADO;
 	}
 }
 
 void PowerUpDestruirEnemigos::animar(float timeStep){
-	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS) {
+	if (this->estadoAnimacion != POWER_UP_COLISIONADO) {
 			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
 					this->contadorTiempoAnimacion = 0;
 					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
