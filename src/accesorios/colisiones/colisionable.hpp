@@ -6,6 +6,8 @@
 #include "superficie.hpp"
 #include "../codigo.hpp"
 #include "dimensionSuperficies.hpp"
+#include <vector>
+
 
 using namespace std;
 
@@ -16,7 +18,7 @@ private:
     float ancho;
     float alto;
     Superficie* superficiePrincipal;
-    list<Superficie*> superficiesSecundarias;
+    vector<Superficie*> superficiesSecundarias;
     int* posCelda;
     void crearAvionPequenio(float posX, float posY, float angulo);
     void crearAvionEscuadron(float posX, float posY, float angulo);
@@ -30,6 +32,7 @@ private:
 
 public:
     Colisionable(float posX, float posY, float angulo, int tipoDeElemento);
+    ~Colisionable();
     float getPosX();
     float getPosY();
     void setPosX(float posX);
@@ -42,7 +45,7 @@ public:
     void mover(float posX, float posY, float angulo);
     void proyectarColisionable(float timeStep);
     Superficie * getSuperficiePrincipal();
-    list<Superficie*> getSuperficiesSecundarias();
+    vector<Superficie*> getSuperficiesSecundarias();
     float getExtremoIzquierdo();
     float getExtremoDerecho();
     float getExtremoSuperior();

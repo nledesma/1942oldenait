@@ -30,15 +30,25 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
     }
 }
 
+Colisionable::~Colisionable(){
+    delete this->superficiePrincipal;
+    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        delete this->superficiesSecundarias[i];
+    }
+}
+
 
 void Colisionable::crearAvionPequenio(float posX, float posY, float angulo){
     this->superficiePrincipal = new Superficie(posX, posY, ANCHO_ENEMIGO_PEQUENIO, ALTO_ENEMIGO_PEQUENIO, 0, 0);
-    float xCentro = (posX + ANCHO_AVION_COMUN) / 2;
-    float yCentro = (posY + ALTO_AVION_COMUN) / 2;
+    float xCentro = posX + ANCHO_AVION_COMUN / 2;
+    float yCentro = posY + ALTO_AVION_COMUN / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
     Superficie *superficie1 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_1, ANCHO_AVION_PEQUENIO_1, 0, AVION_PEQUENIO_OFFSET_ALTO);
     Superficie *superficie2 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_2, ALTO_AVION_PEQUENIO_2, 0, 0);
     Superficie *superficie3 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_2, ALTO_AVION_PEQUENIO_2, AVION_PEQUENIO_OFFSET_ANCHO, 0);
+    superficie1->rotar(angulo, xCentro, yCentro);
+    superficie2->rotar(angulo, xCentro, yCentro);
+    superficie3->rotar(angulo, xCentro, yCentro);
     this->superficiesSecundarias.push_back(superficie1);
     this->superficiesSecundarias.push_back(superficie2);
     this->superficiesSecundarias.push_back(superficie3);
@@ -46,43 +56,73 @@ void Colisionable::crearAvionPequenio(float posX, float posY, float angulo){
 
 void Colisionable::crearAvionEscuadron(float posX, float posY, float angulo){
     this->superficiePrincipal = new Superficie(posX, posY, ANCHO_ENEMIGO_ESCUADRON, ALTO_ENEMIGO_ESCUADRON, 0, 0);
-    float xCentro = (posX + ANCHO_ENEMIGO_ESCUADRON) / 2;
-    float yCentro = (posY + ALTO_ENEMIGO_ESCUADRON) / 2;
+    float xCentro = posX + ANCHO_ENEMIGO_ESCUADRON / 2;
+    float yCentro = posY + ALTO_ENEMIGO_ESCUADRON / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
+    Superficie *superficie1 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_1, ANCHO_AVION_PEQUENIO_1, 0, AVION_PEQUENIO_OFFSET_ALTO);
+    Superficie *superficie2 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_2, ALTO_AVION_PEQUENIO_2, 0, 0);
+    Superficie *superficie3 = new Superficie(posX, posY, ANCHO_AVION_PEQUENIO_2, ALTO_AVION_PEQUENIO_2, AVION_PEQUENIO_OFFSET_ANCHO, 0);
+    superficie1->rotar(angulo, xCentro, yCentro);
+    superficie2->rotar(angulo, xCentro, yCentro);
+    superficie3->rotar(angulo, xCentro, yCentro);
+    this->superficiesSecundarias.push_back(superficie1);
+    this->superficiesSecundarias.push_back(superficie2);
+    this->superficiesSecundarias.push_back(superficie3);
 }
 
 void Colisionable::crearAvionMediano(float posX, float posY, float angulo){
     this->superficiePrincipal = new Superficie(posX, posY, ANCHO_ENEMIGO_MEDIANO, ALTO_ENEMIGO_MEDIANO, 0, 0);
-    float xCentro = (posX + ANCHO_ENEMIGO_MEDIANO) / 2;
-    float yCentro = (posY + ALTO_ENEMIGO_MEDIANO) / 2;
+    float xCentro = posX + ANCHO_ENEMIGO_MEDIANO / 2;
+    float yCentro = posY + ALTO_ENEMIGO_MEDIANO / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
+    Superficie * superficie1 = new Superficie(posX, posY, AVION_ENEMIGO_MEDIANO_ANCHO_1, AVION_ENEMIGO_MEDIANO_ALTO_1, 0, 0);
+    Superficie * superficie2 = new Superficie(posX, posY, AVION_ENEMIGO_MEDIANO_ANCHO_2, AVION_ENEMIGO_MEDIANO_ALTO_2, OFFSET_ANCHO_AVION_MEDIANO, OFFSET_ALTO_AVION_MEDIANO);
+    Superficie * superficie3 = new Superficie(posX, posY, AVION_ENEMIGO_MEDIANO_ANCHO_1, AVION_ENEMIGO_MEDIANO_ALTO_1, OFFSET_ANCHO_AVION_MEDIANO_2, 0);
+    superficie1->rotar(angulo, xCentro, yCentro);
+    superficie2->rotar(angulo, xCentro, yCentro);
+    superficie3->rotar(angulo, xCentro, yCentro);
+    this->superficiesSecundarias.push_back(superficie1);
+    this->superficiesSecundarias.push_back(superficie2);
+    this->superficiesSecundarias.push_back(superficie3);
 }
 
 void Colisionable::crearAvionGrande(float posX, float posY, float angulo){
     this->superficiePrincipal = new Superficie(posX, posY, ANCHO_ENEMIGO_GRANDE, ALTO_ENEMIGO_GRANDE, 0, 0);
-    float xCentro = (posX + ANCHO_ENEMIGO_GRANDE) / 2;
-    float yCentro = (posY + ALTO_ENEMIGO_GRANDE) / 2;
+    float xCentro = posX + ANCHO_ENEMIGO_GRANDE / 2;
+    float yCentro = posY + ALTO_ENEMIGO_GRANDE / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
+    Superficie * superficie1 = new Superficie(posX, posY, AVION_ENEMIGO_GRANDE_ANCHO_1, AVION_ENEMIGO_GRANDE_ALTO_1, OFFSET_ANCHO_AVION_GRANDE, 0);
+    Superficie * superficie2 = new Superficie(posX, posY, AVION_ENEMIGO_GRANDE_ANCHO_2, AVION_ENEMIGO_GRANDE_ALTO_2, 0, 0);
+    superficie1->rotar(angulo, xCentro, yCentro);
+    superficie2->rotar(angulo, xCentro, yCentro);
+    this->superficiesSecundarias.push_back(superficie1);
+    this->superficiesSecundarias.push_back(superficie2);
 }
 
 void Colisionable::crearAvion(float posX, float posY, float angulo){
     this->superficiePrincipal = new Superficie(posX, posY, ANCHO_AVION_COMUN, ALTO_AVION_COMUN, 0, 0);
-    float xCentro = (posX + ANCHO_AVION_COMUN) / 2;
-    float yCentro = (posY + ALTO_AVION_COMUN) / 2;
+    float xCentro = posX + ANCHO_AVION_COMUN / 2;
+    float yCentro = posY + ALTO_AVION_COMUN / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
+    Superficie * superficie1 = new Superficie(posX, posY, AVION_ANCHO_1, AVION_ALTO_1, OFFSET_AVION_ANCHO, 0);
+    Superficie * superficie2 = new Superficie(posX, posY, AVION_ANCHO_2, AVION_ALTO_2, 0, OFFSET_AVION_ALTO);
+    superficie1->rotar(angulo, xCentro, yCentro);
+    superficie2->rotar(angulo, xCentro, yCentro);
+    this->superficiesSecundarias.push_back(superficie1);
+    this->superficiesSecundarias.push_back(superficie2);
 }
 
 void Colisionable::crearDisparo(float posX, float posY, float angulo){
     this->superficiePrincipal = new Superficie(posX, posY, ANCHO_SUPERFICIE_DISPARO, ALTO_SUPERFICIE_DISPARO, 0, 0);
-    float xCentro = (posX + ANCHO_DISPARO_COMUN) / 2;
-    float yCentro = (posY + ALTO_DISPARO_COMUN) / 2;
+    float xCentro = posX + ANCHO_DISPARO_COMUN / 2;
+    float yCentro = posY + ALTO_DISPARO_COMUN / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
 }
 
 void Colisionable::crearDisparoEnemigo(float posX, float posY, float angulo){
-    this->superficiePrincipal = new Superficie(posX, posY, ANCHO_DISPARO_ENEMIGO, ALTO_DISPARO_ENEMIGO, 0, 0);
-    float xCentro = (posX + ANCHO_DISPARO_ENEMIGO) / 2;
-    float yCentro = (posY + ALTO_DISPARO_ENEMIGO) / 2;
+    this->superficiePrincipal = new Superficie(posX, posY, DISPARO_ENEMIGO_SUPERFICIE_ANCHO, DISPARO_ENEMIGO_SUPERFICIE_ALTO, 0, 0);
+    float xCentro = posX + DISPARO_ENEMIGO_SUPERFICIE_ANCHO / 2;
+    float yCentro = posY + DISPARO_ENEMIGO_SUPERFICIE_ALTO / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
 }
 
@@ -91,9 +131,9 @@ void Colisionable::mover(float posX, float posY, float angulo){
     float xCentral = posX + (this->superficiePrincipal->getAncho() / 2);
     float yCentral = posY + (this->superficiePrincipal->getAncho() / 2);
     this->superficiePrincipal->rotar(angulo, xCentral, yCentral);
-    for(list<Superficie*>::iterator itSuperficies = superficiesSecundarias.begin(); itSuperficies != superficiesSecundarias.end(); itSuperficies++){
-        (*itSuperficies)->mover(posX, posY);
-        (*itSuperficies)->rotar(angulo, xCentral, yCentral);
+    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        this->superficiesSecundarias[i]->mover(posX, posY);
+        this->superficiesSecundarias[i]->rotar(angulo, xCentral, yCentral);
     }
 }
 
@@ -122,70 +162,39 @@ void Colisionable::setPosY(float posY){
     this->posY = posY;
 }
 
-// bool Colisionable::colisiona(Colisionable * colisionable){
-//     int izquierda, izquierdaColisionable;
-//     int derecha, derechaColisionable;
-//     int arriba, arribaColisionable;
-//     int abajo, abajoColisionable;
-//
-//     izquierda = this->posX;
-//     derecha = this->posX + this->ancho;
-//     arriba = this->posY;
-//     abajo = this->posY + this->alto;
-//
-//     izquierdaColisionable = colisionable->getPosX();
-//     derechaColisionable = colisionable->getPosX() + colisionable->getAncho();
-//     arribaColisionable = colisionable->getPosY();
-//     abajoColisionable = colisionable->getPosY() + colisionable->getAlto();
-//
-//
-//     if((arribaColisionable <= 0) || (abajo <= arribaColisionable)){
-//             return false;
-//     }
-//
-//     if((abajoColisionable <= 0) || (arriba >= abajoColisionable)){
-//             return false;
-//     }
-//
-//     if(derecha <= izquierdaColisionable){
-//         return false;
-//     }
-//
-//     if(izquierda >= derechaColisionable){
-//         return false;
-//     }
-//
-//     return true;
-// }
 
-bool Colisionable::colisiona(Colisionable *colisionable){
-    bool colisiona = this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal());
-    if(colisiona && this->superficiesSecundarias.size() > 0){
-        colisiona = false;
-         list<Superficie*>::iterator itSuperficies = this->superficiesSecundarias.begin();
-         while(!colisiona && itSuperficies != this->superficiesSecundarias.end()) {
-             if(colisionable->getSuperficiePrincipal()->colisiona((*itSuperficies))){
-                 if(colisionable->getSuperficiesSecundarias().size() == 0) {
-                     colisiona = true;
-                 } else {
-                     list<Superficie *>::iterator itSuperficiesColisionable = colisionable->getSuperficiesSecundarias().begin();
-                     while (!colisiona && itSuperficiesColisionable != colisionable->getSuperficiesSecundarias().end()) {
-                         colisiona = (*itSuperficies)->colisiona((*itSuperficiesColisionable));
-                         itSuperficiesColisionable++;
-                     }
-                 }
-             }
-             itSuperficies++;
-         }
-     }
-    return colisiona;
+bool Colisionable::colisiona(Colisionable *colisionable) {
+
+    if(!this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal())){
+        return false;
+    }
+
+    if(this->superficiesSecundarias.size() == 0) {
+        if(colisionable->getSuperficiesSecundarias().size() == 0){
+            return true;
+        }
+        for(int i = 0; i < colisionable->getSuperficiesSecundarias().size(); i++){
+            if(this->superficiePrincipal->colisiona(colisionable->getSuperficiesSecundarias()[i])){
+                return true;
+            }
+        }
+        return false;
+    }
+    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        for(int j = 0; j < colisionable->getSuperficiesSecundarias().size(); j++){
+            if(this->superficiesSecundarias[i]->colisiona(colisionable->getSuperficiesSecundarias()[j])){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 Superficie* Colisionable::getSuperficiePrincipal(){
     return this->superficiePrincipal;
 }
 
-list<Superficie*> Colisionable::getSuperficiesSecundarias(){
+vector<Superficie*> Colisionable::getSuperficiesSecundarias(){
     return this->superficiesSecundarias;
 }
 
