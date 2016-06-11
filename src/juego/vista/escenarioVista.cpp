@@ -482,7 +482,6 @@ void EscenarioVista::actualizarImagenVidas() {
     AvionVista *avionVida = *it;
 
     stringstream ss; ss << (avionVida)->getVidas();
-    cout << "esto es el getVidas: " <<  (avionVida)->getVidas() << endl;
     textoVidas->cambiarTexto(ss.str());
 }
 

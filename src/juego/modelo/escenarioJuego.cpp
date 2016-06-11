@@ -204,7 +204,6 @@ void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
             pthread_mutex_unlock(&mutexListaEnemigos);
 
             if (disparoEnemigo != NULL){
-                cout << disparoEnemigo->getPosX() << endl;
                 pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
                 this->disparosEnemigos.push_back(disparoEnemigo);
                 pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);

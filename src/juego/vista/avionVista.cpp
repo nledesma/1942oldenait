@@ -203,7 +203,6 @@ int AvionVista::actualizar(string codigo){
     pthread_mutex_lock(&mutexActualizar);
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
-    Decodificador::imprimirBytes(codigo);
 
     int estadoAnimacionActual = Decodificador::popByte(codigo);
     this->vidas = Decodificador::popInt(codigo);
