@@ -25,9 +25,12 @@ protected:
     int estadoAnimacion;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     string idSprite;
+    Colisionable * colisionable;
 public:
     virtual ~PowerUp();
     //virtual void aplicarPowerUp() = 0;
+    Colisionable* getColisionable();
+    virtual void colisionar();
     virtual float getPosicionX();
     float getPosicionY();
     int getEstadoAnimacion();
@@ -35,7 +38,7 @@ public:
     int getValor();
     string getIdSprite();
     void mover(float timeStep, float velocidadY);
-    void animar(float timeStep);
+    virtual void animar(float timeStep);
     void volverEstadoInicial();
     void colisionar();
 };

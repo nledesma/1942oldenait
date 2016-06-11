@@ -61,22 +61,22 @@
                 <powerUps>
                     <powerUp>
                       <tipo>bonificacion</tipo>
-                      <cantidad>2</cantidad>
+                      <cantidad>5</cantidad>
                       <valor>1000</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>aviones</tipo>
-                      <cantidad>1</cantidad>
-                      <valor>500</valor>
+                      <cantidad>5</cantidad>
+                      <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>ametralladoras</tipo>
-                      <cantidad>3</cantidad>
+                      <cantidad>5</cantidad>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>destruir</tipo>
-                      <cantidad>3</cantidad>
+                      <cantidad>5</cantidad>
                       <valor>0</valor>
                     </powerUp>
                 </powerUps>
@@ -135,18 +135,23 @@
                 </enemigos>
                 <powerUps>
                     <powerUp>
-                      <tipo>bonificacion</tipo>
-                      <cantidad>3</cantidad>
-                      <valor>1000</valor>
+                      <tipo>aviones</tipo>
+                      <cantidad>5</cantidad>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>destruir</tipo>
+                      <cantidad>5</cantidad>
+                      <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>bonificacion</tipo>
-                      <cantidad>4</cantidad>
+                      <cantidad>5</cantidad>
                       <valor>500</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>ametralladoras</tipo>
-                      <cantidad>2</cantidad>
+                      <cantidad>5</cantidad>
                       <valor>0</valor>
                     </powerUp>
                 </powerUps>

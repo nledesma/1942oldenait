@@ -566,14 +566,15 @@ void EscenarioVista::renderizarPowerUps(){
   for(list<powerUp>::iterator iterador = this->powerUps.begin(); iterador != this->powerUps.end(); iterador++){
     powerUp unPowerUp = *iterador;
 
-    if (unPowerUp.tipoPowerUp == TIPO_POWERUP_BONIFICACION)
-      this->powerUpBonificacion->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DOS_AMETRALLADORAS)
-      this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS)
-      this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    else
-      this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    if (unPowerUp.tipoPowerUp == TIPO_POWERUP_BONIFICACION){
+        this->powerUpBonificacion->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    } else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DOS_AMETRALLADORAS){
+        this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    } else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
+        this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    } else {
+        this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    }
   }
   pthread_mutex_unlock(&mutexPowerUps);
 }

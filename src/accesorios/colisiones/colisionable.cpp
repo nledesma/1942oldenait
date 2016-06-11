@@ -27,6 +27,22 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
         case TIPO_DISPARO_ENEMIGO:
             this->crearDisparoEnemigo(x, y, angulo);
             break;
+
+        case TIPO_POWERUP_BONIFICACION:
+             this->crearPowerUp(x,y,0);
+             break;
+         case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
+             this->crearPowerUp(x,y,0);
+             break;
+         case TIPO_POWERUP_DOS_AMETRALLADORAS:
+             this->crearPowerUp(x,y,0);
+             break;
+         case TIPO_POWERUP_AVIONES_SECUNDARIOS:
+             this->crearPowerUp(x,y,0);
+             break;
+         case TIPO_POWERUP_BONIFICACION_1500:
+             this->crearPowerUp(x,y,0);
+             break;
     }
 }
 
@@ -125,6 +141,14 @@ void Colisionable::crearDisparoEnemigo(float posX, float posY, float angulo){
     float yCentro = posY + DISPARO_ENEMIGO_SUPERFICIE_ALTO / 2;
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
 }
+
+void Colisionable::crearPowerUp(float posX, float posY, float angulo){ //TODO: REVISAR SI ESE ANGULO SIRVE PARA ALGO O ES SARASA
+    this->superficiePrincipal = new Superficie(posX,posY,ANCHO_POWERUP,ALTO_POWERUP,0,0);
+    float xCentro = (posX + ANCHO_POWERUP) / 2;
+    float yCentro = (posY + ALTO_POWERUP) / 2;
+    this->superficiePrincipal->rotar(angulo, xCentro, yCentro);
+}
+
 
 void Colisionable::mover(float posX, float posY, float angulo){
     this->superficiePrincipal->mover(posX, posY);

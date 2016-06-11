@@ -178,6 +178,8 @@ Disparo* Avion::disparar(){
 }
 
 void Avion::volverEstadoInicial(){
+    this->velocidadX = 0;
+    this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
     this->colisionable->mover(this->posX, this->posY, 0);
@@ -217,6 +219,13 @@ void Avion::colisionar(){
             cout << "PERDISTE!" << endl;
         }
     }
+}
+
+void Avion::colisionarConPowerUp(){
+    cout << "Esta por colisionar el avion" << endl;
+    if (this->estadoAnimacion < EXPLOSION_ETAPA_1 )
+        this->estadoAnimacion = COLISION_AVION_CON_POWERUP;
+    cout << "Colisiono el avion" << endl;
 }
 
 void Avion::resetPuntos() {

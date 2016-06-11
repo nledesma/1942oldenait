@@ -82,6 +82,8 @@ public:
 
     void colisionar();
 
+    void colisionarConPowerUp();
+
     void resetPuntos();
 
     int getPuntaje();
@@ -89,7 +91,7 @@ public:
     int getVidas();
 
     void setSpawn(int x, int y);
-    
+
     void quitarUnaVida();
 };
 
