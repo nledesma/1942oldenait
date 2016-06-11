@@ -2,7 +2,7 @@
 #include "powerUpDestruirEnemigos.hpp"
 
 PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicionY, int valor){
-	this->tipo = TIPO_POWERUP_BONIFICACION;
+	this->tipo = TIPO_POWERUP_DESTRUIR_ENEMIGOS;
   	this->valor = valor;
   	this->posX = posX;
   	this->posY = posY;
@@ -10,38 +10,29 @@ PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicion
 		this->posYInicial = posY;
   	this->estadoAnimacion = POWER_UP_NORMAL;
   	this->idSprite = SPRITE_POWERUP_BONIFICACION;
+	this->colisionable = new Colisionable(this->posX,this->posY,0,this->tipo);
 }
 
 PowerUpDestruirEnemigos::~PowerUpDestruirEnemigos() { }
 
-/*
-powerUpDestruirEnemigos::aplicarPowerUp(){}
-
-int powerUpDestruirEnemigos::getAncho(){
-	return this->ancho;
+void PowerUpDestruirEnemigos::colisionar(){
+	cout << "Esta por colisionar" << endl;
+	if(this->estadoAnimacion < POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS){
+			this->estadoAnimacion = POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS;
+	}
+	cout << "Colisiono" << endl;
 }
 
-int powerUpDestruirEnemigos::getAlto(){
-	return this->alto;
+void PowerUpDestruirEnemigos::animar(float timeStep){
+	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS) {
+			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+					this->contadorTiempoAnimacion = 0;
+					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+							this->estadoAnimacion += 1;
+					else
+							this->estadoAnimacion = POWER_UP_NORMAL;
+			} else {
+					this->contadorTiempoAnimacion += timeStep;
+			}
+	}
 }
-
-float powerUpDestruirEnemigos::getPosicionX(){
-	return this->posX;
-}
-
-float powerUpDestruirEnemigos::getPosicionY(){
-	return this->posY;
-}
-
-int powerUpDestruirEnemigos::getEstadoAnimacion(){
-	return this->estadoAnimacion;
-}
-
-int powerUpDestruirEnemigos::getTipo(){
-	return this->tipo;
-}
-
-string powerUpDestruirEnemigos::getIdSprite(){
-	return this->idSprite;
-}
-*/

@@ -219,6 +219,13 @@ void Avion::colisionar(){
     }
 }
 
+void Avion::colisionarConPowerUp(){
+    cout << "Esta por colisionar el avion" << endl;
+    if (this->estadoAnimacion < EXPLOSION_ETAPA_1 )
+        this->estadoAnimacion = COLISION_AVION_CON_POWERUP;
+    cout << "Colisiono el avion" << endl;
+}
+
 void Avion::resetPuntos() {
     puntaje = 0;
 }
