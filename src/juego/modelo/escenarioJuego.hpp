@@ -90,6 +90,7 @@ public:
     void actualizarEstado(float timeStep);
     void actualizarScrollingOffset(float timeStep);
     void moverAviones(float timestep);
+    bool moverAvionesAposicionFinal(float timeStep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
     void moverDisparosEnemigos(float timeStep);

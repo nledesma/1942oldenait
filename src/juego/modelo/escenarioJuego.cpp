@@ -61,7 +61,35 @@ float EscenarioJuego::getScrollingOffset() {
 void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, string idSprite,
                                   string idSpriteDisparos) {
     float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
-    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
+    float posXFinal;
+    float posYFinal;
+    switch ((int)aviones.size()){
+        case 0:
+            posXFinal = 250;
+            posYFinal = 190;
+            break;
+        case 1:
+            posXFinal = 450;
+            posYFinal = 190;
+            break;
+        case 2:
+            posXFinal = 250;
+            posYFinal = 350;
+            break;
+        case 3:
+            posXFinal = 450;
+            posYFinal = 350;
+            break;
+        case 4:
+            posXFinal = 210;
+            posYFinal = 300;
+            break;
+        case 5:
+            posXFinal = 490;
+            posYFinal = 300;
+            break;
+    }
+    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, posXFinal, posYFinal);
     this->aviones.push_back(avion);
     // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
     equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
@@ -131,10 +159,6 @@ void EscenarioJuego::getProximoEnemigo() {
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
-    if(posicionY >= getLongitud()){
-        // Se termina una etapa y se pasa a la siguiente.
-        this->avanzarEtapa();
-    }
     if (scrollingOffset > alto){
         scrollingOffset = 0;
     }
@@ -158,19 +182,30 @@ void EscenarioJuego::mainLoop() {
 }
 
 void EscenarioJuego::actualizarEstado(float timeStep) {
-    this->actualizarScrollingOffset(timeStep);
-    this->sortearDisparosEnemigos(timeStep);
-    this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
-    this->moverAviones(timeStep);
-    this->moverElementos(timeStep);
-    this->moverEnemigos(timeStep);
-    this->moverPowerUps(timeStep);
-    this->proyectarDisparos(timeStep);
-    this->moverDisparosEnemigos(timeStep);
-    this->verificarColisiones();
-    this->moverDisparos(timeStep);
-    this->manejarProximoEvento();
-    this->getProximoEnemigo();
+    if (this->posicionY < this->etapaActual()->getLongitud() - 800) {
+        this->actualizarScrollingOffset(timeStep);
+        this->sortearDisparosEnemigos(timeStep);
+        this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
+        this->moverAviones(timeStep);
+        this->moverElementos(timeStep);
+        this->moverEnemigos(timeStep);
+        this->moverPowerUps(timeStep);
+        this->proyectarDisparos(timeStep);
+        this->moverDisparosEnemigos(timeStep);
+        this->verificarColisiones();
+        this->moverDisparos(timeStep);
+        this->manejarProximoEvento();
+        this->getProximoEnemigo();
+    } else {
+        this->moverEnemigos(timeStep);
+        this->moverDisparosEnemigos(timeStep);
+        this->moverDisparos(timeStep);
+        bool avionesEstacionados = this->moverAvionesAposicionFinal(timeStep);
+        if (avionesEstacionados){
+            this->enemigos.empty();
+            this->avanzarEtapa();
+        }
+    }
 }
 
 void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
@@ -253,6 +288,18 @@ void EscenarioJuego::moverAviones(float timeStep) {
         Avion *avion = *iterador;
         avion->mover(timeStep);
     }
+}
+
+bool EscenarioJuego::moverAvionesAposicionFinal(float timeStep) {
+    bool resultado = true;
+    for (list<Avion *>::iterator iterador = this->getAviones().begin();
+         iterador != this->getAviones().end(); ++iterador) {
+        Avion *avion = *iterador;
+        if (!avion->moverAPosicionFinal(timeStep)){
+            resultado = false;
+        }
+    }
+    return resultado;
 }
 
 void EscenarioJuego::moverElementos(float timeStep) {

@@ -27,6 +27,14 @@
 #define COLOR_VERDE_G 255
 #define COLOR_VERDE_B 100
 
+#define COLOR_AMARILLO_R 244
+#define COLOR_AMARILLO_G 242
+#define COLOR_AMARILLO_B 32
+
+#define COLOR_VIOLETA_R 172
+#define COLOR_VIOLETA_G 40
+#define COLOR_VIOLETA_B 210
+
 #define PATH_IMG "../../resources/img/"
 
 using namespace std;

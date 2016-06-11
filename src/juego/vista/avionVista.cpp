@@ -196,6 +196,11 @@ void AvionVista::iniciarAvion(float posX, float posY, string pathSprite){
     this->clipsAnimacion[EXPLOSION_ETAPA_10].y = 0 + ALTO_AVION_COMUN * 4;
     this->clipsAnimacion[EXPLOSION_ETAPA_10].w = ANCHO_AVION_COMUN;
     this->clipsAnimacion[EXPLOSION_ETAPA_10].h = ALTO_AVION_COMUN;
+
+    this->clipsAnimacion[ESTACIONADO].x = 0 + ANCHO_AVION_COMUN * 5;
+    this->clipsAnimacion[ESTACIONADO].y = 0 + ALTO_AVION_COMUN * 4;
+    this->clipsAnimacion[ESTACIONADO].w = ANCHO_AVION_COMUN;
+    this->clipsAnimacion[ESTACIONADO].h = ALTO_AVION_COMUN;
 }
 
 int AvionVista::actualizar(string codigo){
