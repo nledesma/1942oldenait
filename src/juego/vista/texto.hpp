@@ -20,6 +20,7 @@ class Texto {
         virtual ~Texto();
         void cargarFuente(string textoString);
         virtual void renderizar(int x, int y);
+        void renderDerecho(int x, int y);
         void renderCentrado(int y);
         Figura* getFigura();
         TTF_Font* getFuente();

@@ -225,10 +225,15 @@ int Avion::getPuntaje() {
     return puntaje;
 }
 
-int Avion::getVidas(){
+int Avion::getVidas() {
     return this->vidas;
 }
 
-void Avion::quitarUnaVida(){
+void Avion::quitarUnaVida() {
     this->vidas--;
+}
+
+void Avion::setSpawn(int x, int y) {
+    posXInicial = x;
+    posYInicial = y;
 }
