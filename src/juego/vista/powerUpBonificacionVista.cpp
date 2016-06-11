@@ -49,10 +49,10 @@ PowerUpBonificacionVista::PowerUpBonificacionVista() {
     this->clipsAnimacion[POWER_UP_ROTACION_6].h = ALTO_POWERUP;
 
     //Moneda despues de ser colisionada
-    this->clipsAnimacion[POWER_UP_COLISIONADO_BONIFICACION].x = 0;
-    this->clipsAnimacion[POWER_UP_COLISIONADO_BONIFICACION].y = 0 + ALTO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO_BONIFICACION].w = ANCHO_POWERUP;
-    this->clipsAnimacion[POWER_UP_COLISIONADO_BONIFICACION].h = ALTO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].x = 0  + ALTO_POWERUP * 7;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].y = 0;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].w = ANCHO_POWERUP;
+    this->clipsAnimacion[POWER_UP_COLISIONADO].h = ALTO_POWERUP;
 }
 
 void PowerUpBonificacionVista::cargarImagen(SDL_Renderer *renderer) {

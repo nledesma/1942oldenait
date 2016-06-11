@@ -14,27 +14,26 @@ PowerUpAvionesSecundarios::PowerUpAvionesSecundarios(float posicionX, float posi
 
 PowerUpAvionesSecundarios::~PowerUpAvionesSecundarios() {}
 
-void PowerUpAvionesSecundarios::colisionar(){
-	cout << "Esta por colisionar" << endl;
-	if(this->estadoAnimacion < POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS){
-			this->estadoAnimacion = POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS;
-	}
-	cout << "Colisiono" << endl;
-}
+//void PowerUpAvionesSecundarios::colisionar(){
+//	if(this->estadoAnimacion < POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS){
+//			this->estadoAnimacion = POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS;
+//	}
+//	cout << "Colisiono" << endl;
+//}
 
-void PowerUpAvionesSecundarios::animar(float timeStep){
-	if (this->estadoAnimacion != POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS) {
-			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
-					this->contadorTiempoAnimacion = 0;
-					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
-							this->estadoAnimacion += 1;
-					else
-							this->estadoAnimacion = POWER_UP_NORMAL;
-			} else {
-					this->contadorTiempoAnimacion += timeStep;
-			}
-	}
-}
+//void PowerUpAvionesSecundarios::animar(float timeStep){
+//	if (this->estadoAnimacion != POWER_UP_COLISIONADO_AVIONES_SECUNDARIOS) {
+//			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+//					this->contadorTiempoAnimacion = 0;
+//					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+//							this->estadoAnimacion += 1;
+//					else
+//							this->estadoAnimacion = POWER_UP_NORMAL;
+//			} else {
+//					this->contadorTiempoAnimacion += timeStep;
+//			}
+//	}
+//}
 /*
 powerUpAvionesSecundarios::aplicarPowerUp(){
 

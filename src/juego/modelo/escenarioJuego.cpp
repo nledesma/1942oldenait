@@ -294,12 +294,14 @@ void EscenarioJuego::moverDisparosEnemigos(float timeStep) {
 }
 
 void EscenarioJuego::moverPowerUps(float timeStep) {
-    int i = 1;
     for (list<PowerUp *>::iterator iterador = powerUps.begin();
-         iterador != powerUps.end(); ++iterador) {
-        PowerUp *powerUp = *iterador;
-        powerUp->mover(timeStep, this->velocidadDesplazamientoY);
-        i++;
+         iterador != powerUps.end(); iterador++) {
+        if((*iterador)->mover(timeStep, this->velocidadDesplazamientoY) == 0){
+            delete(*iterador);
+            pthread_mutex_lock(&this->mutexPowerUps);
+            iterador = powerUps.erase(iterador);
+            pthread_mutex_unlock(&this->mutexPowerUps);
+        };
     }
 }
 
@@ -487,11 +489,13 @@ void EscenarioJuego::verificarColisiones(){
         }
     }
 
-//    for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-//        for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
-//            if((*itAviones)->getColisionable()->colisiona(po))
-//        }
-//    }
+    for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
+        for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
+            if((*itAviones)->getColisionable()->colisiona((*itPowerUps)->getColisionable())){
+                (*itPowerUps)->colisionar();
+            }
+        }
+    }
 }
 
 void EscenarioJuego::proyectarDisparos(float timeStep) {
@@ -502,7 +506,6 @@ void EscenarioJuego::proyectarDisparos(float timeStep) {
 
 list< pair<int,int> > EscenarioJuego::getPuntajes() {
     list<pair<int,int> > equipoPuntaje;
-
     for (int i = 0; i < equipos.size(); ++i) {
         set<int>::iterator it;
         pair<int,int> par;
