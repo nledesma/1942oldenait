@@ -2,7 +2,7 @@
 MenuConexiones::MenuConexiones(Ventana* ventana){
     this->botonSiguiente = new BotonSiguiente();
     this->fondo = new Figura();
-    this->lista = new ListaDeSeleccion(ventana, 100, 200);
+    this->lista = new ListaDeSeleccion(ventana, 100, 150);
 }
 
 bool MenuConexiones::cargarBotones(Ventana* ventana){
@@ -18,7 +18,7 @@ bool MenuConexiones::cargarBotones(Ventana* ventana){
         //Set sprites
         this->getBotonSiguiente()->setSprites(ventana->getVentanaRenderer());
         //Setea los botones en las posiciones
-        this->botonSiguiente[0].setPosition(350, 550);
+        this->botonSiguiente[0].setPosition(350, 450);
     }
 
     return success;
