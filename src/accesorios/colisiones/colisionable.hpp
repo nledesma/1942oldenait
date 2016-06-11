@@ -30,6 +30,7 @@ private:
 
 public:
     Colisionable(float posX, float posY, float angulo, int tipoDeElemento);
+    ~Colisionable();
     float getPosX();
     float getPosY();
     void setPosX(float posX);
