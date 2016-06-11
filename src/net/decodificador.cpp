@@ -48,6 +48,7 @@ void Decodificador::push(string &codigo, PowerUp *powerUp){
 void Decodificador::push(string & codigo, Disparo *d) {
     push(codigo, d->getPosX());
     push(codigo, d->getPosY());
+    push(codigo, d->getEstado());
 }
 
 /* Push y pop de disparo enemigo. */
@@ -57,7 +58,7 @@ void Decodificador::push(string & codigo, DisparoEnemigo *d) {
 }
 
 string Decodificador::popDisparo(string & codigo) {
-    return popBytes(codigo, 2*sizeof(float));
+    return popBytes(codigo, 2*sizeof(float) + sizeof(int));
 }
 
 /* Push enemigo */

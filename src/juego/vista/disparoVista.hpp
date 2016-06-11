@@ -11,6 +11,7 @@ using namespace std;
 struct disparo {
     float posX;
     float posY;
+    int estado;
 };
 
 class DisparoVista {
@@ -18,12 +19,14 @@ class DisparoVista {
 private:
     Figura * figuraDisparo;
     string pathSprite;
+    SDL_Rect clipsAnimacion[2];
+
 public:
     DisparoVista(string pathSprite);
     ~DisparoVista();
 
     void cargarImagen(SDL_Renderer * renderer);
-    void render(float posX, float posY, SDL_Renderer * renderer);
+    void render(float posX, float posY, int estado,SDL_Renderer * renderer);
     void cerrar();
 };
 #endif

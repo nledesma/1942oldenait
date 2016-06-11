@@ -138,6 +138,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         disparo unDisparo;
         unDisparo.posX = Decodificador::popFloat(infoActualizacion);
         unDisparo.posY = Decodificador::popFloat(infoActualizacion);
+        unDisparo.estado = Decodificador::popInt(infoActualizacion);
         disparos.push_front(unDisparo);
     }
     this->setDisparos(disparos);
@@ -505,7 +506,7 @@ void EscenarioVista::renderizarDisparos(){
     pthread_mutex_lock(&mutexDisparos);
     for(list<disparo>::iterator iterador = this->disparos.begin(); iterador != this->disparos.end(); ++iterador) {
         disparo disparo1 = *iterador;
-        disparoVista->render(disparo1.posX, disparo1.posY, this->ventana->getVentanaRenderer());
+        disparoVista->render(disparo1.posX, disparo1.posY, disparo1.estado, this->ventana->getVentanaRenderer());
     }
     pthread_mutex_unlock(&mutexDisparos);
 }

@@ -8,6 +8,8 @@
 #include "../../accesorios/colisiones/colisionable.hpp"
 using namespace std;
 
+#define TIEMPO_EXPLOSION_IMPACTO 0.1
+
 class Disparo {
 private:
 	float velocidad;
@@ -18,6 +20,8 @@ private:
 	Colisionable* colisionable;
 	bool colisiono;
 	float alturaDeMuerte;
+	int estado;
+	float contadorExplosionImpacto;
 
 public:
 	Disparo(float posX, float posY, float velocidad);
@@ -31,6 +35,7 @@ public:
   	float getPosX();
   	int getAlto();
   	int getAncho();
+	int getEstado();
 	void setAvion(int nroAvion);
 	int getNroAvion();
 	Colisionable* getColisionable();
