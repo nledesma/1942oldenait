@@ -60,6 +60,10 @@ private:
     bool porEquipos;
     vector<int> puntajes;
     vector<TextoDinamico *> textosPuntaje;
+    vector<Texto*> titulosPuntaje;
+    /* Vidas */
+    TextoDinamico* textoVidas;
+    Texto *tituloVidas;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */
@@ -103,7 +107,6 @@ private:
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
-    TextoDinamico* textoVidas;
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);

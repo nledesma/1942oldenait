@@ -20,13 +20,19 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
 
     textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
     textosPuntaje[0]->cambiarTexto("0");
+    titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+    titulosPuntaje[0]->cargarFuente("Puntaje - Equipo 1");
     if (porEquipos) {
         textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
         textosPuntaje[1]->cambiarTexto("0");
+        titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
+        titulosPuntaje[1]->cargarFuente("Puntaje - Equipo 2");
     }
 
     this->textoVidas = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     textoVidas->cambiarTexto("5");
+    this->tituloVidas = new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    this->tituloVidas->cargarFuente("Vidas");
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -487,13 +493,17 @@ void EscenarioVista::actualizarImagenVidas() {
 
 
 void EscenarioVista::renderizarPuntajes() {
-    textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
-    if (porEquipos)
-        textosPuntaje[1]->renderDerecho(ventana->getAncho() - 10, POSY_PUNTAJES);
+    titulosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
+    textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES + 20);
+    if (porEquipos) {
+        titulosPuntaje[1]->renderDerecho(ventana->getAncho() - 10, POSY_PUNTAJES);
+        textosPuntaje[1]->renderDerecho(ventana->getAncho() - 10, POSY_PUNTAJES + 20);
+    }
 }
 
 void EscenarioVista::renderizarVidas(){
-    textoVidas->renderizar(POSX_VIDAS,POSY_VIDAS);
+    tituloVidas->renderCentrado(POSY_VIDAS);
+    textoVidas->renderCentrado(POSY_VIDAS + 20);
 }
 
 void EscenarioVista::renderizarAviones() {
