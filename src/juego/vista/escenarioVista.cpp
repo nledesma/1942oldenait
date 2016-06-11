@@ -489,7 +489,7 @@ void EscenarioVista::actualizarImagenVidas() {
 void EscenarioVista::renderizarPuntajes() {
     textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
     if (porEquipos)
-        textosPuntaje[1]->renderizar(POSX_PUNTAJE2, POSY_PUNTAJES);
+        textosPuntaje[1]->renderDerecho(ventana->getAncho() - 10, POSY_PUNTAJES);
 }
 
 void EscenarioVista::renderizarVidas(){
