@@ -12,7 +12,6 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->altoVentana = altoVentana;
     this->grilla = new Grilla(12, 12);
 
-
     // Inicio el vector de equipos.
     set<int> equipo1;
     equipos.push_back(equipo1);
@@ -116,16 +115,6 @@ void EscenarioJuego::comenzarEtapa() {
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
     cout << "Se agrego a la etapa actual una lista de tamaño " << powerUps.size() << endl;
-
-    /* Se fijan las posiciones de los aviones */
-    float d = ancho/(aviones.size() + 1);
-    list<Avion*>::iterator it;
-    int i = 1;
-
-    for (it = aviones.begin(); it != aviones.end(); ++it) {
-        (*it)->setPosicion(d*i - ANCHO_AVION_COMUN/2, 200);
-        ++i;
-    }
 
     mainLoop();
     // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P
@@ -232,6 +221,18 @@ void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
 }
 
 void EscenarioJuego::jugar(bool serverActivo) {
+    // TODO POS
+    /* Se fijan las posiciones de los aviones */
+    float d = ancho/(aviones.size() + 1);
+    list<Avion*>::iterator it;
+    int i = 1;
+
+    for (it = aviones.begin(); it != aviones.end(); ++it) {
+        (*it)->setSpawn(d*i - ANCHO_AVION_COMUN/2, 600);
+        (*it)->setPosicion(d*i - ANCHO_AVION_COMUN/2, 600);
+        ++i;
+    }
+
     itEtapa = etapas.begin();
     comenzarEtapa();
 }
@@ -502,6 +503,6 @@ list< pair<int,int> > EscenarioJuego::getPuntajes() {
             equipoPuntaje.push_back(par);
         }
     }
-    
+
     return equipoPuntaje;
 }

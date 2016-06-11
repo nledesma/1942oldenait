@@ -88,6 +88,8 @@ public:
 
     int getVidas();
 
+    void setSpawn(int x, int y);
+    
     void quitarUnaVida();
 };
 
