@@ -164,21 +164,28 @@ void Colisionable::setPosY(float posY){
 
 
 bool Colisionable::colisiona(Colisionable *colisionable) {
-
     if(!this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal())){
         return false;
     }
-
     if(this->superficiesSecundarias.size() == 0) {
+        cout << " Aca entra" << endl;
         if(colisionable->getSuperficiesSecundarias().size() == 0){
             return true;
         }
         for(int i = 0; i < colisionable->getSuperficiesSecundarias().size(); i++){
+            cout << "Aca tambien" << endl;
             if(this->superficiePrincipal->colisiona(colisionable->getSuperficiesSecundarias()[i])){
                 return true;
             }
         }
         return false;
+    }
+    if(colisionable->getSuperficiesSecundarias().size() == 0){
+        for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+            if(colisionable->getSuperficiePrincipal()->colisiona(this->superficiesSecundarias[i])){
+                return true;
+            }
+        }
     }
     for(int i = 0; i < this->superficiesSecundarias.size(); i++){
         for(int j = 0; j < colisionable->getSuperficiesSecundarias().size(); j++){
