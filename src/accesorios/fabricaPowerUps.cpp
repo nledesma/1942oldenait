@@ -39,6 +39,7 @@ list <PowerUp*> FabricaPowerUps::fabricarPowerUps(list<PowerUpParseado*> powerUp
         if (posicionY == 0){
             posicionY = generarPosicionY(anchoEscenario);
         }
+        posicionY = altoEscenario - posicionY;
 
         int valor = (*itPowerUpsParseados)->getValor();
 

@@ -47,7 +47,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>escuadron</tipo>
-                      <cantidad>2</cantidad>
+                      <cantidad>24</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>mediano</tipo>
@@ -55,7 +55,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>grande</tipo>
-                      <cantidad>1</cantidad>
+                      <cantidad>10</cantidad>
                     </enemigo>
                 </enemigos>
                 <powerUps>
@@ -91,6 +91,18 @@
                     </powerUp>
                     <powerUp>
                       <tipo>ametralladoras</tipo>
+                      <posx>0</posx>
+                      <posy>0</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>ametralladoras</tipo>
+                      <posx>0</posx>
+                      <posy>0</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>ametralladoras</tipo>
                       <posx>400</posx>
                       <posy>200</posy>
                       <valor>0</valor>
@@ -98,7 +110,19 @@
                     <powerUp>
                       <tipo>destruir</tipo>
                       <posx>700</posx>
-                      <posy>250</posy>
+                      <posy>1700</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>destruir</tipo>
+                      <posx>250</posx>
+                      <posy>300</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>destruir</tipo>
+                      <posx>200</posx>
+                      <posy>3000</posy>
                       <valor>0</valor>
                     </powerUp>
                 </powerUps>
