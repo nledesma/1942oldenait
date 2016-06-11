@@ -43,10 +43,11 @@ void Celda::verificarColisiones(){
                 (*itEnemigos)->colisionar();
                 (*itDisparos)->colisionar();
                 cout << "Colisiono" << endl;
-            } else {
-                cout << "Posicion enemigo" << endl;
+            }
+            /*else {
+            *//*    cout << "Posicion enemigo" << endl;
                 int* posCelda = (*itEnemigos)->getColisionable()->getPosCeldas();
-/*                cout << (*itEnemigos)->getTipoAvion() << endl;
+*//**//*                cout << (*itEnemigos)->getTipoAvion() << endl;
                 cout << posCelda[0] << " " << posCelda[1] << " " << posCelda[2] << " " << posCelda[3] << endl;
                 cout << (*itEnemigos)->getColisionable()->getSuperficiePrincipal()->getIzqAbajo()->getPosX() << " " << (*itEnemigos)->getColisionable()->getSuperficiePrincipal()->getIzqAbajo()->getPosY() << endl;
                 cout << (*itEnemigos)->getColisionable()->getSuperficiePrincipal()->getIzqArriba()->getPosX() << " " << (*itEnemigos)->getColisionable()->getSuperficiePrincipal()->getIzqArriba()->getPosY() << endl;
@@ -58,8 +59,8 @@ void Celda::verificarColisiones(){
                 cout << (*itDisparos)->getColisionable()->getSuperficiePrincipal()->getIzqArriba()->getPosX() << " " << (*itDisparos)->getColisionable()->getSuperficiePrincipal()->getIzqArriba()->getPosY() << endl;
                 cout << (*itDisparos)->getColisionable()->getSuperficiePrincipal()->getDerArriba()->getPosX() << " " << (*itDisparos)->getColisionable()->getSuperficiePrincipal()->getDerArriba()->getPosY() << endl;
                 cout << (*itDisparos)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosX() << " " << (*itDisparos)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosY() << endl;
-                cout << endl << endl;*/
-            }
+                cout << endl << endl;*//**//*
+            }*/
         }
     }
 }

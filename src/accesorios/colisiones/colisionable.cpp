@@ -32,8 +32,8 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
 
 Colisionable::~Colisionable(){
     delete this->superficiePrincipal;
-    for(list<Superficie*>::iterator itSuperficies = this->superficiesSecundarias.begin(); itSuperficies != this->superficiesSecundarias.end(); itSuperficies++){
-        delete (*itSuperficies);
+    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        delete this->superficiesSecundarias[i];
     }
 }
 
@@ -131,9 +131,9 @@ void Colisionable::mover(float posX, float posY, float angulo){
     float xCentral = posX + (this->superficiePrincipal->getAncho() / 2);
     float yCentral = posY + (this->superficiePrincipal->getAncho() / 2);
     this->superficiePrincipal->rotar(angulo, xCentral, yCentral);
-    for(list<Superficie*>::iterator itSuperficies = superficiesSecundarias.begin(); itSuperficies != superficiesSecundarias.end(); itSuperficies++){
-        (*itSuperficies)->mover(posX, posY);
-        (*itSuperficies)->rotar(angulo, xCentral, yCentral);
+    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        this->superficiesSecundarias[i]->mover(posX, posY);
+        this->superficiesSecundarias[i]->rotar(angulo, xCentral, yCentral);
     }
 }
 
@@ -162,69 +162,6 @@ void Colisionable::setPosY(float posY){
     this->posY = posY;
 }
 
-// bool Colisionable::colisiona(Colisionable * colisionable){
-//     int izquierda, izquierdaColisionable;
-//     int derecha, derechaColisionable;
-//     int arriba, arribaColisionable;
-//     int abajo, abajoColisionable;
-//
-//     izquierda = this->posX;
-//     derecha = this->posX + this->ancho;
-//     arriba = this->posY;
-//     abajo = this->posY + this->alto;
-//
-//     izquierdaColisionable = colisionable->getPosX();
-//     derechaColisionable = colisionable->getPosX() + colisionable->getAncho();
-//     arribaColisionable = colisionable->getPosY();
-//     abajoColisionable = colisionable->getPosY() + colisionable->getAlto();
-//
-//
-//     if((arribaColisionable <= 0) || (abajo <= arribaColisionable)){
-//             return false;
-//     }
-//
-//     if((abajoColisionable <= 0) || (arriba >= abajoColisionable)){
-//             return false;
-//     }
-//
-//     if(derecha <= izquierdaColisionable){
-//         return false;
-//     }
-//
-//     if(izquierda >= derechaColisionable){
-//         return false;
-//     }
-//
-//     return true;
-// }
-
-/*bool Colisionable::colisiona(Colisionable *colisionable){
-    bool colisiona = this->superficiePrincipal->colisiona(colisionable->getSuperficiePrincipal());
-    if(colisiona && this->superficiesSecundarias.size() > 0){
-        colisiona = false;
-        list<Superficie*>::iterator itSuperficies = this->superficiesSecundarias.begin();
-        int i = 0;
-        cout << this->superficiesSecundarias.size() << endl;
-        while(!colisiona || (itSuperficies != this->superficiesSecundarias.end())) {
-
-            if(colisionable->getSuperficiePrincipal()->colisiona((*itSuperficies))){
-                if(colisionable->getSuperficiesSecundarias().size() == 0) {
-                    colisiona = true;
-                } else {
-                    list<Superficie *>::iterator itSuperficiesColisionable = colisionable->getSuperficiesSecundarias().begin();
-                     while (!colisiona || (itSuperficiesColisionable != colisionable->getSuperficiesSecundarias().end())) {
-                         colisiona = (*itSuperficies)->colisiona((*itSuperficiesColisionable));
-                         itSuperficiesColisionable++;
-                     }
-                }
-             }
-             itSuperficies++;
-            cout<< i << endl << endl;
-            i++;
-         }
-     }
-    return colisiona;
-}*/
 
 bool Colisionable::colisiona(Colisionable *colisionable) {
 
@@ -233,22 +170,21 @@ bool Colisionable::colisiona(Colisionable *colisionable) {
     }
 
     if(this->superficiesSecundarias.size() == 0) {
-        if(colisionable->getSuperficiePrincipal() == 0){
+        if(colisionable->getSuperficiesSecundarias().size() == 0){
             return true;
         }
-        for(list<Superficie*>::iterator itSuperficie = colisionable->getSuperficiesSecundarias().begin(); itSuperficie != colisionable->getSuperficiesSecundarias().end(); itSuperficie++){
-            if(this->superficiePrincipal->colisiona((*itSuperficie))){
+        for(int i = 0; i < colisionable->getSuperficiesSecundarias().size(); i++){
+            if(this->superficiePrincipal->colisiona(colisionable->getSuperficiesSecundarias()[i])){
                 return true;
             }
         }
         return false;
     }
-    for(list<Superficie*>::iterator itSuperficie = this->superficiesSecundarias.begin(); itSuperficie != this->superficiesSecundarias.end(); itSuperficie++){
-        for(list<Superficie*>::iterator itSuperficie2 = colisionable->getSuperficiesSecundarias().begin(); itSuperficie2 != colisionable->getSuperficiesSecundarias().end(); itSuperficie2++){
-            if((*itSuperficie)->colisiona((*itSuperficie2))){
+    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        for(int j = 0; j < colisionable->getSuperficiesSecundarias().size(); j++){
+            if(this->superficiesSecundarias[i]->colisiona(colisionable->getSuperficiesSecundarias()[j])){
                 return true;
             }
-            cout<<"aca llega" << endl;
         }
     }
     return false;
@@ -258,7 +194,7 @@ Superficie* Colisionable::getSuperficiePrincipal(){
     return this->superficiePrincipal;
 }
 
-list<Superficie*> Colisionable::getSuperficiesSecundarias(){
+vector<Superficie*> Colisionable::getSuperficiesSecundarias(){
     return this->superficiesSecundarias;
 }
 
