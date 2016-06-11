@@ -23,12 +23,16 @@ int DisparoEnemigo::mover(float timeStep){
     if(!this->colisiono){
         this->posX += this->velocidad * this->versorX * timeStep;
         this->posY += this->velocidad * this->versorY * timeStep;
+        this->colisionable->mover(this->posX, this->posY, 0);
+//        cout << "posiciones disparo: " << this->posX << " " << this->posY << endl;
+//        cout << "posiciones colisionable: " << endl;
+//        cout << this->colisionable->getSuperficiePrincipal()->getDerAbajo()->getPosX() << " " << this->colisionable->getSuperficiePrincipal()->getDerAbajo()->getPosY() << endl;
+//        cout << this->colisionable->getSuperficiePrincipal()->getIzqArriba()->getPosX() << " " << this->colisionable->getSuperficiePrincipal()->getIzqArriba()->getPosY() << endl;
         if( this->posY < - ALTO_DISPARO_ENEMIGO){
             retorno = 0;
         } else {
             retorno = 1;
         }
-        this->colisionable->mover(this->posX, this->posY, 0);
     }
     pthread_mutex_unlock(&this->mutexMover);
     return retorno;

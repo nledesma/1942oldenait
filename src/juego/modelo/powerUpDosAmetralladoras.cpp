@@ -14,24 +14,24 @@ PowerUpDosAmetralladoras::PowerUpDosAmetralladoras(float posX, float posY, int v
 
 PowerUpDosAmetralladoras::~PowerUpDosAmetralladoras() { }
 
-void PowerUpDosAmetralladoras::colisionar(){
-	cout << "Esta por colisionar" << endl;
-	if(this->estadoAnimacion < POWER_UP_COLISIONADO_DOS_AMETRALLADORAS){
-			this->estadoAnimacion = POWER_UP_COLISIONADO_DOS_AMETRALLADORAS;
-	}
-	cout << "Colisiono" << endl;
-}
+//void PowerUpDosAmetralladoras::colisionar(){
+//	cout << "Esta por colisionar" << endl;
+//	if(this->estadoAnimacion < POWER_UP_COLISIONADO_DOS_AMETRALLADORAS){
+//			this->estadoAnimacion = POWER_UP_COLISIONADO_DOS_AMETRALLADORAS;
+//	}
+//	cout << "Colisiono" << endl;
+//}
 
-void PowerUpDosAmetralladoras::animar(float timeStep){
-	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DOS_AMETRALLADORAS) {
-			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
-					this->contadorTiempoAnimacion = 0;
-					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
-							this->estadoAnimacion += 1;
-					else
-							this->estadoAnimacion = POWER_UP_NORMAL;
-			} else {
-					this->contadorTiempoAnimacion += timeStep;
-			}
-	}
-}
+//void PowerUpDosAmetralladoras::animar(float timeStep){
+//	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DOS_AMETRALLADORAS) {
+//			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+//					this->contadorTiempoAnimacion = 0;
+//					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+//							this->estadoAnimacion += 1;
+//					else
+//							this->estadoAnimacion = POWER_UP_NORMAL;
+//			} else {
+//					this->contadorTiempoAnimacion += timeStep;
+//			}
+//	}
+//}

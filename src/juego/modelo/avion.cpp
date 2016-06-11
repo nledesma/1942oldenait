@@ -26,7 +26,7 @@ Avion::~Avion(){
 
 void Avion::manejarEvento(int evento){
     /* Se realizan acciones de avión si el mismo no esta loopeando */
-    if((this->estadoAnimacion < LOOP_ETAPA_1)) {
+    if((this->estadoAnimacion < LOOP_ETAPA_1 || this->estadoAnimacion == INTERMITENCIA)) {
         switch (evento) {
             case ARRIBA_PRESIONA:
                 this->velocidadY -= this->velocidad;
@@ -55,13 +55,13 @@ void Avion::manejarEvento(int evento){
                     this->velocidadY -= this->velocidad;
                 break;
             case IZQUIERDA_SUELTA:
-                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_DERECHA)
+                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_DERECHA || this->estadoAnimacion == INTERMITENCIA)
                     this->velocidadX += this->velocidad;
                 if (this->estadoAnimacion != GIRANDO_DERECHA)
                     this->estadoAnimacion = ESTADO_NORMAL;
                 break;
             case DERECHA_SUELTA:
-                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_IZQUIERDA)
+                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_IZQUIERDA || this->estadoAnimacion == INTERMITENCIA)
                     this->velocidadX -= this->velocidad;
                 if (this->estadoAnimacion != GIRANDO_IZQUIERDA)
                     this->estadoAnimacion = ESTADO_NORMAL;
@@ -70,14 +70,37 @@ void Avion::manejarEvento(int evento){
     }
 }
 
+void Avion::disminuirTiempoInmunidad(float timestep) {
+    if (this->contadorTiempoInmunidad > 0) {
+        if ((this->contadorTiempoInmunidad - timestep) >= 0) {
+            if ((this->contadorIntermitenciaInmunidad - timestep) >= 0) {
+                this->contadorIntermitenciaInmunidad -= timestep;
+            } else {
+                this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
+                if (this->estadoAnimacion != INTERMITENCIA) {
+                    this->estadoAnimacion = INTERMITENCIA;
+                } else {
+                    this->estadoAnimacion = ESTADO_NORMAL;
+                }
+            }
+            this->contadorTiempoInmunidad -= timestep;
+        } else {
+            this->contadorTiempoInmunidad = 0;
+            this->estadoAnimacion = ESTADO_NORMAL;
+        }
+    }
+}
+
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
+
+
     if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
     } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
     }
-    if(this->estadoAnimacion < 3) {
+    if(this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
         this->posX += this->velocidadX * timeStep;
         if( this->posX < 0 ){
             this->posX = 0;
@@ -116,6 +139,7 @@ void Avion::mover(float timeStep){
             }
         }
     }
+    this->disminuirTiempoInmunidad(timeStep);
     pthread_mutex_unlock(&this->mutexMover);
 }
 
@@ -170,7 +194,7 @@ int Avion::getEstadoAnimacion(){
 
 Disparo* Avion::disparar(){
     // Por ahora sale con la misma velocidad y posición que el avión.
-    if (estadoAnimacion > LOOP_ETAPA_1) {
+    if (estadoAnimacion > LOOP_ETAPA_1 || this->contadorTiempoInmunidad > 0) {
         return NULL;
     }
     this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
@@ -182,6 +206,8 @@ void Avion::volverEstadoInicial(){
     this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
+    this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
+    this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
     this->colisionable->mover(this->posX, this->posY, 0);
     if (this->estadoAnimacion != DESCONECTADO)
         this->estadoAnimacion = ESTADO_NORMAL;
@@ -209,14 +235,16 @@ Colisionable* Avion::getColisionable(){
 }
 
 void Avion::colisionar(){
-    if (this->estadoAnimacion < EXPLOSION_ETAPA_1 ){
-        this->estadoAnimacion = EXPLOSION_ETAPA_1;
-        if (this->vidas > 0){
-            pthread_mutex_lock(&this->mutexVidas);
-            quitarUnaVida();
-            pthread_mutex_unlock(&this->mutexVidas);
-        }else{
-            cout << "PERDISTE!" << endl;
+    if (this->contadorTiempoInmunidad == 0) {
+        if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
+            this->estadoAnimacion = EXPLOSION_ETAPA_1;
+            if (this->vidas > 0) {
+                pthread_mutex_lock(&this->mutexVidas);
+                quitarUnaVida();
+                pthread_mutex_unlock(&this->mutexVidas);
+            } else {
+                cout << "PERDISTE!" << endl;
+            }
         }
     }
 }
@@ -247,4 +275,8 @@ void Avion::quitarUnaVida() {
 void Avion::setSpawn(int x, int y) {
     posXInicial = x;
     posYInicial = y;
+}
+
+float Avion::getContadorTiempoInmunidad() {
+    return this->contadorTiempoInmunidad;
 }
