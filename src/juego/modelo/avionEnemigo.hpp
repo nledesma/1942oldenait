@@ -23,6 +23,7 @@ protected:
     int estadoAnimacion;
     int tipoAvion;
     float velocidad;
+    int vidas = 1;
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
@@ -40,7 +41,7 @@ public:
     float getAngulo();
     int getEstadoAnimacion();
     int getTipoAvion();
-    int mover(float timeStep);
+    virtual int mover(float timeStep);
     int getAnchoDisparo();
     int getAltoDisparo();
     string getIdSprite();

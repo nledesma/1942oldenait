@@ -461,7 +461,13 @@ void EscenarioJuego::verificarColisiones(){
         //TODO refactor, esto se usa para ver cual es el avion enemigo más cercano al enemigo, pero el codigo quedó horrible
         float cercano = 0;
         for(list<AvionEnemigo*>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++){
-            if((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable()) && (*itEnemigos)->getEstadoAnimacion() < AVION_ENEMIGO_EXPLOSION_ETAPA_1 ) {
+            int condicionEstaExplotando;
+            if ((*itEnemigos)->getTipoAvion() == TIPO_AVION_GRANDE){
+                condicionEstaExplotando = AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1;
+            } else {
+                condicionEstaExplotando = AVION_ENEMIGO_EXPLOSION_ETAPA_1;
+            }
+            if((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable()) && (*itDisparos)->getEstado() == 0  && (*itEnemigos)->getEstadoAnimacion() < condicionEstaExplotando ) {
                 if((*itEnemigos)->getPosicionY() > cercano) {
                     cercano = (*itEnemigos)->getPosicionY();
                     enemigoAColisionar = (*itEnemigos);

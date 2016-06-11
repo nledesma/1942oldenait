@@ -12,6 +12,7 @@ AvionMediano::AvionMediano(float posX, float posY, float velocidad, float angulo
     this->trayectoria = trayectoria;
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_MEDIANO);
     this->tipoAvion = TIPO_AVION_MEDIANO;
+    this->vidas = 5;
 }
 
 AvionMediano::~AvionMediano(){

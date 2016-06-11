@@ -12,6 +12,7 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->trayectoria = trayectoria;
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_GRANDE);
     this->tipoAvion = TIPO_AVION_GRANDE;
+    this->vidas = 10;
 }
 
 AvionGrande::~AvionGrande(){
@@ -69,4 +70,45 @@ vector<DisparoEnemigo*> AvionGrande::disparar(){
     disparos.push_back(disparo3);
 
     return disparos;
+}
+
+void AvionGrande::colisionar(){
+    this->vidas -= 1;
+    cout << "vidas: " << this->vidas << endl;
+    if (this->vidas == 0) {
+        if (this->estadoAnimacion < AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1) {
+            this->estadoAnimacion = AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1;
+        }
+    } else if (this->vidas == 7) {
+        this->estadoAnimacion = AVION_ENEMIGO_GRANDE_DANIADO_1;
+    } else if (this->vidas == 3) {
+        this->estadoAnimacion = AVION_ENEMIGO_GRANDE_DANIADO_2;
+    }
+}
+
+int AvionGrande::mover(float timeStep) {
+    pthread_mutex_lock(&this->mutexMover);
+    int sigueEnPantalla = 1;
+    if(this->estadoAnimacion < AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1){
+        this->trayectoria->mover(this->posX, this->posY, this->velocidad, this->angulo, this->estadoAnimacion, timeStep);
+        // TODO: chequear los bordes usando los atributos del escenario
+        if (this->posX > ANCHO_ESCENARIO || this->posX < - this->getAncho()
+            || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
+            sigueEnPantalla = 0;
+        }
+        this->colisionable->mover(this->posX, this->posY, this->angulo);
+    } else {
+        if(this->contador > 0 ) {
+            this->contador --;
+        } else {
+            if(this->estadoAnimacion == AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_12){
+                sigueEnPantalla = 0;
+            } else {
+                this->estadoAnimacion ++;
+            }
+            this->contador = CONTADOR_INICIAL;
+        }
+    }
+    pthread_mutex_unlock(&this->mutexMover);
+    return sigueEnPantalla;
 }
