@@ -62,7 +62,7 @@
                     <powerUp>
                       <tipo>bonificacion</tipo>
                       <posx>200</posx>
-                      <posy>100</posy>
+                      <posy>700</posy>
                       <valor>1000</valor>
                     </powerUp>
                     <powerUp>

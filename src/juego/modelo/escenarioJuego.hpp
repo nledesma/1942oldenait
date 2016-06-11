@@ -122,6 +122,7 @@ public:
     void verificarColisiones();
     void proyectarDisparos(float timeStep);
     list<pair<int,int> > getPuntajes();
+    void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
 
 };
 

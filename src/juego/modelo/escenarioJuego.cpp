@@ -301,7 +301,7 @@ void EscenarioJuego::moverPowerUps(float timeStep) {
             pthread_mutex_lock(&this->mutexPowerUps);
             iterador = powerUps.erase(iterador);
             pthread_mutex_unlock(&this->mutexPowerUps);
-        };
+        }
     }
 }
 
@@ -495,14 +495,42 @@ void EscenarioJuego::verificarColisiones(){
         }
     }
 
+    int nroAvion = 1;
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
         if ((*itAviones)->getContadorTiempoInmunidad() == 0){
             for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
                 if((*itAviones)->getColisionable()->colisiona((*itPowerUps)->getColisionable())){
-                    (*itPowerUps)->colisionar();
+                    if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
+                        (*itPowerUps)->colisionar();
+                        aplicarPowerUp(*itPowerUps,*itAviones);
+                    }
                 }
             }
         }
+        nroAvion++;
+    }
+}
+
+void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
+    if((powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION)||(powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION_1500)){
+        int valorBonus = powerUp->getValor();
+        cout << "VALOR BONUS: " << valorBonus << endl;
+        avion->sumarPuntos(valorBonus);
+    }
+    if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
+        list<AvionEnemigo*> listaEnemigos = this->getEnemigos();
+        int sumaPuntaje = 0;
+        for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++) {
+            (*itEnemigos)->setVidasEnUno();
+            sumaPuntaje += (*itEnemigos)->estallar();
+        }
+        avion->sumarPuntos(sumaPuntaje);
+    }
+    if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DOS_AMETRALLADORAS){
+
+    }
+    if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
+
     }
 }
 

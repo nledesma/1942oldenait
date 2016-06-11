@@ -114,6 +114,8 @@ void AvionEnemigo::colisionar(){
     }
 }
 
+int AvionEnemigo::estallar(){}
+
 DisparoEnemigo* AvionEnemigo::disparar(float xObjetivo, float yObjetivo){
     DisparoEnemigo * disparo;
     if (this->posX != 0) {
@@ -134,4 +136,8 @@ DisparoEnemigo* AvionEnemigo::disparar(float xObjetivo, float yObjetivo){
     }
 
     return disparo;
+}
+
+void AvionEnemigo::setVidasEnUno(){
+    this->vidas = 1;
 }

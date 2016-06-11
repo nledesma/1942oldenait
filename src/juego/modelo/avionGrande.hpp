@@ -49,6 +49,7 @@ public:
     void colisionar();
     int mover(float timeStep);
     vector<DisparoEnemigo*> disparar();
+    int estallar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONGRANDE_HPP
