@@ -178,6 +178,8 @@ Disparo* Avion::disparar(){
 }
 
 void Avion::volverEstadoInicial(){
+    this->velocidadX = 0;
+    this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
     this->colisionable->mover(this->posX, this->posY, 0);

@@ -457,7 +457,6 @@ void EscenarioJuego::verificarColisiones(){
                 condicionEstaExplotando = AVION_ENEMIGO_EXPLOSION_ETAPA_1;
             }
             if((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable()) && (*itDisparos)->getEstado() == 0  && (*itEnemigos)->getEstadoAnimacion() < condicionEstaExplotando ) {
-                cout << "entre en verificar colision" << endl;
                 if((*itEnemigos)->getPosicionY() > cercano) {
                     cercano = (*itEnemigos)->getPosicionY();
                     enemigoAColisionar = (*itEnemigos);
