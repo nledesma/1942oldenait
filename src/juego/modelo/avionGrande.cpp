@@ -74,7 +74,6 @@ vector<DisparoEnemigo*> AvionGrande::disparar(){
 
 void AvionGrande::colisionar(){
     this->vidas -= 1;
-    cout << "vidas: " << this->vidas << endl;
     if (this->vidas == 0) {
         if (this->estadoAnimacion < AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1) {
             this->estadoAnimacion = AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1;

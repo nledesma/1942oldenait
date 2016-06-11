@@ -9,7 +9,7 @@ PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicion
 		this->posXInicial = posX;
 		this->posYInicial = posY;
   	this->estadoAnimacion = POWER_UP_NORMAL;
-  	this->idSprite = SPRITE_POWERUP_BONIFICACION;
+  	this->idSprite = SPRITE_POWERUP_DESTRUIR_ENEMIGOS;
 	this->colisionable = new Colisionable(this->posX,this->posY,0,this->tipo);
 }
 

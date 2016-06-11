@@ -444,17 +444,6 @@ void EscenarioJuego::verificarColisiones(){
     this->grilla->ubicarEnemigos(this->enemigos);
     this->grilla->verificarColisiones();
     this->grilla->limpiarGrilla();*/
-/*
-    for(list<AvionEnemigo*>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++) {
-        for (list<Disparo *>::iterator itDisparos = this->disparos.begin();
-             itDisparos != this->disparos.end(); itDisparos++) {
-            if ((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable())) {
-                (*itEnemigos)->colisionar();
-                (*itDisparos)->colisionar();
-            }
-        }
-    }
-*/
 
     for(list<Disparo*>::iterator itDisparos = this->disparos.begin(); itDisparos != this->disparos.end(); itDisparos++){
         AvionEnemigo* enemigoAColisionar = NULL;
