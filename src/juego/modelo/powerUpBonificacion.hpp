@@ -16,14 +16,8 @@ class PowerUpBonificacion: public PowerUp {
 public:
 		PowerUpBonificacion(float posX, float posY, int valor);
         ~PowerUpBonificacion();
-    //virtual void aplicarPowerUp() = 0;
-    //int getAncho();
-    //int getAlto();
-    //float getPosicionX();
-    //float getPosicionY();
-    //int getEstadoAnimacion();
-    //int getTipo();
-    //string getIdSprite();
+		void colisionar();
+		void animar(float timeStep);
 };
 
 #endif //INC_1942OLDENAIT_POWERUPBONIFICACION_HPP

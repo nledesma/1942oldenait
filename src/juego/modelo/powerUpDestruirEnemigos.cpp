@@ -2,46 +2,37 @@
 #include "powerUpDestruirEnemigos.hpp"
 
 PowerUpDestruirEnemigos::PowerUpDestruirEnemigos(float posicionX, float posicionY, int valor){
-	this->tipo = TIPO_POWERUP_BONIFICACION;
+	this->tipo = TIPO_POWERUP_DESTRUIR_ENEMIGOS;
   	this->valor = valor;
-  	this->posX = posX;
-  	this->posY = posY;
-		this->posXInicial = posX;
-		this->posYInicial = posY;
+  	this->posX = posicionX;
+  	this->posY = posicionY;
+	this->posXInicial = posicionX;
+	this->posYInicial = posicionY;
   	this->estadoAnimacion = POWER_UP_NORMAL;
-  	this->idSprite = SPRITE_POWERUP_BONIFICACION;
+  	this->idSprite = SPRITE_POWERUP_DESTRUIR_ENEMIGOS;
+	this->colisionable = new Colisionable(this->posX,this->posY,0,this->tipo);
 }
 
 PowerUpDestruirEnemigos::~PowerUpDestruirEnemigos() { }
 
-/*
-powerUpDestruirEnemigos::aplicarPowerUp(){}
+//void PowerUpDestruirEnemigos::colisionar(){
+//	cout << "Esta por colisionar" << endl;
+//	if(this->estadoAnimacion < POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS){
+//			this->estadoAnimacion = POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS;
+//	}
+//	cout << "Colisiono" << endl;
+//}
 
-int powerUpDestruirEnemigos::getAncho(){
-	return this->ancho;
-}
-
-int powerUpDestruirEnemigos::getAlto(){
-	return this->alto;
-}
-
-float powerUpDestruirEnemigos::getPosicionX(){
-	return this->posX;
-}
-
-float powerUpDestruirEnemigos::getPosicionY(){
-	return this->posY;
-}
-
-int powerUpDestruirEnemigos::getEstadoAnimacion(){
-	return this->estadoAnimacion;
-}
-
-int powerUpDestruirEnemigos::getTipo(){
-	return this->tipo;
-}
-
-string powerUpDestruirEnemigos::getIdSprite(){
-	return this->idSprite;
-}
-*/
+//void PowerUpDestruirEnemigos::animar(float timeStep){
+//	if (this->estadoAnimacion != POWER_UP_COLISIONADO_DESTRUIR_ENEMIGOS) {
+//			if ((this->contadorTiempoAnimacion + timeStep) >= FRECUENCIA_ANIMACION) {
+//					this->contadorTiempoAnimacion = 0;
+//					if (this->estadoAnimacion < POWER_UP_ROTACION_6)
+//							this->estadoAnimacion += 1;
+//					else
+//							this->estadoAnimacion = POWER_UP_NORMAL;
+//			} else {
+//					this->contadorTiempoAnimacion += timeStep;
+//			}
+//	}
+//}

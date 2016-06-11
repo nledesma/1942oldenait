@@ -46,6 +46,8 @@ public:
     AvionGrande(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
     ~AvionGrande();
     bool correspondeDisparar(float timestep);
+    void colisionar();
+    int mover(float timeStep);
     vector<DisparoEnemigo*> disparar();
 };
 

@@ -27,17 +27,17 @@
                     <elemento>
                         <spriteIdElemento>planeta</spriteIdElemento>
                         <posx>600</posx>
-                        <posy>1100</posy>
+                        <posy>300</posy>
                     </elemento>
                     <elemento>
                         <spriteIdElemento>death-star</spriteIdElemento>
                         <posx>0</posx>
-                        <posy>2500</posy>
+                        <posy>350</posy>
                     </elemento>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
                         <posx>0</posx>
-                        <posy>3200</posy>
+                        <posy>250</posy>
                     </elemento>
                 </elementos>
                 <enemigos>
@@ -47,7 +47,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>escuadron</tipo>
-                      <cantidad>2</cantidad>
+                      <cantidad>3</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>mediano</tipo>
@@ -55,28 +55,74 @@
                     </enemigo>
                     <enemigo>
                       <tipo>grande</tipo>
-                      <cantidad>1</cantidad>
+                      <cantidad>2</cantidad>
                     </enemigo>
                 </enemigos>
                 <powerUps>
                     <powerUp>
                       <tipo>bonificacion</tipo>
-                      <cantidad>2</cantidad>
+                      <posx>200</posx>
+                      <posy>100</posy>
+                      <valor>1000</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>bonificacion</tipo>
+                      <posx>0</posx>
+                      <posy>0</posy>
                       <valor>1000</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>aviones</tipo>
-                      <cantidad>1</cantidad>
-                      <valor>500</valor>
+                      <posx>700</posx>
+                      <posy>150</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>aviones</tipo>
+                      <posx>700</posx>
+                      <posy>400</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>aviones</tipo>
+                      <posx>200</posx>
+                      <posy>500</posy>
+                      <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>ametralladoras</tipo>
-                      <cantidad>3</cantidad>
+                      <posx>0</posx>
+                      <posy>0</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>ametralladoras</tipo>
+                      <posx>0</posx>
+                      <posy>0</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>ametralladoras</tipo>
+                      <posx>400</posx>
+                      <posy>200</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>destruir</tipo>
-                      <cantidad>3</cantidad>
+                      <posx>700</posx>
+                      <posy>1700</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>destruir</tipo>
+                      <posx>250</posx>
+                      <posy>300</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>destruir</tipo>
+                      <posx>200</posx>
+                      <posy>3000</posy>
                       <valor>0</valor>
                     </powerUp>
                 </powerUps>
@@ -136,17 +182,26 @@
                 <powerUps>
                     <powerUp>
                       <tipo>bonificacion</tipo>
-                      <cantidad>3</cantidad>
+                      <posx>200</posx>
+                      <posy>250</posy>
                       <valor>1000</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>bonificacion</tipo>
-                      <cantidad>4</cantidad>
-                      <valor>500</valor>
+                      <tipo>aviones</tipo>
+                      <posx>700</posx>
+                      <posy>100</posy>
+                      <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>ametralladoras</tipo>
-                      <cantidad>2</cantidad>
+                      <posx>400</posx>
+                      <posy>300</posy>
+                      <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
+                      <tipo>destruir</tipo>
+                      <posx>700</posx>
+                      <posy>350</posy>
                       <valor>0</valor>
                     </powerUp>
                 </powerUps>

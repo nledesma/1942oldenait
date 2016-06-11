@@ -17,14 +17,8 @@ protected:
 public:
 		PowerUpDestruirEnemigos(float posicionX, float posicionY, int valor);
         ~PowerUpDestruirEnemigos();
-    //virtual void aplicarPowerUp() = 0;
-    //int getAncho();
-    //int getAlto();
-    //float getPosicionX();
-    //float getPosicionY();
-    //int getEstadoAnimacion();
-    //int getTipo();
-    //string getIdSprite();
+		void colisionar();
+		void animar(float timeStep);
 };
 
 #endif //INC_1942OLDENAIT_POWERUPDESTRUIRENEMIGOS_HPP

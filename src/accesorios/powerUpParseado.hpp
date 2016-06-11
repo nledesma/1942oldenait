@@ -13,16 +13,19 @@ using namespace std;
 class PowerUpParseado {
 private:
   string tipo;
-  int cantidad;
+  float posX;
+  float posY;
   int valor;
 public:
     PowerUpParseado();
     ~PowerUpParseado();
     void setTipo(string tipo);
-    void setCantidad(int cantidad);
+    void setPosX(float valor);
+    void setPosY(float valor);
     void setValor(int valor);
     int getTipo(); //devuelve un int porque directamente se fija en los codigos y devuelve el codigo
-    int getCantidad();
+    float getPosX();
+    float getPosY();
     int getValor();
 };
 

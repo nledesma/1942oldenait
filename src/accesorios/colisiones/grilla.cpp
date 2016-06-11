@@ -54,6 +54,7 @@ void Grilla::ubicarEnemigos(list<AvionEnemigo*> enemigos){
     }
 }
 
+
 void Grilla::verificarColisiones(){
     for(list<list<Celda*>>::iterator itFilas = this->grilla.begin(); itFilas != this->grilla.end(); itFilas++){
         for(list<Celda*>::iterator itColumna = (*itFilas).begin(); itColumna != (*itFilas).end(); itColumna++){

@@ -15,10 +15,14 @@
 #define AVION_ALTO ALTO_AVION_COMUN;
 #define DISPARO_ANCHO 20;
 #define DISPARO_ALTO 40;
+#define TIEMPO_INMUNIDAD 3
+#define TIEMPO_INTERMITENCIA 0.1
 using namespace std;
 
 class Avion {
 private:
+    float contadorTiempoInmunidad = 0;
+    float contadorIntermitenciaInmunidad = 0;
     float velocidadDisparos;
     float posX;
     float posY;
@@ -82,6 +86,8 @@ public:
 
     void colisionar();
 
+    void colisionarConPowerUp();
+
     void resetPuntos();
 
     int getPuntaje();
@@ -89,8 +95,12 @@ public:
     int getVidas();
 
     void setSpawn(int x, int y);
-    
+
     void quitarUnaVida();
+
+    void disminuirTiempoInmunidad(float timestep);
+
+    float getContadorTiempoInmunidad();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

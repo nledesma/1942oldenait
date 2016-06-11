@@ -60,7 +60,6 @@ void Superficie::rotar(float angulo, float x, float y){
 }
 
 bool Superficie::colisiona(Superficie * superficie){
-
     Punto* normalArriba = new Punto(-(this->izqArriba->getPosY() - this->derArriba->getPosY()), this->izqArriba->getPosX() - this->derArriba->getPosX());
     Punto* normalDerecha = new Punto(-(this->derArriba->getPosY() - this->derAbajo->getPosY()), this->derArriba->getPosX() - this->derAbajo->getPosX());
     Punto* normalAbajo = new Punto(-(this->derAbajo->getPosY() - this->izqAbajo->getPosY()), this->derAbajo->getPosX() - this->izqAbajo->getPosX());
@@ -68,7 +67,6 @@ bool Superficie::colisiona(Superficie * superficie){
 
     pair<float, float> proyeccion = this->proyectar(this, normalArriba);
     pair<float, float> proyeccionSuperficie = this->proyectar(superficie, normalArriba);
-
     if(!this->proyeccionesSuperpuestas(proyeccion, proyeccionSuperficie)){
         return false;
     }
@@ -103,9 +101,7 @@ pair<float, float> Superficie::proyectar(Superficie * superficie, Punto * punto)
     //TODO ver si se hace refactor con los puntos
     float minimo, maximo;
     minimo = maximo = punto->productoPunto(superficie->getDerArriba());
-
     float producto = punto->productoPunto(superficie->getDerAbajo());
-
     if(producto > maximo) {
         maximo = producto;
     }

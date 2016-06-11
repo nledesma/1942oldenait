@@ -2,7 +2,12 @@
 
 using namespace std;
 
-PowerUpParseado::PowerUpParseado() {}
+PowerUpParseado::PowerUpParseado() {
+    tipo = "";
+    posX = 0;
+    posY = 0;
+    valor = 0;
+}
 
 PowerUpParseado::~PowerUpParseado() { }
 
@@ -10,12 +15,16 @@ void PowerUpParseado::setTipo(string tipo){
   this->tipo = tipo;
 }
 
-void PowerUpParseado::setCantidad(int cantidad){
-  this->cantidad = cantidad;
-}
-
 void PowerUpParseado::setValor(int valor){
   this->valor = valor;
+}
+
+void PowerUpParseado::setPosX(float posX){
+  this->posX = posX;
+}
+
+void PowerUpParseado::setPosY(float posY){
+  this->posY = posY;
 }
 
 int PowerUpParseado::getTipo(){
@@ -30,8 +39,12 @@ int PowerUpParseado::getTipo(){
   } else return 0;
 }
 
-int PowerUpParseado::getCantidad(){
-  return this->cantidad;
+float PowerUpParseado::getPosX(){
+  return this->posX;
+}
+
+float PowerUpParseado::getPosY(){
+  return this->posY;
 }
 
 int PowerUpParseado::getValor(){
