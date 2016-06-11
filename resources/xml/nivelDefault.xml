@@ -47,7 +47,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>escuadron</tipo>
-                      <cantidad>24</cantidad>
+                      <cantidad>3</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>mediano</tipo>
@@ -55,7 +55,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>grande</tipo>
-                      <cantidad>10</cantidad>
+                      <cantidad>2</cantidad>
                     </enemigo>
                 </enemigos>
                 <powerUps>
