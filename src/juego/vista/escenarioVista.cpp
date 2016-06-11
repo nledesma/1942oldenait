@@ -565,14 +565,13 @@ void EscenarioVista::renderizarPowerUps(){
   pthread_mutex_lock(&mutexPowerUps);
   for(list<powerUp>::iterator iterador = this->powerUps.begin(); iterador != this->powerUps.end(); iterador++){
     powerUp unPowerUp = *iterador;
-
     if (unPowerUp.tipoPowerUp == TIPO_POWERUP_BONIFICACION){
         this->powerUpBonificacion->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     } else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DOS_AMETRALLADORAS){
         this->powerUpDosAmetralladoras->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     } else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
         this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
-    } else {
+    } else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_AVIONES_SECUNDARIOS){
         this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     }
   }

@@ -25,7 +25,7 @@ private:
 	static bool getElemento(XMLElement * pNodoElemento, string & pathSprite,
 		float & posx, float & posy);
 	static bool getEnemigo(XMLElement * pNodoElemento, string &tipo, int &cantidad);
-	static bool getPowerUp(XMLElement * pNodoElemento, string &tipo, int &cantidad, int &valor);
+	static bool getPowerUp(XMLElement * pNodoElemento, string &tipo, float &posx, float &posy, int &valor);
 	static bool agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo,
 								int longitudEtapa);
 	static bool agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo, int longitudEtapa);
