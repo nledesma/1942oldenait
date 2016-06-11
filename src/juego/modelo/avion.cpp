@@ -17,6 +17,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->idSprite = idSprite;
     this->idSpriteDisparos = idSpriteDisparos;
     this->puntaje = 0;
+    this->vidas = 5;
 }
 
 Avion::~Avion(){
@@ -206,8 +207,14 @@ Colisionable* Avion::getColisionable(){
 }
 
 void Avion::colisionar(){
-    if (this->estadoAnimacion < EXPLOSION_ETAPA_1 )
+    if (this->estadoAnimacion < EXPLOSION_ETAPA_1 ){
         this->estadoAnimacion = EXPLOSION_ETAPA_1;
+        if (this->vidas >= 0){
+            pthread_mutex_lock(&this->mutexVidas);
+            quitarUnaVida();
+            pthread_mutex_unlock(&this->mutexVidas);
+        }
+    }
 }
 
 void Avion::resetPuntos() {
@@ -216,4 +223,12 @@ void Avion::resetPuntos() {
 
 int Avion::getPuntaje() {
     return puntaje;
+}
+
+int Avion::getVidas(){
+    return this->vidas;
+}
+
+void Avion::quitarUnaVida(){
+    this->vidas--;
 }

@@ -34,6 +34,8 @@
 #define POSX_PUNTAJE1 10
 #define POSX_PUNTAJE2 600
 #define POSY_PUNTAJES 10
+#define POSX_VIDAS 50
+#define POSY_VIDAS 10
 
 using namespace std;
 
@@ -101,6 +103,7 @@ private:
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
+    TextoDinamico* textoVidas;
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);
@@ -160,6 +163,8 @@ public:
     int getAlto();
     Figura *getFondo();
     Ventana *getVentana();
+    void renderizarVidas();
+    void actualizarImagenVidas();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

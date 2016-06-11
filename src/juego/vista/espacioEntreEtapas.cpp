@@ -49,10 +49,9 @@ void EspacioEntreEtapas::renderLoop() {
 
 void EspacioEntreEtapas::renderTextos() {
     list<Texto*>::iterator it;
-    int x = 10;
     int y = 10;
     for (it = textos.begin(); it != textos.end(); ++it) {
-        (*it)->renderizar(x, y);
+        (*it)->renderCentrado(y);
         y += 40;
     }
 }

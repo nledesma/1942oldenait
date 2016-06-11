@@ -20,6 +20,7 @@ private:
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     Figura *figura;
     void iniciarAvion(float poX, float posY, string pathSprite);
+    int vidas;
 public:
     AvionVista(float posX, float posY, string pathSprite);
 
@@ -40,6 +41,8 @@ public:
     float getPosX();
 
     float getPosY();
+
+    int getVidas();
 
     int getAncho();
 
