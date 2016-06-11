@@ -79,7 +79,6 @@ bool PowerUp::animar(float timeStep){
     } else {
         if(this->tiempoPowerUpColisionado > 0){
             this->tiempoPowerUpColisionado -= this->tiempoPowerUpColisionado * timeStep;
-            cout << this->estadoAnimacion << endl;
             return true;
         } else {
             return false;
