@@ -17,7 +17,7 @@ private:
 public:
     EspacioEntreEtapas(Ventana * ventana, string mensajeInicial);
     void finalizar();
-    void renderLoop();
+    int renderLoop();
     void renderTextos();
     void decodificarPuntos(string mensaje);
     virtual ~EspacioEntreEtapas ();

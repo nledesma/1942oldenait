@@ -240,15 +240,24 @@ void Servidor::encolarMensaje(pair<int, string> clienteMensaje) {
 
 // Envía al cliente la cantidad de jugadores faltantes para empezar periódicamente.
 void Servidor::esperarPartida(int fdCliente) {
+    int faltantes;
     cout << "Faltan " << clientesFaltantes() << " jugadores." << endl;
     while(hayLugar() && servidorActivo()){
         string mensaje = "";
         // Enviamos la cantidad de clientes faltantes al cliente.
-        Decodificador::pushCantidad(mensaje, clientesFaltantes());
-        enviarMensaje(mensaje, fdCliente);
+        faltantes = clientesFaltantes();
+        // Por temas de sincronización me fijo de todos modos si es mayor a 0
+        // para asegurarme que solo se mande una vez el 0.
+        if (faltantes > 0) {
+            Decodificador::pushCantidad(mensaje, clientesFaltantes());
+            enviarMensaje(mensaje, fdCliente);
+            usleep(5000);
+        }
         // Espera un segundo antes de mandar de nuevo.
-        usleep(5000);
     }
+    string cero = "";
+    Decodificador::pushCantidad(cero, 0);
+    enviarMensaje(cero, fdCliente);
 }
 
 string Servidor::obtenerDireccion(int fdCliente){

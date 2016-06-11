@@ -37,14 +37,31 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
 
 }
 
-void EspacioEntreEtapas::renderLoop() {
-    // TODO mejorar x e y.
+int EspacioEntreEtapas::renderLoop() {
+    SDL_Event e;
+
     while(dibujar) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_WINDOWEVENT) {
+                if (e.window.event == SDL_WINDOWEVENT_CLOSE){
+                    cout << "Evento de cierre" << endl;
+                    this->finalizar();
+                    return CERRAR;
+                }
+            } else if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_x) {
+                    cout << "Se apretó x" << endl;
+                    this->finalizar();
+                    return CERRAR;
+                }
+            }
+        }
         fondo->render(0, 0, ventana->getVentanaRenderer());
         renderTextos();
         SDL_RenderPresent(ventana->getVentanaRenderer());
     }
     cout << "FIN RENDER LOOP";
+    return CONTINUAR;
 }
 
 void EspacioEntreEtapas::renderTextos() {
