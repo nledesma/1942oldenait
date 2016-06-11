@@ -37,7 +37,6 @@ void Grilla::ubicarDisparosAmigos(list<Disparo*> disparos){
         int* posCeldas;
         list<Celda*> celdas = this->ubicarEnCeldas((*itDisparos)->getColisionable(), posCeldas);
         (*itDisparos)->getColisionable()->setPosCeldas(posCeldas);
-        cout << posCeldas[0] << " " << posCeldas[1] << " " << posCeldas[2] << " " << posCeldas[3] << endl;
         for(list<Celda*>::iterator itCeldas = celdas.begin(); itCeldas != celdas.end(); itCeldas++){
             (*itCeldas)->agregarDisparoAmigo((*itDisparos));
         }
