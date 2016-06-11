@@ -470,19 +470,25 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        for(list<AvionEnemigo*>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++){
-            if((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())){
-                (*itAviones)->colisionar();
-                (*itEnemigos)->colisionar();
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0) {
+            for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
+                 itEnemigos != this->enemigos.end(); itEnemigos++) {
+                if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
+                    (*itAviones)->colisionar();
+                    (*itEnemigos)->colisionar();
+                }
             }
         }
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        for(list<DisparoEnemigo*>::iterator itDisparosEnemigos = this->disparosEnemigos.begin(); itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++){
-            if((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())){
-                (*itAviones)->colisionar();
-                (*itDisparosEnemigos)->colisionar();
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0) {
+            for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
+                 itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
+                if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
+                    (*itAviones)->colisionar();
+                    (*itDisparosEnemigos)->colisionar();
+                }
             }
         }
     }
