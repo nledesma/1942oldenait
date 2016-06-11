@@ -215,7 +215,6 @@ void Avion::colisionar(){
             pthread_mutex_unlock(&this->mutexVidas);
         }
     }
-    cout << "Cantidad de vidas: " << this->getVidas() << endl;
 }
 
 void Avion::resetPuntos() {

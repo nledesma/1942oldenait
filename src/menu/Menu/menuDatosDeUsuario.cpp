@@ -32,7 +32,7 @@ bool MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
 void MenuDatosDeUsuario::renderizar(Ventana* ventana){
     this->fondo->render(0, 0, ventana->getVentanaRenderer());
     this->getBotonSiguiente()[0].render(ventana->getVentanaRenderer());
-    this->texto->renderizar(200, 250);
+    this->texto->renderCentrado(250);
 }
 
 BotonSiguiente* MenuDatosDeUsuario::getBotonSiguiente(){

@@ -42,7 +42,7 @@ void MenuPrincipal::renderizar(Ventana* ventana){
     this->fondo->render(0, 0, ventana->getVentanaRenderer());
     this->getBotonJugar()[0].render(ventana->getVentanaRenderer());
     this->getBotonSalir()[0].render(ventana->getVentanaRenderer());
-    this->texto->renderizar(160, 150);
+    this->texto->renderCentrado(150);
 }
 
 BotonJugar* MenuPrincipal::getBotonJugar(){

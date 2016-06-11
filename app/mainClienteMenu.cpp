@@ -210,7 +210,7 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 		ventana->limpiar();
 		//Renderizado
 		menuDatosDeUsuario->renderizar(ventana);
-        textoDinamico->renderizar(300, 350);
+        textoDinamico->renderCentrado(350);
 		SDL_RenderPresent(ventana->getVentanaRenderer());
 	}
     SDL_StopTextInput();

@@ -15,12 +15,12 @@ class Texto {
         TTF_Font* fuente;
         SDL_Color color;
         Ventana * ventana;
-        pthread_mutex_t mutexTexto = PTHREAD_MUTEX_INITIALIZER;
     public:
         Texto(int tamanioFuente, SDL_Color color, string fuente, Ventana * ventana);
         virtual ~Texto();
         void cargarFuente(string textoString);
         virtual void renderizar(int x, int y);
+        void renderCentrado(int y);
         Figura* getFigura();
         TTF_Font* getFuente();
 };

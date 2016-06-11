@@ -25,6 +25,11 @@ void Texto::renderizar(int x , int y) {
     // pthread_mutex_unlock(&mutexTexto);
 }
 
+void Texto::renderCentrado(int y){
+    int posX = ventana->getAncho()/2 - texto->getWidth()/2;
+    texto->render(posX, y, this->ventana->getVentanaRenderer());
+}
+
 Figura* Texto::getFigura() {
     return this->texto;
 }
