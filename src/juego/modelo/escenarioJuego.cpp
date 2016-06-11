@@ -457,7 +457,6 @@ void EscenarioJuego::verificarColisiones(){
                 condicionEstaExplotando = AVION_ENEMIGO_EXPLOSION_ETAPA_1;
             }
             if((*itEnemigos)->getColisionable()->colisiona((*itDisparos)->getColisionable()) && (*itDisparos)->getEstado() == 0  && (*itEnemigos)->getEstadoAnimacion() < condicionEstaExplotando ) {
-                cout << "entre en verificar colision" << endl;
                 if((*itEnemigos)->getPosicionY() > cercano) {
                     cercano = (*itEnemigos)->getPosicionY();
                     enemigoAColisionar = (*itEnemigos);
@@ -478,6 +477,21 @@ void EscenarioJuego::verificarColisiones(){
             }
         }
     }
+
+    for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
+        for(list<DisparoEnemigo*>::iterator itDisparosEnemigos = this->disparosEnemigos.begin(); itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++){
+            if((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())){
+                (*itAviones)->colisionar();
+                (*itDisparosEnemigos)->colisionar();
+            }
+        }
+    }
+
+//    for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
+//        for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
+//            if((*itAviones)->getColisionable()->colisiona(po))
+//        }
+//    }
 }
 
 void EscenarioJuego::proyectarDisparos(float timeStep) {

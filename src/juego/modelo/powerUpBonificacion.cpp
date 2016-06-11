@@ -9,6 +9,7 @@ PowerUpBonificacion::PowerUpBonificacion(float posX, float posY, int valor) {
 		this->posYInicial = posY;
   	this->estadoAnimacion = POWER_UP_NORMAL;
   	this->idSprite = SPRITE_POWERUP_BONIFICACION;
+
 }
 
 PowerUpBonificacion::~PowerUpBonificacion() {}

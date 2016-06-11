@@ -7,6 +7,7 @@
 #include <list>
 #include "../../accesorios/codigo.hpp"
 #include "disparo.hpp"
+#include "../../accesorios/colisiones/colisionable.hpp"
 
 using namespace std;
 
@@ -36,6 +37,7 @@ public:
     void mover(float timeStep, float velocidadY);
     void animar(float timeStep);
     void volverEstadoInicial();
+    void colisionar();
 };
 
 #endif //INC_1942OLDENAIT_POWERUP_HPP

@@ -65,3 +65,4 @@ void PowerUp::volverEstadoInicial(){
     this->posX = posXInicial;
     this->posY = posYInicial;
 }
+
