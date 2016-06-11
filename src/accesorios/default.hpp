@@ -1,6 +1,8 @@
 #ifndef INC_1942OLDENAIT_DEFAULT_HPP
 #define INC_1942OLDENAIT_DEFAULT_HPP
 
+#define SPRITE_MOTHERSHIP "carrier"
+
 #define DISPARO_POR_DEFECTO "disparo-default"
 #define AVION_POR_DEFECTO "millenium-sprite-default"
 #define ELEMENTO_POR_DEFECTO "imagen-default"

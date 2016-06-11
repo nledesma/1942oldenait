@@ -11,6 +11,8 @@
 #define AZUL 2
 #define ROJO 3
 #define VERDE 4
+#define AMARILLO 5
+#define VIOLETA 6
 /* Colores */
 
 #define JUGADOR_1 BASE
@@ -99,7 +101,8 @@
 #define EXPLOSION_ETAPA_8 28
 #define EXPLOSION_ETAPA_9 29
 #define EXPLOSION_ETAPA_10 30
-#define INTERMITENCIA 31
+#define ESTACIONADO 31
+#define INTERMITENCIA 32
 
 #define OFFSET_ESTADO_DISPARO 50
 #define OFFSET_ESTADO_LOOP 100
