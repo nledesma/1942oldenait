@@ -34,8 +34,6 @@
 #define POSX_PUNTAJE1 10
 #define POSX_PUNTAJE2 600
 #define POSY_PUNTAJES 10
-#define POSX_VIDAS 50
-#define POSY_VIDAS 10
 
 using namespace std;
 
@@ -61,9 +59,6 @@ private:
     vector<int> puntajes;
     vector<TextoDinamico *> textosPuntaje;
     vector<Texto*> titulosPuntaje;
-    /* Vidas */
-    TextoDinamico* textoVidas;
-    Texto *tituloVidas;
     /* Número de avión que le corresponde a este cliente */
     int nroAvion;
     /* Fondo */
@@ -107,6 +102,7 @@ private:
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
+    Figura* figuraVidas;
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);
@@ -141,6 +137,7 @@ public:
     void cargarVistaEnemigos();
     void cargarVistasPowerUps();
     void cargarSonidos();
+    void cargarVistaVidas();
     void actualizar(float offset);
     void cerrar();
     void manejarEvento(int evento);
@@ -166,8 +163,7 @@ public:
     int getAlto();
     Figura *getFondo();
     Ventana *getVentana();
-    void renderizarVidas();
-    void actualizarImagenVidas();
+    void renderizarImagenVidas();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

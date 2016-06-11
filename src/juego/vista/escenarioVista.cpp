@@ -14,6 +14,7 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->soundBoard = new SoundBoard();
     this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
+    this->figuraVidas = new Figura();
 
     puntajes.push_back(0);
     if (porEquipos) puntajes.push_back(0);
@@ -28,11 +29,6 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
         titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
         titulosPuntaje[1]->cargarFuente("Puntaje - Equipo 2");
     }
-
-    this->textoVidas = new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    textoVidas->cambiarTexto("5");
-    this->tituloVidas = new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    this->tituloVidas->cargarFuente("Vidas");
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -214,6 +210,7 @@ void EscenarioVista::preloop(){
     cargarVistaEnemigos();
     cargarVistaDisparosEnemigos();
     cargarSonidos();
+    cargarVistaVidas();
 }
 
 int EscenarioVista::mainLoop(){
@@ -248,9 +245,8 @@ int EscenarioVista::mainLoop(){
         this->renderizarEnemigos();
         // NOTE esta imágen se recarga si hubo cambios y debe estar en este thread.
         this->actualizarImagenPuntajes();
-        this->actualizarImagenVidas();
         this->renderizarPuntajes();
-        this->renderizarVidas();
+        this->renderizarImagenVidas();
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -464,7 +460,21 @@ void EscenarioVista::cargarSonidos() {
     this->soundBoard->cargarSonidos();
 }
 
+void EscenarioVista::cargarVistaVidas(){
+    this->figuraVidas->loadFromFile(VIDAS, this->ventana->getVentanaRenderer());
+}
+
 /* Renderizaciones */
+
+void EscenarioVista::renderizarImagenVidas(){
+    list<AvionVista*>::iterator it = aviones.begin();
+    advance (it, this->nroAvion - 1);
+    AvionVista *avionVida = *it;
+    int vidas =  (avionVida)->getVidas();
+    for(int i = 0; i < vidas; i++){
+        this->figuraVidas->render(330 + (i*ANCHO_VIDA), 10, this->ventana->getVentanaRenderer());
+    }
+}
 
 void EscenarioVista::renderizarElementos(){
     for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
@@ -482,16 +492,6 @@ void EscenarioVista::actualizarImagenPuntajes() {
     }
 }
 
-void EscenarioVista::actualizarImagenVidas() {
-    list<AvionVista*>::iterator it = aviones.begin();
-    advance (it, this->nroAvion - 1);
-    AvionVista *avionVida = *it;
-
-    stringstream ss; ss << (avionVida)->getVidas();
-    textoVidas->cambiarTexto(ss.str());
-}
-
-
 void EscenarioVista::renderizarPuntajes() {
     titulosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES);
     textosPuntaje[0]->renderizar(POSX_PUNTAJE1, POSY_PUNTAJES + 20);
@@ -499,11 +499,6 @@ void EscenarioVista::renderizarPuntajes() {
         titulosPuntaje[1]->renderDerecho(ventana->getAncho() - 10, POSY_PUNTAJES);
         textosPuntaje[1]->renderDerecho(ventana->getAncho() - 10, POSY_PUNTAJES + 20);
     }
-}
-
-void EscenarioVista::renderizarVidas(){
-    tituloVidas->renderCentrado(POSY_VIDAS);
-    textoVidas->renderCentrado(POSY_VIDAS + 20);
 }
 
 void EscenarioVista::renderizarAviones() {

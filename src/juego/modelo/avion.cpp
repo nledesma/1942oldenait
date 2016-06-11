@@ -209,10 +209,12 @@ Colisionable* Avion::getColisionable(){
 void Avion::colisionar(){
     if (this->estadoAnimacion < EXPLOSION_ETAPA_1 ){
         this->estadoAnimacion = EXPLOSION_ETAPA_1;
-        if (this->vidas >= 0){
+        if (this->vidas > 0){
             pthread_mutex_lock(&this->mutexVidas);
             quitarUnaVida();
             pthread_mutex_unlock(&this->mutexVidas);
+        }else{
+            cout << "PERDISTE!" << endl;
         }
     }
 }

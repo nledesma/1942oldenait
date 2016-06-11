@@ -63,6 +63,9 @@
 #define ANCHO_POWERUP 48
 #define ALTO_POWERUP 48
 
+#define ANCHO_VIDA 30
+#define ALTO_VIDA 32
+
 /* Estados avion */
 
 #define ESTADO_NORMAL 0
