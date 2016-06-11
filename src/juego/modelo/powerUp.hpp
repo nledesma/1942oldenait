@@ -40,7 +40,6 @@ public:
     void mover(float timeStep, float velocidadY);
     virtual void animar(float timeStep);
     void volverEstadoInicial();
-    void colisionar();
 };
 
 #endif //INC_1942OLDENAIT_POWERUP_HPP
