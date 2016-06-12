@@ -2,7 +2,7 @@
 #define BOTONPOREQUIPOS_H
 #include "boton.hpp"
 
-enum LButtonSpritePorEquipos{
+enum BotonSpritePorEquipos{
 
 	BUTTON_SPRITE_POREQUIPOS_OUT = 0,
 	BUTTON_SPRITE_POREQUIPOS_MOTION = 1,
@@ -12,11 +12,11 @@ enum LButtonSpritePorEquipos{
 
 class BotonPorEquipos : public Boton{
 	private:
-		LButtonSpritePorEquipos mCurrentSprite;
-		SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL_POREQUIPOS];
+		BotonSpritePorEquipos sprite;
+		SDL_Rect spriteBoton[BUTTON_SPRITE_TOTAL_POREQUIPOS];
 	public:
 		BotonPorEquipos();
-		int handleEvent(SDL_Event* e);
+		int manejarEvento(SDL_Event* e);
 		void render(SDL_Renderer* renderer);
 		void setSprites(SDL_Renderer* renderer);
 };

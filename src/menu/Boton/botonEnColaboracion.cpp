@@ -1,9 +1,9 @@
 #include "botonEnColaboracion.hpp"
 BotonEnColaboracion::BotonEnColaboracion(){
-	this->mCurrentSprite = BUTTON_SPRITE_ENCOLABORACION_OUT;
+	this->sprite = BUTTON_SPRITE_ENCOLABORACION_OUT;
 }
 
-int BotonEnColaboracion::handleEvent(SDL_Event* e){
+int BotonEnColaboracion::manejarEvento(SDL_Event* e){
 	//If mouse event happened
 	if(e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP){
 		//Get mouse position
@@ -29,19 +29,19 @@ int BotonEnColaboracion::handleEvent(SDL_Event* e){
 		}
 		//Mouse is outside button
 		if( !inside ){
-			mCurrentSprite = BUTTON_SPRITE_ENCOLABORACION_OUT;
+			sprite = BUTTON_SPRITE_ENCOLABORACION_OUT;
 		}
 		//Mouse is inside button
 		else{
 			//Set mouse over sprite
 			switch( e->type ){
 				case SDL_MOUSEMOTION:
-				mCurrentSprite = BUTTON_SPRITE_ENCOLABORACION_MOTION;
+				sprite = BUTTON_SPRITE_ENCOLABORACION_MOTION;
 				return 0;
 				break;
 
 				case SDL_MOUSEBUTTONDOWN:
-				mCurrentSprite = BUTTON_SPRITE_ENCOLABORACION_DOWN;
+				sprite = BUTTON_SPRITE_ENCOLABORACION_DOWN;
 				return 1;
 				break;
 			}
@@ -51,15 +51,15 @@ int BotonEnColaboracion::handleEvent(SDL_Event* e){
 }
 
 void BotonEnColaboracion::render(SDL_Renderer* renderer){
-	this->getFigura()->renderMenu(renderer, this->getPosicionX(), this->getPosicionY(), &gSpriteClips[ mCurrentSprite ],0, NULL, (SDL_RendererFlip)NULL);
+	this->getFigura()->renderMenu(renderer, this->getPosicionX(), this->getPosicionY(), &botonSprite[ sprite ],0, NULL, (SDL_RendererFlip)NULL);
 }
 
 void BotonEnColaboracion::setSprites(SDL_Renderer* renderer){
 	//Set sprites
 	for( int i = 0; i < 3; ++i ){
-		gSpriteClips[ i ].x = 0;
-		gSpriteClips[ i ].y = i * 48;
-		gSpriteClips[ i ].w = BUTTON_WIDTH;
-		gSpriteClips[ i ].h = BUTTON_HEIGHT;
+		botonSprite[ i ].x = 0;
+		botonSprite[ i ].y = i * 48;
+		botonSprite[ i ].w = BUTTON_WIDTH;
+		botonSprite[ i ].h = BUTTON_HEIGHT;
 	}
 }

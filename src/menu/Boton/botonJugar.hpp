@@ -2,7 +2,7 @@
 #define BOTONJUGAR_H
 #include "boton.hpp"
 
-enum LButtonSpriteJugar{
+enum BotonSpriteJugar{
 
 	BUTTON_SPRITE_JUGAR_OUT = 0,
 	BUTTON_SPRITE_JUGAR_MOTION = 1,
@@ -12,11 +12,11 @@ enum LButtonSpriteJugar{
 
 class BotonJugar : public Boton{
 	private:
-		LButtonSpriteJugar mCurrentSprite;
-		SDL_Rect gSpriteClips[BUTTON_SPRITE_JUGAR_TOTAL];
+		BotonSpriteJugar sprite;
+		SDL_Rect spriteBoton[BUTTON_SPRITE_JUGAR_TOTAL];
 	public:
 		BotonJugar();
-		int handleEvent(SDL_Event* e);
+		int manejarEvento(SDL_Event* e);
 		void render(SDL_Renderer* renderer);
 		void setSprites(SDL_Renderer* renderer);
 };

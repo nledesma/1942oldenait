@@ -2,7 +2,7 @@
 #define BOTONENCOLABORACION_H
 #include "boton.hpp"
 
-enum LButtonSpriteEnColaboracion{
+enum BotonSpriteEnColaboracion{
 
 	BUTTON_SPRITE_ENCOLABORACION_OUT = 0,
 	BUTTON_SPRITE_ENCOLABORACION_MOTION = 1,
@@ -12,11 +12,11 @@ enum LButtonSpriteEnColaboracion{
 
 class BotonEnColaboracion : public Boton{
 	private:
-		LButtonSpriteEnColaboracion mCurrentSprite;
-		SDL_Rect gSpriteClips[BUTTON_SPRITE_ENCOLABORACION_TOTAL];
+		BotonSpriteEnColaboracion sprite;
+		SDL_Rect botonSprite[BUTTON_SPRITE_ENCOLABORACION_TOTAL];
 	public:
 		BotonEnColaboracion();
-		int handleEvent(SDL_Event* e);
+		int manejarEvento(SDL_Event* e);
 		void render(SDL_Renderer* renderer);
 		void setSprites(SDL_Renderer* renderer);
 };

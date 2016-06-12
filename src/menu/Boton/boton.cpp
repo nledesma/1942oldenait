@@ -1,23 +1,23 @@
 #include "boton.hpp"
 Boton::Boton(){
-	this->mPosition.x = 0;
-	this->mPosition.y = 0;
-	this->gButtonSpriteSheetTexture = new Figura();
+	this->posicion.x = 0;
+	this->posicion.y = 0;
+	this->figuraBoton = new Figura();
 }
 
 int Boton::getPosicionX(){
-	return this->mPosition.x;
+	return this->posicion.x;
 }
 
 int Boton::getPosicionY(){
-	return this->mPosition.y;
+	return this->posicion.y;
 }
 
 void Boton::setPosition(int x, int y){
-	mPosition.x = x;
-	mPosition.y = y;
+	posicion.x = x;
+	posicion.y = y;
 }
 
 Figura* Boton::getFigura(){
-	return this->gButtonSpriteSheetTexture;
+	return this->figuraBoton;
 }

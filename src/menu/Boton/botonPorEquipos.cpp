@@ -1,10 +1,9 @@
 #include "botonPorEquipos.hpp"
 BotonPorEquipos::BotonPorEquipos(){
-	this->mCurrentSprite = BUTTON_SPRITE_POREQUIPOS_OUT;
+	this->sprite = BUTTON_SPRITE_POREQUIPOS_OUT;
 }
 
-int BotonPorEquipos::handleEvent(SDL_Event* e){
-	//If mouse event happened
+int BotonPorEquipos::manejarEvento(SDL_Event* e){
 	if(e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP){
 		//Get mouse position
 		int x, y;
@@ -29,18 +28,18 @@ int BotonPorEquipos::handleEvent(SDL_Event* e){
 		}
 		//Mouse is outside button
 		if( !inside ){
-			mCurrentSprite = BUTTON_SPRITE_POREQUIPOS_OUT;
+			sprite = BUTTON_SPRITE_POREQUIPOS_OUT;
 		}
 		//Mouse is inside button
 		else{
 			//Set mouse over sprite
 			switch( e->type ){
 				case SDL_MOUSEMOTION:
-				mCurrentSprite = BUTTON_SPRITE_POREQUIPOS_MOTION;
+				sprite = BUTTON_SPRITE_POREQUIPOS_MOTION;
 				break;
 
 				case SDL_MOUSEBUTTONDOWN:
-				mCurrentSprite = BUTTON_SPRITE_POREQUIPOS_DOWN;
+				sprite = BUTTON_SPRITE_POREQUIPOS_DOWN;
 				break;
 			}
 		}
@@ -49,16 +48,15 @@ int BotonPorEquipos::handleEvent(SDL_Event* e){
 }
 
 void BotonPorEquipos::render(SDL_Renderer* renderer){
-	this->getFigura()->renderMenu(renderer, this->getPosicionX(), this->getPosicionY(), &gSpriteClips[ mCurrentSprite ],0, NULL, (SDL_RendererFlip)NULL);
+	this->getFigura()->renderMenu(renderer, this->getPosicionX(), this->getPosicionY(), &spriteBoton[sprite],0, NULL, (SDL_RendererFlip)NULL);
 
 }
 
 void BotonPorEquipos::setSprites(SDL_Renderer* renderer){
-	//Set sprites
 	for( int i = 0; i < 3; ++i ){
-		gSpriteClips[ i ].x = 0;
-		gSpriteClips[ i ].y = i * 48;
-		gSpriteClips[ i ].w = BUTTON_WIDTH;
-		gSpriteClips[ i ].h = BUTTON_HEIGHT;
+		spriteBoton[i].x = 0;
+		spriteBoton[i].y = i * 48;
+		spriteBoton[i].w = BUTTON_WIDTH;
+		spriteBoton[i].h = BUTTON_HEIGHT;
 	}
 }
