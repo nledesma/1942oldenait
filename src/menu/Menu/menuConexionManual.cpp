@@ -5,14 +5,12 @@ MenuConexionManual::MenuConexionManual(){
      this->fondo = new Figura();
 }
 
-bool MenuConexionManual::cargarBotones(Ventana* ventana){
-    bool success = true;
+void MenuConexionManual::cargarBotones(Ventana* ventana){
     if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
     if (!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/siguienteSprite" ))){
         cout << "Failed to load button sprite texture!" << endl;
-        success = false;
     } else {
         //Set sprites
         this->getBotonSiguiente()->setSprites(ventana->getVentanaRenderer());
@@ -22,8 +20,6 @@ bool MenuConexionManual::cargarBotones(Ventana* ventana){
 
     this->textoIP = new Texto(35, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     this->textoIP->cargarFuente("INGRESE IP: ");
-
-    return success;
 }
 
 void MenuConexionManual::renderizar(Ventana* ventana){

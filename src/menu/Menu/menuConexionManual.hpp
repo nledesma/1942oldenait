@@ -11,7 +11,7 @@ class MenuConexionManual: public Menu{
         Texto* textoIP;
     public:
         MenuConexionManual();
-        bool cargarBotones(Ventana* ventana);
+        void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
         BotonSiguiente* getBotonSiguiente();
         void cerrar();

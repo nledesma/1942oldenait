@@ -11,7 +11,7 @@ class MenuDatosDeUsuario: public Menu{
         Texto* texto;
     public:
         MenuDatosDeUsuario();
-        bool cargarBotones(Ventana* ventana);
+        void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
         BotonSiguiente* getBotonSiguiente();
         void cerrar();

@@ -14,7 +14,7 @@ class Menu{
         Figura* textTexture;
     protected:
         Figura* fondo;
-        virtual bool cargarBotones(Ventana* ventana) = 0;
+        virtual void cargarBotones(Ventana* ventana) = 0;
         virtual void renderizar(Ventana* ventana) = 0;
     public:
         Menu();

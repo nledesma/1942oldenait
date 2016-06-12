@@ -2,7 +2,7 @@
 #define BOTONSALIR_H
 #include "boton.hpp"
 
-enum LButtonSpriteSalir{
+enum BotonSpriteSalir{
 
 	BUTTON_SPRITE_SALIR_OUT = 0,
 	BUTTON_SPRITE_SALIR_MOTION = 1,
@@ -12,11 +12,11 @@ enum LButtonSpriteSalir{
 
 class BotonSalir : public Boton{
 	private:
-		LButtonSpriteSalir mCurrentSprite;
-		SDL_Rect gSpriteClips3[BUTTON_SPRITE_TOTAL_SALIR];
+		BotonSpriteSalir sprite;
+		SDL_Rect spriteBoton[BUTTON_SPRITE_TOTAL_SALIR];
 	public:
 		BotonSalir();
-		int handleEvent( SDL_Event* e );
+		int manejarEvento(SDL_Event* e);
 		void render(SDL_Renderer* renderer);
 		void setSprites(SDL_Renderer* renderer);
 };
