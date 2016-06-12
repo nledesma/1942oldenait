@@ -204,6 +204,9 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         if (avionesEstacionados){
             this->enemigos.empty();
             this->avanzarEtapa();
+            for (list<Avion *>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++) {
+                (*itAviones)->volverEstadoInicial();
+            }
         }
     }
 }
