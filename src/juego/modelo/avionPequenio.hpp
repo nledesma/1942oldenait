@@ -19,7 +19,6 @@ public:
     ~AvionPequenio();
     bool correspondeDisparar(float timestep);
     vector<DisparoEnemigo*> disparar();
-    int estallar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONPEQUENIO_HPP

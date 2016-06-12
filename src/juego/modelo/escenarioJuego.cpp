@@ -317,9 +317,9 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     if (this->disparos.size() > 0) {
         for (list<Disparo *>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++) {
             if ((*iterador)->mover(timeStep) == 0) {
-                // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
-                subirPuntaje(1, (*iterador)->getNroAvion());
-                // Se borra el disparo.
+//                // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
+//                subirPuntaje(1, (*iterador)->getNroAvion());
+//                // Se borra el disparo.
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaDisparos);
                 iterador = disparos.erase(iterador);
@@ -526,7 +526,7 @@ void EscenarioJuego::verificarColisiones(){
             }
         }
         if(enemigoAColisionar != NULL){
-            enemigoAColisionar->colisionar();
+            subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
             (*itDisparos)->colisionar();
         }
     }

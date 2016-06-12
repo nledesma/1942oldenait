@@ -105,6 +105,7 @@ public:
     float getContadorTiempoInmunidad();
 
     bool moverAPosicionFinal(float timestep);
+
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

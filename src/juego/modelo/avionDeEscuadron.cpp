@@ -24,7 +24,3 @@ bool AvionDeEscuadron::correspondeDisparar(float timestep) { return true; }
 
 vector<DisparoEnemigo*> AvionDeEscuadron::disparar(){ vector<DisparoEnemigo*> disparos; return disparos; }
 
-int AvionDeEscuadron::estallar(){
-    colisionar();
-    return this->valorImpacto;
-}

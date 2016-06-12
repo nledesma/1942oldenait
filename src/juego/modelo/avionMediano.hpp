@@ -30,7 +30,9 @@ public:
     ~AvionMediano();
     bool correspondeDisparar(float timestep);
     vector<DisparoEnemigo*> disparar();
+    int mover(float timeStep);
     int estallar();
+    void colisionar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONMEDIANO_HPP

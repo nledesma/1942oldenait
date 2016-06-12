@@ -114,7 +114,12 @@ int AvionGrande::mover(float timeStep) {
     return sigueEnPantalla;
 }
 
+
 int AvionGrande::estallar(){
-    colisionar();
-    return this->valorDerribo;
+    this->colisionar();
+    if(estadoAnimacion < AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1){
+        return this->valorImpacto;
+    } else {
+        return this->valorDerribo;
+    }
 }

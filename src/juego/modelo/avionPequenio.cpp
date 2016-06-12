@@ -14,7 +14,7 @@ AvionPequenio::AvionPequenio(float posX, float posY, float velocidad, float angu
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_PEQUENIO);
     this->contador = CONTADOR_INICIAL;
     this->valorImpacto = 50;
-    this->valorDerribo = 0;
+    this->valorDerribo = 50;
 }
 
 AvionPequenio::~AvionPequenio(){
@@ -24,8 +24,3 @@ AvionPequenio::~AvionPequenio(){
 bool AvionPequenio::correspondeDisparar(float timestep) { return true; }
 
 vector<DisparoEnemigo*> AvionPequenio::disparar(){  vector<DisparoEnemigo*> disparos; return disparos;  }
-
-int AvionPequenio::estallar(){
-    colisionar();
-    return this->valorImpacto;
-}

@@ -18,7 +18,6 @@ public:
     ~AvionDeEscuadron();
     bool correspondeDisparar(float timestep);
     vector<DisparoEnemigo*> disparar();
-    int estallar();
 };
 
 #endif //INC_1942OLDENAIT_AVIONDEESCUADRON_HPP
