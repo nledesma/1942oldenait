@@ -4,9 +4,9 @@ PowerUp::~PowerUp(){
 
 }
 
-/*
+
 void PowerUp::aplicarPowerUp(){}
-*/
+
 Colisionable* PowerUp::getColisionable(){
     return this->colisionable;
 }
@@ -91,4 +91,3 @@ void PowerUp::volverEstadoInicial(){
     this->posX = posXInicial;
     this->posY = posYInicial;
 }
-

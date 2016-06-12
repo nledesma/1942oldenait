@@ -2,11 +2,13 @@
 
 using namespace std;
 
-Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos){
+Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, float posXFinal, float posYFinal){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
     this->posYInicial = posY;
+    this->posXFinal = posXFinal;
+    this->posYFinal = posYFinal;
     this->velocidadX = 0;
     this->velocidadY = 0;
     this->colisionable = new Colisionable(posX, posY, 0, TIPO_AVION);
@@ -279,4 +281,42 @@ void Avion::setSpawn(int x, int y) {
 
 float Avion::getContadorTiempoInmunidad() {
     return this->contadorTiempoInmunidad;
+}
+
+bool Avion::moverAPosicionFinal(float timeStep) {
+    bool resultado = false;
+    pthread_mutex_lock(&this->mutexMover);
+    this->estadoAnimacion = ESTADO_NORMAL;
+    if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
+        if (this->posX != this->posXFinal){
+            if (this->posX < this->posXFinal) {
+                if ((this->posX + this->velocidad/2 * timeStep) < this->posXFinal)
+                    this->posX += this->velocidad/2 * timeStep;
+                else
+                    this->posX = this->posXFinal;
+            } else {
+                if ((this->posX - this->velocidad/2 * timeStep) > this->posXFinal)
+                    this->posX -= this->velocidad * timeStep;
+                else
+                    this->posX = this->posXFinal;
+            }
+        } else {
+            if (this->posY < this->posYFinal) {
+                if ((this->posY + this->velocidad/2 * timeStep) < this->posYFinal)
+                    this->posY += this->velocidad/2 * timeStep;
+                else
+                    this->posY = this->posYFinal;
+            } else {
+                if ((this->posY - this->velocidad/2 * timeStep) > this->posYFinal)
+                    this->posY -= this->velocidad/2 * timeStep;
+                else
+                    this->posY = this->posYFinal;
+            }
+        }
+    } else {
+        this->estadoAnimacion = ESTACIONADO;
+        resultado = true;
+    }
+    pthread_mutex_unlock(&this->mutexMover);
+    return resultado;
 }

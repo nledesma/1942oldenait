@@ -33,6 +33,8 @@ private:
     int contador;
     float posXInicial;
     float posYInicial;
+    float posXFinal;
+    float posYFinal;
     int puntaje;
     string idSprite;
     string idSpriteDisparos;
@@ -42,7 +44,7 @@ private:
     int vidas;
 
 public:
-    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, float posXFinal = 0, float posYFinal = 0);
 
     ~Avion();
 
@@ -101,6 +103,8 @@ public:
     void disminuirTiempoInmunidad(float timestep);
 
     float getContadorTiempoInmunidad();
+
+    bool moverAPosicionFinal(float timestep);
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

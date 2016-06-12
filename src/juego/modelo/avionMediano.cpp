@@ -13,6 +13,8 @@ AvionMediano::AvionMediano(float posX, float posY, float velocidad, float angulo
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_MEDIANO);
     this->tipoAvion = TIPO_AVION_MEDIANO;
     this->vidas = 5;
+    this->valorImpacto = 100;
+    this->valorDerribo = 500;
 }
 
 AvionMediano::~AvionMediano(){
@@ -23,3 +25,9 @@ bool AvionMediano::correspondeDisparar(float timestep) { return true; }
 
 
 vector<DisparoEnemigo*> AvionMediano::disparar(){  vector<DisparoEnemigo*> disparos; return disparos;  }
+
+
+int AvionMediano::estallar(){
+    colisionar();
+    return this->valorDerribo;
+}

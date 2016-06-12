@@ -30,6 +30,8 @@ protected:
     Trayectoria* trayectoria;
     Colisionable * colisionable;
     int contador;
+    int valorImpacto;
+    int valorDerribo;
 
 public:
     virtual ~AvionEnemigo();
@@ -51,6 +53,8 @@ public:
     DisparoEnemigo* disparar(float xObjetivo, float yObjetivo);
     virtual bool correspondeDisparar(float timestep) = 0;
     virtual vector<DisparoEnemigo*> disparar() = 0;
+    void setVidasEnUno();
+    virtual int estallar();
 };
 
 

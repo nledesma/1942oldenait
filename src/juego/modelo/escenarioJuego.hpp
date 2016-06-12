@@ -90,6 +90,7 @@ public:
     void actualizarEstado(float timeStep);
     void actualizarScrollingOffset(float timeStep);
     void moverAviones(float timestep);
+    bool moverAvionesAposicionFinal(float timeStep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
     void moverDisparosEnemigos(float timeStep);
@@ -122,6 +123,7 @@ public:
     void verificarColisiones();
     void proyectarDisparos(float timeStep);
     list<pair<int,int> > getPuntajes();
+    void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
 
 };
 

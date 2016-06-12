@@ -12,6 +12,8 @@ AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, floa
     this->trayectoria = trayectoria;
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_ESCUADRON);
     this->tipoAvion = TIPO_AVION_ESCUADRON;
+    this->valorImpacto = 100;
+    this->valorDerribo = 0;
 }
 
 AvionDeEscuadron::~AvionDeEscuadron(){
@@ -21,3 +23,8 @@ AvionDeEscuadron::~AvionDeEscuadron(){
 bool AvionDeEscuadron::correspondeDisparar(float timestep) { return true; }
 
 vector<DisparoEnemigo*> AvionDeEscuadron::disparar(){ vector<DisparoEnemigo*> disparos; return disparos; }
+
+int AvionDeEscuadron::estallar(){
+    colisionar();
+    return this->valorImpacto;
+}

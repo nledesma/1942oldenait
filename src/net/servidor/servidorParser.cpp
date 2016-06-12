@@ -32,7 +32,7 @@ bool ServidorParser::getCantidadClientes(XMLElement * pNodoServidor, int &nClien
 	if (!getInt(pNodoServidor, "cantidadMaximaDeClientes", nClientes))
 		return false;
 
-	if (nClientes < 1 || nClientes > 4) {
+	if (nClientes < 1 || nClientes > 6) {
 		Logger::instance()->logWarning("Cantidad de clientes no valida.");
 		return false;
 	}
@@ -167,9 +167,10 @@ bool ServidorParser::getEnemigo(XMLElement * pNodoElemento, string &tipo, int &c
 	return true;
 }
 
-bool ServidorParser::getPowerUp(XMLElement * pNodoElemento, string &tipo, int &cantidad, int &valor){
+bool ServidorParser::getPowerUp(XMLElement * pNodoElemento, string &tipo, float &posx, float &posy, int &valor){
 	if (!getString(pNodoElemento, "tipo", tipo)) tipo = "";
-	if (!getInt(pNodoElemento, "cantidad", cantidad)) return false;
+	if (!getFloat(pNodoElemento, "posx", posx)) posx = 0;
+	if (!getFloat(pNodoElemento, "posy", posy)) posy = 0;
 	if (!getInt(pNodoElemento, "valor", valor)) return false;
 	return true;
 }
@@ -177,7 +178,7 @@ bool ServidorParser::getPowerUp(XMLElement * pNodoElemento, string &tipo, int &c
 bool ServidorParser::agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa, int anchoFondo, int altoFondo, int longitudEtapa){
 
 	string tipo;
-	int cantidad = 0;
+	float posx = 0, posy = 0;
 	int valor = 0;
 	list <PowerUpParseado*> powerUpsParseados;
 	// Nodo power ups
@@ -189,9 +190,10 @@ bool ServidorParser::agregarPowerUps(Etapa * etapa, XMLElement* pNodoEtapa, int 
 
 	while( pNodoPowerUp != NULL ){
 		PowerUpParseado* unPowerUpParseado = new PowerUpParseado();
-		if (getPowerUp(pNodoPowerUp, tipo, cantidad, valor)) {
+		if (getPowerUp(pNodoPowerUp, tipo, posx, posy, valor)) {
 			unPowerUpParseado->setTipo(tipo);
-			unPowerUpParseado->setCantidad(cantidad);
+			unPowerUpParseado->setPosX(posx);
+			unPowerUpParseado->setPosY(posy);
 			unPowerUpParseado->setValor(valor);
 			powerUpsParseados.push_back(unPowerUpParseado);
 		}
@@ -253,6 +255,8 @@ bool ServidorParser::agregarEnemigos(Etapa * etapa, XMLElement* pNodoEtapa, int 
 bool ServidorParser::agregarElementos(Etapa * etapa, XMLElement* pNodoEtapa, int altoVentana){
 	string spriteIdElemento;
 	float posx, posy;
+
+	etapa->agregarElemento(50, altoVentana - etapa->getLongitud(), SPRITE_MOTHERSHIP);
 
 	// Nodo elementos
 	XMLElement * pNodoElementos = pNodoEtapa -> FirstChildElement("elementos");

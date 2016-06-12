@@ -13,6 +13,8 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_GRANDE);
     this->tipoAvion = TIPO_AVION_GRANDE;
     this->vidas = 10;
+    this->valorImpacto = 100;
+    this->valorDerribo = 1000;
 }
 
 AvionGrande::~AvionGrande(){
@@ -110,4 +112,9 @@ int AvionGrande::mover(float timeStep) {
     }
     pthread_mutex_unlock(&this->mutexMover);
     return sigueEnPantalla;
+}
+
+int AvionGrande::estallar(){
+    colisionar();
+    return this->valorDerribo;
 }

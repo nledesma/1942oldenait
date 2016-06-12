@@ -29,16 +29,21 @@ list <PowerUp*> FabricaPowerUps::fabricarPowerUps(list<PowerUpParseado*> powerUp
 
     for (list<PowerUpParseado*>::iterator itPowerUpsParseados = powerUpsParseados.begin(); itPowerUpsParseados != powerUpsParseados.end(); itPowerUpsParseados++) {
         int tipo = (*itPowerUpsParseados)->getTipo();
-        int cantidad = (*itPowerUpsParseados)->getCantidad();
+
+        float posicionX = (*itPowerUpsParseados)->getPosX();
+        if (posicionX == 0){
+            posicionX = generarPosicionX(anchoEscenario);
+        }
+
+        float posicionY = (*itPowerUpsParseados)->getPosY();
+        if (posicionY == 0){
+            posicionY = generarPosicionY(anchoEscenario);
+        }
+        posicionY = altoEscenario - posicionY;
+
         int valor = (*itPowerUpsParseados)->getValor();
 
-        cout << "se toma un elemento de tipo " << tipo << " y cantidad " << cantidad << endl;
-        for(int i = 0; i < cantidad; i++){
-          float posicionX = generarPosicionX( anchoEscenario);
-          float posicionY = generarPosicionY( longitudEscenario);
-          posicionY = altoEscenario - posicionY;
-
-          if (tipo == TIPO_POWERUP_BONIFICACION){
+        if (tipo == TIPO_POWERUP_BONIFICACION){
             generarPowerUpBonificacion(posicionX, posicionY, valor,listaPowerUps);
           } else if (tipo == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
             generarPowerUpDestruirEnemigos(posicionX, posicionY, valor, listaPowerUps);
@@ -47,7 +52,6 @@ list <PowerUp*> FabricaPowerUps::fabricarPowerUps(list<PowerUpParseado*> powerUp
           } else if (tipo == TIPO_POWERUP_AVIONES_SECUNDARIOS){
             generarPowerUpAvionesSecundarios(posicionX, posicionY, valor, listaPowerUps);
           }
-        }
     }
 
     return listaPowerUps;
