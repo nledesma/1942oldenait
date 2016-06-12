@@ -536,8 +536,10 @@ void EscenarioJuego::verificarColisiones(){
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
-                    (*itAviones)->colisionar();
-                    (*itEnemigos)->colisionar();
+                    if(!(*itEnemigos)->estaColisionando()){
+                        (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+                        (*itAviones)->colisionar();
+                    }
                 }
             }
         }

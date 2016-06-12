@@ -55,6 +55,7 @@ public:
     virtual vector<DisparoEnemigo*> disparar() = 0;
     void setVidasEnUno();
     virtual int estallar();
+    virtual bool estaColisionando();
 };
 
 

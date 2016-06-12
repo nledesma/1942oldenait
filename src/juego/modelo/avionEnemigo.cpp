@@ -144,3 +144,7 @@ int AvionEnemigo::estallar(){
     this->colisionar();
     return this->valorDerribo;
 }
+
+bool AvionEnemigo::estaColisionando(){
+    return (this->estadoAnimacion >= AVION_ENEMIGO_EXPLOSION_ETAPA_1);
+}

@@ -24,3 +24,4 @@ bool AvionDeEscuadron::correspondeDisparar(float timestep) { return true; }
 
 vector<DisparoEnemigo*> AvionDeEscuadron::disparar(){ vector<DisparoEnemigo*> disparos; return disparos; }
 
+

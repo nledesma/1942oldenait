@@ -50,6 +50,7 @@ public:
     int mover(float timeStep);
     vector<DisparoEnemigo*> disparar();
     int estallar();
+    bool estaColisionando();
 };
 
 #endif //INC_1942OLDENAIT_AVIONGRANDE_HPP
