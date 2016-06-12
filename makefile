@@ -39,12 +39,11 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	movimientoAvionGrandeEtapa2.o trayectoriaAvionGrande.o trayectoriaRandom.o powerUp.o \
 	powerUpParseado.o fabricaPowerUps.o powerUpBonificacion.o powerUpDosAmetralladoras.o \
 	powerUpDestruirEnemigos.o powerUpAvionesSecundarios.o punto.o superficie.o celda.o \
-	colisionable.o grilla.o trayectoriaIdaYvuelta.o trayectoriaRulo.o boton.o botonEnColaboracion.o \
-	botonJugar.o botonModoPractica.o botonPorEquipos.o botonSalir.o botonSiguiente.o \
-	menu.o menuDatosDeUsuario.o menuConexionManual.o menuConexionPuerto.o menuPrincipal.o menuConexiones.o texto.o \
-	textoDinamico.o radioButton.o listaDeSeleccion.o disparoEnemigo.o powerUpDestruirEnemigosVista.o \
-	powerUpVista.o powerUpBonificacionVista.o powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o \
-	disparoEnemigoVista.o espacioEntreEtapas.o
+	colisionable.o grilla.o trayectoriaIdaYvuelta.o trayectoriaRulo.o boton.o \
+	botonJugar.o botonSalir.o botonSiguiente.o menu.o menuDatosDeUsuario.o menuConexionManual.o \
+	menuConexionPuerto.o menuPrincipal.o menuConexiones.o texto.o textoDinamico.o radioButton.o listaDeSeleccion.o \
+	disparoEnemigo.o powerUpDestruirEnemigosVista.o powerUpVista.o powerUpBonificacionVista.o \
+	powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o disparoEnemigoVista.o espacioEntreEtapas.o
 
 
 DIR_OBJS = compilados

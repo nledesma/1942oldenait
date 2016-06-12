@@ -13,12 +13,10 @@ class MenuPrincipal: public Menu{
         Texto* texto;
     public:
         MenuPrincipal();
-        bool cargarBotones(Ventana* ventana);
+        void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
         BotonJugar* getBotonJugar();
         BotonSalir* getBotonSalir();
-        TTF_Font* getTextoUsuario();
-        Figura* getFiguraTextoUsuario();
         void cerrar();
 };
 
