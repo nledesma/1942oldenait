@@ -126,6 +126,7 @@
 #define TIPO_DISPARO_ENEMIGO 7
 
 /* Tipos de PowerUps */
+#define TIPO_POWERUP 13//Usado para el colisionable
 #define TIPO_POWERUP_BONIFICACION 8
 #define TIPO_POWERUP_DESTRUIR_ENEMIGOS 9
 #define TIPO_POWERUP_DOS_AMETRALLADORAS 10

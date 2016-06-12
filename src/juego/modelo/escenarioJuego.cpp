@@ -526,7 +526,7 @@ void EscenarioJuego::verificarColisiones(){
             }
         }
         if(enemigoAColisionar != NULL){
-            //enemigoAColisionar->colisionar();
+            enemigoAColisionar->colisionar();
             (*itDisparos)->colisionar();
         }
     }
@@ -536,8 +536,8 @@ void EscenarioJuego::verificarColisiones(){
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
-                    //(*itAviones)->colisionar();
-                    //(*itEnemigos)->colisionar();
+                    (*itAviones)->colisionar();
+                    (*itEnemigos)->colisionar();
                 }
             }
         }
@@ -548,8 +548,8 @@ void EscenarioJuego::verificarColisiones(){
             for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
                  itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
-                    //(*itAviones)->colisionar();
-                    //(*itDisparosEnemigos)->colisionar();
+                    (*itAviones)->colisionar();
+                    (*itDisparosEnemigos)->colisionar();
                 }
             }
         }

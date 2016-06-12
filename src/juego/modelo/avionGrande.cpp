@@ -97,7 +97,7 @@ int AvionGrande::mover(float timeStep) {
             || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
             sigueEnPantalla = 0;
         }
-        this->colisionable->mover(this->posX, this->posY, this->angulo);
+        this->colisionable->mover(this->posX, this->posY, this->angulo, TIPO_AVION_GRANDE);
     } else {
         if(this->contador > 0 ) {
             this->contador --;
