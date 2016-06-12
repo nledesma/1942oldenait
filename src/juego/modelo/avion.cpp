@@ -115,7 +115,7 @@ void Avion::mover(float timeStep){
         } else if ( this->posY + this->getAlto() > ALTO_ESCENARIO){
             this->posY = ALTO_ESCENARIO - this->getAlto();
         }
-        this->colisionable->mover(this->posX, this->posY, 0);
+        this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
     } else {
         if(this->estadoAnimacion != DESCONECTADO) {
             if(this->contador > 0) {
@@ -210,7 +210,7 @@ void Avion::volverEstadoInicial(){
     this->posY = this->posYInicial;
     this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
     this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
-    this->colisionable->mover(this->posX, this->posY, 0);
+    this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
     if (this->estadoAnimacion != DESCONECTADO)
         this->estadoAnimacion = ESTADO_NORMAL;
 }

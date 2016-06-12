@@ -32,7 +32,7 @@ int Disparo::mover(float timeStep){
         } else {
             retorno = 1;
         }
-        this->colisionable->mover(this->posX, this->posY, 0);
+        this->colisionable->mover(this->posX, this->posY, 0, TIPO_DISPARO_AVION);
     }
     else {
         if(this->alturaDeMuerte != -1 && this->posY <= this->alturaDeMuerte ){

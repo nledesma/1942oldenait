@@ -362,7 +362,17 @@ void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
 void EscenarioJuego::moverEnemigos(float timeStep) {
     if (this->enemigos.size() > 0) {
         for (list<AvionEnemigo *>::iterator iterador = enemigos.begin(); iterador != enemigos.end(); iterador++) {
-            if ((*iterador)->mover(timeStep) == 0) {
+//            cout << "Puntos Enemigo:" << endl;
+//            cout << (*iterador)->getPosicionX() << " " << (*iterador)->getPosicionY() << " " << (*iterador)->getAngulo() << endl << endl;
+//            cout << "Puntos colisionable:" << endl;
+//            cout << (*iterador)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosY() << endl << endl;
+//            for(int i = 0; i < (*iterador)->getColisionable()->getSuperficiesSecundarias().size(); i++){
+//                cout << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getDerAbajo()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getDerAbajo()->getPosY() << endl;
+//                cout << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getIzqArriba()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getIzqArriba()->getPosY() << endl;
+//                cout << endl;
+//            }
+//            cout << endl << endl << endl;
+             if ((*iterador)->mover(timeStep) == 0) {
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaEnemigos);
                 iterador = enemigos.erase(iterador);
