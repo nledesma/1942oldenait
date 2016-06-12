@@ -203,13 +203,15 @@ Disparo* Avion::disparar(){
     return new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos);
 }
 
-void Avion::volverEstadoInicial(){
+void Avion::volverEstadoInicial(bool inmunidad){
     this->velocidadX = 0;
     this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
-    this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
-    this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
+    if (inmunidad){
+        this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
+        this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
+    }
     this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
     if (this->estadoAnimacion != DESCONECTADO)
         this->estadoAnimacion = ESTADO_NORMAL;
