@@ -74,7 +74,7 @@ public:
 
     int getAltoDisparo();
 
-    void volverEstadoInicial();
+    void volverEstadoInicial(bool inmunidad = true);
 
     string getIdSprite();
 

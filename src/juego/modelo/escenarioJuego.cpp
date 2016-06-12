@@ -202,10 +202,23 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         this->moverDisparos(timeStep);
         bool avionesEstacionados = this->moverAvionesAposicionFinal(timeStep);
         if (avionesEstacionados){
-            this->enemigos.empty();
+            pthread_mutex_lock(&this->mutexListaEnemigos);
+            this->enemigos.clear();
+            pthread_mutex_unlock(&this->mutexListaEnemigos);
+            pthread_mutex_lock(&this->mutexListaDisparos);
+            this->disparos.clear();
+            pthread_mutex_unlock(&this->mutexListaDisparos);
+            pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+            this->disparosEnemigos.clear();
+            pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+            while (!this->colaEventos.vacia()) {
+                this->colaEventos.pop();
+            }
+            timeStep = 0;
+            temporizador.detener();
             this->avanzarEtapa();
             for (list<Avion *>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++) {
-                (*itAviones)->volverEstadoInicial();
+                (*itAviones)->volverEstadoInicial(false);
             }
         }
     }
