@@ -108,18 +108,20 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
-    Disparo * disparo;
+    vector<Disparo *> disparo;
     switch (evento) {
         case PRESIONA_R:
             reset();
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
-            if (disparo != NULL) {
-                disparo->setAvion(nroAvion);
-                pthread_mutex_lock(&this->mutexListaDisparos);
-                disparos.push_back(disparo);
-                pthread_mutex_unlock(&this->mutexListaDisparos);
+            if (!disparo.empty()) {
+                for (int i = 0; i < disparo.size(); i++) {
+                    disparo[i]->setAvion(nroAvion);
+                    pthread_mutex_lock(&this->mutexListaDisparos);
+                    disparos.push_back(disparo[i]);
+                    pthread_mutex_unlock(&this->mutexListaDisparos);
+                }
             }
             break;
         case PRESIONA_L:
@@ -621,7 +623,7 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
         avion->sumarPuntos(sumaPuntaje);
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DOS_AMETRALLADORAS){
-
+        avion->setPowerUpAmetralladoras();
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
 

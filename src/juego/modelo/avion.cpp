@@ -21,6 +21,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->puntaje = 0;
     this->vidas = 5;
     this->numeroAvion = numeroAvion;
+    this->estadoPowerUP = ESTADO_SIN_POWER_UP;
 }
 
 Avion::~Avion(){
@@ -196,13 +197,20 @@ int Avion::getEstadoAnimacion(){
     return estado;
 }
 
-Disparo* Avion::disparar(){
+vector<Disparo*> Avion::disparar(){
     // Por ahora sale con la misma velocidad y posición que el avión.
+    vector<Disparo*> disparos;
     if (estadoAnimacion > LOOP_ETAPA_1 || this->contadorTiempoInmunidad > 0) {
-        return NULL;
+        return disparos;
     }
     this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
-    return new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos);
+    if (this->estadoPowerUP == ESTADO_SIN_POWER_UP){
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos));
+    } else {
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10, this->getPosicionY(), velocidadDisparos));
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10, this->getPosicionY(), velocidadDisparos));
+    }
+    return disparos;
 }
 
 void Avion::volverEstadoInicial(bool inmunidad){
@@ -210,6 +218,7 @@ void Avion::volverEstadoInicial(bool inmunidad){
     this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
+    this->estadoPowerUP = ESTADO_SIN_POWER_UP;
     if (inmunidad){
         this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
         this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
@@ -330,6 +339,10 @@ bool Avion::moverAPosicionFinal(float timeStep) {
     }
     pthread_mutex_unlock(&this->mutexMover);
     return resultado;
+}
+
+void Avion::setPowerUpAmetralladoras() {
+    this->estadoPowerUP = ESTADO_POWER_UP_DISPARO_DOBLE;
 }
 
 
