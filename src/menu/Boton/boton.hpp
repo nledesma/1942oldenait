@@ -2,11 +2,12 @@
 #define BOTON_H
 #include "../../juego/vista/figura.hpp"
 
+#define BOTON_APRETADO 1
 class Boton{
 	protected:
-		SDL_Point mPosition;
-		Figura* gButtonSpriteSheetTexture;
-		virtual int handleEvent(SDL_Event* e) = 0;
+		SDL_Point posicion;
+		Figura* figuraBoton;
+		virtual int manejarEvento(SDL_Event* e) = 0;
 		virtual void render(SDL_Renderer* renderer) = 0;
 		virtual void setSprites(SDL_Renderer* renderer) = 0;
 	public:
@@ -16,7 +17,6 @@ class Boton{
 		Boton();
 		int getPosicionX();
 		int getPosicionY();
-		//Sets top left position
 		void setPosition(int x, int y);
 		Figura* getFigura();
 };

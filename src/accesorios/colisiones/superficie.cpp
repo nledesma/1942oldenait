@@ -50,12 +50,14 @@ int Superficie::getOffsetY() {
     return this->offSetY;
 }
 
-void Superficie::rotar(float angulo, float x, float y){
-    if (angulo > 0) {
-        this->izqAbajo->rotar(angulo, x, y);
-        this->izqArriba->rotar(angulo, x, y);
-        this->derArriba->rotar(angulo, x, y);
-        this->derAbajo->rotar(angulo, x, y);
+void Superficie::rotar(float angulo, float x, float y, int tipoElemento){
+    if(tipoElemento == TIPO_AVION_PEQUENIO || tipoElemento == TIPO_AVION_ESCUADRON || tipoElemento == TIPO_AVION_MEDIANO ){
+        if (angulo > 0) {
+            this->izqAbajo->rotar(angulo, x, y);
+            this->izqArriba->rotar(angulo, x, y);
+            this->derArriba->rotar(angulo, x, y);
+            this->derAbajo->rotar(angulo, x, y);
+        }
     }
 }
 

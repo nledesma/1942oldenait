@@ -16,7 +16,7 @@ private:
     float posY;
     string pathSprite;
     int estadoAnimacion;
-    SDL_Rect clipsAnimacion[31];
+    SDL_Rect clipsAnimacion[32];
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     Figura *figura;
     void iniciarAvion(float poX, float posY, string pathSprite);

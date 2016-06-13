@@ -6,14 +6,12 @@ MenuPrincipal::MenuPrincipal(){
      this->fondo = new Figura();
 }
 
-bool MenuPrincipal::cargarBotones(Ventana* ventana){
-    bool success = true;
+void MenuPrincipal::cargarBotones(Ventana* ventana){
     if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
     if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/jugarSprite" ))){
         cout << "Failed to load button sprite texture!" << endl;
-        success = false;
     } else {
         //Set sprites
         this->getBotonJugar()->setSprites(ventana->getVentanaRenderer());
@@ -24,7 +22,6 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
 
     if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/salirSprite"))){
 		cout << "Failed to load button sprite texture!" << endl;
-		success = false;
     } else {
         //Set sprites
         this->getBotonSalir()->setSprites(ventana->getVentanaRenderer());
@@ -34,8 +31,6 @@ bool MenuPrincipal::cargarBotones(Ventana* ventana){
     SDL_Color color = { 255, 232, 32 };
     this->texto = new Texto(50, color, STAR_WARS_FONT, ventana);
     this->texto->cargarFuente("1942 OLDENAIT");
-
-    return success;
 }
 
 void MenuPrincipal::renderizar(Ventana* ventana){

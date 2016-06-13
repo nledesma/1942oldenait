@@ -11,6 +11,8 @@
 #define AZUL 2
 #define ROJO 3
 #define VERDE 4
+#define AMARILLO 5
+#define VIOLETA 6
 /* Colores */
 
 #define JUGADOR_1 BASE
@@ -33,6 +35,7 @@
 #define PRESIONA_ENTER 10
 #define PRESIONA_R 11
 #define PRESIONA_X 12
+#define PRESIONA_L 13
 
 /* Dimensiones */
 
@@ -99,7 +102,8 @@
 #define EXPLOSION_ETAPA_8 28
 #define EXPLOSION_ETAPA_9 29
 #define EXPLOSION_ETAPA_10 30
-#define INTERMITENCIA 31
+#define ESTACIONADO 31
+#define INTERMITENCIA 32
 
 #define OFFSET_ESTADO_DISPARO 50
 #define OFFSET_ESTADO_LOOP 100
@@ -123,6 +127,7 @@
 #define TIPO_DISPARO_ENEMIGO 7
 
 /* Tipos de PowerUps */
+#define TIPO_POWERUP 13//Usado para el colisionable
 #define TIPO_POWERUP_BONIFICACION 8
 #define TIPO_POWERUP_DESTRUIR_ENEMIGOS 9
 #define TIPO_POWERUP_DOS_AMETRALLADORAS 10

@@ -12,7 +12,7 @@ class MenuConexiones: public Menu{
         ListaDeSeleccion* lista;
     public:
         MenuConexiones(Ventana* ventana);
-        bool cargarBotones(Ventana* ventana);
+        void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
         BotonSiguiente* getBotonSiguiente();
         ListaDeSeleccion* &getListaDeSeleccion();

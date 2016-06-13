@@ -43,7 +43,7 @@ public:
     float getAngulo();
     void setAngulo(float angulo);
     bool colisiona(Colisionable * colisionable);
-    void mover(float posX, float posY, float angulo);
+    void mover(float posX, float posY, float angulo, int tipoElemento);
     void proyectarColisionable(float timeStep);
     Superficie * getSuperficiePrincipal();
     vector<Superficie*> getSuperficiesSecundarias();

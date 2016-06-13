@@ -199,20 +199,21 @@ void Cliente::entreEtapas() {
 		this->cerrar();
 	} else {
 		// Esto se elimina en el hilo creado más abajo, que espera al mensaje del servidor.
-		EspacioEntreEtapas * e = new EspacioEntreEtapas(ventana, mensaje);
+		EspacioEntreEtapas e(ventana, mensaje);
 
 		ArgsEsperarEntreEtapas args;
 		args.cliente = this;
-		args.espacioEntreEtapas = e;
+		args.espacioEntreEtapas = &e;
 		args.evento = FIN_ENTRE_ETAPAS;
 
 		pthread_t esperar_id;
 		pthread_create(&esperar_id, NULL, esperarEvento_th, (void*) &args);
 
 		// Render entre etapas.
-		if (e->renderLoop() != CONTINUAR) {
+		if (e.renderLoop() != CONTINUAR) {
 			this->cerrar();
 		}
+		pthread_join(esperar_id, NULL);
 	}
 	Logger::instance()->logInfo("Saliendo del espacio entre etapas");
 }
@@ -237,7 +238,6 @@ void* Cliente::esperarEvento_th(void* argsVoid) {
 	ArgsEsperarEntreEtapas * args = (ArgsEsperarEntreEtapas*) argsVoid;
 	args->cliente->esperarEvento(args->evento);
 	args->espacioEntreEtapas->finalizar();
-	delete args->espacioEntreEtapas;
 	pthread_exit(NULL);
 }
 

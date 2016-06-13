@@ -33,16 +33,20 @@ private:
     int contador;
     float posXInicial;
     float posYInicial;
+    float posXFinal;
+    float posYFinal;
     int puntaje;
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexVidas = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPuntaje = PTHREAD_MUTEX_INITIALIZER;
     Colisionable* colisionable;
     int vidas;
+    int numeroAvion;
 
 public:
-    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, float posXFinal = 0, float posYFinal = 0);
 
     ~Avion();
 
@@ -72,7 +76,7 @@ public:
 
     int getAltoDisparo();
 
-    void volverEstadoInicial();
+    void volverEstadoInicial(bool inmunidad = true);
 
     string getIdSprite();
 
@@ -101,6 +105,11 @@ public:
     void disminuirTiempoInmunidad(float timestep);
 
     float getContadorTiempoInmunidad();
+
+    bool moverAPosicionFinal(float timestep);
+
+    int getNumeroAvion();
+
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

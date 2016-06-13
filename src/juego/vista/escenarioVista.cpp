@@ -290,6 +290,9 @@ void EscenarioVista::pushEvento(SDL_Event evento){
             case SDLK_m:
                 this->soundBoard->toggleMusica();
                 break;
+            case SDLK_l:
+                this->colaEventos.push((int)PRESIONA_L);
+                break;
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
         switch( evento.key.keysym.sym )

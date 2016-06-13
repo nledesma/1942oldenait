@@ -65,13 +65,18 @@ private:
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     Grilla * grilla;
+    //La clave es el numrero del escuadron, el par es de avion que va matando al escuadron y la cantidad de aviones
+    //que ya mató, si el numero de avion es -1, significa que varios aviones mataron a los aviones de ese escuadron y
+    //la bonificación no corresponde, horrible, ya se.
+    map<int, pair<int, int>> infoEscuadrones;
+    bool modoPractica;
 
 public:
     void subirPuntaje(int puntos, int nroAvion);
     void reset();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite, int modo);
     ~EscenarioJuego();
-    void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos);
+    void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion);
     void agregarEnemigo(AvionEnemigo* enemigo);
     /* Etapas */
     void agregarEtapa(Etapa * etapa);
@@ -91,6 +96,7 @@ public:
     void actualizarEstado(float timeStep);
     void actualizarScrollingOffset(float timeStep);
     void moverAviones(float timestep);
+    bool moverAvionesAposicionFinal(float timeStep);
     void moverElementos(float timestep);
     void moverDisparos(float timeStep);
     void moverDisparosEnemigos(float timeStep);
@@ -124,6 +130,9 @@ public:
     void verificarColisiones();
     void proyectarDisparos(float timeStep);
     list<pair<int,int> > getPuntajes();
+    void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
+    int validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion);
+    void iniciarModoPractica();
 
 };
 

@@ -76,7 +76,7 @@ void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexio
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta = menuConexionPuerto->getBotonSiguiente()[0].handleEvent(&e);
+			int respuesta = menuConexionPuerto->getBotonSiguiente()[0].manejarEvento(&e);
 			if(respuesta == 1){
 				menu->cerrar();
 
@@ -113,7 +113,7 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta = menuConexionManual->getBotonSiguiente()[0].handleEvent(&e);
+			int respuesta = menuConexionManual->getBotonSiguiente()[0].manejarEvento(&e);
 			if(respuesta == 1){
 				menuConexiones->cerrar();
                 cargarMenuPuerto(textoDinamicoIP->getTexto(), cliente, ventana, menuConexionManual);
@@ -168,7 +168,7 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
 			} else if(e.type == SDL_MOUSEBUTTONDOWN){
                 SDL_GetMouseState( &x, &y );
                 menuConexiones->getListaDeSeleccion()->clickEn(x, y);
-                int respuesta = menuConexiones->getBotonSiguiente()[0].handleEvent(&e);
+                int respuesta = menuConexiones->getBotonSiguiente()[0].manejarEvento(&e);
                 if(respuesta == 1){
                     int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();
                     levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
@@ -194,7 +194,7 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta = menuDatosDeUsuario->getBotonSiguiente()[0].handleEvent(&e);
+			int respuesta = menuDatosDeUsuario->getBotonSiguiente()[0].manejarEvento(&e);
 			if(respuesta == 1){
 				menuDatosDeUsuario->cerrar();
 				cargarMenuConexiones(cliente, ventana, menuConexiones);
@@ -228,7 +228,7 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
 			if(e.type == SDL_QUIT) {
 				quit = true;
 			}
-			int respuesta = menuPrincipal->getBotonJugar()[0].handleEvent(&e);
+			int respuesta = menuPrincipal->getBotonJugar()[0].manejarEvento(&e);
 			if(respuesta == 1) {
 				menuPrincipal->cerrar();
 				//Arranca el menu de datos del usuario.
@@ -238,7 +238,7 @@ void menuPrincipal(Cliente * cliente, Ventana* ventana) {
                 menuDatosDeUsuario->cerrar();
                 menuPrincipal->cerrar();
 			}
-			int respuestaSalir = menuPrincipal->getBotonSalir()[0].handleEvent(&e);
+			int respuestaSalir = menuPrincipal->getBotonSalir()[0].manejarEvento(&e);
 			if(respuestaSalir == 1) {
 				menuPrincipal->cerrar();
 				ventana->cerrar();

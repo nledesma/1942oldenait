@@ -32,7 +32,7 @@ bool ServidorParser::getCantidadClientes(XMLElement * pNodoServidor, int &nClien
 	if (!getInt(pNodoServidor, "cantidadMaximaDeClientes", nClientes))
 		return false;
 
-	if (nClientes < 1 || nClientes > 4) {
+	if (nClientes < 1 || nClientes > 6) {
 		Logger::instance()->logWarning("Cantidad de clientes no valida.");
 		return false;
 	}
@@ -256,6 +256,8 @@ bool ServidorParser::agregarElementos(Etapa * etapa, XMLElement* pNodoEtapa, int
 	string spriteIdElemento;
 	float posx, posy;
 
+	etapa->agregarElemento(50, altoVentana - etapa->getLongitud(), SPRITE_MOTHERSHIP);
+
 	// Nodo elementos
 	XMLElement * pNodoElementos = pNodoEtapa -> FirstChildElement("elementos");
 	if (!pNodoElementos) return false;
@@ -295,7 +297,7 @@ bool ServidorParser::agregarAviones(Servidor* servidor, XMLNode * pNodoConfigura
 	for (int i = 1; i <= cantidadDeClientes; i++){
 		servidor->getEscenario()->agregarAvion(velocidadDesplazamiento,
 			velocidadDisparos + velocidadDesplazamiento,
-			avionSpriteId, disparosSpriteId);
+			avionSpriteId, disparosSpriteId, i);
 	}
 	return true;
 }

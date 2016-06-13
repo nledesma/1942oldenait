@@ -13,6 +13,8 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_GRANDE);
     this->tipoAvion = TIPO_AVION_GRANDE;
     this->vidas = 10;
+    this->valorImpacto = 100;
+    this->valorDerribo = 1000;
 }
 
 AvionGrande::~AvionGrande(){
@@ -95,7 +97,7 @@ int AvionGrande::mover(float timeStep) {
             || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
             sigueEnPantalla = 0;
         }
-        this->colisionable->mover(this->posX, this->posY, this->angulo);
+        this->colisionable->mover(this->posX, this->posY, this->angulo, TIPO_AVION_GRANDE);
     } else {
         if(this->contador > 0 ) {
             this->contador --;
@@ -110,4 +112,18 @@ int AvionGrande::mover(float timeStep) {
     }
     pthread_mutex_unlock(&this->mutexMover);
     return sigueEnPantalla;
+}
+
+
+int AvionGrande::estallar(){
+    this->colisionar();
+    if(this->estadoAnimacion < AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1){
+        return this->valorImpacto;
+    } else {
+        return this->valorDerribo;
+    }
+}
+
+bool AvionGrande::estaColisionando(){
+    return (this->estadoAnimacion >= AVION_ENEMIGO_GRANDE_EXPLOSION_ETAPA_1);
 }

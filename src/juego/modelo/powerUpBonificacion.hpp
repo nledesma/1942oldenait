@@ -18,6 +18,7 @@ public:
         ~PowerUpBonificacion();
 		void colisionar();
 		void animar(float timeStep);
+		void aplicarPowerUp();
 };
 
 #endif //INC_1942OLDENAIT_POWERUPBONIFICACION_HPP

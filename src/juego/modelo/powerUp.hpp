@@ -30,7 +30,7 @@ protected:
 
 public:
     virtual ~PowerUp();
-    //virtual void aplicarPowerUp() = 0;
+    virtual void aplicarPowerUp();
     Colisionable* getColisionable();
     void colisionar();
     virtual float getPosicionX();

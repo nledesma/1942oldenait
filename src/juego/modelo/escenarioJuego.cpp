@@ -12,6 +12,8 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->altoVentana = altoVentana;
     this->grilla = new Grilla(12, 12);
     this->nroEtapaActual = 0; // La 0 es la primera.
+    this->modoPractica = false;
+
     // Inicio el vector de equipos.
     set<int> equipo1;
     equipos.push_back(equipo1);
@@ -59,9 +61,37 @@ float EscenarioJuego::getScrollingOffset() {
 }
 
 void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, string idSprite,
-                                  string idSpriteDisparos) {
+                                  string idSpriteDisparos, int numeroAvion) {
     float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
-    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos);
+    float posXFinal;
+    float posYFinal;
+    switch ((int)aviones.size()){
+        case 0:
+            posXFinal = 250;
+            posYFinal = 190;
+            break;
+        case 1:
+            posXFinal = 450;
+            posYFinal = 190;
+            break;
+        case 2:
+            posXFinal = 250;
+            posYFinal = 350;
+            break;
+        case 3:
+            posXFinal = 450;
+            posYFinal = 350;
+            break;
+        case 4:
+            posXFinal = 210;
+            posYFinal = 300;
+            break;
+        case 5:
+            posXFinal = 490;
+            posYFinal = 300;
+            break;
+    }
+    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, numeroAvion, posXFinal, posYFinal);
     this->aviones.push_back(avion);
     // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
     equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
@@ -92,6 +122,9 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
                 pthread_mutex_unlock(&this->mutexListaDisparos);
             }
             break;
+        case PRESIONA_L:
+            this->modoPractica = !this->modoPractica;
+            break;
             // TODO x para la partida para todos?
         default:
             avion(nroAvion)->manejarEvento(evento);
@@ -113,6 +146,7 @@ void EscenarioJuego::comenzarEtapa() {
     scrollingOffset = 0;
     posicionY = 0;
     disparos.clear();
+    this->infoEscuadrones.clear();
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
     cout << "Se agrego a la etapa actual una lista de tamaño " << powerUps.size() << endl;
@@ -132,10 +166,6 @@ void EscenarioJuego::getProximoEnemigo() {
 void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_lock(&this->mutexScroll);
     scrollingOffset = scrollingOffset + timeStep * velocidadDesplazamientoY;
-    if(posicionY >= getLongitud()){
-        // Se termina una etapa y se pasa a la siguiente.
-        this->avanzarEtapa();
-    }
     if (scrollingOffset > alto){
         scrollingOffset = 0;
     }
@@ -159,19 +189,48 @@ void EscenarioJuego::mainLoop() {
 }
 
 void EscenarioJuego::actualizarEstado(float timeStep) {
-    this->actualizarScrollingOffset(timeStep);
-    this->sortearDisparosEnemigos(timeStep);
-    this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
-    this->moverAviones(timeStep);
-    this->moverElementos(timeStep);
-    this->moverEnemigos(timeStep);
-    this->moverPowerUps(timeStep);
-    this->proyectarDisparos(timeStep);
-    this->moverDisparosEnemigos(timeStep);
-    this->verificarColisiones();
-    this->moverDisparos(timeStep);
-    this->manejarProximoEvento();
-    this->getProximoEnemigo();
+    if (this->posicionY < this->etapaActual()->getLongitud() - 800) {
+        this->actualizarScrollingOffset(timeStep);
+        if(!this->modoPractica){
+            this->sortearDisparosEnemigos(timeStep);
+        }
+        this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
+        this->moverAviones(timeStep);
+        this->moverElementos(timeStep);
+        this->moverEnemigos(timeStep);
+        this->moverPowerUps(timeStep);
+        this->proyectarDisparos(timeStep);
+        this->moverDisparosEnemigos(timeStep);
+        this->verificarColisiones();
+        this->moverDisparos(timeStep);
+        this->manejarProximoEvento();
+        this->getProximoEnemigo();
+    } else {
+        this->moverEnemigos(timeStep);
+        this->moverDisparosEnemigos(timeStep);
+        this->moverDisparos(timeStep);
+        bool avionesEstacionados = this->moverAvionesAposicionFinal(timeStep);
+        if (avionesEstacionados){
+            pthread_mutex_lock(&this->mutexListaEnemigos);
+            this->enemigos.clear();
+            pthread_mutex_unlock(&this->mutexListaEnemigos);
+            pthread_mutex_lock(&this->mutexListaDisparos);
+            this->disparos.clear();
+            pthread_mutex_unlock(&this->mutexListaDisparos);
+            pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+            this->disparosEnemigos.clear();
+            pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+            while (!this->colaEventos.vacia()) {
+                this->colaEventos.pop();
+            }
+            timeStep = 0;
+            temporizador.detener();
+            this->avanzarEtapa();
+            for (list<Avion *>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++) {
+                (*itAviones)->volverEstadoInicial(false);
+            }
+        }
+    }
 }
 
 void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
@@ -256,6 +315,18 @@ void EscenarioJuego::moverAviones(float timeStep) {
     }
 }
 
+bool EscenarioJuego::moverAvionesAposicionFinal(float timeStep) {
+    bool resultado = true;
+    for (list<Avion *>::iterator iterador = this->getAviones().begin();
+         iterador != this->getAviones().end(); ++iterador) {
+        Avion *avion = *iterador;
+        if (!avion->moverAPosicionFinal(timeStep)){
+            resultado = false;
+        }
+    }
+    return resultado;
+}
+
 void EscenarioJuego::moverElementos(float timeStep) {
     for (list<Elemento *>::iterator iterador = this->getElementos().begin();
          iterador != this->getElementos().end(); ++iterador) {
@@ -268,9 +339,9 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     if (this->disparos.size() > 0) {
         for (list<Disparo *>::iterator iterador = disparos.begin(); iterador != disparos.end(); iterador++) {
             if ((*iterador)->mover(timeStep) == 0) {
-                // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
-                subirPuntaje(1, (*iterador)->getNroAvion());
-                // Se borra el disparo.
+//                // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
+//                subirPuntaje(1, (*iterador)->getNroAvion());
+//                // Se borra el disparo.
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaDisparos);
                 iterador = disparos.erase(iterador);
@@ -302,7 +373,7 @@ void EscenarioJuego::moverPowerUps(float timeStep) {
             pthread_mutex_lock(&this->mutexPowerUps);
             iterador = powerUps.erase(iterador);
             pthread_mutex_unlock(&this->mutexPowerUps);
-        };
+        }
     }
 }
 
@@ -313,7 +384,17 @@ void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
 void EscenarioJuego::moverEnemigos(float timeStep) {
     if (this->enemigos.size() > 0) {
         for (list<AvionEnemigo *>::iterator iterador = enemigos.begin(); iterador != enemigos.end(); iterador++) {
-            if ((*iterador)->mover(timeStep) == 0) {
+//            cout << "Puntos Enemigo:" << endl;
+//            cout << (*iterador)->getPosicionX() << " " << (*iterador)->getPosicionY() << " " << (*iterador)->getAngulo() << endl << endl;
+//            cout << "Puntos colisionable:" << endl;
+//            cout << (*iterador)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosY() << endl << endl;
+//            for(int i = 0; i < (*iterador)->getColisionable()->getSuperficiesSecundarias().size(); i++){
+//                cout << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getDerAbajo()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getDerAbajo()->getPosY() << endl;
+//                cout << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getIzqArriba()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getIzqArriba()->getPosY() << endl;
+//                cout << endl;
+//            }
+//            cout << endl << endl << endl;
+             if ((*iterador)->mover(timeStep) == 0) {
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaEnemigos);
                 iterador = enemigos.erase(iterador);
@@ -466,26 +547,38 @@ void EscenarioJuego::verificarColisiones(){
                 }
             }
         }
-        if(enemigoAColisionar != NULL){
-            enemigoAColisionar->colisionar();
-            (*itDisparos)->colisionar();
+        if(enemigoAColisionar != NULL && (!enemigoAColisionar->estaColisionando())){
+            if(enemigoAColisionar->getTipoAvion() != TIPO_AVION_ESCUADRON){
+                subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
+                (*itDisparos)->colisionar();
+            } else {
+                subirPuntaje(enemigoAColisionar->estallar() + this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion()), (*itDisparos)->getNroAvion());
+                (*itDisparos)->colisionar();
+            }
         }
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
-                    (*itAviones)->colisionar();
-                    (*itEnemigos)->colisionar();
+                    if(!(*itEnemigos)->estaColisionando()){
+                           if((*itEnemigos)->getTipoAvion() == TIPO_AVION_ESCUADRON){
+                               (*itAviones)->sumarPuntos((*itEnemigos)->estallar() + this->validarBonificacionEscuadron((*itEnemigos), (*itAviones)->getNumeroAvion()));
+                               (*itAviones)->colisionar();
+                           }
+                            (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+                            (*itAviones)->colisionar();
+
+                    }
                 }
             }
         }
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
             for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
                  itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
@@ -496,14 +589,42 @@ void EscenarioJuego::verificarColisiones(){
         }
     }
 
+    int nroAvion = 1;
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
         if ((*itAviones)->getContadorTiempoInmunidad() == 0){
             for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
                 if((*itAviones)->getColisionable()->colisiona((*itPowerUps)->getColisionable())){
-                    (*itPowerUps)->colisionar();
+                    if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
+                        (*itPowerUps)->colisionar();
+                        aplicarPowerUp(*itPowerUps,*itAviones);
+                    }
                 }
             }
         }
+        nroAvion++;
+    }
+}
+
+void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
+    if((powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION)||(powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION_1500)){
+        int valorBonus = powerUp->getValor();
+        cout << "VALOR BONUS: " << valorBonus << endl;
+        avion->sumarPuntos(valorBonus);
+    }
+    if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
+        list<AvionEnemigo*> listaEnemigos = this->getEnemigos();
+        int sumaPuntaje = 0;
+        for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin(); itEnemigos != this->enemigos.end(); itEnemigos++) {
+            (*itEnemigos)->setVidasEnUno();
+            sumaPuntaje += (*itEnemigos)->estallar();
+        }
+        avion->sumarPuntos(sumaPuntaje);
+    }
+    if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DOS_AMETRALLADORAS){
+
+    }
+    if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
+
     }
 }
 
@@ -530,4 +651,37 @@ list< pair<int,int> > EscenarioJuego::getPuntajes() {
 
 int EscenarioJuego::getNroEtapa() {
     return nroEtapaActual;
+}
+
+int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion) {
+    AvionDeEscuadron * avionDeEscuadron = dynamic_cast<AvionDeEscuadron*>(avionEnemigo);
+    if( this->infoEscuadrones.find(avionDeEscuadron->getNumeroEscuadron()) == this->infoEscuadrones.end()) {
+        pair<int, int> parAvionEscuadron;
+        parAvionEscuadron.first = nroAvion;
+        parAvionEscuadron.second = 1;
+        this->infoEscuadrones.insert(make_pair(avionDeEscuadron->getNumeroEscuadron(),parAvionEscuadron));
+        return 0;
+    } else {
+        map<int, pair<int, int>>::iterator infoEscuadron = this->infoEscuadrones.find(avionDeEscuadron->getNumeroEscuadron());
+        if((*infoEscuadron).second.first == -1){
+            return 0;
+        }
+        if((*infoEscuadron).second.first != nroAvion){
+            (*infoEscuadron).second.first = -1;
+            return 0;
+        } else { ;
+            (*infoEscuadron).second.second++;;
+            if((*infoEscuadron).second.second == 5){
+                this->infoEscuadrones.erase(infoEscuadron);
+                return 1000;
+            } else {
+                return 0;
+            }
+        }
+
+    }
+}
+
+void EscenarioJuego::iniciarModoPractica() {
+    this->modoPractica = true;
 }

@@ -87,6 +87,12 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
                 case VERDE:
                     SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_VERDE_R, (Uint8) COLOR_VERDE_G, (Uint8) COLOR_VERDE_B );
                     break;
+                case AMARILLO:
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_AMARILLO_R, (Uint8)COLOR_AMARILLO_G, (Uint8)COLOR_AMARILLO_B );
+                    break;
+                case VIOLETA:
+                    SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_VIOLETA_R, (Uint8) COLOR_VIOLETA_G, (Uint8) COLOR_VIOLETA_B );
+                    break;
                 default:
                     SDL_SetTextureColorMod( nuevaTextura, (Uint8) COLOR_BASE_R, (Uint8) COLOR_BASE_G, (Uint8) COLOR_BASE_B );
             }

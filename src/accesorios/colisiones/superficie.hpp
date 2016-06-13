@@ -3,6 +3,7 @@
 
 #include "../trigonomaster.hpp"
 #include "punto.hpp"
+#include "../codigo.hpp"
 
 class Superficie{
 private:
@@ -19,7 +20,7 @@ public:
     Superficie(float posX, float posY, int ancho, int alto, int offSetX, int offSetY);
     void mover(float x, float y);
     bool colisiona(Superficie * superficie);
-    void rotar(float angulo, float x, float y);
+    void rotar(float angulo, float x, float y, int tipoElemento);
     Punto* getIzqAbajo();
     Punto* getIzqArriba();
     Punto* getDerArriba();

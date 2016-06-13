@@ -87,7 +87,7 @@ int AvionEnemigo::mover(float timeStep) {
             || this->posY > ALTO_ESCENARIO || this->posY < - this->getAlto()){
             sigueEnPantalla = 0;
         }
-        this->colisionable->mover(this->posX, this->posY, this->angulo);
+        this->colisionable->mover(this->posX, this->posY, this->angulo, this->tipoAvion);
     } else {
         if(this->contador > 0 ) {
             this->contador --;
@@ -134,4 +134,17 @@ DisparoEnemigo* AvionEnemigo::disparar(float xObjetivo, float yObjetivo){
     }
 
     return disparo;
+}
+
+void AvionEnemigo::setVidasEnUno(){
+    this->vidas = 1;
+}
+
+int AvionEnemigo::estallar(){
+    this->colisionar();
+    return this->valorDerribo;
+}
+
+bool AvionEnemigo::estaColisionando(){
+    return (this->estadoAnimacion >= AVION_ENEMIGO_EXPLOSION_ETAPA_1);
 }

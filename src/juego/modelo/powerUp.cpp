@@ -4,9 +4,9 @@ PowerUp::~PowerUp(){
 
 }
 
-/*
+
 void PowerUp::aplicarPowerUp(){}
-*/
+
 Colisionable* PowerUp::getColisionable(){
     return this->colisionable;
 }
@@ -53,7 +53,7 @@ int PowerUp::mover(float timeStep, float velocidadY){
     pthread_mutex_lock(&this->mutexMover);
     this->posY += velocidadY * timeStep;
     if(this->animar(timeStep)){
-        this->colisionable->mover(this->posX, this->posY, 0);
+        this->colisionable->mover(this->posX, this->posY, 0, TIPO_POWERUP);
         resultado = 1;
     }
     pthread_mutex_unlock(&this->mutexMover);
@@ -91,4 +91,3 @@ void PowerUp::volverEstadoInicial(){
     this->posX = posXInicial;
     this->posY = posYInicial;
 }
-

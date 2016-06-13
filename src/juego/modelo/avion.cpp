@@ -2,11 +2,13 @@
 
 using namespace std;
 
-Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos){
+Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, float posXFinal, float posYFinal){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
     this->posYInicial = posY;
+    this->posXFinal = posXFinal;
+    this->posYFinal = posYFinal;
     this->velocidadX = 0;
     this->velocidadY = 0;
     this->colisionable = new Colisionable(posX, posY, 0, TIPO_AVION);
@@ -18,6 +20,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->idSpriteDisparos = idSpriteDisparos;
     this->puntaje = 0;
     this->vidas = 5;
+    this->numeroAvion = numeroAvion;
 }
 
 Avion::~Avion(){
@@ -113,7 +116,7 @@ void Avion::mover(float timeStep){
         } else if ( this->posY + this->getAlto() > ALTO_ESCENARIO){
             this->posY = ALTO_ESCENARIO - this->getAlto();
         }
-        this->colisionable->mover(this->posX, this->posY, 0);
+        this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
     } else {
         if(this->estadoAnimacion != DESCONECTADO) {
             if(this->contador > 0) {
@@ -201,14 +204,16 @@ Disparo* Avion::disparar(){
     return new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos);
 }
 
-void Avion::volverEstadoInicial(){
+void Avion::volverEstadoInicial(bool inmunidad){
     this->velocidadX = 0;
     this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
-    this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
-    this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
-    this->colisionable->mover(this->posX, this->posY, 0);
+    if (inmunidad){
+        this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
+        this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
+    }
+    this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
     if (this->estadoAnimacion != DESCONECTADO)
         this->estadoAnimacion = ESTADO_NORMAL;
 }
@@ -227,7 +232,9 @@ void Avion::setPosicion(float x, float y) {
 }
 
 void Avion::sumarPuntos(int puntos) {
-    puntaje += puntos;
+    pthread_mutex_lock(&this->mutexPuntaje);
+    this->puntaje += puntos;
+    pthread_mutex_unlock(&this->mutexPuntaje);
 }
 
 Colisionable* Avion::getColisionable(){
@@ -257,10 +264,15 @@ void Avion::colisionarConPowerUp(){
 }
 
 void Avion::resetPuntos() {
-    puntaje = 0;
+    pthread_mutex_lock(&this->mutexPuntaje);
+    this->puntaje = 0;
+    pthread_mutex_unlock(&this->mutexPuntaje);
 }
 
 int Avion::getPuntaje() {
+    pthread_mutex_lock(&this->mutexPuntaje);
+    int puntaje = this->puntaje;
+    pthread_mutex_unlock(&this->mutexPuntaje);
     return puntaje;
 }
 
@@ -279,4 +291,47 @@ void Avion::setSpawn(int x, int y) {
 
 float Avion::getContadorTiempoInmunidad() {
     return this->contadorTiempoInmunidad;
+}
+
+bool Avion::moverAPosicionFinal(float timeStep) {
+    bool resultado = false;
+    pthread_mutex_lock(&this->mutexMover);
+    this->estadoAnimacion = ESTADO_NORMAL;
+    if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
+        if (this->posX != this->posXFinal){
+            if (this->posX < this->posXFinal) {
+                if ((this->posX + this->velocidad/2 * timeStep) < this->posXFinal)
+                    this->posX += this->velocidad/2 * timeStep;
+                else
+                    this->posX = this->posXFinal;
+            } else {
+                if ((this->posX - this->velocidad/2 * timeStep) > this->posXFinal)
+                    this->posX -= this->velocidad * timeStep;
+                else
+                    this->posX = this->posXFinal;
+            }
+        } else {
+            if (this->posY < this->posYFinal) {
+                if ((this->posY + this->velocidad/2 * timeStep) < this->posYFinal)
+                    this->posY += this->velocidad/2 * timeStep;
+                else
+                    this->posY = this->posYFinal;
+            } else {
+                if ((this->posY - this->velocidad/2 * timeStep) > this->posYFinal)
+                    this->posY -= this->velocidad/2 * timeStep;
+                else
+                    this->posY = this->posYFinal;
+            }
+        }
+    } else {
+        this->estadoAnimacion = ESTACIONADO;
+        resultado = true;
+    }
+    pthread_mutex_unlock(&this->mutexMover);
+    return resultado;
+}
+
+
+int Avion::getNumeroAvion(){
+    return this->numeroAvion;
 }

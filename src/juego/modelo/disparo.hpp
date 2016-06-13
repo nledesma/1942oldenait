@@ -22,6 +22,7 @@ private:
 	float alturaDeMuerte;
 	int estado;
 	float contadorExplosionImpacto;
+	int numeroDeAvion;
 
 public:
 	Disparo(float posX, float posY, float velocidad);
@@ -40,5 +41,6 @@ public:
 	int getNroAvion();
 	Colisionable* getColisionable();
 	void colisionar();
+    int getNumeroDeAvion();
 };
 #endif

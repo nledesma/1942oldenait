@@ -13,6 +13,8 @@ AvionPequenio::AvionPequenio(float posX, float posY, float velocidad, float angu
     this->tipoAvion = TIPO_AVION_PEQUENIO;
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_PEQUENIO);
     this->contador = CONTADOR_INICIAL;
+    this->valorImpacto = 50;
+    this->valorDerribo = 50;
 }
 
 AvionPequenio::~AvionPequenio(){

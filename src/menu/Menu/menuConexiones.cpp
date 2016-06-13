@@ -5,15 +5,13 @@ MenuConexiones::MenuConexiones(Ventana* ventana){
     this->lista = new ListaDeSeleccion(ventana, 100, 150);
 }
 
-bool MenuConexiones::cargarBotones(Ventana* ventana){
-    bool success = true;
+void MenuConexiones::cargarBotones(Ventana* ventana){
     if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")){
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
 
     if(!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/siguienteSprite"))){
 		cout << "Failed to load button sprite texture!" << endl;
-		success = false;
     }else{
         //Set sprites
         this->getBotonSiguiente()->setSprites(ventana->getVentanaRenderer());
@@ -21,7 +19,6 @@ bool MenuConexiones::cargarBotones(Ventana* ventana){
         this->botonSiguiente[0].setPosition(350, 450);
     }
 
-    return success;
 }
 
 void MenuConexiones::renderizar(Ventana* ventana){

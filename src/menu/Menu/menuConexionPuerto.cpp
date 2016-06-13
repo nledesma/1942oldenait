@@ -5,14 +5,13 @@ MenuConexionPuerto::MenuConexionPuerto(){
      this->fondo = new Figura();
 }
 
-bool MenuConexionPuerto::cargarBotones(Ventana* ventana){
-    bool success = true;
+void MenuConexionPuerto::cargarBotones(Ventana* ventana){
     if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
     if (!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/siguienteSprite" ))){
         cout << "Failed to load button sprite texture!" << endl;
-        success = false;
+
     } else {
         //Set sprites
         this->getBotonSiguiente()->setSprites(ventana->getVentanaRenderer());
@@ -24,7 +23,6 @@ bool MenuConexionPuerto::cargarBotones(Ventana* ventana){
     this->textoPuerto = new Texto(35, color,  STAR_WARS_FONT, ventana);
     this->textoPuerto->cargarFuente("INGRESE PUERTO: ");
 
-    return success;
 }
 
 void MenuConexionPuerto::renderizar(Ventana* ventana){
