@@ -403,6 +403,7 @@ void EscenarioVista::agregarVistasPowerUps(){
   this->powerUpDosAmetralladoras = new PowerUpDosAmetralladorasVista();
   this->powerUpDestruirEnemigos = new PowerUpDestruirEnemigosVista();
   this->powerUpAvionesSecundarios = new PowerUpAvionesSecundariosVista();
+  this->powerUpBonificacion1500 = new PowerUpBonificacion1500Vista();
 }
 
 void EscenarioVista::cargarVistasAviones(){
@@ -455,6 +456,7 @@ void EscenarioVista::cargarVistasPowerUps() {
     this->powerUpDestruirEnemigos->cargarImagen(this->ventana->getVentanaRenderer());
     this->powerUpDosAmetralladoras->cargarImagen(this->ventana->getVentanaRenderer());
     this->powerUpAvionesSecundarios->cargarImagen(this->ventana->getVentanaRenderer());
+    this->powerUpBonificacion1500->cargarImagen(this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::cargarAvion(AvionVista* avionVista, SDL_Renderer* renderer, int numeroJugador){
@@ -582,6 +584,8 @@ void EscenarioVista::renderizarPowerUps(){
         this->powerUpDestruirEnemigos->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     } else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_AVIONES_SECUNDARIOS){
         this->powerUpAvionesSecundarios->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
+    }else if (unPowerUp.tipoPowerUp == TIPO_POWERUP_BONIFICACION_1500){
+        this->powerUpBonificacion1500->render(unPowerUp.posX,unPowerUp.posY,unPowerUp.estadoAnimacion,this->ventana->getVentanaRenderer());
     }
   }
   pthread_mutex_unlock(&mutexPowerUps);

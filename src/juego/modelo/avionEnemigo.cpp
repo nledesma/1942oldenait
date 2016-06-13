@@ -148,3 +148,7 @@ int AvionEnemigo::estallar(){
 bool AvionEnemigo::estaColisionando(){
     return (this->estadoAnimacion >= AVION_ENEMIGO_EXPLOSION_ETAPA_1);
 }
+
+int AvionEnemigo::getVidas(){
+    return this->vidas;
+}

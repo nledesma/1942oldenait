@@ -16,6 +16,7 @@
 #include "powerUpDestruirEnemigos.hpp"
 #include "powerUpDosAmetralladoras.hpp"
 #include "powerUpAvionesSecundarios.hpp"
+#include "powerUpBonificacion1500.hpp"
 #include "trayectoriasEnemigos/trayectoriaCuadrada.hpp"
 #include "trayectoriasEnemigos/trayectoriaAvionGrande.hpp"
 #include "elemento.hpp"
@@ -133,6 +134,7 @@ public:
     void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
     int validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion);
     void iniciarModoPractica();
+    void crearPowerUpBonus(float posX, float posY, int valor);
 
 };
 

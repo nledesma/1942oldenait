@@ -27,6 +27,7 @@
 #include "powerUpDosAmetralladorasVista.hpp"
 #include "powerUpDestruirEnemigosVista.hpp"
 #include "powerUpAvionesSecundariosVista.hpp"
+#include "powerUpBonificacion1500Vista.hpp"
 #include "disparoEnemigoVista.hpp"
 #include "textoDinamico.hpp"
 #include <sstream>
@@ -87,6 +88,7 @@ private:
     PowerUpBonificacionVista* powerUpBonificacion;
     PowerUpDestruirEnemigosVista* powerUpDestruirEnemigos;
     PowerUpDosAmetralladorasVista* powerUpDosAmetralladoras;
+    PowerUpBonificacion1500Vista* powerUpBonificacion1500;
     /* Etapas */
     list<EtapaVista*> etapas;
     SoundBoard *soundBoard;

@@ -553,6 +553,9 @@ void EscenarioJuego::verificarColisiones(){
             if(enemigoAColisionar->getTipoAvion() != TIPO_AVION_ESCUADRON){
                 subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
+                if((enemigoAColisionar->getTipoAvion() == TIPO_AVION_GRANDE) && (enemigoAColisionar->getVidas() <= 0)){
+                    crearPowerUpBonus(enemigoAColisionar->getPosicionX(),enemigoAColisionar->getPosicionY(),VALOR_POWERUP_1500);
+                }
             } else {
                 subirPuntaje(enemigoAColisionar->estallar() + this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion()), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
@@ -607,10 +610,14 @@ void EscenarioJuego::verificarColisiones(){
     }
 }
 
+void EscenarioJuego::crearPowerUpBonus(float posX, float posY, int valor){
+    PowerUp* unPowerUpBonus = new PowerUpBonificacion1500(posX,posY,VALOR_POWERUP_1500);
+    powerUps.push_back(unPowerUpBonus);
+}
+
 void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
     if((powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION)||(powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION_1500)){
         int valorBonus = powerUp->getValor();
-        cout << "VALOR BONUS: " << valorBonus << endl;
         avion->sumarPuntos(valorBonus);
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
