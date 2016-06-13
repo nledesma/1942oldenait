@@ -108,18 +108,20 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
-    Disparo * disparo;
+    vector<Disparo *> disparo;
     switch (evento) {
         case PRESIONA_R:
             reset();
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
-            if (disparo != NULL) {
-                disparo->setAvion(nroAvion);
-                pthread_mutex_lock(&this->mutexListaDisparos);
-                disparos.push_back(disparo);
-                pthread_mutex_unlock(&this->mutexListaDisparos);
+            if (!disparo.empty()) {
+                for (int i = 0; i < disparo.size(); i++) {
+                    disparo[i]->setAvion(nroAvion);
+                    pthread_mutex_lock(&this->mutexListaDisparos);
+                    disparos.push_back(disparo[i]);
+                    pthread_mutex_unlock(&this->mutexListaDisparos);
+                }
             }
             break;
         case PRESIONA_L:
@@ -551,6 +553,9 @@ void EscenarioJuego::verificarColisiones(){
             if(enemigoAColisionar->getTipoAvion() != TIPO_AVION_ESCUADRON){
                 subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
+                if((enemigoAColisionar->getTipoAvion() == TIPO_AVION_GRANDE) && (enemigoAColisionar->getVidas() <= 0)){
+                    crearPowerUpBonus(enemigoAColisionar->getPosicionX(),enemigoAColisionar->getPosicionY(),VALOR_POWERUP_1500);
+                }
             } else {
                 subirPuntaje(enemigoAColisionar->estallar() + this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion()), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
@@ -605,10 +610,14 @@ void EscenarioJuego::verificarColisiones(){
     }
 }
 
+void EscenarioJuego::crearPowerUpBonus(float posX, float posY, int valor){
+    PowerUp* unPowerUpBonus = new PowerUpBonificacion1500(posX,posY,VALOR_POWERUP_1500);
+    powerUps.push_back(unPowerUpBonus);
+}
+
 void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
     if((powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION)||(powerUp->getTipoPowerUp() == TIPO_POWERUP_BONIFICACION_1500)){
         int valorBonus = powerUp->getValor();
-        cout << "VALOR BONUS: " << valorBonus << endl;
         avion->sumarPuntos(valorBonus);
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DESTRUIR_ENEMIGOS){
@@ -621,7 +630,7 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
         avion->sumarPuntos(sumaPuntaje);
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DOS_AMETRALLADORAS){
-
+        avion->setPowerUpAmetralladoras();
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
 

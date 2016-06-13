@@ -36,6 +36,7 @@ private:
     float posXFinal;
     float posYFinal;
     int puntaje;
+    int estadoPowerUP;
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
@@ -52,7 +53,7 @@ public:
 
     void manejarEvento(int evento);
 
-    Disparo* disparar();
+    vector<Disparo*> disparar();
 
     float getVelocidad();
 
@@ -110,6 +111,7 @@ public:
 
     int getNumeroAvion();
 
+    void setPowerUpAmetralladoras();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

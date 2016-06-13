@@ -56,6 +56,7 @@ public:
     void setVidasEnUno();
     virtual int estallar();
     virtual bool estaColisionando();
+    int getVidas();
 };
 
 
