@@ -567,7 +567,7 @@ void EscenarioJuego::verificarColisiones(){
         if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
-                if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
+                if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable()) && (*itAviones)->getVidas() != 0) {
                     if(!(*itEnemigos)->estaColisionando()){
                            if((*itEnemigos)->getTipoAvion() == TIPO_AVION_ESCUADRON){
                                (*itAviones)->sumarPuntos((*itEnemigos)->estallar() + this->validarBonificacionEscuadron((*itEnemigos), (*itAviones)->getNumeroAvion()));
@@ -586,7 +586,7 @@ void EscenarioJuego::verificarColisiones(){
         if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
             for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
                  itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
-                if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
+                if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable()) && (*itAviones)->getVidas() != 0) {
                     (*itAviones)->colisionar();
                     (*itDisparosEnemigos)->colisionar();
                 }

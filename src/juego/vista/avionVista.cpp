@@ -235,10 +235,12 @@ void AvionVista::cargarImagen(SDL_Renderer* renderer, int color){
 
 void AvionVista::render(SDL_Renderer* renderer){
     pthread_mutex_lock(&mutexActualizar);
-    if (this->estadoAnimacion != INTERMITENCIA){
-        figura->render((int)posX, (int)posY, renderer, &clipsAnimacion[estadoAnimacion]);
-    } else {
-        figura->render((int)posX, (int)posY, renderer, &clipsAnimacion[DESCONECTADO]);
+    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+        if (this->estadoAnimacion != INTERMITENCIA) {
+            figura->render((int) posX, (int) posY, renderer, &clipsAnimacion[estadoAnimacion]);
+        } else {
+            figura->render((int) posX, (int) posY, renderer, &clipsAnimacion[DESCONECTADO]);
+        }
     }
     pthread_mutex_unlock(&mutexActualizar);
 }

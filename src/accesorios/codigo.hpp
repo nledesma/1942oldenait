@@ -71,6 +71,7 @@
 
 /* Estados avion */
 
+#define ESTADO_AVION_DESTRUIDO -1
 #define ESTADO_NORMAL 0
 #define GIRANDO_IZQUIERDA 1
 #define GIRANDO_DERECHA 2
