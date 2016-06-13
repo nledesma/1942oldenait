@@ -11,6 +11,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
     this->grilla = new Grilla(12, 12);
+    this->nroEtapaActual = 0; // La 0 es la primera.
     this->modoPractica = false;
 
     // Inicio el vector de equipos.
@@ -134,7 +135,8 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 void EscenarioJuego::avanzarEtapa() {
     /* Se desactiva para dar lugar al servidor a hacer otras cosas antes de pasar
     ** de nivel */
-    cout << "Se avanza una etapa" << endl;
+    ++nroEtapaActual;
+    cout << "Se avanza a la etapa " << nroEtapaActual + 1 << "." << endl;
     desactivar();
     ++itEtapa;
 }
@@ -645,6 +647,10 @@ list< pair<int,int> > EscenarioJuego::getPuntajes() {
     }
 
     return equipoPuntaje;
+}
+
+int EscenarioJuego::getNroEtapa() {
+    return nroEtapaActual;
 }
 
 int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion) {

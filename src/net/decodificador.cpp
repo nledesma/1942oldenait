@@ -93,6 +93,27 @@ string Decodificador::popCantidad(string & codigo){
     return popBytes(codigo, sizeof(int));
 }
 
+/* Push y pop de bool (1 byte)*/
+void Decodificador::push(string & codigo, bool b) {
+    if (b)
+        push(codigo, 't');
+    else
+        push(codigo, 'f');
+}
+
+bool Decodificador::popBool(string & codigo) {
+    char b = popBytes(codigo, 1)[0];
+    if (b == 't') {
+        return true;
+    } else if (b == 'f') {
+        return false;
+    }
+    // TODO excepcion
+    cout << "El popBool recibe un código no válido: " << endl;
+    imprimirBytes(codigo);
+    return false;
+}
+
 /* Generales para cualquier tipo */
 template<typename T> void Decodificador::push(string & str, T e) {
     int n = sizeof(e);
@@ -206,6 +227,8 @@ string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
     }
     Decodificador::pushInicialDisparo(codigo, aviones.front()->getIdSpriteDisparos());
     Decodificador::pushCantidad(codigo, escenarioJuego->porEquipos());
+    Decodificador::push(codigo, escenarioJuego->getNroEtapa());
+    // TODO poner esto en el cliente.
     return codigo;
 }
 
