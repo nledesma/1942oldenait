@@ -11,6 +11,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
     this->grilla = new Grilla(12, 12);
+    this->nroEtapaActual = 0; // La 0 es la primera.
     this->modoPractica = false;
 
     // Inicio el vector de equipos.
@@ -110,18 +111,20 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
 }
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
-    Disparo * disparo;
+    vector<Disparo *> disparo;
     switch (evento) {
         case PRESIONA_R:
             reset();
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
-            if (disparo != NULL) {
-                disparo->setAvion(nroAvion);
-                pthread_mutex_lock(&this->mutexListaDisparos);
-                disparos.push_back(disparo);
-                pthread_mutex_unlock(&this->mutexListaDisparos);
+            if (!disparo.empty()) {
+                for (int i = 0; i < disparo.size(); i++) {
+                    disparo[i]->setAvion(nroAvion);
+                    pthread_mutex_lock(&this->mutexListaDisparos);
+                    disparos.push_back(disparo[i]);
+                    pthread_mutex_unlock(&this->mutexListaDisparos);
+                }
             }
             break;
         case PRESIONA_L:
@@ -137,7 +140,8 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
 void EscenarioJuego::avanzarEtapa() {
     /* Se desactiva para dar lugar al servidor a hacer otras cosas antes de pasar
     ** de nivel */
-    cout << "Se avanza una etapa" << endl;
+    ++nroEtapaActual;
+    cout << "Se avanza a la etapa " << nroEtapaActual + 1 << "." << endl;
     desactivar();
     ++itEtapa;
 }
@@ -202,9 +206,9 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         this->moverPowerUps(timeStep);
         this->proyectarDisparos(timeStep);
         this->moverDisparosEnemigos(timeStep);
+        this->manejarProximoEvento();
         this->verificarColisiones();
         this->moverDisparos(timeStep);
-        this->manejarProximoEvento();
         this->getProximoEnemigo();
     } else {
         this->moverEnemigos(timeStep);
@@ -622,7 +626,7 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
         avion->sumarPuntos(sumaPuntaje);
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_DOS_AMETRALLADORAS){
-
+        avion->setPowerUpAmetralladoras();
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
 
@@ -648,6 +652,10 @@ list< pair<int,int> > EscenarioJuego::getPuntajes() {
     }
 
     return equipoPuntaje;
+}
+
+int EscenarioJuego::getNroEtapa() {
+    return nroEtapaActual;
 }
 
 int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion) {

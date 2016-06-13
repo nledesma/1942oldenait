@@ -38,22 +38,25 @@ public:
     Cliente(string ip, int port, Ventana* ventana);
 	Cliente(Ventana* ventana);
     ~Cliente();
-    void inicializar(string serverAddress ,int port);
     void setAddress(string serverAddress, int port);
     int conectar();
-    bool conectado();
     void cerrar();
-    int enviarEvento(int evento);
+	/* Lógica del juego */
+	void iniciarEscenario();
+	void jugar();
+	void actualizarEscenario(string mensaje);
+	void entreEtapas();
+	void cicloMensajes();
+	static void * cicloMensajes_th(void* THIS);
+	/* Comunicación */
+	void esperarJugadores();
+	int enviarEvento(int evento);
 	void esperarEvento(int evento);
 	static void* esperarEvento_th(void* args);
-    int recibirMensaje(string & mensaje);
-    void iniciarEscenario();
-    void actualizarEscenario(string mensaje);
-    void cicloMensajes();
-    static void * cicloMensajes_th(void* THIS);
-    bool sePuedeEntrar();
-	void entreEtapas();
+	int recibirMensaje(string & mensaje);
+	bool sePuedeEntrar();
     /* getters */
+	bool conectado();
     EscenarioVista * getEscenario();
     string getIP();
     int getPort();

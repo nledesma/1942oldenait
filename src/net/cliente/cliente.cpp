@@ -45,7 +45,13 @@ int Cliente::conectar(){
 			if (!sePuedeEntrar()) {
 				cerrar();
 			} else {
-				iniciarEscenario();
+				esperarJugadores();
+				if (cliente_conectado) iniciarEscenario();
+				if (cliente_conectado) jugar();
+				if (cliente_conectado) {
+					this->escenarioVista->cerrar();
+					this->cerrar();
+				}
 			}
 		} else if (connected == -1) {
 			cliente_conectado = false;
@@ -58,6 +64,17 @@ int Cliente::conectar(){
 
 	return conexion;
 }
+
+void Cliente::cerrar(){
+	if (escenarioVista) escenarioVista->desactivar();
+	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
+	if (cliente_conectado) {
+		cliente_conectado = false;
+		cerrarSocket();
+	}
+}
+
+/* Comunicación */
 
 bool Cliente::sePuedeEntrar() {
 	// Primero se envía un mensaje con el nombre.
@@ -112,39 +129,38 @@ int Cliente::enviarEvento(int evento){
 	return estadoEnvio;
 }
 
-void Cliente::iniciarEscenario(){
-	string mensajeRespuesta;
-	int n = 10; // Nunca van a ser 10 jugadores, el máximo es 4.
-	int n2;
-
-	// Vamos a recibir periódicamente los jugadores que faltan.
-	if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
-	while(mensajeRespuesta.length() == sizeof(int) && cliente_conectado) {
-		n2 = Decodificador::popInt(mensajeRespuesta);
-		if (n2 != n){
-			n = n2;
-			cout << "Faltan " << n2 << " jugadores para comenzar." << endl;
-		}
-		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
-	}
-	// El primer mensaje que no es un entero es el escenario.
-	this->escenarioVista = new EscenarioVista(mensajeRespuesta, this->ventana);
+// Recibe un mensaje los datos para iniciar el escenario y lo hace.
+void Cliente::iniciarEscenario() {
+	string mensajeInicial;
+	if(recibirMensaje(mensajeInicial) != MENSAJEOK) return;
+	// TODO si ya había un escenario habría que liberarlo antes de hacer new.
+	this->escenarioVista = new EscenarioVista(mensajeInicial, this->ventana);
 	this->escenarioVista->preloop();
+}
+
+void Cliente::jugar() {
+	// Antes de comenzar nos fijamos si está entre etapas, consultando al servidor.
+	string resEntreEtapas;
+	recibirMensaje(resEntreEtapas);
+	if (Decodificador::popBool(resEntreEtapas)) {
+		cout << "El servidor avisa que el cliente se conectó entre etapas." << endl;
+		entreEtapas();
+	}
+
 	int resultadoRender = CONTINUAR;
-	while(escenarioVista->quedanEtapas() && resultadoRender == CONTINUAR) {
-		cout << "comienza un ciclo de mensajes." << endl;
+
+	while(escenarioVista->quedanEtapas() && resultadoRender == CONTINUAR && cliente_conectado) {
+		cout << "Comienza un ciclo de mensajes." << endl;
 		// El ciclo de mensajes termina cuando el escenario sse desactiva.
 		this->escenarioVista->activar();
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
-		cout << "terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
+		cout << "Terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
 		if (resultadoRender == CONTINUAR) entreEtapas();
 	}
-	if (!escenarioVista->quedanEtapas()) cout << "todas las etapas finalizadas" << endl;
-	if (resultadoRender != CONTINUAR) cout << "el resultado de render no fue de continuar" << endl;
-	// Terminadas todas las etapas, se cierra el escenario.
-	this->escenarioVista->cerrar();
-	this->cerrar();
+
+	if (!escenarioVista->quedanEtapas()) cout << "Fin del juego." << endl;
+	if (resultadoRender != CONTINUAR) cout << "Se procede a salir del juego." << endl;
 }
 
 void* Cliente::cicloMensajes_th(void * THIS){
@@ -166,23 +182,38 @@ void Cliente::cicloMensajes(){
 	pthread_create(&mainLoopThread, NULL, cicloMensajes_th, (void*)this);
 }
 
+void Cliente::actualizarEscenario(string mensaje){
+	if (mensaje.size() == sizeof(int)){
+		// Caso evento.
+		this->escenarioVista->manejarEvento(Decodificador::popInt(mensaje));
+	} else {
+		// Caso actualización de estado.
+		this->escenarioVista->actualizarComponentes(mensaje);
+	}
+}
+
 void Cliente::entreEtapas() {
 	Logger::instance()->logInfo("Entrando al espacio entre etapas");
 	string mensaje;
 	if (recibirMensaje(mensaje) != MENSAJEOK) {
-		this->cerrar(); // TODO debug.
+		this->cerrar();
 	} else {
+		// Esto se elimina en el hilo creado más abajo, que espera al mensaje del servidor.
 		EspacioEntreEtapas e(ventana, mensaje);
-		// hilo que espera al fin entre etapas.
-		ArgsEsperarEntreEtapas args = {
-			.cliente = this,
-			.espacioEntreEtapas = &e,
-			.evento = FIN_ENTRE_ETAPAS
-		};
+
+		ArgsEsperarEntreEtapas args;
+		args.cliente = this;
+		args.espacioEntreEtapas = &e;
+		args.evento = FIN_ENTRE_ETAPAS;
+
 		pthread_t esperar_id;
 		pthread_create(&esperar_id, NULL, esperarEvento_th, (void*) &args);
+
 		// Render entre etapas.
-		e.renderLoop();
+		if (e.renderLoop() != CONTINUAR) {
+			this->cerrar();
+		}
+		pthread_join(esperar_id, NULL);
 	}
 	Logger::instance()->logInfo("Saliendo del espacio entre etapas");
 }
@@ -210,24 +241,24 @@ void* Cliente::esperarEvento_th(void* argsVoid) {
 	pthread_exit(NULL);
 }
 
-
-void Cliente::actualizarEscenario(string mensaje){
-	if (mensaje.size() == sizeof(int)){
-		// Caso evento.
-		this->escenarioVista->manejarEvento(Decodificador::popInt(mensaje));
-	} else {
-		// Caso actualización de estado.
-		this->escenarioVista->actualizarComponentes(mensaje);
+void Cliente::esperarJugadores() {
+	string mensajeRespuesta;
+	int nActual = 10; // Nunca van a ser 10 jugadores, el máximo es 6.
+	int nRecibido;
+	// TODO ver mecanismo de salida!
+	// Vamos a recibir periódicamente los jugadores que faltan.
+	if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
+	nRecibido = Decodificador::popInt(mensajeRespuesta);
+	while(nRecibido != 0 && cliente_conectado) {
+		nRecibido = Decodificador::popInt(mensajeRespuesta);
+		if (nRecibido != nActual) {
+			nActual = nRecibido;
+			// TODO mostrar en la pantalla.
+			cout << "Faltan " << nRecibido << " jugadores para comenzar." << endl;
+		}
+		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
 	}
-}
-
-void Cliente::cerrar(){
-	if (escenarioVista) escenarioVista->desactivar();
-	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
-	if (cliente_conectado) {
-		cliente_conectado = false;
-		cerrarSocket();
-	}
+	cout << "Todos los jugadores conectados!" << endl;
 }
 
 /* Getters y setters.*/

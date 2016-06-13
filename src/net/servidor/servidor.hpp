@@ -52,6 +52,7 @@ private:
     map<string, bool> nombres;
     void desencolarSalidaCliente(int clienteFd);
     bool partidaEnJuego = false;
+    bool esperandoEntreEtapas;
 public:
     map<int, datosCliente> & getClientes();
     bool hayLugar();

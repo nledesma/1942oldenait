@@ -21,6 +21,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->puntaje = 0;
     this->vidas = 5;
     this->numeroAvion = numeroAvion;
+    this->estadoPowerUP = ESTADO_SIN_POWER_UP;
 }
 
 Avion::~Avion(){
@@ -96,13 +97,14 @@ void Avion::disminuirTiempoInmunidad(float timestep) {
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-
-
     if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
     } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
+    } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION ){
+        this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
     }
+
     if(this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
         this->posX += this->velocidadX * timeStep;
         if( this->posX < 0 ){
@@ -195,13 +197,20 @@ int Avion::getEstadoAnimacion(){
     return estado;
 }
 
-Disparo* Avion::disparar(){
+vector<Disparo*> Avion::disparar(){
     // Por ahora sale con la misma velocidad y posición que el avión.
+    vector<Disparo*> disparos;
     if (estadoAnimacion > LOOP_ETAPA_1 || this->contadorTiempoInmunidad > 0) {
-        return NULL;
+        return disparos;
     }
     this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
-    return new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos);
+    if (this->estadoPowerUP == ESTADO_SIN_POWER_UP){
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos));
+    } else {
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10, this->getPosicionY(), velocidadDisparos));
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10, this->getPosicionY(), velocidadDisparos));
+    }
+    return disparos;
 }
 
 void Avion::volverEstadoInicial(bool inmunidad){
@@ -209,6 +218,7 @@ void Avion::volverEstadoInicial(bool inmunidad){
     this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
+    this->estadoPowerUP = ESTADO_SIN_POWER_UP;
     if (inmunidad){
         this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
         this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
@@ -244,7 +254,7 @@ Colisionable* Avion::getColisionable(){
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
         if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
-            this->estadoAnimacion = EXPLOSION_ETAPA_1;
+            this->estadoAnimacion = EXPLOSION_ETAPA_1 + OFFSET_ESTADO_EXPLOSION;
             if (this->vidas > 0) {
                 pthread_mutex_lock(&this->mutexVidas);
                 quitarUnaVida();
@@ -329,6 +339,10 @@ bool Avion::moverAPosicionFinal(float timeStep) {
     }
     pthread_mutex_unlock(&this->mutexMover);
     return resultado;
+}
+
+void Avion::setPowerUpAmetralladoras() {
+    this->estadoPowerUP = ESTADO_POWER_UP_DISPARO_DOBLE;
 }
 
 
