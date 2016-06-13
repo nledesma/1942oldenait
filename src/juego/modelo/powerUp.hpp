@@ -33,7 +33,7 @@ public:
     virtual void aplicarPowerUp();
     Colisionable* getColisionable();
     void colisionar();
-    virtual float getPosicionX();
+    float getPosicionX();
     float getPosicionY();
     int getEstadoAnimacion();
     int getTipoPowerUp();

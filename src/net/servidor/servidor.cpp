@@ -273,6 +273,7 @@ void Servidor::esperarPartida(int fdCliente) {
         }
         // Espera un segundo antes de mandar de nuevo.
     }
+    cout << "Se avisa que están todos conectados." << endl;
     string cero = "";
     Decodificador::pushCantidad(cero, 0);
     enviarMensaje(cero, fdCliente);
