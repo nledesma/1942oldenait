@@ -68,6 +68,7 @@ private:
     //que ya mató, si el numero de avion es -1, significa que varios aviones mataron a los aviones de ese escuadron y
     //la bonificación no corresponde, horrible, ya se.
     map<int, pair<int, int>> infoEscuadrones;
+    bool modoPractica;
 
 public:
     void subirPuntaje(int puntos, int nroAvion);
@@ -129,6 +130,7 @@ public:
     list<pair<int,int> > getPuntajes();
     void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
     int validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion);
+    void iniciarModoPractica();
 
 };
 

@@ -11,6 +11,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
     this->anchoVentana = anchoVentana;
     this->altoVentana = altoVentana;
     this->grilla = new Grilla(12, 12);
+    this->modoPractica = false;
 
     // Inicio el vector de equipos.
     set<int> equipo1;
@@ -120,6 +121,9 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
                 pthread_mutex_unlock(&this->mutexListaDisparos);
             }
             break;
+        case PRESIONA_L:
+            this->modoPractica = !this->modoPractica;
+            break;
             // TODO x para la partida para todos?
         default:
             avion(nroAvion)->manejarEvento(evento);
@@ -185,7 +189,9 @@ void EscenarioJuego::mainLoop() {
 void EscenarioJuego::actualizarEstado(float timeStep) {
     if (this->posicionY < this->etapaActual()->getLongitud() - 800) {
         this->actualizarScrollingOffset(timeStep);
-        this->sortearDisparosEnemigos(timeStep);
+        if(!this->modoPractica){
+            this->sortearDisparosEnemigos(timeStep);
+        }
         this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
         this->moverAviones(timeStep);
         this->moverElementos(timeStep);
@@ -551,7 +557,7 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
@@ -570,7 +576,7 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
             for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
                  itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
@@ -668,4 +674,8 @@ int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, in
         }
 
     }
+}
+
+void EscenarioJuego::iniciarModoPractica() {
+    this->modoPractica = true;
 }

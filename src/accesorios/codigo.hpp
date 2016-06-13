@@ -35,6 +35,7 @@
 #define PRESIONA_ENTER 10
 #define PRESIONA_R 11
 #define PRESIONA_X 12
+#define PRESIONA_L 13
 
 /* Dimensiones */
 
