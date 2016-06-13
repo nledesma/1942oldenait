@@ -96,13 +96,14 @@ void Avion::disminuirTiempoInmunidad(float timestep) {
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-
-
     if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
     } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION){
         this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
+    } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION ){
+        this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
     }
+
     if(this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
         this->posX += this->velocidadX * timeStep;
         if( this->posX < 0 ){
@@ -244,7 +245,7 @@ Colisionable* Avion::getColisionable(){
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
         if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
-            this->estadoAnimacion = EXPLOSION_ETAPA_1;
+            this->estadoAnimacion = EXPLOSION_ETAPA_1 + OFFSET_ESTADO_EXPLOSION;
             if (this->vidas > 0) {
                 pthread_mutex_lock(&this->mutexVidas);
                 quitarUnaVida();

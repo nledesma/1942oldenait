@@ -125,6 +125,8 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
             }
         } else if (sonido == CODIGO_SONIDO_LOOP) {
             this->soundBoard->reproducirLoop();
+        } else if (sonido == CODIGO_SONIDO_EXPLOSION){
+            this->soundBoard->reproducirExplosion();
         }
         if (this->contadorSonido > 0){
             this->contadorSonido = this->contadorSonido - 1;

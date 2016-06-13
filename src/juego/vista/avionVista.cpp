@@ -209,13 +209,16 @@ int AvionVista::actualizar(string codigo){
     this->posX = Decodificador::popFloat(codigo);
     this->posY = Decodificador::popFloat(codigo);
 
-    int estadoAnimacionActual = Decodificador::popByte(codigo);
+    int estadoAnimacionActual = Decodificador::popInt(codigo);
     this->vidas = Decodificador::popInt(codigo);
     if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_LOOP){
         sonido = CODIGO_SONIDO_DISPARO;
         estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_DISPARO;
     } else if (estadoAnimacionActual >= OFFSET_ESTADO_LOOP && estadoAnimacionActual < OFFSET_ESTADO_EXPLOSION){
         sonido = CODIGO_SONIDO_LOOP;
+        estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_LOOP;
+    } else if (estadoAnimacionActual >= OFFSET_ESTADO_EXPLOSION) {
+        sonido = CODIGO_SONIDO_EXPLOSION;
         estadoAnimacionActual = estadoAnimacionActual - OFFSET_ESTADO_LOOP;
     }
     this->estadoAnimacion = estadoAnimacionActual;

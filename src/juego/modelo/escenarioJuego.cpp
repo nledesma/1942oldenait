@@ -199,9 +199,9 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         this->moverPowerUps(timeStep);
         this->proyectarDisparos(timeStep);
         this->moverDisparosEnemigos(timeStep);
+        this->manejarProximoEvento();
         this->verificarColisiones();
         this->moverDisparos(timeStep);
-        this->manejarProximoEvento();
         this->getProximoEnemigo();
     } else {
         this->moverEnemigos(timeStep);
