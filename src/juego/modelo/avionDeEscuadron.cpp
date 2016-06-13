@@ -1,6 +1,6 @@
 #include "avionDeEscuadron.hpp"
 
-AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria){
+AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria, int numeroEscuadron){
     this->posX = posX;
     this->posY = posY;
     this->angulo = angulo;
@@ -13,7 +13,8 @@ AvionDeEscuadron::AvionDeEscuadron(float posX, float posY, float velocidad, floa
     this->colisionable = new Colisionable(this->posX, this->posY, angulo, TIPO_AVION_ESCUADRON);
     this->tipoAvion = TIPO_AVION_ESCUADRON;
     this->valorImpacto = 100;
-    this->valorDerribo = 0;
+    this->valorDerribo = 100;
+    this->numeroEscuadron = numeroEscuadron;
 }
 
 AvionDeEscuadron::~AvionDeEscuadron(){
@@ -23,5 +24,9 @@ AvionDeEscuadron::~AvionDeEscuadron(){
 bool AvionDeEscuadron::correspondeDisparar(float timestep) { return true; }
 
 vector<DisparoEnemigo*> AvionDeEscuadron::disparar(){ vector<DisparoEnemigo*> disparos; return disparos; }
+
+int AvionDeEscuadron::getNumeroEscuadron() {
+    return this->numeroEscuadron;
+}
 
 

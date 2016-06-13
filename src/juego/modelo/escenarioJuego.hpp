@@ -64,6 +64,10 @@ private:
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
     Grilla * grilla;
+    //La clave es el numrero del escuadron, el par es de avion que va matando al escuadron y la cantidad de aviones
+    //que ya mató, si el numero de avion es -1, significa que varios aviones mataron a los aviones de ese escuadron y
+    //la bonificación no corresponde, horrible, ya se.
+    map<int, pair<int, int>> infoEscuadrones;
 
 public:
     void subirPuntaje(int puntos, int nroAvion);
@@ -124,6 +128,7 @@ public:
     void proyectarDisparos(float timeStep);
     list<pair<int,int> > getPuntajes();
     void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
+    int validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion);
 
 };
 

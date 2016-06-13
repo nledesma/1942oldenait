@@ -181,32 +181,32 @@ list< pair<float , AvionEnemigo*> > FabricaEnemigos::fabricarEnemigos(int cantid
                 trayectoria4 = new TrayectoriaRulo();
                 trayectoria5 = new TrayectoriaRulo();
             }
-            AvionEnemigo *enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria1);
+            AvionEnemigo *enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria1, i);
             float trigger = triggersEscuadrones[i];
             pair<float, AvionEnemigo *> parTriggerEnemigo;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria2);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria2, i);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria3);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria3, i);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria4);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria4, i);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;
             listaEnemigos.push_back(parTriggerEnemigo);
 
-            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria5);
+            enemigo = new AvionDeEscuadron(posXavion, posYavion, 200.f, angulo, 200.f, trayectoria5, i);
             trigger = trigger + 100;
             parTriggerEnemigo.first = trigger;
             parTriggerEnemigo.second = enemigo;

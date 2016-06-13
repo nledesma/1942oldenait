@@ -13,11 +13,14 @@
 #include <pthread.h>
 
 class AvionDeEscuadron: public AvionEnemigo {
+private:
+    int numeroEscuadron;
 public:
-    AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria);
+    AvionDeEscuadron(float posX, float posY, float velocidad, float angulo, float velocidadDisparos, Trayectoria* trayectoria, int numeroEscuadron);
     ~AvionDeEscuadron();
     bool correspondeDisparar(float timestep);
     vector<DisparoEnemigo*> disparar();
+    int getNumeroEscuadron();
 };
 
 #endif //INC_1942OLDENAIT_AVIONDEESCUADRON_HPP

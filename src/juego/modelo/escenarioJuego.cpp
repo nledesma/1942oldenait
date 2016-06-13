@@ -140,6 +140,7 @@ void EscenarioJuego::comenzarEtapa() {
     scrollingOffset = 0;
     posicionY = 0;
     disparos.clear();
+    this->infoEscuadrones.clear();
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
     cout << "Se agrego a la etapa actual una lista de tamaño " << powerUps.size() << endl;
@@ -538,9 +539,18 @@ void EscenarioJuego::verificarColisiones(){
                 }
             }
         }
-        if(enemigoAColisionar != NULL){
-            subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
-            (*itDisparos)->colisionar();
+        if(enemigoAColisionar != NULL && (!enemigoAColisionar->estaColisionando())){
+            if(enemigoAColisionar->getTipoAvion() != TIPO_AVION_ESCUADRON){
+                subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
+                (*itDisparos)->colisionar();
+            } else {
+                int puntajeParcial = this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion());
+                cout << "Puntaje parcial " << puntajeParcial << endl;
+                int puntaje = enemigoAColisionar->estallar() + puntajeParcial;
+                cout << "Puntaje " << puntaje << endl;
+                subirPuntaje(puntaje, (*itDisparos)->getNroAvion());
+                (*itDisparos)->colisionar();
+            }
         }
     }
 
@@ -550,8 +560,9 @@ void EscenarioJuego::verificarColisiones(){
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
                     if(!(*itEnemigos)->estaColisionando()){
-                        (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
-                        (*itAviones)->colisionar();
+                            (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+                            (*itAviones)->colisionar();
+
                     }
                 }
             }
@@ -628,4 +639,34 @@ list< pair<int,int> > EscenarioJuego::getPuntajes() {
     }
 
     return equipoPuntaje;
+}
+
+int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion) {
+    AvionDeEscuadron * avionDeEscuadron = dynamic_cast<AvionDeEscuadron*>(avionEnemigo);
+    if( this->infoEscuadrones.find(avionDeEscuadron->getNumeroEscuadron()) == this->infoEscuadrones.end()) {
+        pair<int, int> parAvionEscuadron;
+        parAvionEscuadron.first = nroAvion;
+        parAvionEscuadron.second = 1;
+        this->infoEscuadrones.insert(make_pair(avionDeEscuadron->getNumeroEscuadron(),parAvionEscuadron));
+        return 0;
+    } else {
+        map<int, pair<int, int>>::iterator infoEscuadron = this->infoEscuadrones.find(avionDeEscuadron->getNumeroEscuadron());
+        if((*infoEscuadron).second.first == -1){
+            return 0;
+        }
+        if((*infoEscuadron).second.first != nroAvion){
+            (*infoEscuadron).second.first = -1;
+            return 0;
+        } else {
+            cout << "cant aviones: " << (*infoEscuadron).second.second << endl;
+            (*infoEscuadron).second.second++;
+            if((*infoEscuadron).second.second == 5){
+                this->infoEscuadrones.erase(infoEscuadron);
+                return 1000;
+            } else {
+                return 0;
+            }
+        }
+
+    }
 }
