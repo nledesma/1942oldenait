@@ -320,35 +320,39 @@ float Avion::getContadorTiempoInmunidad() {
 bool Avion::moverAPosicionFinal(float timeStep) {
     bool resultado = false;
     pthread_mutex_lock(&this->mutexMover);
-    this->estadoAnimacion = ESTADO_NORMAL;
-    if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
-        if (this->posX != this->posXFinal){
-            if (this->posX < this->posXFinal) {
-                if ((this->posX + this->velocidad/2 * timeStep) < this->posXFinal)
-                    this->posX += this->velocidad/2 * timeStep;
-                else
-                    this->posX = this->posXFinal;
+    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+        this->estadoAnimacion = ESTADO_NORMAL;
+        if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
+            if (this->posX != this->posXFinal) {
+                if (this->posX < this->posXFinal) {
+                    if ((this->posX + this->velocidad / 2 * timeStep) < this->posXFinal)
+                        this->posX += this->velocidad / 2 * timeStep;
+                    else
+                        this->posX = this->posXFinal;
+                } else {
+                    if ((this->posX - this->velocidad / 2 * timeStep) > this->posXFinal)
+                        this->posX -= this->velocidad * timeStep;
+                    else
+                        this->posX = this->posXFinal;
+                }
             } else {
-                if ((this->posX - this->velocidad/2 * timeStep) > this->posXFinal)
-                    this->posX -= this->velocidad * timeStep;
-                else
-                    this->posX = this->posXFinal;
+                if (this->posY < this->posYFinal) {
+                    if ((this->posY + this->velocidad / 2 * timeStep) < this->posYFinal)
+                        this->posY += this->velocidad / 2 * timeStep;
+                    else
+                        this->posY = this->posYFinal;
+                } else {
+                    if ((this->posY - this->velocidad / 2 * timeStep) > this->posYFinal)
+                        this->posY -= this->velocidad / 2 * timeStep;
+                    else
+                        this->posY = this->posYFinal;
+                }
             }
         } else {
-            if (this->posY < this->posYFinal) {
-                if ((this->posY + this->velocidad/2 * timeStep) < this->posYFinal)
-                    this->posY += this->velocidad/2 * timeStep;
-                else
-                    this->posY = this->posYFinal;
-            } else {
-                if ((this->posY - this->velocidad/2 * timeStep) > this->posYFinal)
-                    this->posY -= this->velocidad/2 * timeStep;
-                else
-                    this->posY = this->posYFinal;
-            }
+            this->estadoAnimacion = ESTACIONADO;
+            resultado = true;
         }
     } else {
-        this->estadoAnimacion = ESTACIONADO;
         resultado = true;
     }
     pthread_mutex_unlock(&this->mutexMover);
