@@ -40,11 +40,13 @@ private:
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexVidas = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPuntaje = PTHREAD_MUTEX_INITIALIZER;
     Colisionable* colisionable;
     int vidas;
+    int numeroAvion;
 
 public:
-    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, float posXFinal = 0, float posYFinal = 0);
+    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, float posXFinal = 0, float posYFinal = 0);
 
     ~Avion();
 
@@ -105,6 +107,8 @@ public:
     float getContadorTiempoInmunidad();
 
     bool moverAPosicionFinal(float timestep);
+
+    int getNumeroAvion();
 
 };
 

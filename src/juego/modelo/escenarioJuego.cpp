@@ -59,7 +59,7 @@ float EscenarioJuego::getScrollingOffset() {
 }
 
 void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, string idSprite,
-                                  string idSpriteDisparos) {
+                                  string idSpriteDisparos, int numeroAvion) {
     float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
     float posXFinal;
     float posYFinal;
@@ -89,7 +89,7 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
             posYFinal = 300;
             break;
     }
-    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, posXFinal, posYFinal);
+    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, numeroAvion, posXFinal, posYFinal);
     this->aviones.push_back(avion);
     // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
     equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
@@ -544,11 +544,7 @@ void EscenarioJuego::verificarColisiones(){
                 subirPuntaje(enemigoAColisionar->estallar(), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
             } else {
-                int puntajeParcial = this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion());
-                cout << "Puntaje parcial " << puntajeParcial << endl;
-                int puntaje = enemigoAColisionar->estallar() + puntajeParcial;
-                cout << "Puntaje " << puntaje << endl;
-                subirPuntaje(puntaje, (*itDisparos)->getNroAvion());
+                subirPuntaje(enemigoAColisionar->estallar() + this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion()), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
             }
         }
@@ -560,6 +556,10 @@ void EscenarioJuego::verificarColisiones(){
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
                     if(!(*itEnemigos)->estaColisionando()){
+                           if((*itEnemigos)->getTipoAvion() == TIPO_AVION_ESCUADRON){
+                               (*itAviones)->sumarPuntos((*itEnemigos)->estallar() + this->validarBonificacionEscuadron((*itEnemigos), (*itAviones)->getNumeroAvion()));
+                               (*itAviones)->colisionar();
+                           }
                             (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
                             (*itAviones)->colisionar();
 
@@ -657,9 +657,8 @@ int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, in
         if((*infoEscuadron).second.first != nroAvion){
             (*infoEscuadron).second.first = -1;
             return 0;
-        } else {
-            cout << "cant aviones: " << (*infoEscuadron).second.second << endl;
-            (*infoEscuadron).second.second++;
+        } else { ;
+            (*infoEscuadron).second.second++;;
             if((*infoEscuadron).second.second == 5){
                 this->infoEscuadrones.erase(infoEscuadron);
                 return 1000;

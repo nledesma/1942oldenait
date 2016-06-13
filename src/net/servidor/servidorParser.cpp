@@ -297,7 +297,7 @@ bool ServidorParser::agregarAviones(Servidor* servidor, XMLNode * pNodoConfigura
 	for (int i = 1; i <= cantidadDeClientes; i++){
 		servidor->getEscenario()->agregarAvion(velocidadDesplazamiento,
 			velocidadDisparos + velocidadDesplazamiento,
-			avionSpriteId, disparosSpriteId);
+			avionSpriteId, disparosSpriteId, i);
 	}
 	return true;
 }

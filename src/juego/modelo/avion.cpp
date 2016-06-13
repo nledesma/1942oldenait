@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, float posXFinal, float posYFinal){
+Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, float posXFinal, float posYFinal){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -20,6 +20,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->idSpriteDisparos = idSpriteDisparos;
     this->puntaje = 0;
     this->vidas = 5;
+    this->numeroAvion = numeroAvion;
 }
 
 Avion::~Avion(){
@@ -231,7 +232,9 @@ void Avion::setPosicion(float x, float y) {
 }
 
 void Avion::sumarPuntos(int puntos) {
-    puntaje += puntos;
+    pthread_mutex_lock(&this->mutexPuntaje);
+    this->puntaje += puntos;
+    pthread_mutex_unlock(&this->mutexPuntaje);
 }
 
 Colisionable* Avion::getColisionable(){
@@ -261,10 +264,15 @@ void Avion::colisionarConPowerUp(){
 }
 
 void Avion::resetPuntos() {
-    puntaje = 0;
+    pthread_mutex_lock(&this->mutexPuntaje);
+    this->puntaje = 0;
+    pthread_mutex_unlock(&this->mutexPuntaje);
 }
 
 int Avion::getPuntaje() {
+    pthread_mutex_lock(&this->mutexPuntaje);
+    int puntaje = this->puntaje;
+    pthread_mutex_unlock(&this->mutexPuntaje);
     return puntaje;
 }
 
@@ -321,4 +329,9 @@ bool Avion::moverAPosicionFinal(float timeStep) {
     }
     pthread_mutex_unlock(&this->mutexMover);
     return resultado;
+}
+
+
+int Avion::getNumeroAvion(){
+    return this->numeroAvion;
 }
