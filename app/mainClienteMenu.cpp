@@ -8,6 +8,7 @@
 #include "../src/menu/Menu/menuConexionPuerto.hpp"
 #include "../src/menu/Menu/menuConexionManual.hpp"
 #include "../src/menu/Menu/menuConexiones.hpp"
+#include "../src/menu/Menu/menuPorEquipos.hpp"
 #include "../src/juego/vista/textoDinamico.hpp"
 #include "../src/menu/listaDeSeleccion.hpp"
 using namespace std;
@@ -133,6 +134,48 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 
 }
 
+void agregarJugador(MenuPorEquipos* menuPorEquipos, Cliente* cliente, Ventana* ventana){
+    int equipoElegido = menuPorEquipos->getListaDeSeleccion()->getNroBotonSeleccionado();
+    cout << "EQUIPO ELEGIDO: " << equipoElegido << endl;
+    //TODO habria que setearle el equipo elegido al cliente de alguna forma.
+    cliente->conectar();
+
+}
+
+void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
+    MenuPorEquipos* menuPorEquipos = new MenuPorEquipos(ventana);
+    for(int i = 1; i < 3; i++){
+        string equipo = "EQUIPO " + to_string(i);
+        menuPorEquipos->getListaDeSeleccion()->agregarOpcion(equipo);
+    }
+    menuPorEquipos->cargarBotones(ventana);
+    bool quit = false;
+    SDL_Event e;
+    int x, y; // Para los clicks.
+
+    while(!quit){
+		while(SDL_PollEvent(&e) != 0){
+			if(e.type == SDL_QUIT) {
+				quit = true;
+			} else if(e.type == SDL_MOUSEBUTTONDOWN){
+                SDL_GetMouseState( &x, &y );
+                menuPorEquipos->getListaDeSeleccion()->clickEn(x, y);
+                int respuesta = menuPorEquipos->getBotonSiguiente()[0].manejarEvento(&e);
+                if (respuesta == 1) {
+                    agregarJugador(menuPorEquipos, cliente, ventana);
+                    // levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
+                }
+            } else if(e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN) {
+                // TODO Refactorizar.
+                //levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
+            }
+		}
+        ventana->limpiar();
+        menuPorEquipos->renderizar(ventana);
+        SDL_RenderPresent(ventana->getVentanaRenderer());
+    }
+    menuPorEquipos->cerrar();
+}
 
 void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones){
     list<Conexion>::iterator it;
@@ -144,7 +187,9 @@ void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* 
         it = conexionesGuardadas->begin();
         advance(it, opcion);
         cliente->setAddress(it->ip, it->puerto);
-        cliente->conectar();
+        //TODO aca deberia haber alguna manera de saber en que modo de juego se esta para llamar
+        //a este metodo o no.
+        cargarMenuPorEquipos(cliente, ventana);
     }
 }
 
