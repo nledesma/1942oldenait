@@ -77,7 +77,7 @@ public:
     void reset();
     EscenarioJuego(float velocidadDesplazamientoY, int ancho, int alto, int anchoVentana, int altoVentana, string idSprite, int modo);
     ~EscenarioJuego();
-    void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion);
+    void agregarAvion(float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, int vidas);
     void agregarEnemigo(AvionEnemigo* enemigo);
     /* Etapas */
     void agregarEtapa(Etapa * etapa);

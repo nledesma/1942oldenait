@@ -47,7 +47,7 @@ private:
     int numeroAvion;
 
 public:
-    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, float posXFinal = 0, float posYFinal = 0);
+    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, int vidas, float posXFinal = 0, float posYFinal = 0);
 
     ~Avion();
 

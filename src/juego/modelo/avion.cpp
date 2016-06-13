@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, float posXFinal, float posYFinal){
+Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, int vidas, float posXFinal, float posYFinal){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -19,7 +19,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->idSprite = idSprite;
     this->idSpriteDisparos = idSpriteDisparos;
     this->puntaje = 0;
-    this->vidas = 5;
+    this->vidas = vidas;
     this->numeroAvion = numeroAvion;
     this->estadoPowerUP = ESTADO_SIN_POWER_UP;
 }
