@@ -5,6 +5,7 @@ using namespace std;
 /* Inicio del servidor */
 Servidor::Servidor(int port, int cantidadDeClientes) : GameSocket() {
     partidaEnJuego = false;
+    esperandoEntreEtapas = false;
     try {
         iniciarSocket();
         inicializar(port);
@@ -110,11 +111,19 @@ void *Servidor::cicloAceptar(void *THIS) {
 }
 
 void Servidor::enviarEstadoInicial(int fdCliente) {
-    cout << "se envía el estado inicial." << endl;
+    cout << "Se envía el estado inicial a un cliente." << endl;
     string estadoInicial = Decodificador::getCodigoEstadoInicial(escenario);
     // Se le agrega el número de avión que le corresponde al cliente.
     Decodificador::pushCantidad(estadoInicial, clientes[fdCliente].nroJugador);
     enviarMensaje(estadoInicial, fdCliente);
+    // Luego del estado inicial se le envía si está o no entre etapas. NOTE mutex a las siguientes líneas?
+    string pe = "";
+    Decodificador::push(pe, esperandoEntreEtapas);
+    enviarMensaje(pe, fdCliente);
+    if (esperandoEntreEtapas) {
+        cout << "Como el cliente se conecta entre etapas, se le envían los puntajes." << endl;
+        enviarMensaje(Decodificador::getPuntajes(escenario), fdCliente);
+    }
 }
 
 void *Servidor::atenderCliente(void *arg) {
@@ -124,11 +133,20 @@ void *Servidor::atenderCliente(void *arg) {
     pair<int, string> clienteMensaje;
     clienteMensaje.first = fdCliente;
 
-    // Antes de atenderlo se espera a que se conecten todos.
-    if(!servidor->partidaActiva()) servidor->esperarPartida(fdCliente);
+    if (!servidor->partidaActiva()) {
+        // Antes de atenderlo se espera a que se conecten todos.
+        servidor->esperarPartida(fdCliente);
+    } else {
+        // Si la partida ya está activa, se le manda que faltan 0 jugadores.
+        string mensaje = "";
+        Decodificador::pushCantidad(mensaje, 0);
+        servidor->enviarMensaje(mensaje, fdCliente);
+    }
+
     servidor->enviarEstadoInicial(fdCliente);
     if(!servidor->partidaActiva()) servidor->signalComienzaPartida();
 
+    // Recepción y encolado de mensajes de ese cliente.
     int recieveResult = ESTADO_INICIAL;
     while (servidor->validarEstadoConexion(recieveResult) && servidor->clienteConectado(fdCliente)) {
         string mensajeCliente;
@@ -403,12 +421,15 @@ void Servidor::ejecutar() {
 }
 
 void Servidor::entreEtapas() {
+    // NOTE puede necesitar mutex. Por ahí no se agrega a nadie mientras está entre etapas.
+    esperandoEntreEtapas = true;
     string mensaje;
     Decodificador::pushCantidad(mensaje, (int)escenario->porEquipos());
     mensaje += Decodificador::getPuntajes(escenario);
     broadcastMensaje(mensaje);
     entretenerClientes(10);
-    // TODO ver si hay que mandar vacíos.
+    esperandoEntreEtapas = false;
+    // Después de que ya no está más entre etapas le avisa a todos.
     broadcastEvento(FIN_ENTRE_ETAPAS);
 }
 

@@ -42,7 +42,7 @@ int BotonJugar::handleEvent(SDL_Event* e){
 
 				case SDL_MOUSEBUTTONDOWN:
 				mCurrentSprite = BUTTON_SPRITE_JUGAR_DOWN;
-				cout << "HOLA ESTOY EN JUGAR" << endl;
+				// cout << "HOLA ESTOY EN JUGAR" << endl;
 				return 1;
 				break;
 			}

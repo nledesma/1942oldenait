@@ -36,6 +36,7 @@ private:
     /* Etapas */
     list<Etapa*> etapas;
     list<Etapa*>::iterator itEtapa;
+    int nroEtapaActual;
     list<Avion*> aviones;
     list<AvionEnemigo*> enemigos;
     list<Elemento*> elementos;
@@ -112,6 +113,7 @@ public:
     int getLongitud();
     Etapa * etapaActual();
     list<Etapa *> getEtapas();
+    int getNroEtapa();
     string getIdSprite();
     bool estaActivo();
     void activar();

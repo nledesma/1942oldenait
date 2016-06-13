@@ -42,7 +42,7 @@ int BotonSalir::handleEvent(SDL_Event* e){
 
 				case SDL_MOUSEBUTTONDOWN:
 				mCurrentSprite = BUTTON_SPRITE_SALIR_DOWN;
-				cout << "HOLA ESTOY EN SALIR" << endl;
+				// cout << "HOLA ESTOY EN SALIR" << endl;
 				return 1;
 				break;
 			}

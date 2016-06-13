@@ -43,7 +43,7 @@ int BotonSiguiente::handleEvent(SDL_Event* e){
 
 				case SDL_MOUSEBUTTONDOWN:
 				mCurrentSprite = BUTTON_SPRITE_SIGUIENTE_DOWN;
-				cout << "HOLA ESTOY EN SIGUIENTE" << endl;
+				// cout << "HOLA ESTOY EN SIGUIENTE" << endl;
 				return 1;
 				break;
 			}

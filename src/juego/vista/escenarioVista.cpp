@@ -59,6 +59,9 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     this->agregarVistasPowerUps();
     cout << "agrego los powerups" << endl;
     this->porEquipos = (bool)Decodificador::popInt(infoEscenario);
+    int nroEtapa = Decodificador::popInt(infoEscenario);
+    advance(itEtapa, nroEtapa);
+    cout << "Esta es la etapa que llega del servidor: " << nroEtapa << endl;
     this->nroAvion = Decodificador::popInt(infoEscenario);
 
     if (infoEscenario.length() != 0) {
@@ -72,6 +75,7 @@ int EscenarioVista::comenzarEtapa() {
     this->activar();
     this->scrollingOffset = 0;
     this->elementos = etapaActual()->getElementos();
+    // TODO lo mismo debería ocurrir con los enemigos.
     cout << "se comienza una etapa con " << elementos.size() << " elementos." << endl;
     return this->mainLoop();
 }

@@ -26,6 +26,7 @@ public:
     static void push(string & codigo, AvionEnemigo *enemigo);
     static void push(string & codigo, EscenarioJuego *e);
     static void push(string & codigo, PowerUp *powerUp);
+    static void push(string & codigo, bool b);
     static void pushInicial(string & codigo, Avion *a);
     static void pushInicial(string & codigo, Elemento *e);
     static void pushInicial(string & codigo, EscenarioJuego *e);
@@ -44,6 +45,7 @@ public:
     static string popDisparoInicial(string & codigo);
     static string popEvento(string & codigo);
     static string popCantidad(string & codigo);
+    static bool popBool(string & codigo);
     static float popFloat(string & codigo);
     static int popInt(string & codigo);
     static int popByte(string & codigo);

@@ -133,25 +133,34 @@ int Cliente::enviarEvento(int evento){
 void Cliente::iniciarEscenario() {
 	string mensajeInicial;
 	if(recibirMensaje(mensajeInicial) != MENSAJEOK) return;
+	// TODO si ya había un escenario habría que liberarlo antes de hacer new.
 	this->escenarioVista = new EscenarioVista(mensajeInicial, this->ventana);
 	this->escenarioVista->preloop();
 }
 
 void Cliente::jugar() {
+	// Antes de comenzar nos fijamos si está entre etapas, consultando al servidor.
+	string resEntreEtapas;
+	recibirMensaje(resEntreEtapas);
+	if (Decodificador::popBool(resEntreEtapas)) {
+		cout << "El servidor avisa que el cliente se conectó entre etapas." << endl;
+		entreEtapas();
+	}
+
 	int resultadoRender = CONTINUAR;
 
 	while(escenarioVista->quedanEtapas() && resultadoRender == CONTINUAR && cliente_conectado) {
-		cout << "comienza un ciclo de mensajes." << endl;
+		cout << "Comienza un ciclo de mensajes." << endl;
 		// El ciclo de mensajes termina cuando el escenario sse desactiva.
 		this->escenarioVista->activar();
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
-		cout << "terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
+		cout << "Terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
 		if (resultadoRender == CONTINUAR) entreEtapas();
 	}
 
 	if (!escenarioVista->quedanEtapas()) cout << "Fin del juego." << endl;
-	if (resultadoRender != CONTINUAR) cout << "Se ha salido del juego." << endl;
+	if (resultadoRender != CONTINUAR) cout << "Se procede a salir del juego." << endl;
 }
 
 void* Cliente::cicloMensajes_th(void * THIS){
@@ -187,20 +196,22 @@ void Cliente::entreEtapas() {
 	Logger::instance()->logInfo("Entrando al espacio entre etapas");
 	string mensaje;
 	if (recibirMensaje(mensaje) != MENSAJEOK) {
-		this->cerrar(); // TODO debug.
+		this->cerrar();
 	} else {
-		EspacioEntreEtapas e(ventana, mensaje);
-		// hilo que espera al fin entre etapas.
-		ArgsEsperarEntreEtapas args = {
-			.cliente = this,
-			.espacioEntreEtapas = &e,
-			.evento = FIN_ENTRE_ETAPAS
-		};
+		// Esto se elimina en el hilo creado más abajo, que espera al mensaje del servidor.
+		EspacioEntreEtapas * e = new EspacioEntreEtapas(ventana, mensaje);
+
+		ArgsEsperarEntreEtapas args;
+		args.cliente = this;
+		args.espacioEntreEtapas = e;
+		args.evento = FIN_ENTRE_ETAPAS;
+
 		pthread_t esperar_id;
 		pthread_create(&esperar_id, NULL, esperarEvento_th, (void*) &args);
+
 		// Render entre etapas.
-		if (e.renderLoop() != CONTINUAR) {
-			this->cerrar(); // TODO checkear que anda.
+		if (e->renderLoop() != CONTINUAR) {
+			this->cerrar();
 		}
 	}
 	Logger::instance()->logInfo("Saliendo del espacio entre etapas");
@@ -226,6 +237,7 @@ void* Cliente::esperarEvento_th(void* argsVoid) {
 	ArgsEsperarEntreEtapas * args = (ArgsEsperarEntreEtapas*) argsVoid;
 	args->cliente->esperarEvento(args->evento);
 	args->espacioEntreEtapas->finalizar();
+	delete args->espacioEntreEtapas;
 	pthread_exit(NULL);
 }
 
