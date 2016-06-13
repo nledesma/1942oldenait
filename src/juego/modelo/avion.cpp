@@ -335,3 +335,7 @@ bool Avion::moverAPosicionFinal(float timeStep) {
 int Avion::getNumeroAvion(){
     return this->numeroAvion;
 }
+
+bool Avion::estaColisionando(){
+    return (this->estadoAnimacion >= EXPLOSION_ETAPA_1);
+}

@@ -110,6 +110,8 @@ public:
 
     int getNumeroAvion();
 
+    bool estaColisionando();
+
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

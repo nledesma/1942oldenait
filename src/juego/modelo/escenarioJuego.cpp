@@ -31,6 +31,8 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
 void EscenarioJuego::reset() {
     disparos.clear();
     posicionY = 0;
+    this->enemigos.clear();
+    this->disparosEnemigos.clear();
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
         (*itAviones)->volverEstadoInicial();
     }
@@ -42,6 +44,7 @@ void EscenarioJuego::reset() {
     for (list<PowerUp *>::iterator itPowerUps = powerUps.begin(); itPowerUps != powerUps.end(); itPowerUps++) {
         (*itPowerUps)->volverEstadoInicial();
     }
+
 }
 
 // Se destruyen todas las listas.
@@ -557,7 +560,7 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica) && (!(*itAviones)->estaColisionando())) {
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
@@ -576,7 +579,7 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica)) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica) && (!(*itAviones)->estaColisionando())) {
             for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
                  itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
@@ -589,7 +592,7 @@ void EscenarioJuego::verificarColisiones(){
 
     int nroAvion = 1;
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0){
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!(*itAviones)->estaColisionando())){
             for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
                 if((*itAviones)->getColisionable()->colisiona((*itPowerUps)->getColisionable())){
                     if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
