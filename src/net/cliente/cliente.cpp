@@ -248,15 +248,16 @@ void Cliente::esperarJugadores() {
 	// TODO ver mecanismo de salida!
 	// Vamos a recibir periódicamente los jugadores que faltan.
 	if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
+
 	nRecibido = Decodificador::popInt(mensajeRespuesta);
 	while(nRecibido != 0 && cliente_conectado) {
-		nRecibido = Decodificador::popInt(mensajeRespuesta);
 		if (nRecibido != nActual) {
 			nActual = nRecibido;
 			// TODO mostrar en la pantalla.
 			cout << "Faltan " << nRecibido << " jugadores para comenzar." << endl;
 		}
 		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
+		nRecibido = Decodificador::popInt(mensajeRespuesta);
 	}
 	cout << "Todos los jugadores conectados!" << endl;
 }

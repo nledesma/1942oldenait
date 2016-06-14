@@ -30,7 +30,7 @@ Avion::~Avion(){
 
 void Avion::manejarEvento(int evento){
     /* Se realizan acciones de avión si el mismo no esta loopeando */
-    if((this->estadoAnimacion < LOOP_ETAPA_1 || this->estadoAnimacion == INTERMITENCIA)) {
+    if((this->estadoAnimacion < LOOP_ETAPA_1 || this->estadoAnimacion == INTERMITENCIA) && this->estadoAnimacion != ESTADO_AVION_DESTRUIDO ) {
         switch (evento) {
             case ARRIBA_PRESIONA:
                 this->velocidadY -= this->velocidad;
@@ -97,54 +97,56 @@ void Avion::disminuirTiempoInmunidad(float timestep) {
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-    if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP){
-        this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
-    } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION){
-        this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
-    } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION ){
-        this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
-    }
+    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+        if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
+            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
+        } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION) {
+            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
+        } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION) {
+            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
+        }
 
-    if(this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
-        this->posX += this->velocidadX * timeStep;
-        if( this->posX < 0 ){
-            this->posX = 0;
-        }else if( this->posX + this->getAncho() > ANCHO_ESCENARIO){
-            this->posX = ANCHO_ESCENARIO - this->getAncho();
-        }
-        this->posY += this->velocidadY * timeStep;
-        if( this->posY < 0 ){
-            this->posY = 0;
-        } else if ( this->posY + this->getAlto() > ALTO_ESCENARIO){
-            this->posY = ALTO_ESCENARIO - this->getAlto();
-        }
-        this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
-    } else {
-        if(this->estadoAnimacion != DESCONECTADO) {
-            if(this->contador > 0) {
-                this->contador --;
-                if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5){
-                    this->posY -= (this->velocidad / 2.f) * timeStep;
-                } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13){
-                    this->posY += (this->velocidad / 2.f) * timeStep;
-                }
-            } else {
-                this->contador = CONTADOR_INICIAL;
-                if(this->estadoAnimacion == LOOP_ETAPA_17) {
-                    this->estadoAnimacion = ESTADO_NORMAL;
-                } else if(this->estadoAnimacion == EXPLOSION_ETAPA_10){
-                    this->volverEstadoInicial();
+        if (this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
+            this->posX += this->velocidadX * timeStep;
+            if (this->posX < 0) {
+                this->posX = 0;
+            } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
+                this->posX = ANCHO_ESCENARIO - this->getAncho();
+            }
+            this->posY += this->velocidadY * timeStep;
+            if (this->posY < 0) {
+                this->posY = 0;
+            } else if (this->posY + this->getAlto() > ALTO_ESCENARIO) {
+                this->posY = ALTO_ESCENARIO - this->getAlto();
+            }
+            this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
+        } else {
+            if (this->estadoAnimacion != DESCONECTADO) {
+                if (this->contador > 0) {
+                    this->contador--;
+                    if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5) {
+                        this->posY -= (this->velocidad / 2.f) * timeStep;
+                    } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13) {
+                        this->posY += (this->velocidad / 2.f) * timeStep;
+                    }
                 } else {
-                    this->estadoAnimacion ++;
+                    this->contador = CONTADOR_INICIAL;
+                    if (this->estadoAnimacion == LOOP_ETAPA_17) {
+                        this->estadoAnimacion = ESTADO_NORMAL;
+                    } else if (this->estadoAnimacion == EXPLOSION_ETAPA_10) {
+                        this->volverEstadoInicial();
+                    } else {
+                        this->estadoAnimacion++;
+                    }
+                }
+                if (this->estadoAnimacion == LOOP_ETAPA_17) {
+                    this->velocidadX = 0;
+                    this->velocidadY = 0;
                 }
             }
-            if (this->estadoAnimacion == LOOP_ETAPA_17){
-                this->velocidadX = 0;
-                this->velocidadY = 0;
-            }
         }
+        this->disminuirTiempoInmunidad(timeStep);
     }
-    this->disminuirTiempoInmunidad(timeStep);
     pthread_mutex_unlock(&this->mutexMover);
 }
 
@@ -200,15 +202,22 @@ int Avion::getEstadoAnimacion(){
 vector<Disparo*> Avion::disparar(){
     // Por ahora sale con la misma velocidad y posición que el avión.
     vector<Disparo*> disparos;
-    if (estadoAnimacion > LOOP_ETAPA_1 || this->contadorTiempoInmunidad > 0) {
-        return disparos;
-    }
-    this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
-    if (this->estadoPowerUP == ESTADO_SIN_POWER_UP){
-        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f, this->getPosicionY(), velocidadDisparos));
-    } else {
-        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10, this->getPosicionY(), velocidadDisparos));
-        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10, this->getPosicionY(), velocidadDisparos));
+    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+        if (estadoAnimacion > LOOP_ETAPA_1 || this->contadorTiempoInmunidad > 0) {
+            return disparos;
+        }
+        this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
+        if (this->estadoPowerUP == ESTADO_SIN_POWER_UP) {
+            disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f,
+                                           this->getPosicionY(), velocidadDisparos));
+        } else {
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10,
+                                this->getPosicionY(), velocidadDisparos));
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10,
+                                this->getPosicionY(), velocidadDisparos));
+        }
     }
     return disparos;
 }
@@ -218,14 +227,18 @@ void Avion::volverEstadoInicial(bool inmunidad){
     this->velocidadY = 0;
     this->posX = this->posXInicial;
     this->posY = this->posYInicial;
-    this->estadoPowerUP = ESTADO_SIN_POWER_UP;
-    if (inmunidad){
-        this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
-        this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
+    if (this->vidas != 0) {
+        this->estadoPowerUP = ESTADO_SIN_POWER_UP;
+        if (inmunidad) {
+            this->contadorTiempoInmunidad = TIEMPO_INMUNIDAD;
+            this->contadorIntermitenciaInmunidad = TIEMPO_INTERMITENCIA;
+        }
+        this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
+        if (this->estadoAnimacion != DESCONECTADO)
+            this->estadoAnimacion = ESTADO_NORMAL;
+    } else {
+        this->estadoAnimacion = ESTADO_AVION_DESTRUIDO;
     }
-    this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
-    if (this->estadoAnimacion != DESCONECTADO)
-        this->estadoAnimacion = ESTADO_NORMAL;
 }
 
 string Avion::getIdSprite(){
@@ -253,6 +266,7 @@ Colisionable* Avion::getColisionable(){
 
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
+
         if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
             this->estadoAnimacion = EXPLOSION_ETAPA_1 + OFFSET_ESTADO_EXPLOSION;
             if (this->vidas > 0) {
@@ -306,35 +320,39 @@ float Avion::getContadorTiempoInmunidad() {
 bool Avion::moverAPosicionFinal(float timeStep) {
     bool resultado = false;
     pthread_mutex_lock(&this->mutexMover);
-    this->estadoAnimacion = ESTADO_NORMAL;
-    if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
-        if (this->posX != this->posXFinal){
-            if (this->posX < this->posXFinal) {
-                if ((this->posX + this->velocidad/2 * timeStep) < this->posXFinal)
-                    this->posX += this->velocidad/2 * timeStep;
-                else
-                    this->posX = this->posXFinal;
+    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+        this->estadoAnimacion = ESTADO_NORMAL;
+        if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
+            if (this->posX != this->posXFinal) {
+                if (this->posX < this->posXFinal) {
+                    if ((this->posX + this->velocidad / 2 * timeStep) < this->posXFinal)
+                        this->posX += this->velocidad / 2 * timeStep;
+                    else
+                        this->posX = this->posXFinal;
+                } else {
+                    if ((this->posX - this->velocidad / 2 * timeStep) > this->posXFinal)
+                        this->posX -= this->velocidad * timeStep;
+                    else
+                        this->posX = this->posXFinal;
+                }
             } else {
-                if ((this->posX - this->velocidad/2 * timeStep) > this->posXFinal)
-                    this->posX -= this->velocidad * timeStep;
-                else
-                    this->posX = this->posXFinal;
+                if (this->posY < this->posYFinal) {
+                    if ((this->posY + this->velocidad / 2 * timeStep) < this->posYFinal)
+                        this->posY += this->velocidad / 2 * timeStep;
+                    else
+                        this->posY = this->posYFinal;
+                } else {
+                    if ((this->posY - this->velocidad / 2 * timeStep) > this->posYFinal)
+                        this->posY -= this->velocidad / 2 * timeStep;
+                    else
+                        this->posY = this->posYFinal;
+                }
             }
         } else {
-            if (this->posY < this->posYFinal) {
-                if ((this->posY + this->velocidad/2 * timeStep) < this->posYFinal)
-                    this->posY += this->velocidad/2 * timeStep;
-                else
-                    this->posY = this->posYFinal;
-            } else {
-                if ((this->posY - this->velocidad/2 * timeStep) > this->posYFinal)
-                    this->posY -= this->velocidad/2 * timeStep;
-                else
-                    this->posY = this->posYFinal;
-            }
+            this->estadoAnimacion = ESTACIONADO;
+            resultado = true;
         }
     } else {
-        this->estadoAnimacion = ESTACIONADO;
         resultado = true;
     }
     pthread_mutex_unlock(&this->mutexMover);
