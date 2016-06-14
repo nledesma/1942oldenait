@@ -330,8 +330,8 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
     asignarEquipo(fdCliente, datos.nroJugador);
 
     datos.nombreJugador = nombre;
-    // TODO || esperandoEntreEtapas.
-    if(this->escenario->estaActivo()){
+    
+    if(this->escenario->estaActivo() || esperandoEntreEtapas){
         escenario->avion(datos.nroJugador)->setEstadoAnimacion(ESTADO_NORMAL);
     }
     nombres[nombre] = true;
