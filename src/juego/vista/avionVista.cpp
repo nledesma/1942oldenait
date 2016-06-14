@@ -2,14 +2,14 @@
 
 AvionVista::AvionVista(float posX, float posY, string pathSprite){
     this->iniciarAvion(posX, posY, pathSprite);
-    this->vidas = 0;
+    //this->vidas = 0;
 }
 
 AvionVista::AvionVista(string infoAvion){
     float posX = Decodificador::popFloat(infoAvion);
     float posY = Decodificador::popFloat(infoAvion);
     this->iniciarAvion(posX, posY, infoAvion);
-    this->vidas = 0;
+    //this->vidas = 0;
 }
 
 AvionVista::~AvionVista() { }

@@ -29,6 +29,8 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
         titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
         titulosPuntaje[1]->cargarFuente("Puntaje - Equipo 2");
     }
+    this->textoPerdedor = new Texto(50, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    this->textoPerdedor->cargarFuente("PERDISTE! :( ");
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {
@@ -482,6 +484,9 @@ void EscenarioVista::renderizarImagenVidas() {
     advance (it, this->nroAvion - 1);
     AvionVista *avionVida = *it;
     int vidas =  (avionVida)->getVidas();
+    if(vidas == 0){
+        this->textoPerdedor->renderCentrado(200);
+    }
     for (int i = 0; i < vidas; i++) {
         this->figuraVidas->render(330 + (i*ANCHO_VIDA), 10, this->ventana->getVentanaRenderer());
     }

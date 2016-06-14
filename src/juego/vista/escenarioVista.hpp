@@ -105,6 +105,7 @@ private:
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
     Figura* figuraVidas;
+    Texto* textoPerdedor;
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);
