@@ -39,9 +39,10 @@ public:
 	Cliente(Ventana* ventana);
     ~Cliente();
     void setAddress(string serverAddress, int port);
-    int conectar();
+    bool conectar();
     void cerrar();
 	/* Lógica del juego */
+	void ejecutar();
 	void iniciarEscenario();
 	void jugar();
 	void actualizarEscenario(string mensaje);
