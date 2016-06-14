@@ -266,9 +266,18 @@ Colisionable* Avion::getColisionable(){
 
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
-
+        // cout << "ESTADO ANIMACION: " << this->estadoAnimacion << endl;
+        // if((this->estadoAnimacion < AVION_TRANSFORMADO_EXPLOSION_ETAPA_1) && (this->estadoAnimacion > EXPLOSION_ETAPA_10)){
+        //     if((contadorColisiones > 0) && ((this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE))){
+        //         contadorColisiones--;
+        //         this->estadoAnimacion = AVION_TRANSFORMADO_EXPLOSION_ETAPA_1;
+        //         cout << "CONTADOR COLISIONES: " << contadorColisiones << endl;
+        //     }
+        // }
+        cout << "Este es el estado de animacion: " << this-> estadoAnimacion << endl;
         if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
-            this->estadoAnimacion = EXPLOSION_ETAPA_1 + OFFSET_ESTADO_EXPLOSION;
+            this->estadoAnimacion = EXPLOSION_ETAPA_1 ;
+            cout << "Este es el nuevo estado de animacion: " << this->estadoAnimacion << endl;
             if (this->vidas > 0) {
                 pthread_mutex_lock(&this->mutexVidas);
                 quitarUnaVida();
@@ -360,9 +369,27 @@ bool Avion::moverAPosicionFinal(float timeStep) {
 }
 
 void Avion::setPowerUpAmetralladoras() {
-    this->estadoPowerUP = ESTADO_POWER_UP_DISPARO_DOBLE;
+    if(this->estadoPowerUP == 2){
+        this->estadoPowerUP = ESTADO_POWER_UP_DOBLE;
+    }else{
+        this->estadoPowerUP = ESTADO_POWER_UP_DISPARO_DOBLE;
+    }
 }
 
+void Avion::setPowerUpAvionesSecundarios() {
+    cout << "ESTADO POWER UP" << this->estadoPowerUP << endl;
+    if(this->estadoPowerUP == 1){
+        cout << "ENTRO DONDE NO DEBERIA" << endl;
+        this->estadoPowerUP = ESTADO_POWER_UP_DOBLE;
+    }else{
+        cout << "ENTRO A DONDE DEBERIA" << endl;
+        this->estadoPowerUP = ESTADO_POWER_UP_AVIONES_SECUNDARIOS;
+    }
+}
+
+int Avion::getEstadoPowerUp(){
+    return this->estadoPowerUP;
+}
 
 int Avion::getNumeroAvion(){
     return this->numeroAvion;

@@ -641,7 +641,7 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
         avion->setPowerUpAmetralladoras();
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
-
+        avion->setPowerUpAvionesSecundarios();
     }
 }
 
