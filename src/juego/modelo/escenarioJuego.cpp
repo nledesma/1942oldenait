@@ -93,8 +93,14 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
     }
     Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, numeroAvion, vidas, posXFinal, posYFinal);
     this->aviones.push_back(avion);
-    // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
-    equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
+}
+
+void EscenarioJuego::setEquipo(int nroAvion, int equipo) {
+    if (equipo != 0 && equipo != 1) {
+        cout << "Error en el equipo recibido ("<< equipo <<"), se le asigna el equipo 1." << endl;
+        equipo = 0;
+    }
+    equipos[equipo].insert(aviones.size());
 }
 
 void EscenarioJuego::agregarEnemigo(AvionEnemigo *enemigo) {

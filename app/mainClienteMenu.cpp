@@ -134,20 +134,20 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 
 }
 
-void agregarJugador(MenuPorEquipos* menuPorEquipos, Cliente* cliente, Ventana* ventana){
+void agregarJugador(MenuPorEquipos* menuPorEquipos, Cliente* cliente){
     int equipoElegido = menuPorEquipos->getListaDeSeleccion()->getNroBotonSeleccionado();
     cout << "EQUIPO ELEGIDO: " << equipoElegido << endl;
-    //TODO habria que setearle el equipo elegido al cliente de alguna forma.
-    cliente->conectar();
-
+    // No es un evento, pero es un entero y fiaca.
+    cliente->enviarEvento(equipoElegido);
 }
 
+// TODO test.
 void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
     MenuPorEquipos* menuPorEquipos = new MenuPorEquipos(ventana);
-    for(int i = 1; i < 3; i++){
-        string equipo = "EQUIPO " + to_string(i);
-        menuPorEquipos->getListaDeSeleccion()->agregarOpcion(equipo);
-    }
+
+    menuPorEquipos->getListaDeSeleccion()->agregarOpcion("Equipo 1");
+    menuPorEquipos->getListaDeSeleccion()->agregarOpcion("Equipo 2");
+
     menuPorEquipos->cargarBotones(ventana);
     bool quit = false;
     SDL_Event e;
@@ -162,11 +162,14 @@ void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
                 menuPorEquipos->getListaDeSeleccion()->clickEn(x, y);
                 int respuesta = menuPorEquipos->getBotonSiguiente()[0].manejarEvento(&e);
                 if (respuesta == 1) {
-                    agregarJugador(menuPorEquipos, cliente, ventana);
+                    agregarJugador(menuPorEquipos, cliente);
+                    quit = true;
                     // levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
                 }
             } else if(e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN) {
                 // TODO Refactorizar.
+                agregarJugador(menuPorEquipos, cliente);
+                quit = true;
                 //levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
             }
 		}
@@ -181,15 +184,24 @@ void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* 
     list<Conexion>::iterator it;
     int opcion = numeroSeleccionado;
     cout << "Opcion: " << opcion << endl;
-    if(opcion == 6){
+    if (opcion == 6) {
         cargarMenuConexionManual(cliente, ventana, menuConexiones);
-    }else{
+    } else {
         it = conexionesGuardadas->begin();
         advance(it, opcion);
         cliente->setAddress(it->ip, it->puerto);
-        //TODO aca deberia haber alguna manera de saber en que modo de juego se esta para llamar
-        //a este metodo o no.
-        cargarMenuPorEquipos(cliente, ventana);
+        if (cliente->conectar()) {
+            // Si nos pudimos conectar, le preguntamos al servidor si la partida está en curso y si es por equipos.
+            string respuesta;
+            cliente->recibirMensaje(respuesta);
+            bool enCurso = Decodificador::popBool(respuesta);
+            bool porEquipos = Decodificador::popBool(respuesta);
+            if (!enCurso && porEquipos) {
+                cargarMenuPorEquipos(cliente, ventana);
+            }
+            // Después de la elección de  equipo, si la hubo, se procede con el juego.
+            cliente->ejecutar();
+        }
     }
 }
 

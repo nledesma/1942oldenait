@@ -135,6 +135,7 @@ public:
     int validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion);
     void iniciarModoPractica();
     void crearPowerUpBonus(float posX, float posY, int valor);
+    void setEquipo(int nroAvion, int equipo);
 
 };
 
