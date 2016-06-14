@@ -95,12 +95,10 @@ string Decodificador::popCantidad(string & codigo){
 
 /* Push y pop de bool (1 byte)*/
 void Decodificador::push(string & codigo, bool b) {
-    cout << "Se pushea un bool" << endl;
     if (b)
         push(codigo, 't');
     else
         push(codigo, 'f');
-    cout << "Este es el mensaje después del push: " << endl;
     imprimirBytes(codigo);
 }
 
