@@ -64,7 +64,7 @@ float EscenarioJuego::getScrollingOffset() {
 }
 
 void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, string idSprite,
-                                  string idSpriteDisparos, int numeroAvion) {
+                                  string idSpriteDisparos, int numeroAvion, int vidas) {
     float posX = 0, posY = 0; // Habría que hacer un constructor sin posiciones.
     float posXFinal;
     float posYFinal;
@@ -94,7 +94,7 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
             posYFinal = 300;
             break;
     }
-    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, numeroAvion, posXFinal, posYFinal);
+    Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, numeroAvion, vidas, posXFinal, posYFinal);
     this->aviones.push_back(avion);
     // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
     equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());

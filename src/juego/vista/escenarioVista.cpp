@@ -477,18 +477,18 @@ void EscenarioVista::cargarVistaVidas(){
 
 /* Renderizaciones */
 
-void EscenarioVista::renderizarImagenVidas(){
+void EscenarioVista::renderizarImagenVidas() {
     list<AvionVista*>::iterator it = aviones.begin();
     advance (it, this->nroAvion - 1);
     AvionVista *avionVida = *it;
     int vidas =  (avionVida)->getVidas();
-    for(int i = 0; i < vidas; i++){
+    for (int i = 0; i < vidas; i++) {
         this->figuraVidas->render(330 + (i*ANCHO_VIDA), 10, this->ventana->getVentanaRenderer());
     }
 }
 
-void EscenarioVista::renderizarElementos(){
-    for(list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador){
+void EscenarioVista::renderizarElementos() {
+    for (list<ElementoVista*>::iterator iterador = this->getElementos().begin(); iterador != this->getElementos().end(); ++iterador) {
         ElementoVista* elementoVista = *iterador;
         elementoVista->render(this->ventana->getVentanaRenderer());
     }

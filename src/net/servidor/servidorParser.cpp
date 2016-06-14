@@ -280,6 +280,7 @@ bool ServidorParser::agregarElementos(Etapa * etapa, XMLElement* pNodoEtapa, int
 bool ServidorParser::agregarAviones(Servidor* servidor, XMLNode * pNodoConfiguracion){
 	float velocidadDesplazamiento, velocidadDisparos;
 	string avionSpriteId, disparosSpriteId;
+	int vidas;
 
 	XMLElement* pNodoAviones = pNodoConfiguracion->FirstChildElement("aviones");
 	if (!pNodoAviones) return false;
@@ -291,13 +292,14 @@ bool ServidorParser::agregarAviones(Servidor* servidor, XMLNode * pNodoConfigura
 	if (!getFloat(pNodoAvion, "velocidadDisparos", velocidadDisparos)) return false;
 	if (!getString(pNodoAvion, "avionSpriteId", avionSpriteId)) avionSpriteId = "";
 	if (!getString(pNodoAvion, "disparosSpriteId", disparosSpriteId)) avionSpriteId = "";
+	if (!getInt(pNodoAvion, "vidas", vidas)) return false;
 	int cantidadDeClientes = servidor->getCantidadMaximaDeClientes();
 
 	// Agregamos el mismo avión para todos los jugadores.
 	for (int i = 1; i <= cantidadDeClientes; i++){
 		servidor->getEscenario()->agregarAvion(velocidadDesplazamiento,
 			velocidadDisparos + velocidadDesplazamiento,
-			avionSpriteId, disparosSpriteId, i);
+			avionSpriteId, disparosSpriteId, i, vidas);
 	}
 	return true;
 }
