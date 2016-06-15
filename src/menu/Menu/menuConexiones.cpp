@@ -10,7 +10,7 @@ void MenuConexiones::cargarBotones(Ventana* ventana){
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
 
-    if(!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/siguienteSprite"))){
+    if(!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloSiguiente"))){
 		cout << "Failed to load button sprite texture!" << endl;
     }else{
         //Set sprites

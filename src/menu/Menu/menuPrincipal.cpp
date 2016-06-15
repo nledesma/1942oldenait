@@ -10,7 +10,7 @@ void MenuPrincipal::cargarBotones(Ventana* ventana){
     if (!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")) {
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
-    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/jugarSprite" ))){
+    if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloJugar" ))){
         cout << "Failed to load button sprite texture!" << endl;
     } else {
         //Set sprites
@@ -20,7 +20,7 @@ void MenuPrincipal::cargarBotones(Ventana* ventana){
     }
 
 
-    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/salirSprite"))){
+    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloSiguiente"))){
 		cout << "Failed to load button sprite texture!" << endl;
     } else {
         //Set sprites

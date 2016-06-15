@@ -11,8 +11,8 @@ class Boton{
 		virtual void render(SDL_Renderer* renderer) = 0;
 		virtual void setSprites(SDL_Renderer* renderer) = 0;
 	public:
-		const int BUTTON_WIDTH = 193;
-		const int BUTTON_HEIGHT = 48;
+		const int BUTTON_WIDTH = 188;
+		const int BUTTON_HEIGHT = 42;
 		const int TOTAL_BUTTONS = 1;
 		Boton();
 		int getPosicionX();
