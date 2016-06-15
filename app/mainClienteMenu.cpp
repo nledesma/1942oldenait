@@ -13,6 +13,11 @@
 #include "../src/menu/listaDeSeleccion.hpp"
 using namespace std;
 
+void cargarMenuPrincipal(Cliente * cliente, Ventana* ventana);
+void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeUsuario, Cliente* cliente);
+void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* menuConexiones, MenuDatosDeUsuario* menuDatosDeUsuario);
+void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones, MenuDatosDeUsuario* menuDatosDeUsuario);
+
 bool validarInt(string valor) {
     if  (valor.empty() || ((!isdigit(valor[0])) && (valor[0] != '-') && (valor[0] != '+')))
         return false;
@@ -102,7 +107,7 @@ void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexio
 
 }
 
-void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones){
+void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones* menuConexiones, MenuDatosDeUsuario* menuDatosDeUsuario){
     MenuConexionManual* menuConexionManual = new MenuConexionManual();
     TextoDinamico* textoDinamicoIP = new TextoDinamico(25, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     textoDinamicoIP->cambiarTexto("");
@@ -119,6 +124,14 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 				menuConexiones->cerrar();
                 cargarMenuPuerto(textoDinamicoIP->getTexto(), cliente, ventana, menuConexionManual);
 			}
+            int respuestaAtras = menuConexionManual->getBotonAtras()[0].manejarEvento(&e);
+            if(respuestaAtras == 1){
+                cout << "ventana antes de cerrar el menú conexiones." << (long) ventana << endl;
+                menuConexiones->cerrar();
+                menuConexiones = new MenuConexiones(ventana);
+                cout << "ventana después de cerrar el menú conexiones. " << (long) ventana << endl;
+                cargarMenuConexiones(cliente, ventana, menuConexiones, menuDatosDeUsuario);
+            }
 			ventana->limpiar();
 			//Renderizado
             textoDinamicoIP->manejarEvento(e);
@@ -134,6 +147,7 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 
 }
 
+//TODO
 void agregarJugador(MenuPorEquipos* menuPorEquipos, Cliente* cliente){
     int equipoElegido = menuPorEquipos->getListaDeSeleccion()->getNroBotonSeleccionado();
     cout << "EQUIPO ELEGIDO: " << equipoElegido << endl;
@@ -180,12 +194,12 @@ void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
     menuPorEquipos->cerrar();
 }
 
-void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones){
+void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones, MenuDatosDeUsuario* menuDatosDeUsuario){
     list<Conexion>::iterator it;
     int opcion = numeroSeleccionado;
     cout << "Opcion: " << opcion << endl;
     if (opcion == 6) {
-        cargarMenuConexionManual(cliente, ventana, menuConexiones);
+        cargarMenuConexionManual(cliente, ventana, menuConexiones, menuDatosDeUsuario);
     } else {
         it = conexionesGuardadas->begin();
         advance(it, opcion);
@@ -205,7 +219,7 @@ void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* 
     }
 }
 
-void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* menuConexiones) {
+void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* menuConexiones, MenuDatosDeUsuario* menuDatosDeUsuario) {
     list<Conexion> conexionesGuardadas = ClienteParser::levantarConexiones();
     list<Conexion>::iterator it;
     for(it = conexionesGuardadas.begin(); it != conexionesGuardadas.end(); it ++){
@@ -228,12 +242,18 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
                 int respuesta = menuConexiones->getBotonSiguiente()[0].manejarEvento(&e);
                 if (respuesta == 1) {
                     int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();
-                    levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
+                    levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones, menuDatosDeUsuario);
+                }
+                int respuestaAtras = menuConexiones->getBotonAtras()[0].manejarEvento(&e);
+                if(respuestaAtras == 1){
+                    menuConexiones->cerrar();
+                    cargarMenuDatosDeUsuario(ventana, menuDatosDeUsuario, cliente);
+                    quit = true;
                 }
             } else if(e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN) {
                 // TODO Refactorizar.
                 int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();
-                levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones);
+                levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones, menuDatosDeUsuario);
             }
 		}
         ventana->limpiar();
@@ -247,6 +267,7 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 	MenuConexiones* menuConexiones = new MenuConexiones(ventana);
     TextoDinamico* textoDinamico = new TextoDinamico(25, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     textoDinamico->cambiarTexto("");
+    menuDatosDeUsuario->cargarBotones(ventana);
 	bool quit = false;
 	SDL_Event e;
     SDL_StartTextInput();
@@ -258,9 +279,15 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			int respuesta = menuDatosDeUsuario->getBotonSiguiente()[0].manejarEvento(&e);
 			if(respuesta == 1 ||  (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)){
 				menuDatosDeUsuario->cerrar();
-				cargarMenuConexiones(cliente, ventana, menuConexiones);
+				cargarMenuConexiones(cliente, ventana, menuConexiones, menuDatosDeUsuario);
                 quit = true;
 			}
+            int respuestaAtras = menuDatosDeUsuario->getBotonAtras()[0].manejarEvento(&e);
+            if(respuestaAtras == 1){
+                quit = true;
+                menuDatosDeUsuario->cerrar();
+                cargarMenuPrincipal(cliente, ventana);
+            }
 
 			ventana->limpiar();
 			//Renderizado
@@ -277,7 +304,7 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
     SDL_StopTextInput();
 }
 
-void menuPrincipal(Cliente * cliente, Ventana* ventana) {
+void cargarMenuPrincipal(Cliente * cliente, Ventana* ventana) {
 	MenuPrincipal* menuPrincipal = new MenuPrincipal();
 	MenuDatosDeUsuario* menuDatosDeUsuario = new MenuDatosDeUsuario();
 
@@ -319,6 +346,6 @@ int main(){
     Ventana* ventana = new Ventana(800, 800);
     ventana->iniciar();
     Cliente cliente(ventana);
-    menuPrincipal(&cliente, ventana);
+    cargarMenuPrincipal(&cliente, ventana);
     return 0;
 }
