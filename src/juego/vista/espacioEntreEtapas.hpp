@@ -5,9 +5,15 @@
 #include "ventana.hpp"
 #include "texto.hpp"
 #include "../../net/decodificador.hpp"
+#include <utility> // pair
+#include <map>
+#include <string>
+
+using namespace std;
 
 class EspacioEntreEtapas {
 private:
+    int nroEtapa;
     Ventana * ventana;
     Figura * fondo;
     list<Texto*> textos;
@@ -15,7 +21,8 @@ private:
     bool porEquipos;
     bool dibujar;
 public:
-    EspacioEntreEtapas(Ventana * ventana, string mensajeInicial);
+    EspacioEntreEtapas(Ventana * ventana, string mensajeInicial, int nroEtapa);
+    void imprimirTituloEtapa();
     void finalizar();
     int renderLoop();
     void renderTextos();

@@ -406,7 +406,6 @@ int AvionVista::actualizar(string codigo){
     int estadoAnimacionActual = Decodificador::popInt(codigo);
     this->vidas = Decodificador::popInt(codigo);
     if((estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (estadoPowerUP == ESTADO_POWER_UP_DOBLE)){
-        cout << "ENTRO PARA SETEAR LOS CLIPS" << endl;
         setearClips();
         estadoAnimacionActual = estadoAnimacionActual + 33;
     }

@@ -7,7 +7,7 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->ventana = ventana;
     this->ancho = Decodificador::popInt(infoEscenario);
     this->alto = Decodificador::popInt(infoEscenario);
-    this->pathImagen = Decodificador::popIdImg(infoEscenario);
+    this->pathImagen = Decodificador::popString(infoEscenario);
     this->scrollingOffset = 0;
     this->contadorSonido = 0;
     this->fondo = new Figura();

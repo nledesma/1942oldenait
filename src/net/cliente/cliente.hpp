@@ -26,6 +26,7 @@ using namespace std;
 
 class Cliente: public GameSocket{
 private:
+	int etapas = 0;
     string ip;
     int port;
     bool cliente_conectado;
@@ -46,7 +47,7 @@ public:
 	void iniciarEscenario();
 	void jugar();
 	void actualizarEscenario(string mensaje);
-	void entreEtapas();
+	void entreEtapas(int nroEtapa);
 	void cicloMensajes();
 	static void * cicloMensajes_th(void* THIS);
 	/* Comunicación */

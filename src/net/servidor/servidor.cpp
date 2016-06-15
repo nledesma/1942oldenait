@@ -122,7 +122,7 @@ void Servidor::enviarEstadoInicial(int fdCliente) {
     enviarMensaje(pe, fdCliente);
     if (esperandoEntreEtapas) {
         cout << "Como el cliente se conecta entre etapas, se le envían los puntajes." << endl;
-        enviarMensaje(Decodificador::getPuntajes(escenario), fdCliente);
+        enviarMensaje(Decodificador::getPuntajes(escenario, nombreSegunNroAvion), fdCliente);
     }
 }
 
@@ -321,6 +321,7 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
     if (!partidaEnJuego){
         datos.nroJugador = (int) clientes.size() + 1;
         nroAvionSegunNombre[nombre] = datos.nroJugador;
+        nombreSegunNroAvion[datos.nroJugador] = nombre;
         cout << "Se agrega al jugador " << nombre << " con el nro de avión " << datos.nroJugador << endl;
     } else {
         datos.nroJugador = nroAvion(nombre);
@@ -453,7 +454,7 @@ void Servidor::entreEtapas() {
     esperandoEntreEtapas = true;
     string mensaje;
     Decodificador::pushCantidad(mensaje, (int)escenario->porEquipos());
-    mensaje += Decodificador::getPuntajes(escenario);
+    mensaje += Decodificador::getPuntajes(escenario, nombreSegunNroAvion);
     broadcastMensaje(mensaje);
     entretenerClientes(10);
     esperandoEntreEtapas = false;

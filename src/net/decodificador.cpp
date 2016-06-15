@@ -8,7 +8,7 @@ void Decodificador::push(string &codigo, string idImg) {
     codigo += idImg;
 }
 
-string Decodificador::popIdImg(string &codigo) {
+string Decodificador::popString(string &codigo) {
     string lengthString = popBytes(codigo, sizeof(int));
     int length = stringToInt(lengthString);
     return popBytes(codigo, length);
@@ -186,24 +186,24 @@ void Decodificador::pushCantidad(string &codigo, int cantidad) {
 string Decodificador::popAvionInicial(string & codigo){
     string str1 = popBytes(codigo, sizeof(float));
     string str2 = popBytes(codigo, sizeof(float));
-    string str3 = popIdImg(codigo);
+    string str3 = popString(codigo);
     return str1 + str2 + str3;
 }
 
 string Decodificador::popElementoInicial(string & codigo){
     string str1 = popBytes(codigo, 2*sizeof(float));
-    string str2 = popIdImg(codigo);
+    string str2 = popString(codigo);
     return str1 + str2;
 }
 
 string Decodificador::popEscenarioInicial(string & codigo){
     string str1 = popBytes(codigo, 2*sizeof(int));
-    string str2 = popIdImg(codigo);
+    string str2 = popString(codigo);
     return str1 + str2;
 }
 
 string Decodificador::popDisparoInicial(string &codigo) {
-    return popIdImg(codigo);
+    return popString(codigo);
 }
 
 string Decodificador::getCodigoEstadoInicial(EscenarioJuego * escenarioJuego) {
@@ -289,13 +289,18 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     return codigo;
 }
 
-string Decodificador::getPuntajes(EscenarioJuego * escenario) {
+string Decodificador::getPuntajes(EscenarioJuego * escenario, map<int, string> nombreSegunNroAvion) {
     string mensaje;
     list<pair<int,int>> listaPuntajes = escenario->getPuntajes();
     list<pair<int,int>>::iterator it;
     for (it = listaPuntajes.begin(); it != listaPuntajes.end(); ++it) {
+        string nombre = nombreSegunNroAvion[it->first];
         Decodificador::push(mensaje, it->first);
         Decodificador::push(mensaje, it->second);
+        Decodificador::pushCantidad(mensaje, (int) nombreSegunNroAvion.size());
+        for (int i = 0; i < nombreSegunNroAvion.size();i++){
+            Decodificador::push(mensaje, nombreSegunNroAvion[i]);
+        }
     }
     return mensaje;
 }

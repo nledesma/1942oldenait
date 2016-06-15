@@ -33,7 +33,7 @@ public:
     static void pushInicialDisparo(string & codigo, string idSpriteDisparo);
     static void pushCantidad(string & codigo, int cantidad);
     /* Devuelve un par con el id y el código con el nuevo estado */
-    static string popIdImg(string & codigo);
+    static string popString(string &codigo);
     static string popElemento(string & codigo);
     static string popAvion(string & codigo);
     static string popEscenario(string & codigo);
@@ -54,7 +54,7 @@ public:
     static void imprimirBytes(string codigo);
     static string getCodigoEstadoInicial(EscenarioJuego * escenarioJuego);
     static string getCodigoEstadoActual(EscenarioJuego * escenarioJuego);
-    static string getPuntajes(EscenarioJuego * escenarioJuego);
+    static string getPuntajes(EscenarioJuego * escenarioJuego, map<int, string> nombreSegunNroAvion);
 };
 
 #endif

@@ -151,7 +151,7 @@ void Cliente::jugar() {
 	recibirMensaje(resEntreEtapas);
 	if (Decodificador::popBool(resEntreEtapas)) {
 		cout << "El servidor avisa que el cliente se conectó entre etapas." << endl;
-		entreEtapas();
+		entreEtapas(this->etapas);
 	}
 
 	int resultadoRender = CONTINUAR;
@@ -162,8 +162,9 @@ void Cliente::jugar() {
 		this->escenarioVista->activar();
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
+		this->etapas ++;
 		cout << "Terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
-		if (resultadoRender == CONTINUAR) entreEtapas();
+		if (resultadoRender == CONTINUAR) entreEtapas(this->etapas);
 	}
 
 	if (!escenarioVista->quedanEtapas()) cout << "Fin del juego." << endl;
@@ -199,14 +200,14 @@ void Cliente::actualizarEscenario(string mensaje){
 	}
 }
 
-void Cliente::entreEtapas() {
+void Cliente::entreEtapas(int nroEtapa) {
 	Logger::instance()->logInfo("Entrando al espacio entre etapas");
 	string mensaje;
 	if (recibirMensaje(mensaje) != MENSAJEOK) {
 		this->cerrar();
 	} else {
 		// Esto se elimina en el hilo creado más abajo, que espera al mensaje del servidor.
-		EspacioEntreEtapas e(ventana, mensaje);
+		EspacioEntreEtapas e(ventana, mensaje, nroEtapa);
 
 		ArgsEsperarEntreEtapas args;
 		args.cliente = this;
