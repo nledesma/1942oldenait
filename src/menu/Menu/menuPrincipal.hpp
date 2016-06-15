@@ -10,7 +10,8 @@ class MenuPrincipal: public Menu{
     private:
         BotonJugar* botonJugar;
         BotonSalir* botonSalir;
-        Texto* texto;
+        // Texto* texto;
+        Figura* figuraLetras;
     public:
         MenuPrincipal();
         void cargarBotones(Ventana* ventana);
