@@ -569,6 +569,7 @@ void EscenarioJuego::verificarColisiones(){
                 subirPuntaje(enemigoAColisionar->estallar() + this->validarBonificacionEscuadron(enemigoAColisionar, (*itDisparos)->getNroAvion()), (*itDisparos)->getNroAvion());
                 (*itDisparos)->colisionar();
             }
+            avion((*itDisparos)->getNroAvion())->aumentarAciertos();
         }
     }
 
@@ -654,14 +655,17 @@ void EscenarioJuego::proyectarDisparos(float timeStep) {
     }
 }
 
-list< pair<int,int> > EscenarioJuego::getPuntajes() {
-    list<pair<int,int> > equipoPuntaje;
+list< pair<int,vector<int>> > EscenarioJuego::getPuntajes() {
+    list<pair<int,vector<int>> > equipoPuntaje;
     for (int i = 0; i < equipos.size(); ++i) {
         set<int>::iterator it;
-        pair<int,int> par;
+        pair<int,vector<int>> par;
         par.first = i;
         for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
-            par.second = avion(*it)->getPuntaje();
+            par.second.push_back(avion(*it)->getPuntaje());
+            par.second.push_back(avion(*it)->getCantidadDisparos());
+            par.second.push_back(avion(*it)->getCantidadAciertos());
+            par.second.push_back(avion(*it)->getPorcentajeAciertos());
             equipoPuntaje.push_back(par);
         }
     }

@@ -22,6 +22,8 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->vidas = vidas;
     this->numeroAvion = numeroAvion;
     this->estadoPowerUP = ESTADO_SIN_POWER_UP;
+    this->cantidadDisparos = 0;
+    this->cantidadAciertos = 0;
 }
 
 Avion::~Avion(){
@@ -210,6 +212,7 @@ vector<Disparo*> Avion::disparar(){
         if (this->estadoPowerUP == ESTADO_SIN_POWER_UP) {
             disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f,
                                            this->getPosicionY(), velocidadDisparos));
+            this->cantidadDisparos+= 1;
         } else if (this->estadoPowerUP == ESTADO_POWER_UP_DISPARO_DOBLE){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10,
@@ -217,6 +220,7 @@ vector<Disparo*> Avion::disparar(){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10,
                                 this->getPosicionY(), velocidadDisparos));
+            this->cantidadDisparos+= 2;
         } else if (this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,
@@ -226,6 +230,7 @@ vector<Disparo*> Avion::disparar(){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 25,
                                 this->getPosicionY() + 15, velocidadDisparos));
+            this->cantidadDisparos+= 3;
         } else if (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,
@@ -239,6 +244,7 @@ vector<Disparo*> Avion::disparar(){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 25,
                                 this->getPosicionY() + 15, velocidadDisparos));
+            this->cantidadDisparos+= 4;
         }
     }
     return disparos;
@@ -411,4 +417,24 @@ int Avion::getNumeroAvion(){
 
 bool Avion::estaColisionando(){
     return (this->estadoAnimacion >= EXPLOSION_ETAPA_1);
+}
+
+void Avion::aumentarAciertos() {
+    this->cantidadAciertos ++;
+}
+
+int Avion::getCantidadAciertos() {
+    return this->cantidadAciertos;
+}
+
+int Avion::getCantidadDisparos() {
+    return this->cantidadDisparos;
+}
+
+int Avion::getPorcentajeAciertos() {
+    if (this->cantidadDisparos != 0){
+        return (int) floor(100 * (this->cantidadAciertos / (float) this->cantidadDisparos));
+    } else {
+        return 0;
+    }
 }

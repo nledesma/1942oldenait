@@ -130,7 +130,7 @@ public:
     AvionEnemigo* avionEnemigo(int i);
     void verificarColisiones();
     void proyectarDisparos(float timeStep);
-    list<pair<int,int> > getPuntajes();
+    list<pair<int,vector<int>> > getPuntajes();
     void aplicarPowerUp(PowerUp* powerUp, Avion* avion);
     int validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, int nroAvion);
     void iniciarModoPractica();
