@@ -649,3 +649,8 @@ float EscenarioVista::getScrollingOffset(){
 bool EscenarioVista::getActivo(){
   return this->activo;
 }
+
+void EscenarioVista::reiniciarEtapas() {
+    this->desactivar();
+    this->itEtapa = this->etapas.begin();
+}

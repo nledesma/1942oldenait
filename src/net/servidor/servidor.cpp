@@ -389,8 +389,16 @@ void Servidor::desencolar() {
         int intEvento = Decodificador::popInt(clienteMensaje.second);
         int intJugador = clientes[clienteMensaje.first].nroJugador;
         pair <int, int> evento(intJugador, intEvento);
+
         if(intEvento != PRESIONA_X){
-            this->escenario->pushEvento(evento);
+            if(intEvento == PRESIONA_R){
+                this->escenario->desactivar();
+                this->escenario->reset();
+                this->broadcastEvento(REINICIAR_JUEGO);
+                this->ejecutarEscenario();
+            } else {
+                this->escenario->pushEvento(evento);
+            }
         } else {
             this->cerrar();
         }
@@ -430,6 +438,11 @@ void Servidor::ejecutar() {
     sleep(1);
 
     // Se puede haber cerrado el servidor antes de recibir a todos los jugadores.
+    this->ejecutarEscenario();
+
+}
+
+void Servidor::ejecutarEscenario(){
     if (servidorActivo()) {
         // Comienza la partida.
         iniciarCicloDesencolaciones();

@@ -169,6 +169,7 @@ public:
     Ventana *getVentana();
     void renderizarImagenVidas();
     void renderizarTextoIniciarPartida();
+    void reiniciarEtapas();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

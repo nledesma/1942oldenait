@@ -53,6 +53,8 @@ private:
     void desencolarSalidaCliente(int clienteFd);
     bool partidaEnJuego = false;
     bool esperandoEntreEtapas;
+    void ejecutarEscenario();
+
 public:
     map<int, datosCliente> & getClientes();
     bool hayLugar();

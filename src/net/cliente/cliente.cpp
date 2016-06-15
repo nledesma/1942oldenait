@@ -191,8 +191,15 @@ void Cliente::cicloMensajes(){
 
 void Cliente::actualizarEscenario(string mensaje){
 	if (mensaje.size() == sizeof(int)){
+		int evento = Decodificador::popInt(mensaje);
+		if(evento == REINICIAR_JUEGO){
+			this->escenarioVista->desactivar();
+			this->escenarioVista->reiniciarEtapas();
+			this->jugar();
+		} else {
+			this->escenarioVista->manejarEvento(evento);
+		}
 		// Caso evento.
-		this->escenarioVista->manejarEvento(Decodificador::popInt(mensaje));
 	} else {
 		// Caso actualización de estado.
 		this->escenarioVista->actualizarComponentes(mensaje);

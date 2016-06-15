@@ -63,6 +63,12 @@ void Etapa::setPowerUps(list<PowerUp*> powerUps){
 
 void Etapa::reiniciarEtapa() {
     this->itEnemigos = this->enemigos.begin();
+    for(list<Elemento*>::iterator itElementos = this->elementos.begin(); itElementos != this->elementos.end(); itElementos++){
+        (*itElementos)->volverEstadoInicial();
+    }
+    for(list<PowerUp*>::iterator itPowerUps = this->powerUps.begin(); itPowerUps != this->powerUps.end(); itPowerUps++){
+        (*itPowerUps)->volverEstadoInicial();
+    }
 }
 
 bool Etapa::etapaEstaActiva() {
