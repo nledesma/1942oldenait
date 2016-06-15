@@ -406,11 +406,8 @@ int AvionVista::actualizar(string codigo){
     int estadoAnimacionActual = Decodificador::popInt(codigo);
     this->vidas = Decodificador::popInt(codigo);
     if((estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (estadoPowerUP == ESTADO_POWER_UP_DOBLE)){
-        cout << "ENTRO PARA SETEAR LOS CLIPS" << endl;
         setearClips();
-        cout << "ESTADO ANIMACION: " << estadoAnimacionActual << endl;
         estadoAnimacionActual = estadoAnimacionActual + 33;
-        cout << "ESTADO NUEVO: " << estadoAnimacionActual << endl;
     }
     if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_LOOP){
         sonido = CODIGO_SONIDO_DISPARO;

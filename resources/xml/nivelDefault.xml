@@ -78,6 +78,12 @@
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
+                        <tipo>aviones</tipo>
+                        <posx>400</posx>
+                        <posy>800</posy>
+                        <valor>0</valor>
+                    </powerUp>
+                    <powerUp>
                       <tipo>aviones</tipo>
                       <posx>700</posx>
                       <posy>400</posy>

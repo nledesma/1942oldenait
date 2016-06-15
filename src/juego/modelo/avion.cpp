@@ -210,13 +210,35 @@ vector<Disparo*> Avion::disparar(){
         if (this->estadoPowerUP == ESTADO_SIN_POWER_UP) {
             disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f,
                                            this->getPosicionY(), velocidadDisparos));
-        } else {
+        } else if (this->estadoPowerUP == ESTADO_POWER_UP_DISPARO_DOBLE){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10,
                                 this->getPosicionY(), velocidadDisparos));
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10,
                                 this->getPosicionY(), velocidadDisparos));
+        } else if (this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS){
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,
+                                this->getPosicionY() + 15, velocidadDisparos));
+            disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f,
+                                           this->getPosicionY(), velocidadDisparos));
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 25,
+                                this->getPosicionY() + 15, velocidadDisparos));
+        } else if (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE){
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,
+                                this->getPosicionY() + 15, velocidadDisparos));
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 10,
+                                this->getPosicionY(), velocidadDisparos));
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 10,
+                                this->getPosicionY(), velocidadDisparos));
+            disparos.push_back(
+                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 25,
+                                this->getPosicionY() + 15, velocidadDisparos));
         }
     }
     return disparos;
@@ -274,26 +296,21 @@ void Avion::colisionar(){
         //         cout << "CONTADOR COLISIONES: " << contadorColisiones << endl;
         //     }
         // }
-        cout << "Este es el estado de animacion: " << this-> estadoAnimacion << endl;
         if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
             this->estadoAnimacion = EXPLOSION_ETAPA_1 ;
-            cout << "Este es el nuevo estado de animacion: " << this->estadoAnimacion << endl;
             if (this->vidas > 0) {
                 pthread_mutex_lock(&this->mutexVidas);
                 quitarUnaVida();
                 pthread_mutex_unlock(&this->mutexVidas);
             } else {
-                cout << "PERDISTE!" << endl;
             }
         }
     }
 }
 
 void Avion::colisionarConPowerUp(){
-    cout << "Esta por colisionar el avion" << endl;
     if (this->estadoAnimacion < EXPLOSION_ETAPA_1 )
         this->estadoAnimacion = COLISION_AVION_CON_POWERUP;
-    cout << "Colisiono el avion" << endl;
 }
 
 void Avion::resetPuntos() {
@@ -369,7 +386,7 @@ bool Avion::moverAPosicionFinal(float timeStep) {
 }
 
 void Avion::setPowerUpAmetralladoras() {
-    if(this->estadoPowerUP == 2){
+    if(this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS){
         this->estadoPowerUP = ESTADO_POWER_UP_DOBLE;
     }else{
         this->estadoPowerUP = ESTADO_POWER_UP_DISPARO_DOBLE;
@@ -377,12 +394,9 @@ void Avion::setPowerUpAmetralladoras() {
 }
 
 void Avion::setPowerUpAvionesSecundarios() {
-    cout << "ESTADO POWER UP" << this->estadoPowerUP << endl;
-    if(this->estadoPowerUP == 1){
-        cout << "ENTRO DONDE NO DEBERIA" << endl;
+    if(this->estadoPowerUP == ESTADO_POWER_UP_DISPARO_DOBLE){
         this->estadoPowerUP = ESTADO_POWER_UP_DOBLE;
     }else{
-        cout << "ENTRO A DONDE DEBERIA" << endl;
         this->estadoPowerUP = ESTADO_POWER_UP_AVIONES_SECUNDARIOS;
     }
 }
