@@ -260,6 +260,7 @@
 /* Respuestas de mainLoop */
 #define CONTINUAR 1
 #define CERRAR 2
+#define FINALIZADO 3
 
 /* Modos de juego */
 

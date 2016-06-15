@@ -165,6 +165,7 @@ void Cliente::jugar() {
 		this->etapas ++;
 		cout << "Terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
 		if (resultadoRender == CONTINUAR) entreEtapas(this->etapas);
+		if (resultadoRender == FINALIZADO) entreEtapas(this->etapas);
 	}
 
 	if (!escenarioVista->quedanEtapas()) cout << "Fin del juego." << endl;

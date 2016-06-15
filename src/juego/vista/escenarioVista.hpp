@@ -107,6 +107,7 @@ private:
     Figura* figuraVidas;
     Texto* textoIniciarPartida;
     Texto* textoPerdedor;
+    bool finalizado = false;
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana);

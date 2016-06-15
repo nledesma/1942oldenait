@@ -220,7 +220,7 @@
             <velocidadDisparos>350</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
-            <vidas>5</vidas>
+            <vidas>2</vidas>
         </avion>
     </aviones>
 </configuracion>

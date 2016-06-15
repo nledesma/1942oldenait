@@ -260,6 +260,12 @@ int EscenarioVista::mainLoop(){
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
     cout << "Finalizó el ciclo de render." << endl;
     //cerrar();
+    if(this->finalizado){
+        //Desactivar el escenario
+        cout << "ENTRO PARA DESACTIVAR EL ESCENARIO" << endl;
+        this->desactivar();
+        return FINALIZADO;
+    }
     return CONTINUAR;
 }
 
@@ -330,6 +336,7 @@ void EscenarioVista::activar() {
 }
 
 void EscenarioVista::desactivar() {
+    cout << "ENTRO AL DESACTIVAR DE ESCENARIO" << endl;
     this->activo = false;
     colaEventos.avisar();
 }
@@ -496,6 +503,7 @@ void EscenarioVista::renderizarImagenVidas() {
     int vidas =  (avionVida)->getVidas();
     if(vidas == 0){
         this->textoPerdedor->renderCentrado(200);
+        this->finalizado = true;
     }
     for (int i = 0; i < vidas; i++) {
         this->figuraVidas->render(330 + (i*ANCHO_VIDA), 10, this->ventana->getVentanaRenderer());
