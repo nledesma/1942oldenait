@@ -11,19 +11,15 @@ void MenuConexionManual::cargarBotones(Ventana* ventana){
         cout << "No se ha podido cargar la imagen de fondo" << endl;
     }
     if (!(this->botonSiguiente->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloSiguiente" ))){
-        cout << "Failed to load button sprite texture!" << endl;
+        cout << "No se ha podido cargar la textura del boton!" << endl;
     } else {
-        //Set sprites
         this->getBotonSiguiente()->setSprites(ventana->getVentanaRenderer());
-        //Setea los botones en las posiciones
         this->botonSiguiente[0].setPosition(450, 400);
     }
     if(!(this->botonAtras->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloAtras"))){
-        cout << "Failed to load button sprite texture!" << endl;
+        cout << "No se ha podido cargar la textura del boton!" << endl;
     }else{
-        //Set sprites
         this->getBotonAtras()->setSprites(ventana->getVentanaRenderer());
-        //Setea los botones en las posiciones
         this->botonAtras[0].setPosition(150, 450);
     }
 

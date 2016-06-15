@@ -4,7 +4,7 @@ ListaDeSeleccion::ListaDeSeleccion(Ventana * ventana, int x, int y) {
     this->ventana = ventana;
     this->x = x;
     this->y = y;
-    cout << "Se crea la lista en x: " << x << " - y: " << y << endl;
+    //cout << "Se crea la lista en x: " << x << " - y: " << y << endl;
 }
 
 // NOTE esto debe hacerse antes de cerrar la ventana. Quizás convenga un método cerrar.

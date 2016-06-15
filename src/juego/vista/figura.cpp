@@ -11,40 +11,31 @@ Figura::Figura(){
 }
 
 Figura::~Figura(){
-    //Deallocate
     free();
 }
 
 bool Figura::loadFromFilePNG(SDL_Renderer* renderer, string path){
-	//Get rid of preexisting texture
 	free();
-	//The final texture
 	SDL_Texture* newTexture = NULL;
-	//Load image at specified path
     string basePath = PATH_IMG;
     string fullPath = basePath + path + ".png";
 	SDL_Surface* loadedSurface = IMG_Load(fullPath.c_str());
 	if(loadedSurface == NULL){
-		cout << "Unable to load image! SDL_image Error:" << IMG_GetError() << endl;
+		cout << "SDL_image Error:" << IMG_GetError() << endl;
 	}
 	else{
-		//Color key image
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-		//Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-		if( newTexture == NULL ){
-			cout << "Unable to create texture from ! SDL Error:" << SDL_GetError() << endl;
+		if(newTexture == NULL){
+			cout << "SDL Error:" << SDL_GetError() << endl;
 		}
 		else{
-			//Get image dimensions
 			mWidth = loadedSurface->w;
 			mHeight = loadedSurface->h;
 		}
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
+		SDL_FreeSurface(loadedSurface);
 	}
 
-	//Return success
 	textura = newTexture;
 	return textura != NULL;
 }
@@ -116,30 +107,6 @@ void Figura::free(){
         this->mHeight = 0;
     }
 }
-//
-// bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_Font *gFont, SDL_Renderer* renderer){
-// 	// Quitamos texturas preexistentes.
-// 	free();
-// 	// Superficie.
-// 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
-// 	if(textSurface == NULL){
-// 		cout << "Unable to render text surface! SDL_ttf Error: " << endl;
-// 	}else{
-// 		//Create texture from surface pixels
-//         textura = SDL_CreateTextureFromSurface(renderer, textSurface);
-// 		if(textura == NULL){
-// 			cout << "Unable to create texture from rendered text! SDL Error: " << SDL_GetError() << endl;
-// 		}else{
-// 			//Get image dimensions
-// 			mWidth = textSurface->w;
-// 			mHeight = textSurface->h;
-// 		}
-// 		//Get rid of old surface
-// 		SDL_FreeSurface(textSurface);
-// 	}
-//
-// 	return textura != NULL;
-// }
 
 void Figura::render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip){
     SDL_Rect renderQuad = { x, y, this->mWidth, this->mHeight };

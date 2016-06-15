@@ -126,10 +126,8 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 			}
             int respuestaAtras = menuConexionManual->getBotonAtras()[0].manejarEvento(&e);
             if(respuestaAtras == 1){
-                cout << "ventana antes de cerrar el menú conexiones." << (long) ventana << endl;
                 menuConexiones->cerrar();
                 menuConexiones = new MenuConexiones(ventana);
-                cout << "ventana después de cerrar el menú conexiones. " << (long) ventana << endl;
                 cargarMenuConexiones(cliente, ventana, menuConexiones, menuDatosDeUsuario);
             }
 			ventana->limpiar();
@@ -197,7 +195,6 @@ void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
 void levantarConexion(int numeroSeleccionado, Cliente * cliente,list<Conexion>* conexionesGuardadas, Ventana* ventana, MenuConexiones* menuConexiones, MenuDatosDeUsuario* menuDatosDeUsuario){
     list<Conexion>::iterator it;
     int opcion = numeroSeleccionado;
-    cout << "Opcion: " << opcion << endl;
     if (opcion == 6) {
         cargarMenuConexionManual(cliente, ventana, menuConexiones, menuDatosDeUsuario);
     } else {

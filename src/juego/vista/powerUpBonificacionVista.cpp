@@ -56,7 +56,6 @@ PowerUpBonificacionVista::PowerUpBonificacionVista() {
 }
 
 void PowerUpBonificacionVista::cargarImagen(SDL_Renderer *renderer) {
-    cout << "va a cargar la imagen " << endl;
     PowerUpVista::cargarImagen(renderer);
 }
 

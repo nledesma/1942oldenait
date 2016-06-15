@@ -57,15 +57,12 @@ void EscenarioVista::inicializarComponentes(string infoEscenario) {
     string disparo = Decodificador::popDisparoInicial(infoEscenario);
     this->agregarDisparoVista(disparo);
     this->agregarDisparoEnemigoVista();
-    cout << "agrego los disparos" << endl;
     this->agregarVistasEnemigos();
-    cout << "agrego los enemigos" << endl;
     this->agregarVistasPowerUps();
-    cout << "agrego los powerups" << endl;
     this->porEquipos = (bool)Decodificador::popInt(infoEscenario);
     int nroEtapa = Decodificador::popInt(infoEscenario);
     advance(itEtapa, nroEtapa);
-    cout << "Esta es la etapa que llega del servidor: " << nroEtapa << endl;
+    //cout << "Esta es la etapa que llega del servidor: " << nroEtapa << endl;
     this->nroAvion = Decodificador::popInt(infoEscenario);
 
     if (infoEscenario.length() != 0) {

@@ -1,7 +1,6 @@
 #include "powerUpVista.hpp"
 
 void PowerUpVista::cargarImagen(SDL_Renderer * renderer){
-	cout << "El path del sprite es: " << this->pathSprite << endl;
     this->figuraPowerUp->loadFromFile(this->pathSprite, renderer);
 }
 
