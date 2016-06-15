@@ -43,10 +43,18 @@ void BotonAtras::render(SDL_Renderer* renderer){
 }
 
 void BotonAtras::setSprites(SDL_Renderer* renderer){
-	for( int i = 0; i < 3; ++i ){
-		spriteBoton[i].x = 0;
-		spriteBoton[i].y = i * 48;
-		spriteBoton[i].w = BUTTON_WIDTH;
-		spriteBoton[i].h = BUTTON_HEIGHT;
-	}
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_OUT].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_OUT].y = 0;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_OUT].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_OUT].h = BUTTON_HEIGHT;
+
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_MOTION].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_MOTION].y = 48;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_MOTION].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_MOTION].h = BUTTON_HEIGHT;
+
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_DOWN].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_DOWN].y = 2 * 48;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_DOWN].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_ATRAS_DOWN].h = BUTTON_HEIGHT;
 }

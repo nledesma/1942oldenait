@@ -43,10 +43,18 @@ void BotonSiguiente::render(SDL_Renderer* renderer){
 }
 
 void BotonSiguiente::setSprites(SDL_Renderer* renderer){
-	for( int i = 0; i < 3; ++i ){
-		spriteBoton[i].x = 0;
-		spriteBoton[i].y = i * 48;
-		spriteBoton[i].w = BUTTON_WIDTH;
-		spriteBoton[i].h = BUTTON_HEIGHT;
-	}
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_OUT].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_OUT].y = 0;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_OUT].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_OUT].h = BUTTON_HEIGHT;
+
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_MOTION].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_MOTION].y = 48;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_MOTION].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_MOTION].h = BUTTON_HEIGHT;
+
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_DOWN].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_DOWN].y = 2 * 48;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_DOWN].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_SIGUIENTE_DOWN].h = BUTTON_HEIGHT;
 }

@@ -42,10 +42,18 @@ void BotonJugar::render(SDL_Renderer* renderer){
 }
 
 void BotonJugar::setSprites(SDL_Renderer* renderer){
-	for(int i = 0; i < 3; ++i){
-		spriteBoton[i].x = 0;
-		spriteBoton[i].y = i * 48;
-		spriteBoton[i].w = BUTTON_WIDTH;
-		spriteBoton[i].h = BUTTON_HEIGHT;
-	}
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_OUT].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_OUT].y = 0;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_OUT].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_OUT].h = BUTTON_HEIGHT;
+
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_MOTION].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_MOTION].y = 48;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_MOTION].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_MOTION].h = BUTTON_HEIGHT;
+
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_DOWN].x = 0;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_DOWN].y = 2 * 48;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_DOWN].w = BUTTON_WIDTH;
+	this->spriteBoton[BUTTON_SPRITE_JUGAR_DOWN].h = BUTTON_HEIGHT;
 }

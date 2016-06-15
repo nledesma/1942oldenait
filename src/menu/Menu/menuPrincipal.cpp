@@ -20,7 +20,7 @@ void MenuPrincipal::cargarBotones(Ventana* ventana){
     }
 
 
-    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloSiguiente"))){
+    if (!(this->botonSalir->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloSalir"))){
 		cout << "Failed to load button sprite texture!" << endl;
     } else {
         //Set sprites
