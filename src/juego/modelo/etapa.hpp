@@ -15,6 +15,9 @@ private:
     list<Elemento *> elementos;
     list<PowerUp*> powerUps;
     list<pair<float, AvionEnemigo *> > enemigos;
+    list<pair<float, AvionEnemigo*>>::iterator itEnemigos;
+    bool etapaActiva;
+
 public:
     Etapa(int longitud);
     void agregarElemento(Elemento * e);
@@ -27,6 +30,9 @@ public:
     list<Elemento *> getElementos();
     list<PowerUp*> getPowerUps();
     AvionEnemigo * getSiguienteEnemigo(float pos);
+    void reiniciarEtapa();
+    bool etapaEstaActiva();
+    void desactivarEtapa();
 
 };
 

@@ -32,7 +32,6 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
 void EscenarioJuego::reset() {
     disparos.clear();
     posicionY = 0;
-    this->enemigos.clear();
     this->disparosEnemigos.clear();
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
         (*itAviones)->volverEstadoInicial();
@@ -45,7 +44,11 @@ void EscenarioJuego::reset() {
     for (list<PowerUp *>::iterator itPowerUps = powerUps.begin(); itPowerUps != powerUps.end(); itPowerUps++) {
         (*itPowerUps)->volverEstadoInicial();
     }
-
+    this->motorActivado = false;
+    (*this->itEtapa)->desactivarEtapa();
+    this->desactivar();
+    (*this->itEtapa)->reiniciarEtapa();
+    //this->desactivar();
 }
 
 // Se destruyen todas las listas.
@@ -216,31 +219,36 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         this->verificarColisiones();
         this->moverDisparos(timeStep);
         this->getProximoEnemigo();
+    } else if(!this->etapaActual()->etapaEstaActiva()){
+            this->limpiarEtapa();
     } else {
         this->moverEnemigos(timeStep);
         this->moverDisparosEnemigos(timeStep);
         this->moverDisparos(timeStep);
         bool avionesEstacionados = this->moverAvionesAposicionFinal(timeStep);
         if (avionesEstacionados){
-            pthread_mutex_lock(&this->mutexListaEnemigos);
-            this->enemigos.clear();
-            pthread_mutex_unlock(&this->mutexListaEnemigos);
-            pthread_mutex_lock(&this->mutexListaDisparos);
-            this->disparos.clear();
-            pthread_mutex_unlock(&this->mutexListaDisparos);
-            pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
-            this->disparosEnemigos.clear();
-            pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
-            while (!this->colaEventos.vacia()) {
-                this->colaEventos.pop();
-            }
-            timeStep = 0;
-            temporizador.detener();
+            this->limpiarEtapa();
             this->avanzarEtapa();
-            for (list<Avion *>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++) {
-                (*itAviones)->volverEstadoInicial(false);
-            }
         }
+    }
+}
+
+void EscenarioJuego::limpiarEtapa(){
+    pthread_mutex_lock(&this->mutexListaEnemigos);
+    this->enemigos.clear();
+    pthread_mutex_unlock(&this->mutexListaEnemigos);
+    pthread_mutex_lock(&this->mutexListaDisparos);
+    this->disparos.clear();
+    pthread_mutex_unlock(&this->mutexListaDisparos);
+    pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
+    this->disparosEnemigos.clear();
+    pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
+    while (!this->colaEventos.vacia()) {
+        this->colaEventos.pop();
+    }
+    temporizador.detener();
+    for (list<Avion *>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++) {
+        (*itAviones)->volverEstadoInicial(false);
     }
 }
 
@@ -405,7 +413,7 @@ void EscenarioJuego::moverEnemigos(float timeStep) {
 //                cout << endl;
 //            }
 //            cout << endl << endl << endl;
-             if ((*iterador)->mover(timeStep) == 0) {
+            if ((*iterador)->mover(timeStep) == 0) {
                 delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaEnemigos);
                 iterador = enemigos.erase(iterador);

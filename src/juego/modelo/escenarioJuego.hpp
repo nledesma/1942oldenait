@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include "../../accesorios/codigo.hpp"
 
+
 using namespace std;
 
 class EscenarioJuego {
@@ -71,6 +72,7 @@ private:
     //la bonificación no corresponde, horrible, ya se.
     map<int, pair<int, int>> infoEscuadrones;
     bool modoPractica;
+    void limpiarEtapa();
 
 public:
     void subirPuntaje(int puntos, int nroAvion);

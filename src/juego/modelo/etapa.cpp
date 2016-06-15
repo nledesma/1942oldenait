@@ -2,6 +2,7 @@
 
 Etapa::Etapa(int longitud) {
     this->longitud = longitud;
+    this->etapaActiva = true;
 }
 
 Etapa::~Etapa() {
@@ -28,11 +29,14 @@ int Etapa::getLongitud() {
 }
 
 AvionEnemigo* Etapa::getSiguienteEnemigo(float pos) {
-    if (!this->enemigos.empty()){
-        if (pos >= this->enemigos.front().first){
+    float hola = (*itEnemigos).first;
+    hola ++;
+    if (!this->enemigos.empty() && this->itEnemigos != this->enemigos.end()){
+        if (pos >= (*itEnemigos).first){
             pair <float, AvionEnemigo*> proximoPar;
-            proximoPar = this->enemigos.front();
-            this->enemigos.pop_front();
+            proximoPar = *itEnemigos;
+            //this->enemigos.pop_front();
+            itEnemigos++;
             return proximoPar.second;
         }
     }
@@ -50,8 +54,21 @@ list<PowerUp*> Etapa::getPowerUps(){
 
 void Etapa::setEnemigos(list<pair<float, AvionEnemigo *> > enemigos) {
     this->enemigos = enemigos;
+    this->itEnemigos = this->enemigos.begin();
 }
 
 void Etapa::setPowerUps(list<PowerUp*> powerUps){
   this->powerUps = powerUps;
+}
+
+void Etapa::reiniciarEtapa() {
+    this->itEnemigos = this->enemigos.begin();
+}
+
+bool Etapa::etapaEstaActiva() {
+    return this->etapaActiva;
+}
+
+void Etapa::desactivarEtapa() {
+    this->etapaActiva = false;
 }
