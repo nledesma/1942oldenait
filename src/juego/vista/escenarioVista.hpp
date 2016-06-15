@@ -105,6 +105,7 @@ private:
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
     Figura* figuraVidas;
+    Texto* textoIniciarPartida;
     Texto* textoPerdedor;
 public:
     /* Constructor y destructor */
@@ -167,6 +168,7 @@ public:
     Figura *getFondo();
     Ventana *getVentana();
     void renderizarImagenVidas();
+    void renderizarTextoIniciarPartida();
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

@@ -8,19 +8,19 @@ AvionVista::AvionVista(float posX, float posY, string pathSprite, int estadoPowe
 AvionVista::AvionVista(string infoAvion){
     float posX = Decodificador::popFloat(infoAvion);
     float posY = Decodificador::popFloat(infoAvion);
-    cout << "INFO AVION: " << infoAvion << endl;
+    // cout << "INFO AVION: " << infoAvion << endl;
     //int estadoPowerUP = Decodificador::popInt(infoAvion);
-    cout << "ESTADO POWER UP: " << estadoPowerUP << endl;
-    cout << "INFO AVION 2: " << infoAvion << endl;
+    // cout << "ESTADO POWER UP: " << estadoPowerUP << endl;
+    // cout << "INFO AVION 2: " << infoAvion << endl;
     this->iniciarAvion(posX, posY, infoAvion, estadoPowerUP );
-    //this->vidas = 0;
+    this->vidas = -1;
 }
 
 AvionVista::~AvionVista() { }
 
 void AvionVista::iniciarAvion(float posX, float posY, string pathSprite, int estadoPowerUP){
-    cout << "SPRITE AVION: " << pathSprite << endl;
-    cout << "ESTADO DE POWER UP" << estadoPowerUP << endl;
+    // cout << "SPRITE AVION: " << pathSprite << endl;
+    // cout << "ESTADO DE POWER UP" << estadoPowerUP << endl;
     this->posX = posX;
     this->posY = posY;
     this->estadoAnimacion = ESTADO_NORMAL;
@@ -406,6 +406,7 @@ int AvionVista::actualizar(string codigo){
     int estadoAnimacionActual = Decodificador::popInt(codigo);
     this->vidas = Decodificador::popInt(codigo);
     if((estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (estadoPowerUP == ESTADO_POWER_UP_DOBLE)){
+        cout << "ENTRO PARA SETEAR LOS CLIPS" << endl;
         setearClips();
         estadoAnimacionActual = estadoAnimacionActual + 33;
     }
