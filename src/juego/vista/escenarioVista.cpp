@@ -262,7 +262,6 @@ int EscenarioVista::mainLoop(){
     //cerrar();
     if(this->finalizado){
         //Desactivar el escenario
-        cout << "ENTRO PARA DESACTIVAR EL ESCENARIO" << endl;
         this->desactivar();
         return FINALIZADO;
     }
@@ -336,7 +335,6 @@ void EscenarioVista::activar() {
 }
 
 void EscenarioVista::desactivar() {
-    cout << "ENTRO AL DESACTIVAR DE ESCENARIO" << endl;
     this->activo = false;
     colaEventos.avisar();
 }

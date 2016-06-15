@@ -1,6 +1,6 @@
 <configuracion>
     <servidor>
-        <cantidadMaximaDeClientes>1</cantidadMaximaDeClientes>
+        <cantidadMaximaDeClientes>2</cantidadMaximaDeClientes>
         <puerto>8000</puerto>
     </servidor>
     <escenario>
@@ -220,7 +220,7 @@
             <velocidadDisparos>350</velocidadDisparos>
             <avionSpriteId>millenium-sprite</avionSpriteId>
             <disparosSpriteId>redLaserRay</disparosSpriteId>
-            <vidas>2</vidas>
+            <vidas>5</vidas>
         </avion>
     </aviones>
 </configuracion>
