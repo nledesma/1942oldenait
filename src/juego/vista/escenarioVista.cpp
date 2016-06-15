@@ -29,6 +29,8 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
         titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
         titulosPuntaje[1]->cargarFuente("Puntaje - Equipo 2");
     }
+    this->textoIniciarPartida = new Texto(50, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    this->textoIniciarPartida->cargarFuente("INICIANDO PARTIDA");
     this->textoPerdedor = new Texto(50, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
     this->textoPerdedor->cargarFuente("PERDISTE! :( ");
 }
@@ -245,6 +247,7 @@ int EscenarioVista::mainLoop(){
         // TODO por ahí conviene agregar un mutex.
         this->renderizarFondo(this->scrollingOffset);
         this->renderizarFondo(this->scrollingOffset - this->fondo->getHeight());
+        this->renderizarTextoIniciarPartida();
         this->renderizarElementos();
         this->renderizarPowerUps();
         this->renderizarAviones();
@@ -478,6 +481,16 @@ void EscenarioVista::cargarVistaVidas(){
 }
 
 /* Renderizaciones */
+
+void EscenarioVista::renderizarTextoIniciarPartida(){
+    list<AvionVista*>::iterator it = aviones.begin();
+    advance (it, this->nroAvion - 1);
+    AvionVista *avionVida = *it;
+    int vidas =  (avionVida)->getVidas();
+    if(vidas == -1){
+        this->textoIniciarPartida->renderCentrado(200);
+    }
+}
 
 void EscenarioVista::renderizarImagenVidas() {
     list<AvionVista*>::iterator it = aviones.begin();
