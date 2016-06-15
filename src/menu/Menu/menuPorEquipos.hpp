@@ -10,6 +10,7 @@ class MenuPorEquipos: public Menu{
     private:
         BotonSiguiente* botonSiguiente;
         ListaDeSeleccion* lista;
+        Texto* texto;
     public:
         MenuPorEquipos(Ventana* ventana);
         void cargarBotones(Ventana* ventana);
