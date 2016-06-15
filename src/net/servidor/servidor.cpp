@@ -291,8 +291,31 @@ string Servidor::obtenerDireccion(int fdCliente){
     return direccionCliente.str();
 }
 
-void Servidor::agregarCliente(int fdCliente, string nombre) {
+void Servidor::asignarEquipo(int fdCliente, int nroJugador) {
+    int equipoDelCliente;
+    // Antes que nada le especificamos al cliente si está en curso la partida
+    // y si es o no por equipos la partida.
+    string respuesta = "";
+    Decodificador::push(respuesta, partidaEnJuego);
+    Decodificador::push(respuesta, escenario->porEquipos());
+    enviarMensaje(respuesta, fdCliente);
 
+    // Si la partida no está en juego, corresponde asignar un equipo.
+    if (!partidaEnJuego) {
+        // Si efectivamente es por equipos, recibimos el equipo correspondiente.
+        if (escenario->porEquipos()) {
+            string mensajeEquipoCliente;
+            recibirMensaje(mensajeEquipoCliente, fdCliente);
+            equipoDelCliente = Decodificador::popInt(mensajeEquipoCliente);
+        } else {
+            // Si no es por equipos, le asignamos, como a todos, el equipo 0.
+            equipoDelCliente = 0;
+        }
+        escenario->setEquipo(nroJugador, equipoDelCliente);
+    }
+}
+
+void Servidor::agregarCliente(int fdCliente, string nombre) {
     datosCliente datos;
     datos.conectado = true;
     if (!partidaEnJuego){
@@ -303,8 +326,12 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
         datos.nroJugador = nroAvion(nombre);
         cout << "Se conecta el jugador " << nombre << " al avión " << datos.nroJugador << endl;
     }
+
+    asignarEquipo(fdCliente, datos.nroJugador);
+
     datos.nombreJugador = nombre;
-    if(this->escenario->estaActivo()){
+    
+    if(this->escenario->estaActivo() || esperandoEntreEtapas){
         escenario->avion(datos.nroJugador)->setEstadoAnimacion(ESTADO_NORMAL);
     }
     nombres[nombre] = true;

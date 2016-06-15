@@ -28,12 +28,13 @@ string Decodificador::popElemento(string & codigo) {
 void Decodificador::push(string & codigo, Avion* a) {
     push(codigo, a->getPosicionX());
     push(codigo, a->getPosicionY());
+    push(codigo, (int) a->getEstadoPowerUp());
     push(codigo, (int) a->getEstadoAnimacion());
     push(codigo, (int)a->getVidas());
 }
 
 string Decodificador::popAvion(string & codigo){
-    return popBytes(codigo, 2*sizeof(float) + 2*sizeof(int));
+    return popBytes(codigo, 2*sizeof(float) + 3*sizeof(int));
 }
 
 /* Push y pop de powerUps */
@@ -95,12 +96,10 @@ string Decodificador::popCantidad(string & codigo){
 
 /* Push y pop de bool (1 byte)*/
 void Decodificador::push(string & codigo, bool b) {
-    cout << "Se pushea un bool" << endl;
     if (b)
         push(codigo, 't');
     else
         push(codigo, 'f');
-    cout << "Este es el mensaje después del push: " << endl;
     imprimirBytes(codigo);
 }
 

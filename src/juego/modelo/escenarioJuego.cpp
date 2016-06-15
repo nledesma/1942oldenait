@@ -96,8 +96,14 @@ void EscenarioJuego::agregarAvion(float velocidad, float velocidadDisparos, stri
     }
     Avion *avion = new Avion(posX, posY, velocidad, velocidadDisparos, idSprite, idSpriteDisparos, numeroAvion, vidas, posXFinal, posYFinal);
     this->aviones.push_back(avion);
-    // NOTE provisorio, dado que no hay política de a qué equipo agregarlo.
-    equipos[(aviones.size()-1)%equipos.size()].insert(aviones.size());
+}
+
+void EscenarioJuego::setEquipo(int nroAvion, int equipo) {
+    if (equipo != 0 && equipo != 1) {
+        cout << "Error en el equipo recibido ("<< equipo <<"), se le asigna el equipo 1." << endl;
+        equipo = 0;
+    }
+    equipos[equipo].insert(nroAvion);
 }
 
 void EscenarioJuego::agregarEnemigo(AvionEnemigo *enemigo) {
@@ -154,7 +160,7 @@ void EscenarioJuego::comenzarEtapa() {
     this->infoEscuadrones.clear();
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
-    cout << "Se agrego a la etapa actual una lista de tamaño " << powerUps.size() << endl;
+    cout << "Se agregan a la etapa actual " << powerUps.size() << " powerups." << endl;
 
     mainLoop();
     // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P
@@ -574,9 +580,11 @@ void EscenarioJuego::verificarColisiones(){
                     if(!(*itEnemigos)->estaColisionando()){
                            if((*itEnemigos)->getTipoAvion() == TIPO_AVION_ESCUADRON){
                                (*itAviones)->sumarPuntos((*itEnemigos)->estallar() + this->validarBonificacionEscuadron((*itEnemigos), (*itAviones)->getNumeroAvion()));
+
                                (*itAviones)->colisionar();
                            }
                             (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+                            // Acá sumó puntos. Me fijo el estado de las cosas.
                             (*itAviones)->colisionar();
 
                     }
@@ -636,7 +644,7 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
         avion->setPowerUpAmetralladoras();
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
-
+        avion->setPowerUpAvionesSecundarios();
     }
 }
 

@@ -45,6 +45,7 @@ private:
     Colisionable* colisionable;
     int vidas;
     int numeroAvion;
+    //int contadorColisiones = 3;
 
 public:
     Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, int vidas, float posXFinal = 0, float posYFinal = 0);
@@ -116,6 +117,9 @@ public:
     void setPowerUpAmetralladoras();
 
     
+    void setPowerUpAvionesSecundarios();
+
+    int getEstadoPowerUp();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

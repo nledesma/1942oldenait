@@ -67,6 +67,7 @@ public:
     int getPuerto();
     void setPuerto(int unPuerto);
     void agregarCliente(int idCliente, string nombre);
+    void asignarEquipo(int fdCliente, int nroJugador);
     void quitarCliente(int fdCliente);
     void esperarPartida(int fdCliente);
     void enviarEstadoInicial(int fdCliente);

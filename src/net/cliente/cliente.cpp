@@ -31,7 +31,7 @@ void Cliente::setAddress(string serverAddress, int port){
 	memset(this->addr_info.sin_zero, 0, sizeof(this->addr_info.sin_zero));
 }
 
-int Cliente::conectar(){
+bool Cliente::conectar(){
 	// Me conecto a la direccion.
 	iniciarSocket();
 	int conexion;
@@ -42,29 +42,36 @@ int Cliente::conectar(){
 			Logger::instance()->logInfo("Conexión exitosa");
 			cliente_conectado = true;
 			cout << "Conexión exitosa" << endl;
+			// Una vez conectado, le preguntamos al servidor si hay lugar.
 			if (!sePuedeEntrar()) {
+				// Caso contrario, cerramos la conexión.
 				cerrar();
+				return false;
 			} else {
-				esperarJugadores();
-				if (cliente_conectado) iniciarEscenario();
-				if (cliente_conectado) jugar();
-				if (cliente_conectado) {
-					this->escenarioVista->cerrar();
-					this->cerrar();
-				}
+				return true;
 			}
 		} else if (connected == -1) {
 			cliente_conectado = false;
 			cout << "La conexión falló, error " << errno << endl;
 			throw runtime_error("CLIENTE_EXCEPTION");
+			return false;
 		}
 	} catch(runtime_error &e){
 		Logger::instance()->logError(errno,"Se produjo un error en el connect");
 	}
 
-	return conexion;
+	return false;
 }
 
+void Cliente::ejecutar() {
+	if (cliente_conectado) esperarJugadores();
+	if (cliente_conectado) iniciarEscenario();
+	if (cliente_conectado) jugar();
+	if (cliente_conectado) {
+		this->escenarioVista->cerrar();
+		this->cerrar();
+	}
+}
 void Cliente::cerrar(){
 	if (escenarioVista) escenarioVista->desactivar();
 	Logger::instance()->logInfo("Cerrando la conexión del lado del cliente.");
