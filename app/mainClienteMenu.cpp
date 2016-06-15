@@ -126,7 +126,10 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 			}
             int respuestaAtras = menuConexionManual->getBotonAtras()[0].manejarEvento(&e);
             if(respuestaAtras == 1){
+                cout << "ventana antes de cerrar el menú conexiones." << (long) ventana << endl;
                 menuConexiones->cerrar();
+                menuConexiones = new MenuConexiones(ventana);
+                cout << "ventana después de cerrar el menú conexiones. " << (long) ventana << endl;
                 cargarMenuConexiones(cliente, ventana, menuConexiones, menuDatosDeUsuario);
             }
 			ventana->limpiar();
