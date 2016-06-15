@@ -660,12 +660,15 @@ list< pair<int,vector<int>> > EscenarioJuego::getPuntajes() {
     for (int i = 0; i < equipos.size(); ++i) {
         set<int>::iterator it;
         pair<int,vector<int>> par;
-        par.first = i;
         for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
-            par.second.push_back(avion(*it)->getPuntaje());
-            par.second.push_back(avion(*it)->getCantidadDisparos());
-            par.second.push_back(avion(*it)->getCantidadAciertos());
-            par.second.push_back(avion(*it)->getPorcentajeAciertos());
+            par.first = *it;
+            cout << "nroavion en escenario: " << *it << endl;
+            Avion * avionActual = avion(*it);
+            par.second.push_back(i);
+            par.second.push_back(avionActual->getPuntaje());
+            par.second.push_back(avionActual->getCantidadDisparos());
+            par.second.push_back(avionActual->getCantidadAciertos());
+            par.second.push_back(avionActual->getPorcentajeAciertos());
             equipoPuntaje.push_back(par);
         }
     }

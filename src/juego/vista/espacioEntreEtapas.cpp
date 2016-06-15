@@ -29,29 +29,26 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
     // Cada jugador viene como un par, equipo, puntos.
     // Vienen en orden (no hace falta pasar el número).
     // TODO chequear que sea múltiplo de 2*sizeof(int) el length.
-    int nroAvion = 1;
+    int nroAvion;
     int equipo;
     int puntos;
     int disparos;
     int aciertos;
     int porcentaje;
     int cantJugadores;
-    map<int, string> nombreSegunNroAvion;
+    string nombre;
     while(mensaje.length() != 0) {
+        nroAvion = Decodificador::popInt(mensaje);
         equipo = Decodificador::popInt(mensaje);
         puntos = Decodificador::popInt(mensaje);
         disparos = Decodificador::popInt(mensaje);
         aciertos = Decodificador::popInt(mensaje);
         porcentaje = Decodificador::popInt(mensaje);
-
-        cantJugadores = Decodificador::popInt(mensaje);
-        for (int i = 1; i <= cantJugadores; i++){
-            nombreSegunNroAvion[i] = Decodificador::popString(mensaje);
-        }
+        nombre = Decodificador::popString(mensaje);
         // Se agrega un texto.
         Texto * textoAux = new Texto(20, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
         stringstream ss;
-        ss <<  "Jugador: " << nombreSegunNroAvion[nroAvion];
+        ss <<  "Jugador: " << nombre;
         ss << " - Equipo: " << equipo + 1;
         ss << " - Puntaje: " << puntos;
         textoAux->cargarFuente(ss.str());
@@ -64,7 +61,6 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
         ss2 << " - Punteria: " << porcentaje << "%";
         textoAux2->cargarFuente(ss2.str());
         textos.push_back(textoAux2);
-        ++nroAvion;
     }
 
 }
