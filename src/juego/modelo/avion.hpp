@@ -45,6 +45,8 @@ private:
     Colisionable* colisionable;
     int vidas;
     int numeroAvion;
+    int cantidadDisparos = 0;
+    int cantidadAciertos = 0;
     //int contadorColisiones = 3;
 
 public:
@@ -120,6 +122,14 @@ public:
     void setPowerUpAvionesSecundarios();
 
     int getEstadoPowerUp();
+
+    void aumentarAciertos();
+
+    int getCantidadDisparos();
+
+    int getCantidadAciertos();
+
+    int getPorcentajeAciertos();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

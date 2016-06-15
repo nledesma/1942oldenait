@@ -32,24 +32,38 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
     int nroAvion = 1;
     int equipo;
     int puntos;
+    int disparos;
+    int aciertos;
+    int porcentaje;
     int cantJugadores;
-    string nombre;
     map<int, string> nombreSegunNroAvion;
     while(mensaje.length() != 0) {
         equipo = Decodificador::popInt(mensaje);
         puntos = Decodificador::popInt(mensaje);
+        disparos = Decodificador::popInt(mensaje);
+        aciertos = Decodificador::popInt(mensaje);
+        porcentaje = Decodificador::popInt(mensaje);
+
         cantJugadores = Decodificador::popInt(mensaje);
-        for (int i = 0; i < cantJugadores; i ++){
+        for (int i = 1; i <= cantJugadores; i++){
             nombreSegunNroAvion[i] = Decodificador::popString(mensaje);
         }
         // Se agrega un texto.
-        Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+        Texto * textoAux = new Texto(20, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
         stringstream ss;
-        ss << nombreSegunNroAvion[nroAvion];
+        ss <<  "Jugador: " << nombreSegunNroAvion[nroAvion];
         ss << " - Equipo: " << equipo + 1;
-        ss << " - puntos: " << puntos;
+        ss << " - Puntaje: " << puntos;
         textoAux->cargarFuente(ss.str());
         textos.push_back(textoAux);
+        Texto * textoAux2 = new Texto(20, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+        stringstream ss2;
+        ss2 << "    Estadisticas: ";
+        ss2 << " Disparos: " << disparos;
+        ss2 << " - Aciertos: " << aciertos;
+        ss2 << " - Punteria: " << porcentaje << "%";
+        textoAux2->cargarFuente(ss2.str());
+        textos.push_back(textoAux2);
         ++nroAvion;
     }
 
