@@ -659,8 +659,8 @@ list< pair<int,vector<int>> > EscenarioJuego::getPuntajes() {
     list<pair<int,vector<int>> > equipoPuntaje;
     for (int i = 0; i < equipos.size(); ++i) {
         set<int>::iterator it;
-        pair<int,vector<int>> par;
         for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
+            pair<int,vector<int>> par;
             par.first = *it;
             cout << "nroavion en escenario: " << *it << endl;
             Avion * avionActual = avion(*it);
