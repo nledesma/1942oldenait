@@ -18,9 +18,9 @@ EspacioEntreEtapas::~EspacioEntreEtapas() {
 }
 
 void EspacioEntreEtapas::imprimirTituloEtapa(){
-    Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+    Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT2, ventana);
     stringstream ss;
-    ss << "ETAPA " << nroEtapa << " FINALIZADA";
+    ss << "etapa " << nroEtapa << " finalizada";
     textoAux->cargarFuente(ss.str());
     textos.push_back(textoAux);
 }
@@ -46,21 +46,24 @@ void EspacioEntreEtapas::decodificarPuntos(string mensaje) {
         porcentaje = Decodificador::popInt(mensaje);
         nombre = Decodificador::popString(mensaje);
         // Se agrega un texto.
-        Texto * textoAux = new Texto(20, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+        Texto * textoAux = new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
         stringstream ss;
-        ss <<  "Jugador: " << nombre;
-        ss << " - Equipo: " << equipo + 1;
-        ss << " - Puntaje: " << puntos;
+        ss <<  "jugador: " << nombre;
+        ss << " - equipo: " << equipo + 1;
+        ss << " - puntaje: " << puntos;
         textoAux->cargarFuente(ss.str());
         textos.push_back(textoAux);
-        Texto * textoAux2 = new Texto(20, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+        Texto * textoAux2 = new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
         stringstream ss2;
-        ss2 << "    Estadisticas: ";
-        ss2 << " Disparos: " << disparos;
-        ss2 << " - Aciertos: " << aciertos;
-        ss2 << " - Punteria: " << porcentaje << "%";
+        ss2 << "    estadisticas: ";
+        ss2 << " disparos: " << disparos;
+        ss2 << " - aciertos: " << aciertos;
+        ss2 << " - punteria: " << porcentaje << "%";
         textoAux2->cargarFuente(ss2.str());
         textos.push_back(textoAux2);
+        Texto * textoAux3 = new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_SYMBOL, ventana);
+        textoAux3->cargarFuente("$ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $");
+        textos.push_back(textoAux3);
     }
 
 }

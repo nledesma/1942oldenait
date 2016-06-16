@@ -220,10 +220,10 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
     list<Conexion> conexionesGuardadas = ClienteParser::levantarConexiones();
     list<Conexion>::iterator it;
     for(it = conexionesGuardadas.begin(); it != conexionesGuardadas.end(); it ++){
-        string conexion = it->nombre + ". IP: " + it->ip + ". Puerto: " + to_string(it->puerto);
+        string conexion = it->nombre + ". ip: " + it->ip + ". puerto: " + to_string(it->puerto);
         menuConexiones->getListaDeSeleccion()->agregarOpcion(conexion);
     }
-    menuConexiones->getListaDeSeleccion()->agregarOpcion("CONEXION MANUAL");
+    menuConexiones->getListaDeSeleccion()->agregarOpcion("conexion manual");
     menuConexiones->cargarBotones(ventana);
     bool quit = false;
     SDL_Event e;

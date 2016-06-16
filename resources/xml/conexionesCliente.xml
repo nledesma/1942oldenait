@@ -1,31 +1,31 @@
 <conexiones>
     <conexion>
-        <nombre>CONEXION LOCAL</nombre>
+        <nombre>conexion local</nombre>
         <IP>127.0.0.1</IP>
         <puerto>8000</puerto>
     </conexion>
     <conexion>
-        <nombre>PC NOE</nombre>
+        <nombre>pc noe</nombre>
         <IP>192.0.0.1</IP>
         <puerto>8000</puerto>
     </conexion>
     <conexion>
-        <nombre>PC TOM</nombre>
+        <nombre>pc tom</nombre>
         <IP>192.0.0.2</IP>
         <puerto>8000</puerto>
     </conexion>
     <conexion>
-        <nombre>PC RO</nombre>
+        <nombre>pc ro</nombre>
         <IP>192.0.0.3</IP>
         <puerto>8000</puerto>
     </conexion>
     <conexion>
-        <nombre>PC NICO</nombre>
+        <nombre>pc nico</nombre>
         <IP>192.0.0.4</IP>
         <puerto>8000</puerto>
     </conexion>
     <conexion>
-        <nombre>PC LEO</nombre>
+        <nombre>pc leo</nombre>
         <IP>192.0.0.5</IP>
         <puerto>8000</puerto>
     </conexion>

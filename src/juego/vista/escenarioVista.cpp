@@ -22,17 +22,17 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
     textosPuntaje[0]->cambiarTexto("0");
     titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
-    titulosPuntaje[0]->cargarFuente("Puntaje - Equipo 1");
+    titulosPuntaje[0]->cargarFuente("puntaje - Equipo 1");
     if (porEquipos) {
         textosPuntaje.push_back(new TextoDinamico(16, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
         textosPuntaje[1]->cambiarTexto("0");
         titulosPuntaje.push_back(new Texto(18, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana));
-        titulosPuntaje[1]->cargarFuente("Puntaje - Equipo 2");
+        titulosPuntaje[1]->cargarFuente("puntaje - Equipo 2");
     }
-    this->textoIniciarPartida = new Texto(50, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    this->textoIniciarPartida->cargarFuente("INICIANDO PARTIDA");
+    this->textoIniciarPartida = new Texto(50, AMARILLO_STAR_WARS, STAR_WARS_FONT2, ventana);
+    this->textoIniciarPartida->cargarFuente("iniciando partida");
     this->textoPerdedor = new Texto(50, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    this->textoPerdedor->cargarFuente("PERDISTE! :( ");
+    this->textoPerdedor->cargarFuente("perdiste! :( ");
 }
 
 void EscenarioVista::inicializarComponentes(string infoEscenario) {

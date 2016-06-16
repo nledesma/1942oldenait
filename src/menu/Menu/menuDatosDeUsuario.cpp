@@ -25,7 +25,7 @@ void MenuDatosDeUsuario::cargarBotones(Ventana* ventana){
     }
 
     this->texto = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
-    this->texto->cargarFuente("INGRESE UN ALIAS: ");
+    this->texto->cargarFuente("ingrese un alias: ");
 }
 
 void MenuDatosDeUsuario::renderizar(Ventana* ventana){
