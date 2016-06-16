@@ -163,15 +163,13 @@ void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
     menuPorEquipos->cargarBotones(ventana);
     bool quit = false;
     SDL_Event e;
-    int x, y; // Para los clicks.
 
     while(!quit){
 		while(SDL_PollEvent(&e) != 0){
+            menuPorEquipos->getListaDeSeleccion()->manejarEvento(&e);
 			if(e.type == SDL_QUIT) {
 				quit = true;
 			} else if(e.type == SDL_MOUSEBUTTONDOWN){
-                SDL_GetMouseState( &x, &y );
-                menuPorEquipos->getListaDeSeleccion()->clickEn(x, y);
                 int respuesta = menuPorEquipos->getBotonSiguiente()[0].manejarEvento(&e);
                 if (respuesta == 1) {
                     agregarJugador(menuPorEquipos, cliente);
@@ -227,15 +225,13 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
     menuConexiones->cargarBotones(ventana);
     bool quit = false;
     SDL_Event e;
-    int x, y; // Para los clicks.
 
     while(!quit){
 		while(SDL_PollEvent(&e) != 0){
+            menuConexiones->getListaDeSeleccion()->manejarEvento(&e);
 			if(e.type == SDL_QUIT) {
 				quit = true;
 			} else if(e.type == SDL_MOUSEBUTTONDOWN){
-                SDL_GetMouseState( &x, &y );
-                menuConexiones->getListaDeSeleccion()->clickEn(x, y);
                 int respuesta = menuConexiones->getBotonSiguiente()[0].manejarEvento(&e);
                 if (respuesta == 1) {
                     int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();

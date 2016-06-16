@@ -39,6 +39,30 @@ void ListaDeSeleccion::renderizar() {
     }
 }
 
+void ListaDeSeleccion::manejarEvento(SDL_Event *e) {
+    if (e->type == SDL_MOUSEBUTTONDOWN) {
+        // Si es un click de mouse entonces se maneja el click.
+        int x, y;
+        SDL_GetMouseState( &x, &y );
+        clickEn(x,y);
+    } else if (e->type == SDL_KEYUP) {
+        // Los botones importantes son arriba y abajo.
+        if (e->key.keysym.sym == SDLK_UP) {
+            if (nroBotonSeleccionado != 0) {
+                cambiarSeleccion(nroBotonSeleccionado - 1);
+            }
+        } else if (e->key.keysym.sym == SDLK_DOWN) {
+            if (nroBotonSeleccionado != opciones.size() - 1) {
+                cambiarSeleccion(nroBotonSeleccionado + 1);
+            }
+        }
+    }
+}
+
+int ListaDeSeleccion::getCantidadOpciones(){
+    return opciones.size();
+}
+
 void ListaDeSeleccion::clickEn(int x, int y){
     int lado = PADDING;
     int altoTotal = PADDING*opciones.size();
