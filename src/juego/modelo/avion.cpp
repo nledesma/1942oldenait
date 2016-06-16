@@ -427,7 +427,7 @@ int Avion::getCantidadAciertos() {
     return this->cantidadAciertos;
 }
 
-int Avion::getCantidadDisparos() {
+int Avion:: getCantidadDisparos() {
     return this->cantidadDisparos;
 }
 
