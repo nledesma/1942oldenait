@@ -1,7 +1,7 @@
 #include "menuConexiones.hpp"
 MenuConexiones::MenuConexiones(Ventana* ventana){
-    this->botonSiguiente = new BotonSiguiente();
-    this->botonAtras = new BotonAtras();
+    this->botonSiguiente = new Boton();
+    this->botonAtras = new Boton();
     this->fondo = new Figura();
     this->lista = new ListaDeSeleccion(ventana, 100, 150);
 }
@@ -34,11 +34,11 @@ void MenuConexiones::renderizar(Ventana* ventana){
     this->lista->renderizar();
 }
 
-BotonSiguiente* MenuConexiones::getBotonSiguiente(){
+Boton* MenuConexiones::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
-BotonAtras* MenuConexiones::getBotonAtras(){
+Boton* MenuConexiones::getBotonAtras(){
     return this->botonAtras;
 }
 

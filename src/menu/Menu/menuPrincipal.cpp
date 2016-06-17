@@ -1,7 +1,7 @@
 #include "menuPrincipal.hpp"
 MenuPrincipal::MenuPrincipal(){
-     this->botonJugar = new BotonJugar();
-     this->botonSalir = new BotonSalir();
+     this->botonJugar = new Boton();
+     this->botonSalir = new Boton();
      this->figuraLetras = new Figura();
      this->fondo = new Figura();
 }
@@ -35,11 +35,11 @@ void MenuPrincipal::renderizar(Ventana* ventana){
     this->getBotonSalir()[0].render(ventana->getVentanaRenderer());
 }
 
-BotonJugar* MenuPrincipal::getBotonJugar(){
+Boton* MenuPrincipal::getBotonJugar(){
      return this->botonJugar;
 }
 
-BotonSalir* MenuPrincipal::getBotonSalir(){
+Boton* MenuPrincipal::getBotonSalir(){
     return this->botonSalir;
 }
 

@@ -1,19 +1,19 @@
 #ifndef MENUCONEXIONPUERTO_H
 #define MENUCONEXIONPUERTO_H
 
-#include "../Boton/botonSiguiente.hpp"
+#include "../Boton/boton.hpp"
 #include "menu.hpp"
 using namespace std;
 
 class MenuConexionPuerto: public Menu{
     private:
-        BotonSiguiente* botonSiguiente;
+        Boton* botonSiguiente;
         Texto* textoPuerto;
     public:
         MenuConexionPuerto();
         void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
-        BotonSiguiente* getBotonSiguiente();
+        Boton* getBotonSiguiente();
         void cerrar();
 };
 

@@ -39,8 +39,8 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	movimientoAvionGrandeEtapa2.o trayectoriaAvionGrande.o trayectoriaRandom.o powerUp.o \
 	powerUpParseado.o fabricaPowerUps.o powerUpBonificacion.o powerUpDosAmetralladoras.o \
 	powerUpDestruirEnemigos.o powerUpAvionesSecundarios.o powerUpBonificacion1500.o punto.o superficie.o celda.o \
-	colisionable.o grilla.o trayectoriaIdaYvuelta.o trayectoriaRulo.o boton.o \
-	botonJugar.o botonSalir.o botonSiguiente.o botonAtras.o menu.o menuDatosDeUsuario.o menuConexionManual.o \
+	colisionable.o grilla.o trayectoriaIdaYvuelta.o trayectoriaRulo.o boton.o\
+	menu.o menuDatosDeUsuario.o menuConexionManual.o \
 	menuConexionPuerto.o menuPrincipal.o menuConexiones.o menuPorEquipos.o texto.o textoDinamico.o radioButton.o listaDeSeleccion.o \
 	disparoEnemigo.o powerUpDestruirEnemigosVista.o powerUpVista.o powerUpBonificacionVista.o powerUpBonificacion1500Vista.o\
 	powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o disparoEnemigoVista.o espacioEntreEtapas.o
@@ -53,19 +53,15 @@ OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
 BIN = bin
 CLIENTE = $(BIN)/cliente
 SERVIDOR = $(BIN)/servidor
-OPCIONES = $(BIN)/opciones
 
 # Reglas:
-all: makeDirs $(SERVIDOR)/mainServidorJuego $(CLIENTE)/mainClienteMenu $(OPCIONES)/mainOpciones
+all: makeDirs $(SERVIDOR)/mainServidorJuego $(CLIENTE)/mainClienteMenu
 
 $(SERVIDOR)/mainServidorJuego: $(DIR_OBJS)/mainServidorJuego.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $(SERVIDOR)/servidor $(LIBS)
 
 $(CLIENTE)/mainClienteMenu: $(DIR_OBJS)/mainClienteMenu.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $(CLIENTE)/cliente $(LIBS)
-
-$(OPCIONES)/mainOpciones: $(DIR_OBJS)/mainOpciones.o $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $(OPCIONES)/opciones $(LIBS)
 
 # Compilación de todos los .o, que es igual.
 $(DIR_OBJS)/%.o: %.cpp
@@ -74,7 +70,7 @@ $(DIR_OBJS)/%.o: %.cpp
 .PHONY: makeDirs clean
 
 makeDirs:
-	mkdir -p $(CLIENTE) $(SERVIDOR) $(OPCIONES)
+	mkdir -p $(CLIENTE) $(SERVIDOR)
 	mkdir -p $(DIR_OBJS)
 
 clean:
@@ -82,4 +78,3 @@ clean:
 	rm -f $(OBJS)/*.o
 	rm -f $(CLIENTE)/cliente
 	rm -f $(SERVIDOR)/servidor
-	rm -f $(OPCIONES)/opciones

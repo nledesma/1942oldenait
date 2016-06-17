@@ -1,6 +1,6 @@
 #include "menuConexionPuerto.hpp"
 MenuConexionPuerto::MenuConexionPuerto(){
-     this->botonSiguiente = new BotonSiguiente();
+     this->botonSiguiente = new Boton();
      this->textoPuerto = NULL;
      this->fondo = new Figura();
 }
@@ -31,7 +31,7 @@ void MenuConexionPuerto::renderizar(Ventana* ventana){
     this->textoPuerto->renderizar(160, 150);
 }
 
-BotonSiguiente* MenuConexionPuerto::getBotonSiguiente(){
+Boton* MenuConexionPuerto::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 

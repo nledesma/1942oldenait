@@ -1,7 +1,7 @@
 #include "menuConexionManual.hpp"
 MenuConexionManual::MenuConexionManual(){
-     this->botonSiguiente = new BotonSiguiente();
-     this->botonAtras = new BotonAtras();
+     this->botonSiguiente = new Boton();
+     this->botonAtras = new Boton();
      this->textoIP = NULL;
      this->fondo = new Figura();
 }
@@ -34,11 +34,11 @@ void MenuConexionManual::renderizar(Ventana* ventana){
     this->textoIP->renderizar(160, 150);
 }
 
-BotonSiguiente* MenuConexionManual::getBotonSiguiente(){
+Boton* MenuConexionManual::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
-BotonAtras* MenuConexionManual::getBotonAtras(){
+Boton* MenuConexionManual::getBotonAtras(){
     return this->botonAtras;
 }
 

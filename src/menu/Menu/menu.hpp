@@ -1,8 +1,6 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "../Boton/botonJugar.hpp"
-#include "../Boton/botonSalir.hpp"
 #include "../../juego/vista/ventana.hpp"
 #include "../../juego/vista/texto.hpp"
 #include <list>

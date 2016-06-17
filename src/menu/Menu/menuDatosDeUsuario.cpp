@@ -1,7 +1,7 @@
 #include "menuDatosDeUsuario.hpp"
 MenuDatosDeUsuario::MenuDatosDeUsuario(){
-    this->botonSiguiente = new BotonSiguiente();
-    this->botonAtras = new BotonAtras();
+    this->botonSiguiente = new Boton();
+    this->botonAtras = new Boton();
     this->fondo = new Figura();
      this->texto = NULL;
 }
@@ -35,11 +35,11 @@ void MenuDatosDeUsuario::renderizar(Ventana* ventana){
     this->texto->renderCentrado(150);
 }
 
-BotonSiguiente* MenuDatosDeUsuario::getBotonSiguiente(){
+Boton* MenuDatosDeUsuario::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 
-BotonAtras* MenuDatosDeUsuario::getBotonAtras(){
+Boton* MenuDatosDeUsuario::getBotonAtras(){
     return this->botonAtras;
 }
 
