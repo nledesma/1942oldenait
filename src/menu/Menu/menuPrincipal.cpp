@@ -1,12 +1,12 @@
 #include "menuPrincipal.hpp"
 
 MenuPrincipal::MenuPrincipal(Ventana * ventana): Menu(ventana) {
-    cout << "Se llama al constructor de MenuPrincipal" << endl;
      this->botonJugar = new BotonJugar();
      this->botonSalir = new BotonSalir();
      this->titulo = new Figura();
      this->anterior = this;
      this->siguiente = NULL;
+     cargarFiguras();
 }
 
 void MenuPrincipal::cerrar(){
@@ -15,7 +15,7 @@ void MenuPrincipal::cerrar(){
     this->titulo->free();
 }
 
-void MenuPrincipal::cargarBotones() {
+void MenuPrincipal::cargarFiguras() {
     if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloJugar" ))) {
         cout << "No se ha podido cargar la textura del boton!" << endl;
     } else {
@@ -39,8 +39,8 @@ void MenuPrincipal::setMenuDatosUsuario(Menu * m) {
 }
 
 void MenuPrincipal::render() {
-    this->fondo->render(0, 0, ventana->getVentanaRenderer());
-    this->titulo->render(100, 90, ventana->getVentanaRenderer());
+    Menu::render();
+    titulo->render(100, 90, ventana->getVentanaRenderer());
     botonJugar->render(ventana->getVentanaRenderer());
     botonSalir->render(ventana->getVentanaRenderer());
 }

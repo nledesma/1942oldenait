@@ -1,13 +1,12 @@
 #include "menu.hpp"
 
 Menu::Menu(Ventana * ventana) {
-    cout << "Se llama al constructor de menu." << endl;
     this->ventana = ventana;
     this->gFont = NULL;
     this->fondo = new Figura();
 
     if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")){
-        cout << "No se ha podido cargar la imagen de fondo" << endl;
+        cout << "No se ha podido cargar la imagen de fondo." << endl;
     }
 }
 
