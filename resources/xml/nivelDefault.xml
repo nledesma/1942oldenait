@@ -1,6 +1,6 @@
 <configuracion>
     <servidor>
-        <cantidadMaximaDeClientes>2</cantidadMaximaDeClientes>
+        <cantidadMaximaDeClientes>1</cantidadMaximaDeClientes>
         <puerto>8000</puerto>
     </servidor>
     <escenario>
@@ -14,7 +14,7 @@
             <alto>800</alto>
             <velocidadDesplazamientoY>180</velocidadDesplazamientoY>
         </fondo>
-        <modo>equipos</modo>
+        <modo>colaborativo</modo>
         <etapas>
             <etapa>
                 <longitud>6000</longitud>

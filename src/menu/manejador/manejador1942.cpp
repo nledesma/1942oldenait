@@ -39,8 +39,8 @@ Manejador1942::~Manejador1942() {
 
 void Manejador1942::manejarEvento(int evento){
     if (evento == JUGAR) {
-        // cliente->ejecutar();
-        cout << "Acá debería ejecutarse el cliente. " << endl;
+        cliente->ejecutar();
+        // cout << "Acá debería ejecutarse el cliente. " << endl;
     } else {
         ManejadorDeMenues::manejarEvento(evento);
     }

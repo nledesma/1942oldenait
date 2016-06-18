@@ -95,10 +95,8 @@ int GameSocket::recibirBytes(string & mensaje, int longitudMensaje, int fdEmisor
 
     while (bytesRecibidos < longitudMensaje && validarEstadoConexion(bytesActuales)) {
         // Agrego offsets si es que no se envía todo el mensaje
-        cout << "Se llama a recv" << endl;
         bytesActuales = recv(fdEmisor, pMensaje + bytesRecibidos, longitudMensaje - bytesRecibidos,
             0); // Recv retorna la cantidad de bytes recibidos.
-        cout << "Se llamó a recv" << endl;
         bytesRecibidos += bytesActuales;
     }
     mensaje = string(pMensaje, longitudMensaje);
@@ -122,7 +120,7 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
     string longitudMensaje;
     Decodificador::pushCantidad(longitudMensaje, mensaje.size());
     mensaje = longitudMensaje + mensaje;
-    Decodificador::imprimirBytes(mensaje);
+    // Decodificador::imprimirBytes(mensaje);
     pthread_mutex_lock(&mutexEnviar);
     int resultado = enviarBytes((char *) mensaje.c_str(), mensaje.size(), fdReceptor);
     pthread_mutex_unlock(&mutexEnviar);
@@ -133,14 +131,11 @@ int GameSocket::enviarMensaje(string mensaje, int fdReceptor) {
 int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
 
     string cabecera;
-    cout << "Se recibirá la cabecera." << endl;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
-    cout << "Se recibió la cabecera." << endl;
     if (resultado == MENSAJEOK){
-        cout << "Se recibió una cabecera correctamente" << endl;
         int longMensajeInt = Decodificador::popInt(cabecera);
         if (recibirBytes(mensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {
-            Decodificador::imprimirBytes(mensaje);
+            // Decodificador::imprimirBytes(mensaje);
             return MENSAJEOK;
         } else {
             stringstream ss;
