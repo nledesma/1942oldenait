@@ -10,7 +10,13 @@ MenuConexiones::~MenuConexiones() {
 }
 
 void MenuConexiones::agregarOpciones() {
-    cout << "Acá deberíamos levantar las conexiones y agregarlas." << endl;
+    list<Conexion> conexionesGuardadas = ClienteParser::levantarConexiones();
+    list<Conexion>::iterator it;
+    for(it = conexionesGuardadas.begin(); it != conexionesGuardadas.end(); it ++){
+        string conexion = it->nombre + ". ip: " + it->ip + ". puerto: " + to_string(it->puerto);
+        lista->agregarOpcion(conexion);
+    }
+    lista->agregarOpcion("conexion manual");
 }
 
 void MenuConexiones::accionAnterior() {}

@@ -10,7 +10,6 @@ class MenuPrincipal: public Menu {
     private:
         BotonJugar* botonJugar;
         BotonSalir* botonSalir;
-        // Texto* texto;
         Figura* titulo;
     public:
         MenuPrincipal(Ventana * ventana);

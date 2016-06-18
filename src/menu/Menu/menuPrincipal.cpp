@@ -46,7 +46,7 @@ void MenuPrincipal::render() {
 }
 
 int MenuPrincipal::manejarEvento(SDL_Event * e) {
-    if (esSalida(e) || botonSalir->manejarEvento(e) == BOTON_APRETADO) {
+    if (esSalida(e) || botonSalir->manejarEvento(e) == BOTON_APRETADO || esTecla(e, SDLK_ESCAPE)) {
         return SALIR;
     }
     if (esTecla(e,SDLK_RETURN) || botonJugar->manejarEvento(e) == BOTON_APRETADO) {

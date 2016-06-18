@@ -6,9 +6,9 @@ MenuLista::MenuLista (Ventana * ventana) : MenuIntermedio (ventana) {
 }
 
 void MenuLista::render() {
+    MenuIntermedio::render();
     lista->renderizar();
     titulo->renderCentrado(ALTURA_TITULO);
-    MenuIntermedio::render();
 }
 
 int MenuLista::manejarEvento(SDL_Event * e) {

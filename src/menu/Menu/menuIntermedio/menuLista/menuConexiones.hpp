@@ -2,6 +2,7 @@
 #define MENUCONEXIONES_H
 
 #include "menuLista.hpp"
+#include "../../../../net/cliente/clienteParser.hpp"
 using namespace std;
 
 class MenuConexiones: public MenuLista {
