@@ -9,7 +9,7 @@ Manejador1942::Manejador1942(Ventana * ventana, Cliente * cliente) : ManejadorDe
     menuIp = new MenuConexionManual(ventana);
     menuPuerto = new MenuConexionPuerto(ventana);
     menuDatosDeUsuario = new MenuDatosDeUsuario(ventana, cliente);
-    menuPorEquipos = new MenuPorEquipos(ventana);
+    menuPorEquipos = new MenuPorEquipos(ventana, cliente);
 
     /* Relación entre menúes */
     menuPrincipal->setMenuDatosUsuario(menuDatosDeUsuario);
