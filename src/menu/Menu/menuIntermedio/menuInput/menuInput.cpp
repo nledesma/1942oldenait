@@ -7,9 +7,9 @@ MenuInput::MenuInput (Ventana * ventana) : MenuIntermedio(ventana) {
 }
 
 void MenuInput::render() {
+    MenuIntermedio::render();
     titulo->renderCentrado(ALTURA_TITULO);
     input->renderCentrado(ALTURA_TITULO + 100);
-    MenuIntermedio::render();
 }
 
 int MenuInput::manejarEvento(SDL_Event * e) {

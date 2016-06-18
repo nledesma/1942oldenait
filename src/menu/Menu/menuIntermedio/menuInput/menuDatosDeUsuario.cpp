@@ -1,7 +1,7 @@
 #include "menuDatosDeUsuario.hpp"
 
 MenuDatosDeUsuario::MenuDatosDeUsuario(Ventana * ventana) : MenuInput(ventana) {
-    titulo->cargarFuente("Ingrese un Alias:");
+    titulo->cargarFuente("Ingrese un Alias");
 }
 
 void MenuDatosDeUsuario::setMenuPrincipal(Menu * m) {
