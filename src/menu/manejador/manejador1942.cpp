@@ -39,8 +39,9 @@ Manejador1942::~Manejador1942() {
 
 void Manejador1942::manejarEvento(int evento){
     if (evento == JUGAR) {
+        // Si se sale el juego, deberíamos quedar en menuConexiones;
+        actual = menuConexiones;
         cliente->ejecutar();
-        // cout << "Acá debería ejecutarse el cliente. " << endl;
     } else {
         ManejadorDeMenues::manejarEvento(evento);
     }
