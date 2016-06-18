@@ -6,7 +6,7 @@
 #include "../../Boton/botonAtras.hpp"
 
 class MenuIntermedio : public Menu {
-private:
+protected:
     BotonSiguiente* botonSiguiente;
     BotonAtras* botonAtras;
 public:

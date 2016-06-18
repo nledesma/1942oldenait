@@ -60,7 +60,7 @@ OPCIONES = $(BIN)/opciones
 
 # Reglas:
 #all: makeDirs $(SERVIDOR)/mainServidorJuego $(CLIENTE)/mainClienteMenu $(OPCIONES)/mainOpciones
-all: makeDirs $(CLIENTE)/mainNuevo
+all: makeDirs $(CLIENTE)/mainNuevo $(SERVIDOR)/mainServidorJuego
 
 $(SERVIDOR)/mainServidorJuego: $(DIR_OBJS)/mainServidorJuego.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $(SERVIDOR)/servidor $(LIBS)

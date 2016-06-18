@@ -6,7 +6,7 @@ MenuPrincipal::MenuPrincipal(Ventana * ventana): Menu(ventana) {
      this->titulo = new Figura();
      this->anterior = this;
      this->siguiente = NULL;
-     cargarFiguras();
+     cargarBotones();
 }
 
 void MenuPrincipal::cerrar(){
@@ -15,7 +15,7 @@ void MenuPrincipal::cerrar(){
     this->titulo->free();
 }
 
-void MenuPrincipal::cargarFiguras() {
+void MenuPrincipal::cargarBotones() {
     if (!(this->botonJugar->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloJugar" ))) {
         cout << "No se ha podido cargar la textura del boton!" << endl;
     } else {

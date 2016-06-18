@@ -1,6 +1,7 @@
 #include "menuDatosDeUsuario.hpp"
 
-MenuDatosDeUsuario::MenuDatosDeUsuario(Ventana * ventana) : MenuInput(ventana) {
+MenuDatosDeUsuario::MenuDatosDeUsuario(Ventana * ventana, Cliente * cliente) : MenuInput(ventana) {
+    this->cliente = cliente;
     titulo->cargarFuente("Ingrese un Alias");
 }
 
@@ -15,5 +16,6 @@ void MenuDatosDeUsuario::setMenuConexiones(Menu * m) {
 void MenuDatosDeUsuario::accionAnterior() {}
 
 void MenuDatosDeUsuario::accionSiguiente() {
-    cout << "Acá se debería setear el alias del cliente." << endl;
+    cliente->setAlias(input->getTexto());
+    cout << "se le dio al cliente el nombre" << cliente->getAlias() << endl;
 }

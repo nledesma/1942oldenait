@@ -16,7 +16,7 @@ public:
     void menuSiguiente();
     void renderLoop();
     void finalizarRender();
-    void manejarEvento(int evento);
+    virtual void manejarEvento(int evento);
 };
 
 #endif

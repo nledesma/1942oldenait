@@ -14,7 +14,7 @@ class MenuPrincipal: public Menu {
     public:
         MenuPrincipal(Ventana * ventana);
         void cerrar();
-        void cargarFiguras();
+        void cargarBotones();
         void setMenuDatosUsuario(Menu * m);
         int manejarEvento(SDL_Event * e);
         void accionAnterior();

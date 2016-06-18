@@ -17,9 +17,11 @@ private:
     MenuConexionManual * menuIp;
     MenuConexionPuerto * menuPuerto;
     MenuDatosDeUsuario * menuDatosDeUsuario;
+    Cliente * cliente;
 public:
-    Manejador1942 (Ventana * ventana);
+    Manejador1942 (Ventana * ventana, Cliente * cliente);
     virtual ~Manejador1942 ();
+    void manejarEvento(int evento);
 };
 
 #endif

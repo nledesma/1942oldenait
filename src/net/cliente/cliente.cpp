@@ -8,7 +8,7 @@
 #include "cliente.hpp"
 using namespace std;
 
-Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket(){
+Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket() {
 	this->ip = ip;
 	this->port = port;
 	this->ventana = ventana;
@@ -16,7 +16,7 @@ Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket(){
 	setAddress(ip, port);
 }
 
-Cliente::Cliente(Ventana* ventana):GameSocket(){
+Cliente::Cliente(Ventana* ventana):GameSocket() {
 	this->ventana = ventana;
 	cliente_conectado = false;
 }
@@ -34,10 +34,8 @@ void Cliente::setAddress(string serverAddress, int port){
 bool Cliente::conectar(){
 	// Me conecto a la direccion.
 	iniciarSocket();
-	int conexion;
 	try {
 		int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
-		conexion = connected;
 		if (connected == 0) {
 			Logger::instance()->logInfo("Conexión exitosa");
 			cliente_conectado = true;
@@ -85,11 +83,14 @@ void Cliente::cerrar(){
 
 bool Cliente::sePuedeEntrar() {
 	// Primero se envía un mensaje con el nombre.
+	cout << "Se envia el nombre." << endl;
 	enviarMensaje(alias, socketFd);
+	cout << "Se envió el nombre" << endl;
 	// Luego el servidor evalua y envia su respuesta. Si es OK se puede.
 	string mensaje = "";
 	if(recibirMensaje(mensaje) != MENSAJEOK) return false;
 	if (mensaje == "OK"){
+		cout << "Se puede entrar." << endl;
 		return true;
 	} else {
 		cout << "No fue posible conectarse. El servidor responde: \"";

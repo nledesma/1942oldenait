@@ -3,6 +3,7 @@
 
 #include "../menuIntermedio.hpp"
 #include "../../../../juego/vista/textoDinamico.hpp"
+#include "../../../../net/cliente/cliente.hpp"
 
 #define ALTURA_TITULO 100
 
@@ -15,6 +16,5 @@ public:
     // virtual ~MenuInput ();
     virtual void render();
     virtual int manejarEvento(SDL_Event * e);
-
 };
 #endif

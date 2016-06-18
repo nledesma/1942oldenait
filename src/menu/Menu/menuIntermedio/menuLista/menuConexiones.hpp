@@ -9,17 +9,19 @@ class MenuConexiones: public MenuLista {
     private:
         Menu * menuPorEquipos;
         Menu * menuConexionManual;
-        // Texto * titulo;
+        Cliente * cliente;
+        list<Conexion> conexionesGuardadas;
     public:
-        MenuConexiones(Ventana* ventana);
+        MenuConexiones(Ventana* ventana, Cliente * cliente);
         ~MenuConexiones();
         void agregarOpciones();
         void setMenuConexionManual(Menu * m);
         void setMenuDatosUsuario(Menu * m);
         void setMenuPorEquipos(Menu * m);
+        int manejarEvento(SDL_Event * e);
         void accionAnterior();
         void accionSiguiente();
-
+        bool conectar(string ip, int puerto);
 };
 
 #endif

@@ -2,7 +2,6 @@
 
 Menu::Menu(Ventana * ventana) {
     this->ventana = ventana;
-    this->gFont = NULL;
     this->fondo = new Figura();
 
     if(!this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas")){
@@ -31,9 +30,7 @@ void Menu::render() {
 }
 
 void Menu::cerrar() {
-    // Free global font
-	TTF_CloseFont( gFont );
-	gFont = NULL;
+    // NOTE actualmente no estamos ningún menú y creo que en caso de hacerlo NO deberíamos hacer estos quits.
     TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

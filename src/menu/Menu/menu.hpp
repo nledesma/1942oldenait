@@ -12,10 +12,9 @@ using namespace std;
 #define SIGUIENTE 1
 #define SALIR 2
 #define NADA 3
+#define JUGAR 4
 
 class Menu {
-    private:
-        TTF_Font *gFont;
     protected:
         Ventana * ventana;
         Figura* fondo;
