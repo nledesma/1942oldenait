@@ -30,3 +30,7 @@ Manejador1942::Manejador1942(Ventana * ventana) : ManejadorDeMenues(ventana){
 
     actual = menuPrincipal;
 }
+
+Manejador1942::~Manejador1942() {
+
+}

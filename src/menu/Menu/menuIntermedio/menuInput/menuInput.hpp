@@ -12,7 +12,7 @@ protected:
     TextoDinamico * input;
 public:
     MenuInput (Ventana * ventana);
-    virtual ~MenuInput ();
+    // virtual ~MenuInput ();
     virtual void render();
     virtual int manejarEvento(SDL_Event * e);
 

@@ -24,6 +24,7 @@ class Menu {
         virtual void cargarBotones() = 0;
     public:
         Menu(Ventana * ventana);
+        // virtual ~Menu();
         Figura* getFiguraTexto();
         void cerrar();
         // NOTE Un par de auxiliares que bien podŕian ir en otro lado.

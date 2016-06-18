@@ -1,6 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(Ventana * ventana) {
+    cout << "Se llama al constructor de menu." << endl;
     this->ventana = ventana;
     this->gFont = NULL;
     this->fondo = new Figura();
@@ -15,7 +16,7 @@ bool Menu::esTecla(SDL_Event * e, SDL_Keycode tecla) {
 }
 
 bool Menu::esSalida(SDL_Event * e) {
-    return (e->type == SDL_WINDOWEVENT && e->window.event == SDL_WINDOWEVENT_CLOSE);
+    return ((e->type == SDL_WINDOWEVENT && e->window.event == SDL_WINDOWEVENT_CLOSE));
 }
 
 Menu * Menu::getAnterior() {

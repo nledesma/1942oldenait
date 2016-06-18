@@ -1,6 +1,7 @@
 #include "menuPrincipal.hpp"
 
 MenuPrincipal::MenuPrincipal(Ventana * ventana): Menu(ventana) {
+    cout << "Se llama al constructor de MenuPrincipal" << endl;
      this->botonJugar = new BotonJugar();
      this->botonSalir = new BotonSalir();
      this->titulo = new Figura();
@@ -45,11 +46,10 @@ void MenuPrincipal::render() {
 }
 
 int MenuPrincipal::manejarEvento(SDL_Event * e) {
-    // TODO ver que manejarEvento sea bool.
-    if (esSalida(e) || botonSalir->manejarEvento(e)) {
+    if (esSalida(e) || botonSalir->manejarEvento(e) == BOTON_APRETADO) {
         return SALIR;
     }
-    if (esTecla(e,SDLK_RETURN) || botonJugar->manejarEvento(e)) {
+    if (esTecla(e,SDLK_RETURN) || botonJugar->manejarEvento(e) == BOTON_APRETADO) {
         return SIGUIENTE;
     }
     return NADA;

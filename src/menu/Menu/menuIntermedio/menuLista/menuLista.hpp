@@ -12,7 +12,7 @@ protected:
     ListaDeSeleccion* lista;
 public:
     MenuLista (Ventana * ventana);
-    virtual ~MenuLista ();
+    // virtual ~MenuLista ();
     virtual void render();
     virtual int manejarEvento(SDL_Event * e);
 };

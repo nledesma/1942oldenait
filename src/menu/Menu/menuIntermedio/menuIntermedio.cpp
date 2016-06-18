@@ -26,10 +26,10 @@ int MenuIntermedio::manejarEvento(SDL_Event * e) {
     if (esSalida(e)) {
         return SALIR;
     }
-    if (esTecla(e, SDLK_BACKSPACE) || botonAtras->manejarEvento(e)) {
+    if (esTecla(e, SDLK_BACKSPACE) || botonAtras->manejarEvento(e) == BOTON_APRETADO) {
         return ANTERIOR;
     }
-    if (esTecla(e, SDLK_RETURN) || botonSiguiente->manejarEvento(e)) {
+    if (esTecla(e, SDLK_RETURN) || botonSiguiente->manejarEvento(e) == BOTON_APRETADO) {
         return SIGUIENTE;
     }
     return NADA;
