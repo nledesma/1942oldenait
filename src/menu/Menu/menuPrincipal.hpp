@@ -6,19 +6,21 @@
 #include "menu.hpp"
 using namespace std;
 
-class MenuPrincipal: public Menu{
+class MenuPrincipal: public Menu {
     private:
         BotonJugar* botonJugar;
         BotonSalir* botonSalir;
         // Texto* texto;
-        Figura* figuraLetras;
+        Figura* titulo;
     public:
-        MenuPrincipal();
-        void cargarBotones(Ventana* ventana);
-        void renderizar(Ventana* ventana);
-        BotonJugar* getBotonJugar();
-        BotonSalir* getBotonSalir();
+        MenuPrincipal(Ventana * ventana);
         void cerrar();
+        void cargarBotones();
+        void setMenuDatosUsuario(Menu * m);
+        int manejarEvento(SDL_Event * e);
+        void accionAnterior();
+        void accionSiguiente();
+        void render();
 };
 
 #endif
