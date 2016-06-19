@@ -179,7 +179,6 @@ void EscenarioJuego::reiniciarEtapas() {
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
         (*itAviones)->volverEstadoInicial();
     }
-    cout << " size powerUps: " << powerUps.size() << " size enemigos: " << enemigos.size() << " size disparos: " << disparos.size() << " size disparosEnemigos: " << disparosEnemigos.size() << " size elementos: " << elementos.size() << endl;
     while (!this->colaEventos.vacia()) {
         this->colaEventos.pop();
     }
@@ -196,7 +195,6 @@ int EscenarioJuego::comenzarEtapa() {
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
     etapaActual()->resetEnemigos();
-    cout << " size powerUps: " << powerUps.size() << " size enemigos: " << enemigos.size() << " size disparos: " << disparos.size() << " size disparosEnemigos: " << disparosEnemigos.size() << " size elementos: " << elementos.size() << endl;
 
     return mainLoop();
     // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P

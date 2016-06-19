@@ -17,7 +17,7 @@
         <modo>colaborativo</modo>
         <etapas>
             <etapa>
-                <longitud>6000</longitud>
+                <longitud>8000</longitud>
                 <elementos>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
