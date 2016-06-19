@@ -34,10 +34,11 @@ private:
     string alias;
     pthread_t mainLoopThread;
 	Ventana* ventana;
+	SoundBoard* soundboard;
 
 public:
     Cliente(string ip, int port, Ventana* ventana);
-	Cliente(Ventana* ventana);
+	Cliente(Ventana* ventana, SoundBoard* soundBoard);
     ~Cliente();
     void setAddress(string serverAddress, int port);
     bool conectar();

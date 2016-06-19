@@ -16,8 +16,9 @@ Cliente::Cliente(string ip, int port, Ventana* ventana):GameSocket() {
 	setAddress(ip, port);
 }
 
-Cliente::Cliente(Ventana* ventana):GameSocket() {
+Cliente::Cliente(Ventana* ventana, SoundBoard* soundBoard):GameSocket() {
 	this->ventana = ventana;
+	this->soundboard = soundBoard;
 	cliente_conectado = false;
 }
 
@@ -142,7 +143,7 @@ void Cliente::iniciarEscenario() {
 	string mensajeInicial;
 	if(recibirMensaje(mensajeInicial) != MENSAJEOK) return;
 	// TODO si ya había un escenario habría que liberarlo antes de hacer new.
-	this->escenarioVista = new EscenarioVista(mensajeInicial, this->ventana);
+	this->escenarioVista = new EscenarioVista(mensajeInicial, this->ventana, this->soundboard);
 	this->escenarioVista->preloop();
 }
 

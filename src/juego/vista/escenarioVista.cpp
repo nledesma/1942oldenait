@@ -1,7 +1,7 @@
 #include "escenarioVista.hpp"
 using namespace std;
 
-EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
+EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana, SoundBoard* soundboard){
     this->anchoVentana = Decodificador::popInt(infoEscenario);
     this->altoVentana = Decodificador::popInt(infoEscenario);
     this->ventana = ventana;
@@ -11,8 +11,8 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana){
     this->scrollingOffset = 0;
     this->contadorSonido = 0;
     this->fondo = new Figura();
-    this->soundBoard = new SoundBoard();
-    this->soundBoard->inicializar();
+    this->soundBoard = soundboard;
+//    this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
     this->figuraVidas = new Figura();
 
@@ -225,14 +225,14 @@ void EscenarioVista::preloop(){
     cargarVistaDisparos();
     cargarVistaEnemigos();
     cargarVistaDisparosEnemigos();
-    cargarSonidos();
+//    cargarSonidos();
     cargarVistaVidas();
 }
 
 int EscenarioVista::mainLoop(){
     cout << "se entra al mainLoop" << endl;
     SDL_Event e;
-    this->soundBoard->toggleMusica();
+    this->soundBoard->toggleOnMusica();
     while(this->getActivo()){
         while ( SDL_PollEvent( &e ) != 0 ) {
             if (e.type == SDL_WINDOWEVENT) {
@@ -268,7 +268,7 @@ int EscenarioVista::mainLoop(){
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
     cout << "Finalizó el ciclo de render." << endl;
-    this->soundBoard->toggleMusica();
+    this->soundBoard->toggleOffMusica();
     this->soundBoard->reproducirR2D2yeah();
     //cerrar();
     if(this->finalizado){
@@ -485,9 +485,9 @@ void EscenarioVista::cargarElemento(ElementoVista* elementoVista, SDL_Renderer* 
     elementoVista->cargarImagen(renderer);
 }
 
-void EscenarioVista::cargarSonidos() {
-    this->soundBoard->cargarSonidos();
-}
+//void EscenarioVista::cargarSonidos() {
+//    this->soundBoard->cargarSonidos();
+//}
 
 void EscenarioVista::cargarVistaVidas(){
     this->figuraVidas->loadFromFile(VIDAS, this->ventana->getVentanaRenderer());

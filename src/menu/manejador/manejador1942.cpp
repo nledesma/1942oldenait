@@ -1,6 +1,6 @@
 #include "manejador1942.hpp"
 
-Manejador1942::Manejador1942(Ventana * ventana, Cliente * cliente) : ManejadorDeMenues(ventana){
+Manejador1942::Manejador1942(Ventana * ventana, Cliente * cliente, SoundBoard * soundBoard) : ManejadorDeMenues(ventana, soundBoard){
     this->cliente = cliente;
 
     /* Creación de menúes */
@@ -41,6 +41,7 @@ void Manejador1942::manejarEvento(int evento){
     if (evento == JUGAR) {
         // Si se sale el juego, deberíamos quedar en menuConexiones;
         actual = menuConexiones;
+        this->soundBoard->stopMusica();
         cliente->ejecutar();
     } else {
         ManejadorDeMenues::manejarEvento(evento);

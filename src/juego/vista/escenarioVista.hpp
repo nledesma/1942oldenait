@@ -110,7 +110,7 @@ private:
     bool finalizado = false;
 public:
     /* Constructor y destructor */
-    EscenarioVista(string infoEscenario, Ventana* ventana);
+    EscenarioVista(string infoEscenario, Ventana* ventana, SoundBoard* soundboard);
     void inicializarComponentes(string infoEscenario);
     void actualizarComponentes(string infoActualizacion);
     ~EscenarioVista();
@@ -141,7 +141,7 @@ public:
     void cargarVistaDisparosEnemigos();
     void cargarVistaEnemigos();
     void cargarVistasPowerUps();
-    void cargarSonidos();
+//    void cargarSonidos();
     void cargarVistaVidas();
     void actualizar(float offset);
     void cerrar();

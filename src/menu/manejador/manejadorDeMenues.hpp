@@ -2,6 +2,7 @@
 #define MANEJADOR_MENU_HPP
 
 #include "../Menu/menu.hpp"
+#include "../../juego/vista/soundboard.hpp"
 
 class ManejadorDeMenues {
 private:
@@ -9,8 +10,9 @@ private:
     bool dibujar;
 protected:
     Menu * actual;
+    SoundBoard * soundBoard;
 public:
-    ManejadorDeMenues (Ventana * ventana);
+    ManejadorDeMenues (Ventana * ventana, SoundBoard * soundBoard);
     virtual ~ManejadorDeMenues ();
     void menuAnterior();
     void menuSiguiente();

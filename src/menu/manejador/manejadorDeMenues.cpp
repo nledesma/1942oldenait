@@ -1,7 +1,8 @@
 #include "manejadorDeMenues.hpp"
 
-ManejadorDeMenues::ManejadorDeMenues(Ventana * ventana) {
+ManejadorDeMenues::ManejadorDeMenues(Ventana * ventana, SoundBoard * soundboard) {
     this->ventana = ventana;
+    this->soundBoard = soundboard;
 }
 
 ManejadorDeMenues::~ManejadorDeMenues(){
@@ -41,8 +42,8 @@ void ManejadorDeMenues::finalizarRender() {
 
 void ManejadorDeMenues::manejarEvento(int evento) {
     switch (evento) {
-        case ANTERIOR: menuAnterior(); break;
-        case SIGUIENTE: menuSiguiente(); break;
+        case ANTERIOR: menuAnterior(); this->soundBoard->reproducirR2D2yeah(); break;
+        case SIGUIENTE: menuSiguiente(); this->soundBoard->reproducirR2D2yeah(); break;
         case SALIR: finalizarRender(); break;
         case NADA: break;
         default: cout << "Evento no válido ("<< evento <<")." << endl;

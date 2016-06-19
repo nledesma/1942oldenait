@@ -27,6 +27,8 @@ void SoundBoard::cerrar() {
     this->r2d2Yeah = NULL;
     Mix_FreeMusic(this->musica);
     this->musica = NULL;
+    Mix_FreeMusic(this->musica);
+    this->musicaMenu = NULL;
     Mix_Quit();
 }
 
@@ -44,10 +46,13 @@ bool SoundBoard::cargarSonidos() {
         Mix_FreeChunk(this->r2d2Yeah);
     if (this->musica != NULL)
         Mix_FreeMusic(this->musica);
+    if (this->musicaMenu != NULL)
+        Mix_FreeMusic(this->musicaMenu);
     this->disparo = NULL;
     this->disparo_enemigo = NULL;
     this->explosion = NULL;
     this->musica = NULL;
+    this->musicaMenu = NULL;
     this->r2d2Yeah = NULL;
 
     string basePath = PATH_SOUND;
@@ -56,6 +61,15 @@ bool SoundBoard::cargarSonidos() {
     this->musica = Mix_LoadMUS(musicaPath.c_str());
     Mix_VolumeMusic(60);
     if( this->musica == NULL )
+    {
+        printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        success = false;
+    }
+
+    string musicaMenuPath = basePath + MUSICA_MENU;
+    this->musicaMenu = Mix_LoadMUS(musicaMenuPath.c_str());
+    Mix_VolumeMusic(60);
+    if( this->musicaMenu == NULL )
     {
         printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
@@ -141,5 +155,68 @@ void SoundBoard::toggleMusica(){
         {
             Mix_PauseMusic();
         }
+    }
+}
+
+void SoundBoard::toggleOnMusica(){
+    if( Mix_PlayingMusic() == 0 )
+    {
+        Mix_PlayMusic( this->musica, -1 );
+    }
+    else
+    {
+        if( Mix_PausedMusic() == 1 )
+        {
+            Mix_ResumeMusic();
+        }
+    }
+}
+
+void SoundBoard::toggleOffMusica(){
+    if( Mix_PlayingMusic() == 1 ) {
+        if( Mix_PausedMusic() == 0 )
+        {
+            Mix_PauseMusic();
+        }
+    }
+}
+
+void SoundBoard::toggleMusicaMenu(){
+    if( Mix_PlayingMusic() == 0 )
+    {
+        Mix_PlayMusic( this->musicaMenu, -1 );
+    }
+    else
+    {
+        if( Mix_PausedMusic() == 1 )
+        {
+            Mix_ResumeMusic();
+        }
+        else
+        {
+            Mix_PauseMusic();
+        }
+    }
+}
+
+void SoundBoard::playMusica() {
+    if( Mix_PlayingMusic() == 0 )
+    {
+        Mix_PlayMusic( this->musica, -1 );
+    }
+}
+
+void SoundBoard::playMusicaMenu() {
+    if( Mix_PlayingMusic() == 0 )
+    {
+        Mix_PlayMusic( this->musicaMenu, -1 );
+    }
+}
+
+
+void SoundBoard::stopMusica() {
+    if( Mix_PlayingMusic() == 1 )
+    {
+        Mix_HaltMusic();
     }
 }
