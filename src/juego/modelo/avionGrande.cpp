@@ -15,6 +15,7 @@ AvionGrande::AvionGrande(float posX, float posY, float velocidad, float angulo, 
     this->vidas = 10;
     this->valorImpacto = 100;
     this->valorDerribo = 1000;
+    this->contador = 0;
 }
 
 AvionGrande::~AvionGrande(){
