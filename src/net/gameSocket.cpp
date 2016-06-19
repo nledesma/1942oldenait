@@ -132,7 +132,6 @@ int GameSocket::recibirMensaje(string & mensaje, int fdEmisor) {
 
     string cabecera;
     int resultado = recibirBytes(cabecera, sizeof(int), fdEmisor);
-
     if (resultado == MENSAJEOK){
         int longMensajeInt = Decodificador::popInt(cabecera);
         if (recibirBytes(mensaje, longMensajeInt, fdEmisor) == MENSAJEOK) {

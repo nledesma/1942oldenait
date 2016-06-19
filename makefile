@@ -22,11 +22,14 @@ MENU_PATH = src/menu
 SRC = app:$(NET_PATH):$(NET_PATH)/cliente:$(NET_PATH)/servidor:\
 	$(NET_PATH)/mensaje:$(COLA_PATH):$(LOGGER_PATH):$(XML_PATH): \
 	$(JUEGO_MODELO_PATH):$(JUEGO_VISTA_PATH):$(TEMPORIZADOR_PATH): \
-	$(TRAYECTORIA_PATH):$(COLISIONES_PATH):$(MENU_PATH):$(MENU_PATH)/Menu:$(MENU_PATH)/Boton
+	$(TRAYECTORIA_PATH):$(COLISIONES_PATH):$(MENU_PATH):$(MENU_PATH)/Menu:$(MENU_PATH)/Boton \
+	$(MENU_PATH)/manejador:$(MENU_PATH)/Menu/menuIntermedio:$(MENU_PATH)/Menu/menuIntermedio \
+	$(MENU_PATH)/Menu/menuIntermedio/menuLista:$(MENU_PATH)/Menu/menuIntermedio/menuInput
 vpath %.cpp $(SRC)
 
 # ESTO ESTA FUERA DE CONTROLLLL
 
+# Sacar el .o, agregar con sufijo.
 # Compilados.
 OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	logger.o colaConcurrente.o avion.o disparo.o clienteParser.o etapa.o etapaVista.o \
@@ -43,8 +46,8 @@ OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
 	menu.o menuDatosDeUsuario.o menuConexionManual.o \
 	menuConexionPuerto.o menuPrincipal.o menuConexiones.o menuPorEquipos.o texto.o textoDinamico.o radioButton.o listaDeSeleccion.o \
 	disparoEnemigo.o powerUpDestruirEnemigosVista.o powerUpVista.o powerUpBonificacionVista.o powerUpBonificacion1500Vista.o\
-	powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o disparoEnemigoVista.o espacioEntreEtapas.o
-
+	powerUpAvionesSecundariosVista.o powerUpDosAmetralladorasVista.o disparoEnemigoVista.o espacioEntreEtapas.o\
+	menuInput.o menuLista.o menuIntermedio.o manejadorDeMenues.o manejador1942.o
 
 DIR_OBJS = compilados
 OBJS = $(addprefix $(DIR_OBJS)/,$(OBJS_LIST))
@@ -54,13 +57,15 @@ BIN = bin
 CLIENTE = $(BIN)/cliente
 SERVIDOR = $(BIN)/servidor
 
-# Reglas:
-all: makeDirs $(SERVIDOR)/mainServidorJuego $(CLIENTE)/mainClienteMenu
+all: makeDirs $(CLIENTE)/mainNuevo $(SERVIDOR)/mainServidorJuego
 
 $(SERVIDOR)/mainServidorJuego: $(DIR_OBJS)/mainServidorJuego.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $(SERVIDOR)/servidor $(LIBS)
 
 $(CLIENTE)/mainClienteMenu: $(DIR_OBJS)/mainClienteMenu.o $(OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $(CLIENTE)/cliente $(LIBS)
+
+$(CLIENTE)/mainNuevo: $(DIR_OBJS)/mainNuevo.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $(CLIENTE)/cliente $(LIBS)
 
 # Compilación de todos los .o, que es igual.
