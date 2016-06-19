@@ -43,3 +43,7 @@ void TrayectoriaIdaYvuelta::mover(float &posX, float &posY, float &velocidad, fl
 
     this->tiempoIda = this->tiempoIda - timestep;
 }
+
+void TrayectoriaIdaYvuelta::setEstadoInicial() {
+    this->tiempoIda = 3.5;
+}

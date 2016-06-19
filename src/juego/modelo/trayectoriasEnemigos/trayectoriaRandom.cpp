@@ -32,3 +32,7 @@ void TrayectoriaRandom::mover(float &posX, float &posY, float &velocidad, float 
     posX += velocidadX*timestep;
     posY += velocidadY*timestep;
 }
+
+void TrayectoriaRandom::setEstadoInicial() {
+
+}

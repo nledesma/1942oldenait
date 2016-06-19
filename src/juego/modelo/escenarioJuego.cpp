@@ -35,7 +35,7 @@ void EscenarioJuego::reset() {
     this->enemigos.clear();
     this->disparosEnemigos.clear();
     for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
-        (*itAviones)->volverEstadoInicial();
+        (*itAviones)->setPosicionInicial();
     }
 
     for (list<Elemento *>::iterator itElementos = elementos.begin(); itElementos != elementos.end(); itElementos++) {
@@ -116,11 +116,12 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
     this->etapas.push_back(etapa);
 }
 
-void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
+bool EscenarioJuego::manejarEvento(int nroAvion, int evento) {
     vector<Disparo *> disparo;
+    bool resetea = false;
     switch (evento) {
         case PRESIONA_R:
-            reset();
+            resetea = true;
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
@@ -141,6 +142,7 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             avion(nroAvion)->manejarEvento(evento);
             break;
     }
+    return resetea;
 }
 
 void EscenarioJuego::avanzarEtapa() {
@@ -152,7 +154,40 @@ void EscenarioJuego::avanzarEtapa() {
     ++itEtapa;
 }
 
-void EscenarioJuego::comenzarEtapa() {
+void EscenarioJuego::reiniciarEtapas() {
+    desactivar();
+    nroEtapaActual = 0;
+    usleep(5000);
+    this->itEtapa = etapas.begin();
+    pthread_mutex_lock(&mutexPowerUps);
+    this->powerUps.clear();
+    pthread_mutex_unlock(&mutexPowerUps);
+    pthread_mutex_lock(&mutexListaEnemigos);
+    this->enemigos.clear();
+    pthread_mutex_unlock(&mutexListaEnemigos);
+    pthread_mutex_lock(&mutexListaDisparosEnemigos);this->disparos.clear();
+    this->disparosEnemigos.clear();
+    pthread_mutex_unlock(&mutexListaDisparosEnemigos);
+    pthread_mutex_lock(&mutexListaDisparos);this->disparos.clear();
+    this->disparos.clear();
+    pthread_mutex_unlock(&mutexListaDisparos);
+
+    for (list<Etapa *>::iterator itEtapas = etapas.begin(); itEtapas != etapas.end(); itEtapas++) {
+        (*itEtapas)->setEstadosIniciales();
+    }
+
+    for (list<Avion *>::iterator itAviones = aviones.begin(); itAviones != aviones.end(); itAviones++) {
+        (*itAviones)->volverEstadoInicial();
+    }
+    cout << " size powerUps: " << powerUps.size() << " size enemigos: " << enemigos.size() << " size disparos: " << disparos.size() << " size disparosEnemigos: " << disparosEnemigos.size() << " size elementos: " << elementos.size() << endl;
+    while (!this->colaEventos.vacia()) {
+        this->colaEventos.pop();
+    }
+    temporizador.detener();
+
+}
+
+int EscenarioJuego::comenzarEtapa() {
     this->activar();
     scrollingOffset = 0;
     posicionY = 0;
@@ -160,9 +195,10 @@ void EscenarioJuego::comenzarEtapa() {
     this->infoEscuadrones.clear();
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
-    cout << "Se agregan a la etapa actual " << powerUps.size() << " powerups." << endl;
+    etapaActual()->resetEnemigos();
+    cout << " size powerUps: " << powerUps.size() << " size enemigos: " << enemigos.size() << " size disparos: " << disparos.size() << " size disparosEnemigos: " << disparosEnemigos.size() << " size elementos: " << elementos.size() << endl;
 
-    mainLoop();
+    return mainLoop();
     // TODO 2: podría cambiar la imagen de fondo entre etapas? Mejor no preguntar :P
 }
 
@@ -183,8 +219,9 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
     pthread_mutex_unlock(&this->mutexScroll);
 }
 
-void EscenarioJuego::mainLoop() {
+int EscenarioJuego::mainLoop() {
     activar();
+    int eventoFinal = AVANZAR_ETAPA;
 //    Trayectoria* cuadrada = new TrayectoriaCuadrada();
 //    AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
 //    Trayectoria* trayectoriaAvionGrande = new TrayectoriaAvionGrande();
@@ -194,12 +231,15 @@ void EscenarioJuego::mainLoop() {
     while (estaActivo()) {
         float timeStep = temporizador.getTicks() / 1000.f;
         temporizador.comenzar();
-        actualizarEstado(timeStep);
+        eventoFinal = actualizarEstado(timeStep);
         usleep(5000);
     }
+    return eventoFinal;
 }
 
-void EscenarioJuego::actualizarEstado(float timeStep) {
+int EscenarioJuego::actualizarEstado(float timeStep) {
+    bool resetear = false;
+    int eventoFinal = AVANZAR_ETAPA;
     if (this->posicionY < this->etapaActual()->getLongitud() - 800) {
         this->actualizarScrollingOffset(timeStep);
         if(!this->modoPractica){
@@ -212,7 +252,7 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         this->moverPowerUps(timeStep);
         this->proyectarDisparos(timeStep);
         this->moverDisparosEnemigos(timeStep);
-        this->manejarProximoEvento();
+        resetear = this->manejarProximoEvento();
         this->verificarColisiones();
         this->moverDisparos(timeStep);
         this->getProximoEnemigo();
@@ -225,6 +265,9 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
             pthread_mutex_lock(&this->mutexListaEnemigos);
             this->enemigos.clear();
             pthread_mutex_unlock(&this->mutexListaEnemigos);
+            pthread_mutex_lock(&this->mutexPowerUps);
+            this->powerUps.clear();
+            pthread_mutex_unlock(&this->mutexPowerUps);
             pthread_mutex_lock(&this->mutexListaDisparos);
             this->disparos.clear();
             pthread_mutex_unlock(&this->mutexListaDisparos);
@@ -234,14 +277,18 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
             while (!this->colaEventos.vacia()) {
                 this->colaEventos.pop();
             }
-            timeStep = 0;
             temporizador.detener();
             this->avanzarEtapa();
             for (list<Avion *>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++) {
-                (*itAviones)->volverEstadoInicial(false);
+                (*itAviones)->setPosicionInicial(false);
             }
         }
     }
+    if (resetear){
+        this->reiniciarEtapas();
+        eventoFinal = REINICIAR_ESCENARIO;
+    }
+    return eventoFinal;
 }
 
 void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
@@ -290,7 +337,7 @@ void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
     }
 }
 
-void EscenarioJuego::jugar(bool serverActivo) {
+int EscenarioJuego::jugar(bool serverActivo) {
     // TODO POS
     /* Se fijan las posiciones de los aviones */
     float d = ancho/(aviones.size() + 1);
@@ -304,14 +351,16 @@ void EscenarioJuego::jugar(bool serverActivo) {
     }
 
     itEtapa = etapas.begin();
-    comenzarEtapa();
+    return comenzarEtapa();
 }
 
-void EscenarioJuego::manejarProximoEvento() {
+bool EscenarioJuego::manejarProximoEvento() {
+    bool resetear = false;
     if (!this->colaEventos.vacia()) {
         pair<int, int> evento = this->colaEventos.pop();
-        this->manejarEvento(evento.first, evento.second);
+        resetear = this->manejarEvento(evento.first, evento.second);
     }
+    return resetear;
 }
 
 void EscenarioJuego::pushEvento(pair<int, int> evento) {
@@ -380,7 +429,6 @@ void EscenarioJuego::moverPowerUps(float timeStep) {
     for (list<PowerUp *>::iterator iterador = powerUps.begin();
          iterador != powerUps.end(); iterador++) {
         if((*iterador)->mover(timeStep, this->velocidadDesplazamientoY) == 0){
-            delete(*iterador);
             pthread_mutex_lock(&this->mutexPowerUps);
             iterador = powerUps.erase(iterador);
             pthread_mutex_unlock(&this->mutexPowerUps);
@@ -406,7 +454,6 @@ void EscenarioJuego::moverEnemigos(float timeStep) {
 //            }
 //            cout << endl << endl << endl;
              if ((*iterador)->mover(timeStep) == 0) {
-                delete (*iterador);
                 pthread_mutex_lock(&this->mutexListaEnemigos);
                 iterador = enemigos.erase(iterador);
                 pthread_mutex_unlock(&this->mutexListaEnemigos);

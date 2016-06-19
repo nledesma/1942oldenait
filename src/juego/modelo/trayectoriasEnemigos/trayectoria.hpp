@@ -1,15 +1,17 @@
 #ifndef INC_1942OLDENAIT_TRAYECTORIA_HPP
 #define INC_1942OLDENAIT_TRAYECTORIA_HPP
 
-#include <queue>
+#include <list>
 #include "tipoMovimiento.hpp"
 using namespace std;
 
 class Trayectoria {
 protected:
-    queue<TipoMovimiento*> colaMovimientos;
+    list<TipoMovimiento*> movimientos;
+    list<TipoMovimiento*>::iterator itMovimientos;
 public:
     virtual void mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep) = 0;
+    virtual void setEstadoInicial() = 0;
 };
 
 

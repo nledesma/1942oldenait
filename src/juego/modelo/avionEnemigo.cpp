@@ -152,3 +152,13 @@ bool AvionEnemigo::estaColisionando(){
 int AvionEnemigo::getVidas(){
     return this->vidas;
 }
+
+void AvionEnemigo::setEstadoInicial() {
+    this->posX = this->posXInicial;
+    this->posY = this->posYInicial;
+    this->angulo = this->anguloInicial;
+    this->estadoAnimacion = this->estadoAnimacionInicial;
+    this->vidas = this->vidasInicial;
+    this->trayectoria->setEstadoInicial();
+    this->colisionable->mover(this->posXInicial, this->posYInicial, this->anguloInicial, this->tipoAvion);
+}

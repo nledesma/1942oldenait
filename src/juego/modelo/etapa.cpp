@@ -28,12 +28,11 @@ int Etapa::getLongitud() {
 }
 
 AvionEnemigo* Etapa::getSiguienteEnemigo(float pos) {
-    if (!this->enemigos.empty()){
-        if (pos >= this->enemigos.front().first){
-            pair <float, AvionEnemigo*> proximoPar;
-            proximoPar = this->enemigos.front();
-            this->enemigos.pop_front();
-            return proximoPar.second;
+    if (itEnemigos != enemigos.end()){
+        pair <float, AvionEnemigo*> avionEnemigo = (*itEnemigos);
+        if (pos >= avionEnemigo.first){
+            ++itEnemigos;
+            return avionEnemigo.second;
         }
     }
     return NULL;
@@ -50,8 +49,25 @@ list<PowerUp*> Etapa::getPowerUps(){
 
 void Etapa::setEnemigos(list<pair<float, AvionEnemigo *> > enemigos) {
     this->enemigos = enemigos;
+    this->itEnemigos = begin(this->enemigos);
+}
+
+void Etapa::resetEnemigos(){
+    this->itEnemigos = begin(this->enemigos);
 }
 
 void Etapa::setPowerUps(list<PowerUp*> powerUps){
   this->powerUps = powerUps;
+}
+
+void Etapa::setEstadosIniciales() {
+    for (list<Elemento *>::iterator itElementos = elementos.begin(); itElementos != elementos.end(); itElementos++) {
+        (*itElementos)->volverEstadoInicial();
+    }
+    for (list<PowerUp *>::iterator itPowerUps = powerUps.begin(); itPowerUps != powerUps.end(); itPowerUps++) {
+        (*itPowerUps)->volverEstadoInicial();
+    }
+    for (list<pair<float, AvionEnemigo *> >::iterator itParesEnemigos = enemigos.begin(); itParesEnemigos != enemigos.end(); itParesEnemigos++) {
+        (*itParesEnemigos).second->setEstadoInicial();
+    }
 }

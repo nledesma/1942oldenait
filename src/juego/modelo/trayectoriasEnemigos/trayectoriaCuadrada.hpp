@@ -12,7 +12,7 @@ public:
     TrayectoriaCuadrada();
     ~TrayectoriaCuadrada();
     void mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
-
+    void setEstadoInicial();
 };
 
 

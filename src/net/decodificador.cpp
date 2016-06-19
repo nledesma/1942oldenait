@@ -296,25 +296,18 @@ string Decodificador::getPuntajes(EscenarioJuego * escenario, map<int, string> n
     for (it = listaPuntajes.begin(); it != listaPuntajes.end(); ++it) {
         int nroAvion = it->first;
         Decodificador::pushCantidad(mensaje, nroAvion);
-        cout << "nroAvion: " << nroAvion << endl;
         vector<int> datosAvion = it->second;
         int equipo = datosAvion[0];
         Decodificador::pushCantidad(mensaje, equipo);
-        cout << "equipo: " << equipo << endl;
         int puntaje = datosAvion[1];
         Decodificador::pushCantidad(mensaje, puntaje);
-        cout << "puntaje: " << puntaje << endl;
         int disparos = datosAvion[2];
         Decodificador::pushCantidad(mensaje, disparos);
-        cout << "disparos: " << disparos << endl;
         int aciertos = datosAvion[3];
         Decodificador::pushCantidad(mensaje, aciertos);
-        cout << "aciertos: " << aciertos << endl;
         int porcentaje = datosAvion[4];
         Decodificador::pushCantidad(mensaje, porcentaje);
-        cout << "porcentaje: " << porcentaje << endl;
         Decodificador::push(mensaje, nombreSegunNroAvion[nroAvion]);
-        cout << "nombre: " << nombreSegunNroAvion[nroAvion] << endl;
     }
     return mensaje;
 }

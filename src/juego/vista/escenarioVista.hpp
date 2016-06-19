@@ -149,6 +149,7 @@ public:
     /* Etapas */
     int comenzarEtapa();
     void avanzarEtapa();
+    void resetearEtapas();
     EtapaVista* etapaActual();
     bool quedanEtapas();
     void finalizarJuego();

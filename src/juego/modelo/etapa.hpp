@@ -15,11 +15,13 @@ private:
     list<Elemento *> elementos;
     list<PowerUp*> powerUps;
     list<pair<float, AvionEnemigo *> > enemigos;
+    list<pair<float, AvionEnemigo *> >::iterator itEnemigos;
 public:
     Etapa(int longitud);
     void agregarElemento(Elemento * e);
     void agregarElemento(float posX, float posY, string idSprite);
     void setEnemigos(list<pair<float, AvionEnemigo *> > enemigos);
+    void resetEnemigos();
     void setPowerUps(list<PowerUp*> powerUps);
     virtual ~Etapa ();
     /* getters & setters */
@@ -27,7 +29,7 @@ public:
     list<Elemento *> getElementos();
     list<PowerUp*> getPowerUps();
     AvionEnemigo * getSiguienteEnemigo(float pos);
-
+    void setEstadosIniciales();
 };
 
 #endif

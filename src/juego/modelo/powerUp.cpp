@@ -19,11 +19,17 @@ void PowerUp::colisionar(){
 }
 
 int PowerUp::getEstadoAnimacion(){
-    return this->estadoAnimacion;
+    pthread_mutex_lock(&this->mutexMover);
+    int estadoAnimacion =  this->estadoAnimacion;
+    pthread_mutex_unlock(&this->mutexMover);
+    return estadoAnimacion;
 }
 
 int PowerUp::getTipoPowerUp() {
-    return this->tipo;
+    pthread_mutex_lock(&this->mutexMover);
+    int tipo=  this->tipo;
+    pthread_mutex_unlock(&this->mutexMover);
+    return tipo;
 }
 
 float PowerUp::getPosicionX(){
@@ -41,7 +47,10 @@ float PowerUp::getPosicionY(){
 }
 
 int PowerUp::getValor(){
-    return this->valor;
+    pthread_mutex_lock(&this->mutexMover);
+    int valor =  this->valor;
+    pthread_mutex_unlock(&this->mutexMover);
+    return valor;
 }
 
 string PowerUp::getIdSprite(){
@@ -90,4 +99,6 @@ bool PowerUp::animar(float timeStep){
 void PowerUp::volverEstadoInicial(){
     this->posX = posXInicial;
     this->posY = posYInicial;
+    this->colisionable->mover(this->posX, this->posY, 0, TIPO_POWERUP);
+    this->estadoAnimacion = POWER_UP_NORMAL;
 }

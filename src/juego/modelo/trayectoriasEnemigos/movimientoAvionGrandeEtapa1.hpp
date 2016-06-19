@@ -10,6 +10,7 @@ public:
     MovimientoAvionGrandeEtapa1(float yTope);
     ~MovimientoAvionGrandeEtapa1();
     bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
+    void setEstadoInicial();
 };
 
 

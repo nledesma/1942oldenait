@@ -15,3 +15,7 @@ bool MovimientoAvionGrandeEtapa1::mover(float &posX, float &posY, float &velocid
         return false;
     }
 }
+
+void MovimientoAvionGrandeEtapa1::setEstadoInicial() {
+
+}

@@ -253,6 +253,7 @@
 #define FINALIZAR_JUEGO 1
 #define FIN_ENTRE_ETAPAS 2
 #define MENSAJE_VACIO 3
+#define REINICIAR_ESCENARIO 4
 
 /* Contador Sonido disparo */
 #define CONTADOR_SONIDO_DISPARO_INICIAL 10

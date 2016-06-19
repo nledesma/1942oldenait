@@ -33,7 +33,7 @@ void TextoDinamico::manejarEvento(SDL_Event evento){
 		}
     } else if(evento.type == SDL_TEXTINPUT) {
         // Para ingreso de texto.
-		caracteres += evento.text.text;
+		caracteres += tolower(evento.text.text[0]);
 		cambiaElTexto = true;
 	}
 

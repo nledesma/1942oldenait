@@ -20,6 +20,7 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->idSpriteDisparos = idSpriteDisparos;
     this->puntaje = 0;
     this->vidas = vidas;
+    this->vidasInicial = vidas;
     this->numeroAvion = numeroAvion;
     this->estadoPowerUP = ESTADO_SIN_POWER_UP;
     this->cantidadDisparos = 0;
@@ -136,7 +137,7 @@ void Avion::mover(float timeStep){
                     if (this->estadoAnimacion == LOOP_ETAPA_17) {
                         this->estadoAnimacion = ESTADO_NORMAL;
                     } else if (this->estadoAnimacion == EXPLOSION_ETAPA_10) {
-                        this->volverEstadoInicial();
+                        this->setPosicionInicial();
                     } else {
                         this->estadoAnimacion++;
                     }
@@ -250,7 +251,7 @@ vector<Disparo*> Avion::disparar(){
     return disparos;
 }
 
-void Avion::volverEstadoInicial(bool inmunidad){
+void Avion::setPosicionInicial(bool inmunidad){
     this->velocidadX = 0;
     this->velocidadY = 0;
     this->posX = this->posXInicial;
@@ -267,6 +268,19 @@ void Avion::volverEstadoInicial(bool inmunidad){
     } else {
         this->estadoAnimacion = ESTADO_AVION_DESTRUIDO;
     }
+}
+
+void Avion::volverEstadoInicial(){
+    this->velocidadX = 0;
+    this->velocidadY = 0;
+    this->posX = this->posXInicial;
+    this->posY = this->posYInicial;
+    this->vidas = this->vidasInicial;
+    this->estadoAnimacion = ESTADO_NORMAL;
+    this->puntaje = 0;
+    this->estadoPowerUP = ESTADO_SIN_POWER_UP;
+    this->cantidadDisparos = 0;
+    this->cantidadAciertos = 0;
 }
 
 string Avion::getIdSprite(){

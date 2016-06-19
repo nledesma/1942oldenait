@@ -82,19 +82,20 @@ public:
     /* Etapas */
     void agregarEtapa(Etapa * etapa);
     void avanzarEtapa();
-    void comenzarEtapa();
+    void reiniciarEtapas();
+    int comenzarEtapa();
     bool quedanEtapas();
     /* Enemigos */
     void getProximoEnemigo();
     /* Eventos */
-    void manejarProximoEvento();
-    void manejarEvento(int nroAvion, int evento);
+    bool manejarProximoEvento();
+    bool manejarEvento(int nroAvion, int evento);
     void pushEvento(pair<int, int> evento);
     /* mainLoop */
-    void jugar(bool serverActivo);
-    void mainLoop();
+    int jugar(bool serverActivo);
+    int mainLoop();
     /* Actualizaciones de estado. */
-    void actualizarEstado(float timeStep);
+    int actualizarEstado(float timeStep);
     void actualizarScrollingOffset(float timeStep);
     void moverAviones(float timestep);
     bool moverAvionesAposicionFinal(float timeStep);

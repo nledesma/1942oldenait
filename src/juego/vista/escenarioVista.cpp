@@ -86,6 +86,11 @@ void EscenarioVista::avanzarEtapa() {
     ++itEtapa;
 }
 
+void EscenarioVista::resetearEtapas() {
+    desactivar();
+    itEtapa = etapas.begin();
+}
+
 EtapaVista* EscenarioVista::etapaActual() {
     return *itEtapa;
 }
@@ -104,6 +109,10 @@ void EscenarioVista::manejarEvento(int evento) {
         case AVANZAR_ETAPA:
             avanzarEtapa();
             Logger::instance()->logInfo("Se avanza de etapa.");
+            break;
+        case REINICIAR_ESCENARIO:
+            resetearEtapas();
+            Logger::instance()->logInfo("Se reinicia el escenario.");
             break;
         case FINALIZAR_JUEGO:
             finalizarJuego();

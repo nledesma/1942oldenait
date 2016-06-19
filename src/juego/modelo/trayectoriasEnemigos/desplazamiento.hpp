@@ -9,11 +9,15 @@ using namespace std;
 
 class Desplazamiento : public TipoMovimiento {
 private:
-  float cantidadTimesteps;
-  float velocidadAngular;
+    float cantidadTimesteps;
+    float cantidadTimestepsInicial;
+    float velocidadAngular;
+    float velocidadAngularInicial;
 public:
-  Desplazamiento(float cantidadTimesteps, float velocidadAngular);
-  bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
+    Desplazamiento(float cantidadTimesteps, float velocidadAngular);
+
+    bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep);
+    void setEstadoInicial();
 };
 
 

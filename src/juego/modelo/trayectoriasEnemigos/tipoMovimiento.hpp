@@ -6,6 +6,7 @@
 class TipoMovimiento {
 public:
   virtual bool mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion, float timestep) = 0;
+    virtual void setEstadoInicial() = 0;
 };
 
 

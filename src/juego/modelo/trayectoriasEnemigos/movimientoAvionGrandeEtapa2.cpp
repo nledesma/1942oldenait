@@ -27,3 +27,7 @@ float MovimientoAvionGrandeEtapa2::switchAngulo(float angulo) {
         return 180;
     }
 }
+
+void MovimientoAvionGrandeEtapa2::setEstadoInicial() {
+
+}

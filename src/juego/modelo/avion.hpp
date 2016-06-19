@@ -44,6 +44,7 @@ private:
     pthread_mutex_t mutexPuntaje = PTHREAD_MUTEX_INITIALIZER;
     Colisionable* colisionable;
     int vidas;
+    int vidasInicial;
     int numeroAvion;
     int cantidadDisparos = 0;
     int cantidadAciertos = 0;
@@ -80,7 +81,9 @@ public:
 
     int getAltoDisparo();
 
-    void volverEstadoInicial(bool inmunidad = true);
+    void setPosicionInicial(bool inmunidad = true);
+
+    void volverEstadoInicial();
 
     string getIdSprite();
 

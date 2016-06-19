@@ -434,17 +434,17 @@ void Servidor::ejecutar() {
     if (servidorActivo()) {
         // Comienza la partida.
         iniciarCicloDesencolaciones();
-        escenario->jugar(servidorActivo());
-        broadcastEvento(AVANZAR_ETAPA);
-        entreEtapas();
+        int evento = escenario->jugar(servidorActivo());
+        broadcastEvento(evento);
+            entreEtapas();
     }
 
     while (servidorActivo() && escenario->quedanEtapas()) {
-        escenario->comenzarEtapa();
-        broadcastEvento(AVANZAR_ETAPA);
-        entreEtapas();
+        int evento = escenario->comenzarEtapa();
+        broadcastEvento(evento);
+            entreEtapas();
     }
-
+    cout << "pase por aca, para finalizar el juego" << endl;
     broadcastEvento(FINALIZAR_JUEGO);
     partidaEnJuego = false;
 }

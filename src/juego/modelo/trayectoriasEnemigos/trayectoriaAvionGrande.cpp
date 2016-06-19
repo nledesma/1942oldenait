@@ -5,8 +5,9 @@
 TrayectoriaAvionGrande::TrayectoriaAvionGrande() {
     MovimientoAvionGrandeEtapa1 * movimientoEtapa1 = new MovimientoAvionGrandeEtapa1(40);
     MovimientoAvionGrandeEtapa2 * movimientoEtapa2 = new MovimientoAvionGrandeEtapa2();
-    this->colaMovimientos.push(movimientoEtapa1);
-    this->colaMovimientos.push(movimientoEtapa2);
+    this->movimientos.push_back(movimientoEtapa1);
+    this->movimientos.push_back(movimientoEtapa2);
+    this->itMovimientos = movimientos.begin();
 }
 
 TrayectoriaAvionGrande::~TrayectoriaAvionGrande() { }
@@ -14,13 +15,13 @@ TrayectoriaAvionGrande::~TrayectoriaAvionGrande() { }
 void TrayectoriaAvionGrande::mover(float &posX, float &posY, float &velocidad, float &angulo, int &estadoAnimacion,
                                 float timestep) {
     /* Si la cola no está vacía se comporta según el próximo tipo de movimiento */
-    if (!this->colaMovimientos.empty()) {
-        TipoMovimiento* proximoTipoMovimiento = this->colaMovimientos.front();
+    if (this->itMovimientos != movimientos.end()) {
+        TipoMovimiento* proximoTipoMovimiento = (*this->itMovimientos);
         bool termino;
         termino = proximoTipoMovimiento->mover(posX, posY, velocidad, angulo, estadoAnimacion, timestep);
 
         if (termino)
-            this->colaMovimientos.pop();
+            ++this->itMovimientos;
         /* De lo contrario la trayectoria continua en línea recta indefinidamente hasta salir de la pantalla */
     } else {
         float velocidadX = velocidad * Trigonomaster::getCoseno(angulo, estadoAnimacion);
@@ -29,4 +30,12 @@ void TrayectoriaAvionGrande::mover(float &posX, float &posY, float &velocidad, f
         posX += velocidadX*timestep;
         posY += velocidadY*timestep;
     }
+}
+
+void TrayectoriaAvionGrande::setEstadoInicial() {
+    for (list<TipoMovimiento *>::iterator iterador = movimientos.begin(); iterador != movimientos.end(); iterador++) {
+        TipoMovimiento* movimiento = (*iterador);
+        movimiento->setEstadoInicial();
+    }
+    this->itMovimientos = this->movimientos.begin();
 }

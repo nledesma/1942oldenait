@@ -19,11 +19,16 @@ protected:
     float velocidadDisparos;
     float posX;
     float posY;
+    float posXInicial;
+    float posYInicial;
     float angulo;
+    float anguloInicial;
     int estadoAnimacion;
+    int estadoAnimacionInicial;
     int tipoAvion;
     float velocidad;
     int vidas = 1;
+    int vidasInicial = 1;
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
@@ -57,6 +62,7 @@ public:
     virtual int estallar();
     virtual bool estaColisionando();
     int getVidas();
+    void setEstadoInicial();
 };
 
 
