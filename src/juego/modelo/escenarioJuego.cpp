@@ -126,7 +126,7 @@ bool EscenarioJuego::manejarEvento(int nroAvion, int evento) {
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
             if (!disparo.empty()) {
-                for (int i = 0; i < disparo.size(); i++) {
+                for (unsigned int i = 0; i < disparo.size(); i++) {
                     disparo[i]->setAvion(nroAvion);
                     pthread_mutex_lock(&this->mutexListaDisparos);
                     disparos.push_back(disparo[i]);
@@ -704,7 +704,7 @@ void EscenarioJuego::proyectarDisparos(float timeStep) {
 
 list< pair<int,vector<int>> > EscenarioJuego::getPuntajes() {
     list<pair<int,vector<int>> > equipoPuntaje;
-    for (int i = 0; i < equipos.size(); ++i) {
+    for (unsigned int i = 0; i < equipos.size(); ++i) {
         set<int>::iterator it;
         for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
             pair<int,vector<int>> par;

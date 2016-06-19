@@ -1,22 +1,21 @@
 #ifndef MENUCONEXIONMANUAL_H
 #define MENUCONEXIONMANUAL_H
 
-#include "../Boton/botonSiguiente.hpp"
-#include "../Boton/botonAtras.hpp"
+#include "../Boton/boton.hpp"
 #include "menu.hpp"
 using namespace std;
 
 class MenuConexionManual: public Menu{
     private:
-        BotonSiguiente* botonSiguiente;
-        BotonAtras* botonAtras;
+        Boton* botonSiguiente;
+        Boton* botonAtras;
         Texto* textoIP;
     public:
         MenuConexionManual();
         void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
-        BotonSiguiente* getBotonSiguiente();
-        BotonAtras * getBotonAtras();
+        Boton* getBotonSiguiente();
+        Boton * getBotonAtras();
         void cerrar();
 };
 

@@ -34,10 +34,8 @@ void Cliente::setAddress(string serverAddress, int port){
 bool Cliente::conectar(){
 	// Me conecto a la direccion.
 	iniciarSocket();
-	int conexion;
 	try {
 		int connected = connect(this->socketFd,(struct sockaddr *) &this->addr_info,sizeof(struct sockaddr_in));
-		conexion = connected;
 		if (connected == 0) {
 			Logger::instance()->logInfo("Conexión exitosa");
 			cliente_conectado = true;

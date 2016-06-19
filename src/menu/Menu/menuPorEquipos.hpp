@@ -2,20 +2,20 @@
 #define MENUPOREQUIPOS_H
 
 #include "menu.hpp"
-#include "../Boton/botonSiguiente.hpp"
+#include "../Boton/boton.hpp"
 #include "../listaDeSeleccion.hpp"
 using namespace std;
 
 class MenuPorEquipos: public Menu{
     private:
-        BotonSiguiente* botonSiguiente;
+        Boton* botonSiguiente;
         ListaDeSeleccion* lista;
         Texto* texto;
     public:
         MenuPorEquipos(Ventana* ventana);
         void cargarBotones(Ventana* ventana);
         void renderizar(Ventana* ventana);
-        BotonSiguiente* getBotonSiguiente();
+        Boton* getBotonSiguiente();
         ListaDeSeleccion* &getListaDeSeleccion();
         void cerrar();
 

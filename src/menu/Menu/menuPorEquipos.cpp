@@ -1,6 +1,6 @@
 #include "menuPorEquipos.hpp"
 MenuPorEquipos::MenuPorEquipos(Ventana* ventana){
-    this->botonSiguiente = new BotonSiguiente();
+    this->botonSiguiente = new Boton();
     this->fondo = new Figura();
     this->texto = NULL;
     this->lista = new ListaDeSeleccion(ventana, 100, 150);
@@ -31,7 +31,7 @@ void MenuPorEquipos::renderizar(Ventana* ventana){
     this->lista->renderizar();
 }
 
-BotonSiguiente* MenuPorEquipos::getBotonSiguiente(){
+Boton* MenuPorEquipos::getBotonSiguiente(){
     return this->botonSiguiente;
 }
 

@@ -47,7 +47,7 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
 
 Colisionable::~Colisionable(){
     delete this->superficiePrincipal;
-    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+    for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
         delete this->superficiesSecundarias[i];
     }
 }
@@ -157,7 +157,7 @@ void Colisionable::mover(float posX, float posY, float angulo, int tipoElemento)
     float xCentral = posX + (this->superficiePrincipal->getAncho() / 2);
     float yCentral = posY + (this->superficiePrincipal->getAlto() / 2);
     //this->superficiePrincipal->rotar(angulo, xCentral, yCentral);
-    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+    for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
         this->superficiesSecundarias[i]->mover(posX, posY);
         this->superficiesSecundarias[i]->rotar(angulo, xCentral, yCentral, tipoElemento);
     }
@@ -197,7 +197,7 @@ bool Colisionable::colisiona(Colisionable *colisionable) {
         if(colisionable->getSuperficiesSecundarias().size() == 0){
             return true;
         }
-        for(int i = 0; i < colisionable->getSuperficiesSecundarias().size(); i++){
+        for(unsigned int i = 0; i < colisionable->getSuperficiesSecundarias().size(); i++){
             if(this->superficiePrincipal->colisiona(colisionable->getSuperficiesSecundarias()[i])){
                 return true;
             }
@@ -205,14 +205,14 @@ bool Colisionable::colisiona(Colisionable *colisionable) {
         return false;
     }
     if(colisionable->getSuperficiesSecundarias().size() == 0){
-        for(int i = 0; i < this->superficiesSecundarias.size(); i++){
+        for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
             if(colisionable->getSuperficiePrincipal()->colisiona(this->superficiesSecundarias[i])){
                 return true;
             }
         }
     }
-    for(int i = 0; i < this->superficiesSecundarias.size(); i++){
-        for(int j = 0; j < colisionable->getSuperficiesSecundarias().size(); j++){
+    for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
+        for(unsigned int j = 0; j < colisionable->getSuperficiesSecundarias().size(); j++){
             if(this->superficiesSecundarias[i]->colisiona(colisionable->getSuperficiesSecundarias()[j])){
                 return true;
             }
