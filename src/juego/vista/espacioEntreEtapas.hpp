@@ -23,6 +23,7 @@ private:
 public:
     EspacioEntreEtapas(Ventana * ventana, string mensajeInicial, int nroEtapa);
     void imprimirTituloEtapa();
+    void imprimirTituloReiniciar();
     void finalizar();
     int renderLoop();
     void renderTextos();

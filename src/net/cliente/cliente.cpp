@@ -162,10 +162,17 @@ void Cliente::jugar() {
 		this->escenarioVista->activar();
 		this->cicloMensajes();
 		resultadoRender = this->escenarioVista->comenzarEtapa();
-		this->etapas ++;
+
+		bool reinicia = false;
+		if (this->etapas == -1){
+			this->etapas = 0;
+			reinicia = true;
+		} else {
+			this->etapas ++;
+		}
 		cout << "Terminó una etapa con resultado " << ((resultadoRender==CONTINUAR)?"continuar":"finalizar") << "("<<resultadoRender<<")" << endl;
-		if (resultadoRender == CONTINUAR) entreEtapas(this->etapas);
-		if (resultadoRender == FINALIZADO) entreEtapas(this->etapas);
+		if ((resultadoRender == CONTINUAR || resultadoRender == FINALIZADO) && !reinicia) entreEtapas(this->etapas);
+		if ((resultadoRender == CONTINUAR || resultadoRender == FINALIZADO) && reinicia) entreEtapas(-1);
 	}
 
 	if (!escenarioVista->quedanEtapas()) cout << "Fin del juego." << endl;
@@ -196,7 +203,7 @@ void Cliente::actualizarEscenario(string mensaje){
 		// Caso evento.
 		int evento = Decodificador::popInt(mensaje);
 		if (evento == REINICIAR_ESCENARIO)
-			this->etapas = 0;
+			this->etapas = -1;
 		this->escenarioVista->manejarEvento(evento);
 	} else {
 		// Caso actualización de estado.

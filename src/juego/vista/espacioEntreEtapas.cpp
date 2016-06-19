@@ -8,8 +8,13 @@ EspacioEntreEtapas::EspacioEntreEtapas(Ventana * ventana, string mensaje, int nr
     // TODO path constante.
     this->fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas");
     porEquipos = (bool) Decodificador::popInt(mensaje);
-    imprimirTituloEtapa();
-    decodificarPuntos(mensaje);
+
+    if (this->nroEtapa != -1) {
+        imprimirTituloEtapa();
+        decodificarPuntos(mensaje);
+    } else {
+        imprimirTituloReiniciar();
+    }
     dibujar = true;
 }
 
@@ -21,6 +26,14 @@ void EspacioEntreEtapas::imprimirTituloEtapa(){
     Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT2, ventana);
     stringstream ss;
     ss << "etapa " << nroEtapa << " finalizada";
+    textoAux->cargarFuente(ss.str());
+    textos.push_back(textoAux);
+}
+
+void EspacioEntreEtapas::imprimirTituloReiniciar(){
+    Texto * textoAux = new Texto(30, AMARILLO_STAR_WARS, STAR_WARS_FONT2, ventana);
+    stringstream ss;
+    ss << "reiniciando partida";
     textoAux->cargarFuente(ss.str());
     textos.push_back(textoAux);
 }
