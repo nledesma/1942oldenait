@@ -24,10 +24,40 @@ Avion::Avion(float posX, float posY, float velocidad, float velocidadDisparos, s
     this->estadoPowerUP = ESTADO_SIN_POWER_UP;
     this->cantidadDisparos = 0;
     this->cantidadAciertos = 0;
+    this->puntajeAvionesSecundarios = 0;
 }
 
 Avion::~Avion(){
 
+}
+
+int Avion::obtenerPuntajesAvionesSecundarios(){
+    if(avionesSecundarios.size() != 0){
+        for(list<AvionSecundario*>::iterator itAvionesSecundarios = this->avionesSecundarios.begin(); itAvionesSecundarios != this->avionesSecundarios.end(); itAvionesSecundarios++){
+            AvionSecundario* avionSecundario = (*itAvionesSecundarios);
+            if(avionSecundario->getPuntaje() != 0){
+                puntajeAvionesSecundarios += avionSecundario->getPuntaje();
+            }
+        }
+    }
+    return puntajeAvionesSecundarios;
+}
+
+void Avion::setAvionSecundario(){
+    if(avionesSecundarios.size() == 0){
+        AvionSecundario* avionSecundario = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO + ANCHO_AVION_COMUN, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos);
+        avionesSecundarios.push_back(avionSecundario);
+    }else{
+        AvionSecundario* avionSecundario = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos);
+        avionesSecundarios.push_back(avionSecundario);
+    }
+}
+
+AvionSecundario* Avion::getAvionSecundario(){
+    list<AvionSecundario*>::iterator it = avionesSecundarios.begin();
+    advance (it, avionesSecundarios.size() - 1);
+    AvionSecundario *avionSecundario = *it;
+    return avionSecundario;
 }
 
 void Avion::manejarEvento(int evento){

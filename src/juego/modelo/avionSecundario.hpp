@@ -1,5 +1,5 @@
-#ifndef INC_1942OLDENAIT_AVION_HPP
-#define INC_1942OLDENAIT_AVION_HPP
+#ifndef INC_1942OLDENAIT_AVION_SECUNDARIO_HPP
+#define INC_1942OLDENAIT_AVION_SECUNDARIO_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -9,21 +9,19 @@
 #include "../../accesorios/codigo.hpp"
 #include "../../accesorios/colisiones/colisionable.hpp"
 #include "disparo.hpp"
-#include "avionSecundario.hpp"
 #include <pthread.h>
 
-#define AVION_ANCHO ANCHO_AVION_COMUN;
-#define AVION_ALTO ALTO_AVION_COMUN;
+#define AVION_SECUNDARIO_ANCHO ANCHO_AVION_SECUNDARIO;
+#define AVION_SECUNDARIO_ALTO ALTO_AVION_SECUNDARIO;
+#define SPRITE_AVION_SECUNDARIO "xwing-sprites"
 #define DISPARO_ANCHO 20;
 #define DISPARO_ALTO 40;
 #define TIEMPO_INMUNIDAD 3
 #define TIEMPO_INTERMITENCIA 0.1
 using namespace std;
 
-class Avion {
+class AvionSecundario {
 private:
-    float contadorTiempoInmunidad = 0;
-    float contadorIntermitenciaInmunidad = 0;
     float velocidadDisparos;
     float posX;
     float posY;
@@ -37,30 +35,19 @@ private:
     float posXFinal;
     float posYFinal;
     int puntaje;
-    int estadoPowerUP;
     string idSprite;
     string idSpriteDisparos;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexVidas = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPuntaje = PTHREAD_MUTEX_INITIALIZER;
     Colisionable* colisionable;
-    int vidas;
-    int numeroAvion;
     int cantidadDisparos = 0;
     int cantidadAciertos = 0;
-    list<AvionSecundario*> avionesSecundarios;
-    int puntajeAvionesSecundarios;
 
 public:
-    Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, int vidas, float posXFinal = 0, float posYFinal = 0);
+    AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos, float posXFinal = 0, float posYFinal = 0);
 
-    ~Avion();
-
-    int obtenerPuntajesAvionesSecundarios();
-
-    void setAvionSecundario();
-
-    AvionSecundario* getAvionSecundario();
+    ~AvionSecundario();
 
     void manejarEvento(int evento);
 
@@ -96,8 +83,6 @@ public:
 
     void setPosicion(float x, float y);
 
-    void sumarPuntos(int puntos);
-
     Colisionable * getColisionable();
 
     void colisionar();
@@ -106,40 +91,24 @@ public:
 
     void resetPuntos();
 
+
     int getPuntaje();
-
-    int getVidas();
-
     void setSpawn(int x, int y);
-
-    void quitarUnaVida();
-
-    void disminuirTiempoInmunidad(float timestep);
-
-    float getContadorTiempoInmunidad();
 
     bool moverAPosicionFinal(float timestep);
 
-    int getNumeroAvion();
-
     bool estaColisionando();
 
-    void setPowerUpAmetralladoras();
-
-
-    void setPowerUpAvionesSecundarios();
-
-    int getEstadoPowerUp();
+    //TODO revisar como mandar los puntos al avion original.
+    int getCantidadDisparos();
 
     void aumentarAciertos();
-
-    int getCantidadDisparos();
 
     int getCantidadAciertos();
 
     int getPorcentajeAciertos();
 
-    int dondeMeColisionan(float posXColision, float posYColision);
+    void sumarPuntos(int puntos);
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP
