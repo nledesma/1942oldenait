@@ -118,7 +118,7 @@ public:
 
     void setPowerUpAmetralladoras();
 
-    
+
     void setPowerUpAvionesSecundarios();
 
     int getEstadoPowerUp();
@@ -130,6 +130,8 @@ public:
     int getCantidadAciertos();
 
     int getPorcentajeAciertos();
+
+    int dondeMeColisionan(float posXColision, float posYColision);
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

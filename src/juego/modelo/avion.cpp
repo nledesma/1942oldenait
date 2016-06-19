@@ -292,6 +292,45 @@ Colisionable* Avion::getColisionable(){
     return this->colisionable;
 }
 
+int Avion::dondeMeColisionan(float posXColision, float posYColision){
+    cout << "ENTRO A DONDE ME COLISIONAN" << endl;
+    //17 a 63 centro y 64 a 80 es derecha
+    cout << "POSICION AVION ACTUAL EN X: " << this->posX << endl;
+    float resta = this->posX - posXColision;
+    // float restaFinal = ANCHO_AVION_COMUN - resta;
+    cout << "RESTA : " << resta << endl;
+    if(resta > 0){
+        if((resta > 16) && (resta < 40)){
+            return CENTRO_AVION;
+        }else{
+            return IZQUIERDA_AVION;
+        }
+    }else if(resta < 0){
+        if((resta > -40) && (resta < -16)){
+            return CENTRO_AVION;
+        }else{
+            return DERECHA_AVION;
+        }
+    }else{
+        return 0;
+    }
+    // }else if (((resta > -40) && (resta < -16)) || ((resta > 16) && (resta < 40))){
+    //     //-40 a -16 o 16 a 40
+    //     return CENTRO_AVION;
+    // }else{
+    //     return 0;
+    // }
+    // if((restaFinal > 0) && (restaFinal < 16)){
+    //     return IZQUIERDA_AVION;
+    // }else if(((restaFinal > 17) && restaFinal < 63)){
+    //     return CENTRO_AVION;
+    // }else if(((restaFinal > 64) && restaFinal < 80)){
+    //     return DERECHA_AVION;
+    // }else{
+    //     return 0;
+    // }
+}
+
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
         // cout << "ESTADO ANIMACION: " << this->estadoAnimacion << endl;

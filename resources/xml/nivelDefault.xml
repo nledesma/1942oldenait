@@ -47,7 +47,7 @@
                     </enemigo>
                     <enemigo>
                       <tipo>escuadron</tipo>
-                      <cantidad>3</cantidad>
+                      <cantidad>0</cantidad>
                     </enemigo>
                     <enemigo>
                       <tipo>mediano</tipo>
@@ -59,18 +59,6 @@
                     </enemigo>
                 </enemigos>
                 <powerUps>
-                    <powerUp>
-                      <tipo>bonificacion</tipo>
-                      <posx>200</posx>
-                      <posy>700</posy>
-                      <valor>1000</valor>
-                    </powerUp>
-                    <powerUp>
-                      <tipo>bonificacion</tipo>
-                      <posx>0</posx>
-                      <posy>0</posy>
-                      <valor>1000</valor>
-                    </powerUp>
                     <powerUp>
                       <tipo>aviones</tipo>
                       <posx>700</posx>
@@ -86,31 +74,19 @@
                     <powerUp>
                       <tipo>aviones</tipo>
                       <posx>700</posx>
-                      <posy>400</posy>
+                      <posy>2000</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>aviones</tipo>
                       <posx>200</posx>
-                      <posy>500</posy>
-                      <valor>0</valor>
-                    </powerUp>
-                    <powerUp>
-                      <tipo>ametralladoras</tipo>
-                      <posx>0</posx>
-                      <posy>0</posy>
-                      <valor>0</valor>
-                    </powerUp>
-                    <powerUp>
-                      <tipo>ametralladoras</tipo>
-                      <posx>0</posx>
-                      <posy>0</posy>
+                      <posy>1000</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
                       <tipo>ametralladoras</tipo>
                       <posx>400</posx>
-                      <posy>200</posy>
+                      <posy>2000</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>

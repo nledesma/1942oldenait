@@ -257,6 +257,11 @@
 /* Contador Sonido disparo */
 #define CONTADOR_SONIDO_DISPARO_INICIAL 10
 
+/* Avion con powerUP de aviones secundarios*/
+#define DERECHA_AVION 1
+#define IZQUIERDA_AVION 2
+#define CENTRO_AVION 3
+
 /* Respuestas de mainLoop */
 #define CONTINUAR 1
 #define CERRAR 2

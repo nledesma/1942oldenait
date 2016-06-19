@@ -17,7 +17,7 @@
         <modo>equipos</modo>
         <etapas>
             <etapa>
-                <longitud>12000</longitud>
+                <longitud>1200</longitud>
                 <elementos>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
@@ -86,7 +86,7 @@
                 </powerUps>
             </etapa>
             <etapa>
-                <longitud>12000</longitud>
+                <longitud>1200</longitud>
                 <elementos>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
