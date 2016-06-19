@@ -11,14 +11,15 @@ void MenuIntermedio::cargarBotones() {
 		cout << "No se ha podido cargar la textura del boton!" << endl;
     } else {
         this->botonSiguiente->setSprites(ventana->getVentanaRenderer());
-        this->botonSiguiente->setPosition(400, 450);
+        this->botonSiguiente->setPosition(ventana->getAncho() - 175 - botonSiguiente->getFigura()->getWidth(), 450);
+
     }
 
     if (!(this->botonAtras->getFigura()->loadFromFilePNG(ventana->getVentanaRenderer(), "SpritesBotones/botonAmarilloAtras"))) {
         cout << "No se ha podido cargar la textura del boton!" << endl;
     } else {
         this->botonAtras->setSprites(ventana->getVentanaRenderer());
-        this->botonAtras->setPosition(150, 450);
+        this->botonAtras->setPosition(175, 450);
     }
 }
 
