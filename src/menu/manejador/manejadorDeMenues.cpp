@@ -1,0 +1,50 @@
+#include "manejadorDeMenues.hpp"
+
+ManejadorDeMenues::ManejadorDeMenues(Ventana * ventana) {
+    this->ventana = ventana;
+}
+
+ManejadorDeMenues::~ManejadorDeMenues(){
+
+}
+
+void ManejadorDeMenues::menuAnterior() {
+    cout << "Se retrocede de menu" << endl;
+    actual->accionAnterior();
+    actual = actual->getAnterior();
+}
+
+void ManejadorDeMenues::menuSiguiente() {
+    cout << "Se avanza de menu." << endl;
+    actual->accionSiguiente();
+    actual = actual->getSiguiente();
+}
+
+void ManejadorDeMenues::renderLoop() {
+    dibujar = true;
+    SDL_Event e;
+    while (dibujar) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (actual->esSalida(&e)) {cout << "Evento de salida." << endl;}
+            this->manejarEvento(actual->manejarEvento(&e));
+            // TODO habría que ver si se hace algún chequeo acá.
+        }
+        actual->render();
+        SDL_RenderPresent(ventana->getVentanaRenderer());
+    }
+}
+
+void ManejadorDeMenues::finalizarRender() {
+    cout << "Se llama a finalizar" << endl;
+    dibujar = false;
+}
+
+void ManejadorDeMenues::manejarEvento(int evento) {
+    switch (evento) {
+        case ANTERIOR: menuAnterior(); break;
+        case SIGUIENTE: menuSiguiente(); break;
+        case SALIR: finalizarRender(); break;
+        case NADA: break;
+        default: cout << "Evento no válido ("<< evento <<")." << endl;
+    }
+}

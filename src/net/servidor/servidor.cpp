@@ -93,7 +93,9 @@ void *Servidor::cicloAceptar(void *THIS) {
     while (servidor->servidorActivo()) {
         try {
             fdCliente = servidor->aceptar();
+            cout << "Se aceptó a un cliente. Se recibe su nombre." << endl;
             servidor->recibirMensaje(nombre, fdCliente);
+            cout << "Se recibió el nombre." << nombre << endl;
             string respuesta = servidor->evaluarIngreso(nombre);
             // En cualquier caso se le envía la respuesta.
             servidor->enviarMensaje(respuesta, fdCliente);
@@ -293,12 +295,11 @@ string Servidor::obtenerDireccion(int fdCliente){
 
 void Servidor::asignarEquipo(int fdCliente, int nroJugador) {
     int equipoDelCliente;
-    // Antes que nada le especificamos al cliente si está en curso la partida
-    // y si es o no por equipos la partida.
-    string respuesta = "";
-    Decodificador::push(respuesta, partidaEnJuego);
-    Decodificador::push(respuesta, escenario->porEquipos());
-    enviarMensaje(respuesta, fdCliente);
+    // Primero le avisamos al cliente si necesitamos o no que nos envíe un equipo.
+    cout << "Le decimos al cliente si es por equipos." << endl;
+    string necesitamosEquipo = "";
+    Decodificador::push(necesitamosEquipo, !partidaEnJuego && escenario->porEquipos());
+    enviarMensaje(necesitamosEquipo, fdCliente);
 
     // Si la partida no está en juego, corresponde asignar un equipo.
     if (!partidaEnJuego) {
@@ -331,7 +332,7 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
     asignarEquipo(fdCliente, datos.nroJugador);
 
     datos.nombreJugador = nombre;
-    
+
     if(this->escenario->estaActivo() || esperandoEntreEtapas){
         escenario->avion(datos.nroJugador)->setEstadoAnimacion(ESTADO_NORMAL);
     }
