@@ -268,6 +268,8 @@ int EscenarioVista::mainLoop(){
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
     cout << "Finalizó el ciclo de render." << endl;
+    this->soundBoard->toggleMusica();
+    this->soundBoard->reproducirR2D2yeah();
     //cerrar();
     if(this->finalizado){
         //Desactivar el escenario

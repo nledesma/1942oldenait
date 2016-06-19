@@ -14,6 +14,8 @@
 #define EXPLOSION "explosion.wav"
 #define MUSICA "empire_strikes_back.wav"
 #define LOOP "falconFly.wav"
+#define R2R2YEAH "R2D2-yeah.wav"
+
 
 using namespace std;
 
@@ -24,6 +26,7 @@ private:
     Mix_Chunk* disparo_enemigo = NULL;
     Mix_Chunk* explosion = NULL;
     Mix_Chunk* loop = NULL;
+    Mix_Chunk* r2d2Yeah = NULL;
     bool reproduciendoMusica;
 public:
     SoundBoard();
@@ -34,6 +37,7 @@ public:
     void reproducirDisparoEnemigo();
     void reproducirExplosion();
     void reproducirLoop();
+    void reproducirR2D2yeah();
     void toggleMusica();
     void cerrar();
 };

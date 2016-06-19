@@ -19,10 +19,12 @@ void SoundBoard::cerrar() {
     Mix_FreeChunk(this->disparo_enemigo);
     Mix_FreeChunk(this->explosion);
     Mix_FreeChunk(this->loop);
+    Mix_FreeChunk(this->r2d2Yeah);
     this->disparo = NULL;
     this->disparo_enemigo = NULL;
     this->explosion = NULL;
     this->loop = NULL;
+    this->r2d2Yeah = NULL;
     Mix_FreeMusic(this->musica);
     this->musica = NULL;
     Mix_Quit();
@@ -38,12 +40,15 @@ bool SoundBoard::cargarSonidos() {
         Mix_FreeChunk(this->explosion);
     if (this->loop != NULL)
         Mix_FreeChunk(this->loop);
+    if (this->r2d2Yeah != NULL)
+        Mix_FreeChunk(this->r2d2Yeah);
     if (this->musica != NULL)
         Mix_FreeMusic(this->musica);
     this->disparo = NULL;
     this->disparo_enemigo = NULL;
     this->explosion = NULL;
     this->musica = NULL;
+    this->r2d2Yeah = NULL;
 
     string basePath = PATH_SOUND;
 
@@ -67,7 +72,7 @@ bool SoundBoard::cargarSonidos() {
 
     string disparoEnemigoPath = basePath + DISPARO_ENEMIGO;
     this->disparo_enemigo = Mix_LoadWAV(disparoEnemigoPath.c_str());
-    Mix_VolumeChunk(this->disparo_enemigo, 60);
+    Mix_VolumeChunk(this->disparo_enemigo, 40);
     if( this->disparo_enemigo == NULL )
     {
         printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -92,6 +97,15 @@ bool SoundBoard::cargarSonidos() {
         success = false;
     }
 
+    string r2d2Path = basePath + R2R2YEAH;
+    this->r2d2Yeah = Mix_LoadWAV(r2d2Path.c_str());
+    Mix_VolumeChunk(this->r2d2Yeah, 60);
+    if( this->r2d2Yeah == NULL )
+    {
+        printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        success = false;
+    }
+
     return success;
 }
 
@@ -107,6 +121,11 @@ void SoundBoard::reproducirExplosion(){
 void SoundBoard::reproducirLoop(){
     Mix_PlayChannel( -1, this->loop, 0 );
 }
+
+void SoundBoard::reproducirR2D2yeah(){
+    Mix_PlayChannel( -1, this->r2d2Yeah, 0 );
+}
+
 void SoundBoard::toggleMusica(){
     if( Mix_PlayingMusic() == 0 )
     {
