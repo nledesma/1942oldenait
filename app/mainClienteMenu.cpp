@@ -82,7 +82,7 @@ void cargarMenuPuerto(string ip, Cliente* cliente, Ventana* ventana, MenuConexio
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta = menuConexionPuerto->getBotonSiguiente()[0].manejarEvento(&e);
+			int respuesta = menuConexionPuerto->getBotonSiguiente()->manejarEvento(&e);
 			if(respuesta == 1 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)){
 				menu->cerrar();
 
@@ -119,12 +119,12 @@ void cargarMenuConexionManual(Cliente* cliente, Ventana* ventana, MenuConexiones
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta = menuConexionManual->getBotonSiguiente()[0].manejarEvento(&e);
+			int respuesta = menuConexionManual->getBotonSiguiente()->manejarEvento(&e);
 			if(respuesta == 1 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)){
 				menuConexiones->cerrar();
                 cargarMenuPuerto(textoDinamicoIP->getTexto(), cliente, ventana, menuConexionManual);
 			}
-            int respuestaAtras = menuConexionManual->getBotonAtras()[0].manejarEvento(&e);
+            int respuestaAtras = menuConexionManual->getBotonAtras()->manejarEvento(&e);
             if(respuestaAtras == 1){
                 menuConexiones->cerrar();
                 menuConexiones = new MenuConexiones(ventana);
@@ -170,7 +170,7 @@ void cargarMenuPorEquipos(Cliente* cliente, Ventana* ventana){
 			if(e.type == SDL_QUIT) {
 				quit = true;
 			} else if(e.type == SDL_MOUSEBUTTONDOWN){
-                int respuesta = menuPorEquipos->getBotonSiguiente()[0].manejarEvento(&e);
+                int respuesta = menuPorEquipos->getBotonSiguiente()->manejarEvento(&e);
                 if (respuesta == 1) {
                     agregarJugador(menuPorEquipos, cliente);
                     quit = true;
@@ -232,12 +232,12 @@ void cargarMenuConexiones(Cliente * cliente, Ventana* ventana, MenuConexiones* m
 			if(e.type == SDL_QUIT) {
 				quit = true;
 			} else if(e.type == SDL_MOUSEBUTTONDOWN){
-                int respuesta = menuConexiones->getBotonSiguiente()[0].manejarEvento(&e);
+                int respuesta = menuConexiones->getBotonSiguiente()->manejarEvento(&e);
                 if (respuesta == 1) {
                     int numeroSeleccionado = menuConexiones->getListaDeSeleccion()->getNroBotonSeleccionado();
                     levantarConexion(numeroSeleccionado, cliente, &conexionesGuardadas, ventana, menuConexiones, menuDatosDeUsuario);
                 }
-                int respuestaAtras = menuConexiones->getBotonAtras()[0].manejarEvento(&e);
+                int respuestaAtras = menuConexiones->getBotonAtras()->manejarEvento(&e);
                 if(respuestaAtras == 1){
                     menuConexiones->cerrar();
                     cargarMenuDatosDeUsuario(ventana, menuDatosDeUsuario, cliente);
@@ -269,13 +269,13 @@ void cargarMenuDatosDeUsuario(Ventana* ventana, MenuDatosDeUsuario* menuDatosDeU
 			if(e.type == SDL_QUIT){
 				quit = true;
 			}
-			int respuesta = menuDatosDeUsuario->getBotonSiguiente()[0].manejarEvento(&e);
+			int respuesta = menuDatosDeUsuario->getBotonSiguiente()->manejarEvento(&e);
 			if(respuesta == 1 ||  (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)){
 				menuDatosDeUsuario->cerrar();
 				cargarMenuConexiones(cliente, ventana, menuConexiones, menuDatosDeUsuario);
                 quit = true;
 			}
-            int respuestaAtras = menuDatosDeUsuario->getBotonAtras()[0].manejarEvento(&e);
+            int respuestaAtras = menuDatosDeUsuario->getBotonAtras()->manejarEvento(&e);
             if(respuestaAtras == 1){
                 quit = true;
                 menuDatosDeUsuario->cerrar();
@@ -309,7 +309,7 @@ void cargarMenuPrincipal(Cliente * cliente, Ventana* ventana) {
 			if(e.type == SDL_QUIT) {
 				quit = true;
 			}
-			int respuesta = menuPrincipal->getBotonJugar()[0].manejarEvento(&e);
+			int respuesta = menuPrincipal->getBotonJugar()->manejarEvento(&e);
 			if(respuesta == 1 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)) {
 				menuPrincipal->cerrar();
 				//Arranca el menu de datos del usuario.
@@ -319,7 +319,7 @@ void cargarMenuPrincipal(Cliente * cliente, Ventana* ventana) {
                 menuDatosDeUsuario->cerrar();
                 menuPrincipal->cerrar();
 			}
-			int respuestaSalir = menuPrincipal->getBotonSalir()[0].manejarEvento(&e);
+			int respuestaSalir = menuPrincipal->getBotonSalir()->manejarEvento(&e);
 			if(respuestaSalir == 1) {
 				menuPrincipal->cerrar();
 				ventana->cerrar();
