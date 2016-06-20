@@ -36,6 +36,7 @@
 #define PRESIONA_R 11
 #define PRESIONA_X 12
 #define PRESIONA_L 13
+#define PRESIONA_P 14
 
 /* Dimensiones */
 

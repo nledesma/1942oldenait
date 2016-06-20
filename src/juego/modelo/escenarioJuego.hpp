@@ -57,6 +57,7 @@ private:
     string idSprite;
     /* Estado */
     bool motorActivado;
+    bool pausado;
     /* Sincronización */
     Temporizador temporizador;
     ColaConcurrente<pair<int, int>> colaEventos;
@@ -65,6 +66,7 @@ private:
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexScroll = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexPausa = PTHREAD_MUTEX_INITIALIZER;
     Grilla * grilla;
     //La clave es el numrero del escuadron, el par es de avion que va matando al escuadron y la cantidad de aviones
     //que ya mató, si el numero de avion es -1, significa que varios aviones mataron a los aviones de ese escuadron y
@@ -119,6 +121,7 @@ public:
     int getAnchoVentana();
     int getAltoVentana();
     int getLongitud();
+    bool getPausado();
     Etapa * etapaActual();
     list<Etapa *> getEtapas();
     int getNroEtapa();
@@ -126,6 +129,7 @@ public:
     bool estaActivo();
     void activar();
     void desactivar();
+    void togglePausa();
     bool porEquipos();
     Avion* avion(int i);
     AvionEnemigo* avionEnemigo(int i);

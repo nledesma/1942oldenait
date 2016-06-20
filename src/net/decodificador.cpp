@@ -286,6 +286,11 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     if (escenarioJuego->porEquipos())
         Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(1));
 
+    if (escenarioJuego->getPausado()){
+        Decodificador::pushCantidad(codigo, 1);
+    } else {
+        Decodificador::pushCantidad(codigo, 0);
+    }
     return codigo;
 }
 

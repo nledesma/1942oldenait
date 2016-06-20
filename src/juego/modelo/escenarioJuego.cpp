@@ -138,6 +138,9 @@ bool EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             this->modoPractica = !this->modoPractica;
             break;
             // TODO x para la partida para todos?
+        case PRESIONA_P:
+            this->togglePausa();
+            break;
         default:
             avion(nroAvion)->manejarEvento(evento);
             break;
@@ -218,6 +221,7 @@ void EscenarioJuego::actualizarScrollingOffset(float timeStep) {
 }
 
 int EscenarioJuego::mainLoop() {
+    this->pausado = false;
     activar();
     int eventoFinal = AVANZAR_ETAPA;
 //    Trayectoria* cuadrada = new TrayectoriaCuadrada();
@@ -239,21 +243,23 @@ int EscenarioJuego::actualizarEstado(float timeStep) {
     bool resetear = false;
     int eventoFinal = AVANZAR_ETAPA;
     if (this->posicionY < this->etapaActual()->getLongitud() - 800) {
-        this->actualizarScrollingOffset(timeStep);
-        if(!this->modoPractica){
-            this->sortearDisparosEnemigos(timeStep);
+        if (!this->pausado) {
+            this->actualizarScrollingOffset(timeStep);
+            if (!this->modoPractica) {
+                this->sortearDisparosEnemigos(timeStep);
+            }
+            this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
+            this->moverAviones(timeStep);
+            this->moverElementos(timeStep);
+            this->moverEnemigos(timeStep);
+            this->moverPowerUps(timeStep);
+            this->proyectarDisparos(timeStep);
+            this->moverDisparosEnemigos(timeStep);
+            this->verificarColisiones();
+            this->moverDisparos(timeStep);
+            this->getProximoEnemigo();
         }
-        this->posicionY = this->posicionY + timeStep * this->velocidadDesplazamientoY;
-        this->moverAviones(timeStep);
-        this->moverElementos(timeStep);
-        this->moverEnemigos(timeStep);
-        this->moverPowerUps(timeStep);
-        this->proyectarDisparos(timeStep);
-        this->moverDisparosEnemigos(timeStep);
         resetear = this->manejarProximoEvento();
-        this->verificarColisiones();
-        this->moverDisparos(timeStep);
-        this->getProximoEnemigo();
     } else {
         this->moverEnemigos(timeStep);
         this->moverDisparosEnemigos(timeStep);
@@ -356,7 +362,13 @@ bool EscenarioJuego::manejarProximoEvento() {
     bool resetear = false;
     if (!this->colaEventos.vacia()) {
         pair<int, int> evento = this->colaEventos.pop();
-        resetear = this->manejarEvento(evento.first, evento.second);
+        if (!this->pausado){
+            resetear = this->manejarEvento(evento.first, evento.second);
+        } else {
+            if (evento.second == PRESIONA_P || evento.second == PRESIONA_R){
+                resetear = this->manejarEvento(evento.first, evento.second);
+            }
+        }
     }
     return resetear;
 }
@@ -518,6 +530,13 @@ int EscenarioJuego::getLongitud() {
     return this->etapaActual()->getLongitud();
 }
 
+bool EscenarioJuego::getPausado() {
+    pthread_mutex_lock(&this->mutexPausa);
+    bool pausado = this->pausado;
+    pthread_mutex_unlock(&this->mutexPausa);
+    return pausado;
+}
+
 Etapa * EscenarioJuego::etapaActual() {
     return *itEtapa;
 }
@@ -548,6 +567,12 @@ bool EscenarioJuego::estaActivo() {
 void EscenarioJuego::desactivar() {
     this->motorActivado = false;
     colaEventos.avisar();
+}
+
+void EscenarioJuego::togglePausa() {
+    pthread_mutex_lock(&this->mutexPausa);
+     this->pausado = !this->pausado;
+    pthread_mutex_unlock(&this->mutexPausa);
 }
 
 void EscenarioJuego::activar() {
@@ -619,7 +644,7 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica) && (!(*itAviones)->estaColisionando())) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica) && (!(*itAviones)->estaColisionando()) && (!(*itAviones)->estaLoopeando())) {
             for (list<AvionEnemigo *>::iterator itEnemigos = this->enemigos.begin();
                  itEnemigos != this->enemigos.end(); itEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itEnemigos)->getColisionable()) && (*itAviones)->getVidas() != 0) {
@@ -640,7 +665,7 @@ void EscenarioJuego::verificarColisiones(){
     }
 
     for(list<Avion*>::iterator itAviones = this->aviones.begin(); itAviones != this->aviones.end(); itAviones++){
-        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica) && (!(*itAviones)->estaColisionando())) {
+        if ((*itAviones)->getContadorTiempoInmunidad() == 0 && (!this->modoPractica) && (!(*itAviones)->estaColisionando()) && (!(*itAviones)->estaLoopeando())) {
             for (list<DisparoEnemigo *>::iterator itDisparosEnemigos = this->disparosEnemigos.begin();
                  itDisparosEnemigos != this->disparosEnemigos.end(); itDisparosEnemigos++) {
                 if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable()) && (*itAviones)->getVidas() != 0) {
@@ -707,7 +732,6 @@ list< pair<int,vector<int>> > EscenarioJuego::getPuntajes() {
         for (it = equipos[i].begin(); it != equipos[i].end(); ++it) {
             pair<int,vector<int>> par;
             par.first = *it;
-            cout << "nroavion en escenario: " << *it << endl;
             Avion * avionActual = avion(*it);
             par.second.push_back(i);
             par.second.push_back(avionActual->getPuntaje());

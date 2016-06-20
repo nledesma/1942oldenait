@@ -105,9 +105,11 @@ private:
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
     Figura* figuraVidas;
+    Figura* cartelPausa;
     Texto* textoIniciarPartida;
     Texto* textoPerdedor;
     bool finalizado = false;
+    bool pausado = false;
 public:
     /* Constructor y destructor */
     EscenarioVista(string infoEscenario, Ventana* ventana, SoundBoard* soundboard);
@@ -143,6 +145,7 @@ public:
     void cargarVistasPowerUps();
 //    void cargarSonidos();
     void cargarVistaVidas();
+    void cargarVistaPausa();
     void actualizar(float offset);
     void cerrar();
     void manejarEvento(int evento);
@@ -170,6 +173,7 @@ public:
     Figura *getFondo();
     Ventana *getVentana();
     void renderizarImagenVidas();
+    void renderizarCartelPausa();
     void renderizarTextoIniciarPartida();
 };
 

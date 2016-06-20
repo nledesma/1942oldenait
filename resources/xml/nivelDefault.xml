@@ -20,6 +20,11 @@
                 <longitud>8000</longitud>
                 <elementos>
                     <elemento>
+                        <spriteIdElemento>subjugatorCorvette</spriteIdElemento>
+                        <posx>-20</posx>
+                        <posy>500</posy>
+                    </elemento>
+                    <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>
                         <posx>0</posx>
                         <posy>2000</posy>
@@ -30,9 +35,14 @@
                         <posy>3000</posy>
                     </elemento>
                     <elemento>
+                        <spriteIdElemento>naboo</spriteIdElemento>
+                        <posx>300</posx>
+                        <posy>5500</posy>
+                    </elemento>
+                    <elemento>
                         <spriteIdElemento>death-star</spriteIdElemento>
-                        <posx>0</posx>
-                        <posy>3500</posy>
+                        <posx>200</posx>
+                        <posy>4900</posy>
                     </elemento>
                     <elemento>
                         <spriteIdElemento>asteroide</spriteIdElemento>

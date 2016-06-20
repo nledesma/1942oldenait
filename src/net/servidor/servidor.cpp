@@ -445,7 +445,6 @@ void Servidor::ejecutar() {
         broadcastEvento(evento);
             entreEtapas();
     }
-    cout << "pase por aca, para finalizar el juego" << endl;
     broadcastEvento(FINALIZAR_JUEGO);
     partidaEnJuego = false;
 }

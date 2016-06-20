@@ -119,6 +119,8 @@ public:
 
     bool estaColisionando();
 
+    bool estaLoopeando();
+
     void setPowerUpAmetralladoras();
 
     

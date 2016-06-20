@@ -15,6 +15,7 @@ EscenarioVista::EscenarioVista(string infoEscenario, Ventana* ventana, SoundBoar
 //    this->soundBoard->inicializar();
     this->inicializarComponentes(infoEscenario);
     this->figuraVidas = new Figura();
+    this->cartelPausa = new Figura();
 
     puntajes.push_back(0);
     if (porEquipos) puntajes.push_back(0);
@@ -208,6 +209,13 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         this->puntajes[1] = puntajeAux;
     }
 
+    int pausado = Decodificador::popInt(infoActualizacion);
+    if (pausado == 1){
+        this->pausado = true;
+    } else if (pausado == 0) {
+        this->pausado = false;
+    }
+
     if (infoActualizacion.size() != 0) {
         cout << "el mensaje queda con " <<  infoActualizacion.size() << " bytes luego de actualizar." << endl;
     }
@@ -227,6 +235,7 @@ void EscenarioVista::preloop(){
     cargarVistaDisparosEnemigos();
 //    cargarSonidos();
     cargarVistaVidas();
+    cargarVistaPausa();
 }
 
 int EscenarioVista::mainLoop(){
@@ -264,6 +273,9 @@ int EscenarioVista::mainLoop(){
         this->actualizarImagenPuntajes();
         this->renderizarPuntajes();
         this->renderizarImagenVidas();
+        if (this->pausado){
+            this->renderizarCartelPausa();
+        }
         SDL_RenderPresent(this->getVentana()->getVentanaRenderer());
     }
     cout << "el getActivo es " << (getActivo()?" true":" false") << endl;
@@ -312,6 +324,9 @@ void EscenarioVista::pushEvento(SDL_Event evento){
                 break;
             case SDLK_l:
                 this->colaEventos.push((int)PRESIONA_L);
+                break;
+            case SDLK_p:
+                this->colaEventos.push((int)PRESIONA_P);
                 break;
         }
     } else if( evento.type == SDL_KEYUP && evento.key.repeat == 0 ) {
@@ -493,6 +508,10 @@ void EscenarioVista::cargarVistaVidas(){
     this->figuraVidas->loadFromFile(VIDAS, this->ventana->getVentanaRenderer());
 }
 
+void EscenarioVista::cargarVistaPausa(){
+    this->cartelPausa->loadFromFile(CARTEL_PAUSA, this->ventana->getVentanaRenderer());
+}
+
 /* Renderizaciones */
 
 void EscenarioVista::renderizarTextoIniciarPartida(){
@@ -503,6 +522,10 @@ void EscenarioVista::renderizarTextoIniciarPartida(){
     if(vidas == -1){
         this->textoIniciarPartida->renderCentrado(200);
     }
+}
+
+void EscenarioVista::renderizarCartelPausa() {
+    this->cartelPausa->render(335, 390,this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::renderizarImagenVidas() {

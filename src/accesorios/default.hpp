@@ -9,6 +9,7 @@
 #define ELEMENTO_POR_DEFECTO "imagen-default"
 #define FONDO_POR_DEFECTO "background-default"
 #define VIDAS "vida-millenium"
+#define CARTEL_PAUSA "pausa"
 
 #define SPRITE_AVION_ENEMIGO_PEQUENIO "tieFighter-sprite"
 #define SPRITE_AVION_ENEMIGO_MEDIANO "tieFighter2-sprite"

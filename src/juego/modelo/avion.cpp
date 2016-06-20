@@ -433,6 +433,12 @@ bool Avion::estaColisionando(){
     return (this->estadoAnimacion >= EXPLOSION_ETAPA_1);
 }
 
+bool Avion::estaLoopeando() {
+    int estado = this->estadoAnimacion;
+    return ((estado >= LOOP_ETAPA_1 && estado <= LOOP_ETAPA_17) ||
+            (estado >= AVION_TRANSFORMADO_LOOP_ETAPA_1 && estado <= AVION_TRANSFORMADO_LOOP_ETAPA_17));
+}
+
 void Avion::aumentarAciertos() {
     this->cantidadAciertos ++;
 }
