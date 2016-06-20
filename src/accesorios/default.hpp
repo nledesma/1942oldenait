@@ -5,7 +5,7 @@
 
 #define DISPARO_POR_DEFECTO "disparo-default"
 #define AVION_POR_DEFECTO "millenium-sprite-default"
-#define AVION_CON_POWER_UP "millenium-powered"
+#define SPRITE_AVION_SECUNDARIO "xwing-sprites"
 #define ELEMENTO_POR_DEFECTO "imagen-default"
 #define FONDO_POR_DEFECTO "background-default"
 #define VIDAS "vida-millenium"

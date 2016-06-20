@@ -33,6 +33,16 @@ void Decodificador::push(string & codigo, Avion* a) {
     push(codigo, (int)a->getVidas());
 }
 
+void Decodificador::push(string & codigo, AvionSecundario* a){
+    push(codigo, a->getPosicionX());
+    push(codigo, a->getPosicionY());
+    push(codigo, (int) a->getEstadoAnimacion());
+}
+
+string Decodificador::popAvionSecundario(string & codigo){
+  return popBytes(codigo, 2*sizeof(float) + sizeof(int));
+}
+
 string Decodificador::popAvion(string & codigo){
     return popBytes(codigo, 2*sizeof(float) + 3*sizeof(int));
 }
@@ -242,6 +252,14 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     for(list<Avion*>::iterator iterador = aviones.begin(); iterador != aviones.end(); ++iterador) {
         Avion* avion = *iterador;
         Decodificador::push(codigo, avion);
+        //if(avion->getAvionesSecundarios().size() > 0){
+            //cout << "Cantidad de aviones secundarios en decodificador: " << (int)avion->getAvionesSecundarios().size() << endl;
+            //Decodificador::pushCantidad(codigo, (int)avion->getAvionesSecundarios().size());
+            //for(list<AvionSecundario*>::iterator iteradorAvionesSecundarios = avion->getAvionesSecundarios().begin(); iteradorAvionesSecundarios != avion->getAvionesSecundarios().end(); ++iteradorAvionesSecundarios){
+            //    AvionSecundario* avionSecundario = *iteradorAvionesSecundarios;
+            //    Decodificador::push(codigo,avionSecundario);
+            //}
+        //}
     }
     list<Elemento*> elementos = escenarioJuego->getElementos();
     for(list<Elemento*>::iterator iterador = elementos.begin(); iterador != elementos.end(); ++iterador) {
@@ -281,6 +299,20 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, powerUp);
         }
     }
+
+    for(list<Avion*>::iterator iterador = aviones.begin(); iterador != aviones.end(); ++iterador) {
+        Avion* avion = *iterador;
+        list <AvionSecundario*> avionesSecundarios = avion->getAvionesSecundarios();
+        // cout « "EN EL DECO EL TAMAÑO DE LA LISTA DE AVIONES SECUNDARIOS DE AVION ES: " « avionesSecundarios.size()« endl;
+        Decodificador::pushCantidad(codigo, (int) avionesSecundarios.size());
+        if(!avionesSecundarios.empty()){
+            for(list<AvionSecundario*>::iterator iterador = avionesSecundarios.begin(); iterador != avionesSecundarios.end(); ++iterador){
+                AvionSecundario* avionSecundario = *iterador;
+                Decodificador::push(codigo, avionSecundario);
+            }
+        }
+    }
+
     Decodificador::pushCantidad(codigo, escenarioJuego->getPuntaje(0));
     // Si es por equipos encolamos el puntaje del segundo.
     if (escenarioJuego->porEquipos())

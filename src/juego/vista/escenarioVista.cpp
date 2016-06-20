@@ -137,6 +137,7 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
             this->contadorSonido = this->contadorSonido - 1;
         }
     }
+
     list<ElementoVista*>::iterator itElemento;
     for(itElemento = this->getElementos().begin(); itElemento != this->getElementos().end(); itElemento++){
         string elemento = Decodificador::popElemento(infoActualizacion);
@@ -191,6 +192,22 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
         powerUps.push_front(unPowerUp);
     }
     this->setPowerUps(powerUps);
+
+    //int cantidadAvionesSecundarios = Decodificador::popInt(infoActualizacion);
+    //list<avionSecundario> avionesSecundarios;
+    //for (int i = 0; i < cantidadAvionesSecundarios; ++i) {
+    //    avionSecundario unAvionSecundario;
+    //    unAvionSecundario.posX = Decodificador::popFloat(infoActualizacion);
+    //    //cout << "La posicion X que llega del deco es: " << unAvionSecundario.posX << endl;
+    //    unAvionSecundario.posY = Decodificador::popFloat(infoActualizacion);
+    //    //cout << "La posicion Y que llega del deco es: " << unAvionSecundario.posY << endl;
+    //    unAvionSecundario.estadoAnimacion = Decodificador::popInt(infoActualizacion);
+    //    //cout << "El estado de animacion que llega del deco es: " << unAvionSecundario.estadoAnimacion << endl;
+    //    avionesSecundarios.push_front(unAvionSecundario);
+    //}
+    //this->setAvionesSecundarios(avionesSecundarios);
+
+    //this->agregarVistasAvionesSecundarios();
 
     int puntajeAux = Decodificador::popInt(infoActualizacion);
     this->puntajes[0] = puntajeAux;
@@ -379,6 +396,12 @@ void EscenarioVista::setPowerUps(list<powerUp> powerUpsParam){
     pthread_mutex_unlock(&this->mutexPowerUps);
 }
 
+void EscenarioVista::setAvionesSecundarios(list<avionSecundario> avionesSecundariosParam){
+    pthread_mutex_lock(&this->mutexAvionesSecundarios);
+    this->avionesSecundarios = avionesSecundariosParam;
+    pthread_mutex_unlock(&this->mutexAvionesSecundarios);
+}
+
 void EscenarioVista::setScrollingOffset(float scrollingOffset){
     this->scrollingOffset = scrollingOffset;
 }
@@ -387,6 +410,7 @@ void EscenarioVista::setScrollingOffset(float scrollingOffset){
 
 void EscenarioVista::agregarAvionVista(string infoAvion){
     AvionVista* avionVista = new AvionVista(infoAvion);
+
     this->aviones.push_back(avionVista);
 }
 
@@ -413,12 +437,24 @@ void EscenarioVista::agregarVistasPowerUps(){
   this->powerUpBonificacion1500 = new PowerUpBonificacion1500Vista();
 }
 
+void EscenarioVista::agregarVistasAvionesSecundarios(){
+  for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
+      AvionVista* avionVista = *iterador;
+      //cout << "Posicion X en avionVista: " << avionVista->getPosX() << " Posicion en Y: " << avionVista->getPosY() << endl;
+      avionVista->cargarAvionesSecundariosVista(avionVista->getPosX(),avionVista->getPosY());
+  }
+}
+
 void EscenarioVista::cargarVistasAviones(){
     int numeroJugador = 1;
     for(list<AvionVista*>::iterator iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador){
         AvionVista* avionVista = *iterador;
         this->cargarAvion(avionVista, ventana->getVentanaRenderer(), numeroJugador);
         numeroJugador++;
+        for(list<AvionSecundarioVista*>::iterator itAvionesSecundarios = avionVista->getAvionesSecundariosVista().begin(); itAvionesSecundarios != avionVista->getAvionesSecundariosVista().end(); ++itAvionesSecundarios){
+            AvionSecundarioVista* avionSecundarioVista = *itAvionesSecundarios;
+            avionSecundarioVista->cargarAvionSecundario(ventana->getVentanaRenderer());
+        }
     }
 }
 
@@ -544,12 +580,19 @@ void EscenarioVista::renderizarAviones() {
         if (i != nroAvion) {
             AvionVista* avion = *iterador;
             avion->render(this->ventana->getVentanaRenderer());
+            if ((avion->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avion->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
+                this->renderizarAvionesSecundarios(avion);
+            }
         } else {
             avionDelCliente = *iterador;
         }
     }
     // Último hay que dibujar el del nroAvion, para que esté arriba.
     avionDelCliente->render(this->ventana->getVentanaRenderer());
+    //cout << "Estado del powerup: " << avionDelCliente->getEstadoPowerUp() << endl;
+    if ((avionDelCliente->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avionDelCliente->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
+        this->renderizarAvionesSecundarios(avionDelCliente);
+    }
 }
 
 void EscenarioVista::renderizarFondo(float y) {
@@ -610,6 +653,15 @@ void EscenarioVista::renderizarPowerUps(){
     }
   }
   pthread_mutex_unlock(&mutexPowerUps);
+}
+
+void EscenarioVista::renderizarAvionesSecundarios(AvionVista* avion){
+//    cout << "Entro a renderizar los aviones secundarios en la vista. La cantidad de aviones secundarios es: " << avion->getAvionesSecundariosVista().size() << endl;
+    for(list<AvionSecundarioVista*>::iterator iterador = avion->getAvionesSecundariosVista().begin(); iterador != avion->getAvionesSecundariosVista().end(); iterador++){
+        AvionSecundarioVista* avionSecundario = *iterador;
+        cout << "PosicionX del avion: " << avionSecundario->getPosX() << " PosicionY del avion: " << avionSecundario->getPosY() << endl;
+        avionSecundario->render(ventana->getVentanaRenderer());
+    }
 }
 
 void EscenarioVista::actualizar(float offset) {

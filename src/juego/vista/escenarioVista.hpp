@@ -8,6 +8,7 @@
 #include <vector>
 #include "ventana.hpp"
 #include "avionVista.hpp"
+#include "avionSecundarioVista.hpp"
 #include "figura.hpp"
 #include "elementoVista.hpp"
 #include "etapaVista.hpp"
@@ -53,6 +54,12 @@ struct powerUp{
   int valorPowerUp;
 };
 
+struct avionSecundario{
+  float posX;
+  float posY;
+  int estadoAnimacion;
+};
+
 class EscenarioVista {
 private:
     /* Equipos */
@@ -84,11 +91,13 @@ private:
     list<disparo> disparos;
     list<disparoEnemigo> disparosEnemigos;
     list<enemigo> enemigos;
+    list<avionSecundario> avionesSecundarios;
     PowerUpAvionesSecundariosVista* powerUpAvionesSecundarios;
     PowerUpBonificacionVista* powerUpBonificacion;
     PowerUpDestruirEnemigosVista* powerUpDestruirEnemigos;
     PowerUpDosAmetralladorasVista* powerUpDosAmetralladoras;
     PowerUpBonificacion1500Vista* powerUpBonificacion1500;
+    AvionSecundarioVista* avionSecundarioVista;
     /* Etapas */
     list<EtapaVista*> etapas;
     SoundBoard *soundBoard;
@@ -102,6 +111,7 @@ private:
     pthread_mutex_t mutexDisparosEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexAvionesSecundarios = PTHREAD_MUTEX_INITIALIZER;
     ColaConcurrente <int> colaEventos;
     void actualizarImagenPuntajes();
     Figura* figuraVidas;
@@ -125,6 +135,7 @@ public:
     void agregarDisparoEnemigoVista();
     void agregarVistasEnemigos();
     void agregarVistasPowerUps();
+    void agregarVistasAvionesSecundarios();
     void renderizarAviones();
     void renderizarElementos();
     void renderizarFondo(float y);
@@ -170,6 +181,10 @@ public:
     Ventana *getVentana();
     void renderizarImagenVidas();
     void renderizarTextoIniciarPartida();
+    void setAvionesSecundarios(list<avionSecundario> avionesSecundarios);
+    void renderizarAvionesSecundarios(AvionVista* avion);
+
+
 };
 
 #endif //INC_1942OLDENAIT_ESCENARIOVISTA_HPP

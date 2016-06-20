@@ -58,8 +58,6 @@ public:
 
     int obtenerPuntajesAvionesSecundarios();
 
-    void setAvionSecundario();
-
     AvionSecundario* getAvionSecundario();
 
     void manejarEvento(int evento);
@@ -126,7 +124,6 @@ public:
 
     void setPowerUpAmetralladoras();
 
-
     void setPowerUpAvionesSecundarios();
 
     int getEstadoPowerUp();
@@ -139,7 +136,11 @@ public:
 
     int getPorcentajeAciertos();
 
-    int dondeMeColisionan(float posXColision, float posYColision);
+    void setAvionesSecundarios(list<AvionSecundario*> avionesSecundarios);
+
+    list<AvionSecundario*> &getAvionesSecundarios();
+
+    void cargarListaAvionesSecundarios();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

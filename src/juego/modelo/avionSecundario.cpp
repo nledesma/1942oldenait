@@ -2,7 +2,7 @@
 
 using namespace std;
 
-AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos, float posXFinal, float posYFinal){
+AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos ,float posXFinal, float posYFinal){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -14,10 +14,7 @@ AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float 
     this->colisionable = new Colisionable(posX, posY, 0, TIPO_AVION_SECUNDARIO);
     this->velocidad = velocidad;
     this->velocidadDisparos = velocidadDisparos;
-    this->contador = CONTADOR_INICIAL;
-    this->estadoAnimacion = ESTADO_NORMAL;
-    //TODO revisar este idSprite porque no lo recibe por parametro.
-    this->idSprite = idSprite;
+    this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_NORMAL;
     this->idSpriteDisparos = idSpriteDisparos;
     this->puntaje = 0;
     this->cantidadDisparos = 0;
@@ -29,8 +26,8 @@ AvionSecundario::~AvionSecundario(){
 }
 
 void AvionSecundario::manejarEvento(int evento){
-    /* Se realizan acciones de avión si el mismo no esta loopeando */
-    if((this->estadoAnimacion < LOOP_ETAPA_1 || this->estadoAnimacion == INTERMITENCIA) && this->estadoAnimacion != ESTADO_AVION_DESTRUIDO ) {
+
+    if(this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO ) {
         switch (evento) {
             case ARRIBA_PRESIONA:
                 this->velocidadY -= this->velocidad;
@@ -40,15 +37,11 @@ void AvionSecundario::manejarEvento(int evento){
                 break;
             case IZQUIERDA_PRESIONA:
                 this->velocidadX -= this->velocidad;
-                this->estadoAnimacion = GIRANDO_IZQUIERDA;
+                this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_GIRANDO_IZQUIERDA;
                 break;
             case DERECHA_PRESIONA:
-                this->estadoAnimacion = GIRANDO_DERECHA;
+                this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_GIRANDO_DERECHA;
                 this->velocidadX += this->velocidad;
-                break;
-            case PRESIONA_ENTER:
-                this->estadoAnimacion = LOOP_ETAPA_1;
-                this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_LOOP;
                 break;
             case ARRIBA_SUELTA:
                 if (this->velocidadY != 0)
@@ -59,16 +52,16 @@ void AvionSecundario::manejarEvento(int evento){
                     this->velocidadY -= this->velocidad;
                 break;
             case IZQUIERDA_SUELTA:
-                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_DERECHA || this->estadoAnimacion == INTERMITENCIA)
+                if (this->velocidadX != 0 || this->estadoAnimacion == ESTADO_AVION_SECUNDARIO_GIRANDO_DERECHA)
                     this->velocidadX += this->velocidad;
-                if (this->estadoAnimacion != GIRANDO_DERECHA)
-                    this->estadoAnimacion = ESTADO_NORMAL;
+                if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_GIRANDO_DERECHA)
+                    this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_NORMAL;
                 break;
             case DERECHA_SUELTA:
-                if (this->velocidadX != 0 || this->estadoAnimacion == GIRANDO_IZQUIERDA || this->estadoAnimacion == INTERMITENCIA)
+                if (this->velocidadX != 0 || this->estadoAnimacion == ESTADO_AVION_SECUNDARIO_GIRANDO_IZQUIERDA)
                     this->velocidadX -= this->velocidad;
-                if (this->estadoAnimacion != GIRANDO_IZQUIERDA)
-                    this->estadoAnimacion = ESTADO_NORMAL;
+                if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_GIRANDO_IZQUIERDA)
+                    this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_NORMAL;
                 break;
         }
     }
@@ -76,17 +69,9 @@ void AvionSecundario::manejarEvento(int evento){
 
 
 void AvionSecundario::mover(float timeStep){
-    pthread_mutex_lock(&this->mutexMover);
-    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
-        if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
-            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
-        } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION) {
-            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
-        } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION) {
-            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
-        }
-
-        if (this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
+    pthread_mutex_lock(&this->mutexMoverAvionSecundario);
+    if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO) {
+        if (this->estadoAnimacion < 3){
             this->posX += this->velocidadX * timeStep;
             if (this->posX < 0) {
                 this->posX = 0;
@@ -100,33 +85,9 @@ void AvionSecundario::mover(float timeStep){
                 this->posY = ALTO_ESCENARIO - this->getAlto();
             }
             this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION_SECUNDARIO);
-        } else {
-            if (this->estadoAnimacion != DESCONECTADO) {
-                if (this->contador > 0) {
-                    this->contador--;
-                    if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5) {
-                        this->posY -= (this->velocidad / 2.f) * timeStep;
-                    } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13) {
-                        this->posY += (this->velocidad / 2.f) * timeStep;
-                    }
-                } else {
-                    this->contador = CONTADOR_INICIAL;
-                    if (this->estadoAnimacion == LOOP_ETAPA_17) {
-                        this->estadoAnimacion = ESTADO_NORMAL;
-                    } else if (this->estadoAnimacion == EXPLOSION_ETAPA_10) {
-                        this->volverEstadoInicial();
-                    } else {
-                        this->estadoAnimacion++;
-                    }
-                }
-                if (this->estadoAnimacion == LOOP_ETAPA_17) {
-                    this->velocidadX = 0;
-                    this->velocidadY = 0;
-                }
-            }
         }
     }
-    pthread_mutex_unlock(&this->mutexMover);
+    pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
 }
 
 
@@ -139,21 +100,23 @@ void AvionSecundario::setVelocidad(float velocidad){
 }
 
 float AvionSecundario::getPosicionX(){
-    pthread_mutex_lock(&this->mutexMover);
+    pthread_mutex_lock(&this->mutexMoverAvionSecundario);
     float posicionX = this->posX;
-    pthread_mutex_unlock(&this->mutexMover);
+    pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
     return posicionX;
 }
+
 float AvionSecundario::getPosicionY(){
-    pthread_mutex_lock(&this->mutexMover);
+    pthread_mutex_lock(&this->mutexMoverAvionSecundario);
     float posicionY = this->posY;
-    pthread_mutex_unlock(&this->mutexMover);
-    return posicionY;}
+    pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
+    return posicionY;
+}
 
 void AvionSecundario::setEstadoAnimacion(int estadoAnimacion){
-    pthread_mutex_lock(&this->mutexMover);
+    pthread_mutex_lock(&this->mutexMoverAvionSecundario);
     this->estadoAnimacion = estadoAnimacion;
-    pthread_mutex_unlock(&this->mutexMover);
+    pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
 }
 
 int AvionSecundario::getAncho(){
@@ -172,9 +135,9 @@ int AvionSecundario::getAltoDisparo(){
 }
 
 int AvionSecundario::getEstadoAnimacion(){
-    pthread_mutex_lock(&this->mutexMover);
+    pthread_mutex_lock(&this->mutexMoverAvionSecundario);
     int estado = this->estadoAnimacion;
-    pthread_mutex_unlock(&this->mutexMover);
+    pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
     return estado;
 }
 
@@ -182,9 +145,7 @@ vector<Disparo*> AvionSecundario::disparar(){
     // Por ahora sale con la misma velocidad y posición que el avión.
     vector<Disparo*> disparos;
     if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
-        if (estadoAnimacion > LOOP_ETAPA_1){
-            return disparos;
-        }
+        return disparos;
         this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
     }
     return disparos;
@@ -214,8 +175,8 @@ Colisionable* AvionSecundario::getColisionable(){
 }
 
 void AvionSecundario::colisionar(){
-        if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
-            this->estadoAnimacion = EXPLOSION_ETAPA_1 ;
+        if (this->estadoAnimacion < ESTADO_AVION_SECUNDARIO_EXPLOSION_1) {
+            this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_EXPLOSION_1;
         }
 }
 
@@ -239,9 +200,9 @@ void AvionSecundario::setSpawn(int x, int y) {
 
 bool AvionSecundario::moverAPosicionFinal(float timeStep) {
     bool resultado = false;
-    pthread_mutex_lock(&this->mutexMover);
-    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
-        this->estadoAnimacion = ESTADO_NORMAL;
+    pthread_mutex_lock(&this->mutexMoverAvionSecundario);
+    if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO) {
+        this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_NORMAL;
         if (this->posX != this->posXFinal || this->posY != this->posYFinal) {
             if (this->posX != this->posXFinal) {
                 if (this->posX < this->posXFinal) {
@@ -269,18 +230,18 @@ bool AvionSecundario::moverAPosicionFinal(float timeStep) {
                 }
             }
         } else {
-            this->estadoAnimacion = ESTACIONADO;
+            this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_NORMAL;
             resultado = true;
         }
     } else {
         resultado = true;
     }
-    pthread_mutex_unlock(&this->mutexMover);
+    pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
     return resultado;
 }
 
 bool AvionSecundario::estaColisionando(){
-    return (this->estadoAnimacion >= EXPLOSION_ETAPA_1);
+    return (this->estadoAnimacion >= ESTADO_AVION_SECUNDARIO_EXPLOSION_1);
 }
 
 void AvionSecundario::aumentarAciertos() {

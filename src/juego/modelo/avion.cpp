@@ -43,22 +43,14 @@ int Avion::obtenerPuntajesAvionesSecundarios(){
     return puntajeAvionesSecundarios;
 }
 
-void Avion::setAvionSecundario(){
-    if(avionesSecundarios.size() == 0){
-        AvionSecundario* avionSecundario = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO + ANCHO_AVION_COMUN, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos);
-        avionesSecundarios.push_back(avionSecundario);
-    }else{
-        AvionSecundario* avionSecundario = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos);
-        avionesSecundarios.push_back(avionSecundario);
-    }
-}
-
 AvionSecundario* Avion::getAvionSecundario(){
     list<AvionSecundario*>::iterator it = avionesSecundarios.begin();
     advance (it, avionesSecundarios.size() - 1);
     AvionSecundario *avionSecundario = *it;
     return avionSecundario;
 }
+
+
 
 void Avion::manejarEvento(int evento){
     /* Se realizan acciones de avión si el mismo no esta loopeando */
@@ -322,45 +314,6 @@ Colisionable* Avion::getColisionable(){
     return this->colisionable;
 }
 
-int Avion::dondeMeColisionan(float posXColision, float posYColision){
-    cout << "ENTRO A DONDE ME COLISIONAN" << endl;
-    //17 a 63 centro y 64 a 80 es derecha
-    cout << "POSICION AVION ACTUAL EN X: " << this->posX << endl;
-    float resta = this->posX - posXColision;
-    // float restaFinal = ANCHO_AVION_COMUN - resta;
-    cout << "RESTA : " << resta << endl;
-    if(resta > 0){
-        if((resta > 16) && (resta < 40)){
-            return CENTRO_AVION;
-        }else{
-            return IZQUIERDA_AVION;
-        }
-    }else if(resta < 0){
-        if((resta > -40) && (resta < -16)){
-            return CENTRO_AVION;
-        }else{
-            return DERECHA_AVION;
-        }
-    }else{
-        return 0;
-    }
-    // }else if (((resta > -40) && (resta < -16)) || ((resta > 16) && (resta < 40))){
-    //     //-40 a -16 o 16 a 40
-    //     return CENTRO_AVION;
-    // }else{
-    //     return 0;
-    // }
-    // if((restaFinal > 0) && (restaFinal < 16)){
-    //     return IZQUIERDA_AVION;
-    // }else if(((restaFinal > 17) && restaFinal < 63)){
-    //     return CENTRO_AVION;
-    // }else if(((restaFinal > 64) && restaFinal < 80)){
-    //     return DERECHA_AVION;
-    // }else{
-    //     return 0;
-    // }
-}
-
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
         // cout << "ESTADO ANIMACION: " << this->estadoAnimacion << endl;
@@ -506,4 +459,21 @@ int Avion::getPorcentajeAciertos() {
     } else {
         return 0;
     }
+}
+
+void Avion::cargarListaAvionesSecundarios(){
+    while(!this->avionesSecundarios.empty()) delete this->avionesSecundarios.front(), this->avionesSecundarios.pop_front();
+
+    AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    this->avionesSecundarios.push_back(avionIzquierdo);
+    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    this->avionesSecundarios.push_back(avionDerecho);
+}
+
+void Avion::setAvionesSecundarios(list<AvionSecundario*> avionesSecundarios){
+  this->avionesSecundarios = avionesSecundarios;
+}
+
+list<AvionSecundario*>& Avion::getAvionesSecundarios(){
+  return this->avionesSecundarios;
 }

@@ -7,6 +7,7 @@
 #include "../../accesorios/codigo.hpp"
 #include "../../net/decodificador.hpp"
 #include "../../accesorios/default.hpp"
+#include "avionSecundarioVista.hpp"
 
 using namespace std;
 
@@ -16,12 +17,13 @@ private:
     float posY;
     string pathSprite;
     int estadoAnimacion;
-    SDL_Rect clipsAnimacion[64];
+    SDL_Rect clipsAnimacion[32];
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     Figura *figura;
     void iniciarAvion(float posX, float posY , string pathSprite, int estadoPowerUP);
     int vidas;
     int estadoPowerUP;
+    list<AvionSecundarioVista*> avionesSecundariosVista;
 public:
     AvionVista(float posX, float posY, string pathSprite,  int estadoPowerUP);
 
@@ -49,6 +51,8 @@ public:
 
     int getAlto();
 
+    int getEstadoPowerUp();
+
     void setPosX(float posX);
 
     void setPosY(float posY);
@@ -61,7 +65,12 @@ public:
 
     void cerrar();
 
-    void setearClips();
+    list<AvionSecundarioVista*> &getAvionesSecundariosVista();
+
+    void setAvionesSecundariosVista(list <AvionSecundarioVista*> avionesSecundariosVista);
+
+    void cargarAvionesSecundariosVista(float posX, float posY);
+
 };
 
 

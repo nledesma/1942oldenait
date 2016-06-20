@@ -7,17 +7,15 @@
 #include <list>
 #include <chrono>
 #include "../../accesorios/codigo.hpp"
+#include "../../accesorios/default.hpp"
 #include "../../accesorios/colisiones/colisionable.hpp"
 #include "disparo.hpp"
 #include <pthread.h>
 
 #define AVION_SECUNDARIO_ANCHO ANCHO_AVION_SECUNDARIO;
 #define AVION_SECUNDARIO_ALTO ALTO_AVION_SECUNDARIO;
-#define SPRITE_AVION_SECUNDARIO "xwing-sprites"
 #define DISPARO_ANCHO 20;
 #define DISPARO_ALTO 40;
-#define TIEMPO_INMUNIDAD 3
-#define TIEMPO_INTERMITENCIA 0.1
 using namespace std;
 
 class AvionSecundario {
@@ -29,16 +27,14 @@ private:
     float velocidadY;
     int estadoAnimacion;
     float velocidad;
-    int contador;
     float posXInicial;
     float posYInicial;
     float posXFinal;
     float posYFinal;
     int puntaje;
-    string idSprite;
+    string idSprite = SPRITE_AVION_SECUNDARIO;
     string idSpriteDisparos;
-    pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
-    pthread_mutex_t mutexVidas = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexMoverAvionSecundario = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPuntaje = PTHREAD_MUTEX_INITIALIZER;
     Colisionable* colisionable;
     int cantidadDisparos = 0;
@@ -93,6 +89,7 @@ public:
 
 
     int getPuntaje();
+
     void setSpawn(int x, int y);
 
     bool moverAPosicionFinal(float timestep);

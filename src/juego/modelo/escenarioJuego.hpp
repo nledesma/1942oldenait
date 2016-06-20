@@ -136,7 +136,7 @@ public:
     void iniciarModoPractica();
     void crearPowerUpBonus(float posX, float posY, int valor);
     void setEquipo(int nroAvion, int equipo);
-
+    void moverAvionesSecundarios(float timestep, Avion * avion);
 };
 
 

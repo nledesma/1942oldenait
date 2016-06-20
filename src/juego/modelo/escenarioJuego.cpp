@@ -323,6 +323,16 @@ void EscenarioJuego::moverAviones(float timeStep) {
          iterador != this->getAviones().end(); ++iterador) {
         Avion *avion = *iterador;
         avion->mover(timeStep);
+        if(avion->getAvionesSecundarios().size() > 0){
+          moverAvionesSecundarios(timeStep, avion);
+        }
+    }
+}
+
+void EscenarioJuego::moverAvionesSecundarios(float timeStep, Avion* unAvion){
+    for(list<AvionSecundario*>::iterator iterador = unAvion->getAvionesSecundarios().begin(); iterador != unAvion->getAvionesSecundarios().end(); ++iterador){
+      AvionSecundario* unAvionSecundario = *iterador;
+      unAvionSecundario->mover(timeStep);
     }
 }
 
@@ -588,21 +598,6 @@ void EscenarioJuego::verificarColisiones(){
                             // Acá sumó puntos. Me fijo el estado de las cosas.
                             (*itAviones)->colisionar();
                             cout << "ESTADO POWER UP ACTUAL: " << (*itAviones)->getEstadoPowerUp() << endl;
-                            if(((*itAviones)->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || ((*itAviones)->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
-                                float posXColision = (*itEnemigos)->getPosicionX();
-                                float posYColision = (*itEnemigos)->getPosicionY();
-                                cout << "POS X ENEMIGO COLISION: " << posXColision << endl;
-                                int dondeMeColisionaron = (*itAviones)->dondeMeColisionan(posXColision, posYColision);
-                                cout << "ESTO ES DONDE ME COLISIONARON: " << dondeMeColisionaron << endl;
-                                if(dondeMeColisionaron == DERECHA_AVION){
-                                    cout << "ME TOCARON LA NALGA DERECHA!" << endl;
-                                }else if (dondeMeColisionaron == IZQUIERDA_AVION){
-                                    cout << "ME TOCARON LA NALGA IZQUIERDA" << endl;
-                                }else if (dondeMeColisionaron == CENTRO_AVION){
-                                    cout << "ME TOCARON EN EL CENTRO" << endl;
-                                }
-                            }
-
                     }
                 }
             }
@@ -616,21 +611,6 @@ void EscenarioJuego::verificarColisiones(){
                 if ((*itAviones)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable()) && (*itAviones)->getVidas() != 0) {
                     (*itAviones)->colisionar();
                     (*itDisparosEnemigos)->colisionar();
-                    //TODO refactorizarlo.
-                    if(((*itAviones)->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || ((*itAviones)->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
-                        float posXColision = (*itDisparosEnemigos)->getPosX();
-                        cout << "POS X ENEMIGO COLISION DISPARO: " << posXColision << endl;
-                        float posYColision = (*itDisparosEnemigos)->getPosY();
-                        int dondeMeColisionaron = (*itAviones)->dondeMeColisionan(posXColision, posYColision);
-                        cout << "ESTO ES DONDE ME COLISIONARON: " << dondeMeColisionaron << endl;
-                        if(dondeMeColisionaron == DERECHA_AVION){
-                            cout << "ME TOCARON LA NALGA DERECHA!" << endl;
-                        }else if (dondeMeColisionaron == IZQUIERDA_AVION){
-                            cout << "ME TOCARON LA NALGA IZQUIERDA" << endl;
-                        }else if (dondeMeColisionaron == CENTRO_AVION){
-                            cout << "ME TOCARON EN EL CENTRO" << endl;
-                        }
-                    }
                 }
             }
         }
@@ -676,6 +656,8 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
     }
     if(powerUp->getTipoPowerUp() == TIPO_POWERUP_AVIONES_SECUNDARIOS){
         avion->setPowerUpAvionesSecundarios();
+        avion->cargarListaAvionesSecundarios();
+        cout << "Se cargo la lista de aviones secundarios de tamaño: " << avion->getAvionesSecundarios().size() << endl;
     }
 }
 
