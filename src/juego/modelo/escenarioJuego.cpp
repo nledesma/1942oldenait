@@ -591,13 +591,22 @@ void EscenarioJuego::verificarColisiones(){
                     if(!(*itEnemigos)->estaColisionando()){
                            if((*itEnemigos)->getTipoAvion() == TIPO_AVION_ESCUADRON){
                                (*itAviones)->sumarPuntos((*itEnemigos)->estallar() + this->validarBonificacionEscuadron((*itEnemigos), (*itAviones)->getNumeroAvion()));
-
                                (*itAviones)->colisionar();
                            }
-                            (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
-                            // Acá sumó puntos. Me fijo el estado de las cosas.
-                            (*itAviones)->colisionar();
-                            cout << "ESTADO POWER UP ACTUAL: " << (*itAviones)->getEstadoPowerUp() << endl;
+                           (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+                           (*itAviones)->colisionar(); // Acá sumó puntos. Me fijo el estado de las cosas.
+                    }
+                    for(list<AvionSecundario*>::iterator itAvSec = (*itAviones)->getAvionesSecundarios().begin(); itAvSec != (*itAviones)->getAvionesSecundarios().end(); ++ itAvSec){
+                        if ((*itAvSec)->getColisionable()->colisiona((*itEnemigos)->getColisionable())) {
+                            if(!(*itEnemigos)->estaColisionando()){
+                                 if((*itEnemigos)->getTipoAvion() == TIPO_AVION_ESCUADRON){
+                                     (*itAviones)->sumarPuntos((*itEnemigos)->estallar() + this->validarBonificacionEscuadron((*itEnemigos), (*itAviones)->getNumeroAvion()));
+                                     (*itAvSec)->colisionar();
+                                 }
+                                 (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+                                 (*itAvSec)->colisionar();
+                            }
+                        }
                     }
                 }
             }
@@ -612,8 +621,15 @@ void EscenarioJuego::verificarColisiones(){
                     (*itAviones)->colisionar();
                     (*itDisparosEnemigos)->colisionar();
                 }
+                for(list<AvionSecundario*>::iterator itAvSec = (*itAviones)->getAvionesSecundarios().begin(); itAvSec != (*itAviones)->getAvionesSecundarios().end(); ++ itAvSec){
+                    if ((*itAvSec)->getColisionable()->colisiona((*itDisparosEnemigos)->getColisionable())) {
+                        (*itAvSec)->colisionar();
+                        (*itDisparosEnemigos)->colisionar();
+                    }
+                }
             }
         }
+
     }
 
     int nroAvion = 1;
@@ -624,6 +640,14 @@ void EscenarioJuego::verificarColisiones(){
                     if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
                         (*itPowerUps)->colisionar();
                         aplicarPowerUp(*itPowerUps,*itAviones);
+                    }
+                }
+                for(list<AvionSecundario*>::iterator itAvSec = (*itAviones)->getAvionesSecundarios().begin(); itAvSec != (*itAviones)->getAvionesSecundarios().end(); ++ itAvSec){
+                    if ((*itAvSec)->getColisionable()->colisiona((*itPowerUps)->getColisionable())) {
+                      if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
+                          (*itPowerUps)->colisionar();
+                          aplicarPowerUp(*itPowerUps,*itAviones);
+                      }
                     }
                 }
             }

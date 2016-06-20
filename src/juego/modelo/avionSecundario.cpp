@@ -175,9 +175,9 @@ Colisionable* AvionSecundario::getColisionable(){
 }
 
 void AvionSecundario::colisionar(){
-        if (this->estadoAnimacion < ESTADO_AVION_SECUNDARIO_EXPLOSION_1) {
-            this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_EXPLOSION_1;
-        }
+    if (this->estadoAnimacion < ESTADO_AVION_SECUNDARIO_EXPLOSION_1) {
+        this->estadoAnimacion = ESTADO_AVION_SECUNDARIO_EXPLOSION_1;
+    }
 }
 
 void AvionSecundario::resetPuntos() {
