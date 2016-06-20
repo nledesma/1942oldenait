@@ -740,6 +740,7 @@ list< pair<int,vector<int>> > EscenarioJuego::getPuntajes() {
             par.second.push_back(avionActual->getCantidadDisparos());
             par.second.push_back(avionActual->getCantidadAciertos());
             par.second.push_back(avionActual->getPorcentajeAciertos());
+            par.second.push_back(avionActual->getVidas());
             equipoPuntaje.push_back(par);
         }
     }

@@ -457,6 +457,7 @@ void Servidor::entreEtapas() {
     esperandoEntreEtapas = true;
     string mensaje;
     Decodificador::pushCantidad(mensaje, (int)escenario->porEquipos());
+    Decodificador::pushCantidad(mensaje, (int)!escenario->quedanEtapas());
     mensaje += Decodificador::getPuntajes(escenario, nombreSegunNroAvion);
     broadcastMensaje(mensaje);
     entretenerClientes(10);

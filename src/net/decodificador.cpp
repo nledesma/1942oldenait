@@ -296,11 +296,11 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
 
 string Decodificador::getPuntajes(EscenarioJuego * escenario, map<int, string> nombreSegunNroAvion) {
     string mensaje;
+    /* Puntajes por jugador */
     list<pair <int,vector<int> > > listaPuntajes = escenario->getPuntajes();
     list<pair<int,vector<int>>>::iterator it;
     for (it = listaPuntajes.begin(); it != listaPuntajes.end(); ++it) {
         int nroAvion = it->first;
-        Decodificador::pushCantidad(mensaje, nroAvion);
         vector<int> datosAvion = it->second;
         int equipo = datosAvion[0];
         Decodificador::pushCantidad(mensaje, equipo);
@@ -312,6 +312,8 @@ string Decodificador::getPuntajes(EscenarioJuego * escenario, map<int, string> n
         Decodificador::pushCantidad(mensaje, aciertos);
         int porcentaje = datosAvion[4];
         Decodificador::pushCantidad(mensaje, porcentaje);
+        int vidas = datosAvion[5];
+        Decodificador::pushCantidad(mensaje, vidas);
         Decodificador::push(mensaje, nombreSegunNroAvion[nroAvion]);
     }
     return mensaje;

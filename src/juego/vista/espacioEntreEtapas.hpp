@@ -11,6 +11,15 @@
 
 using namespace std;
 
+struct puntajeJugador {
+    int puntaje;
+    int disparos;
+    int aciertos;
+    int porcentaje;
+    int vidas;
+    string nombre;
+};
+
 class EspacioEntreEtapas {
 private:
     int nroEtapa;
@@ -19,6 +28,7 @@ private:
     list<Texto*> textos;
     vector<pair<int,int> > puntajes;
     bool porEquipos;
+    bool etapaFinal;
     bool dibujar;
 public:
     EspacioEntreEtapas(Ventana * ventana, string mensajeInicial, int nroEtapa);
