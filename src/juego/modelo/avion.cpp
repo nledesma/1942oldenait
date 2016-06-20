@@ -100,31 +100,31 @@ void Avion::disminuirTiempoInmunidad(float timestep) {
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-    if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
-        if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
-            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
-        } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION) {
-            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
-        } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION) {
-            this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
-        }
+    if (this->conectado) {
+        if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+            if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
+                this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
+            } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION) {
+                this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
+            } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION) {
+                this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
+            }
 
-        if (this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
-            this->posX += this->velocidadX * timeStep;
-            if (this->posX < 0) {
-                this->posX = 0;
-            } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
-                this->posX = ANCHO_ESCENARIO - this->getAncho();
-            }
-            this->posY += this->velocidadY * timeStep;
-            if (this->posY < 0) {
-                this->posY = 0;
-            } else if (this->posY + this->getAlto() > ALTO_ESCENARIO) {
-                this->posY = ALTO_ESCENARIO - this->getAlto();
-            }
-            this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
-        } else {
-            if (this->estadoAnimacion != DESCONECTADO) {
+            if (this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
+                this->posX += this->velocidadX * timeStep;
+                if (this->posX < 0) {
+                    this->posX = 0;
+                } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
+                    this->posX = ANCHO_ESCENARIO - this->getAncho();
+                }
+                this->posY += this->velocidadY * timeStep;
+                if (this->posY < 0) {
+                    this->posY = 0;
+                } else if (this->posY + this->getAlto() > ALTO_ESCENARIO) {
+                    this->posY = ALTO_ESCENARIO - this->getAlto();
+                }
+                this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
+            } else {
                 if (this->contador > 0) {
                     this->contador--;
                     if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5) {
@@ -147,8 +147,10 @@ void Avion::mover(float timeStep){
                     this->velocidadY = 0;
                 }
             }
+            this->disminuirTiempoInmunidad(timeStep);
         }
-        this->disminuirTiempoInmunidad(timeStep);
+    } else {
+        this->estadoAnimacion = DESCONECTADO;
     }
     pthread_mutex_unlock(&this->mutexMover);
 }
@@ -457,4 +459,17 @@ int Avion::getPorcentajeAciertos() {
     } else {
         return 0;
     }
+}
+
+void Avion::setConectado(bool conectado) {
+    pthread_mutex_lock(&this->mutexConectado);
+    this->conectado = conectado;
+    pthread_mutex_unlock(&this->mutexConectado);
+}
+
+bool Avion::getConectado() {
+    pthread_mutex_lock(&this->mutexConectado);
+    bool conectado = this->conectado;
+    pthread_mutex_unlock(&this->mutexConectado);
+    return conectado;
 }

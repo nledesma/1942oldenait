@@ -335,6 +335,7 @@ void Servidor::agregarCliente(int fdCliente, string nombre) {
 
     if(this->escenario->estaActivo() || esperandoEntreEtapas){
         escenario->avion(datos.nroJugador)->setEstadoAnimacion(ESTADO_NORMAL);
+        escenario->avion(datos.nroJugador)->setConectado(true);
     }
     nombres[nombre] = true;
 
@@ -360,6 +361,8 @@ void Servidor::quitarCliente(int clienteFd) {
     advance(itAviones, clientes[clienteFd].nroJugador - 1);
     if(partidaEnJuego) {
         (*itAviones)->setEstadoAnimacion(DESCONECTADO);
+        (*itAviones)->setConectado(false);
+
     }
     clientes[clienteFd].conectado = false;
     clientes[clienteFd].colaSalida.avisar();

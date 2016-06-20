@@ -39,6 +39,8 @@ private:
     int estadoPowerUP;
     string idSprite;
     string idSpriteDisparos;
+    bool conectado = true;
+    pthread_mutex_t mutexConectado = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexMover = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexVidas = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPuntaje = PTHREAD_MUTEX_INITIALIZER;
@@ -49,6 +51,7 @@ private:
     int cantidadDisparos = 0;
     int cantidadAciertos = 0;
     //int contadorColisiones = 3;
+
 
 public:
     Avion(float posX, float posY, float velocidad, float velocidadDisparos, string idSprite, string idSpriteDisparos, int numeroAvion, int vidas, float posXFinal = 0, float posYFinal = 0);
@@ -135,6 +138,10 @@ public:
     int getCantidadAciertos();
 
     int getPorcentajeAciertos();
+
+    void setConectado(bool conectado);
+
+    bool getConectado();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP
