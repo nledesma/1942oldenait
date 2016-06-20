@@ -183,6 +183,9 @@ public:
     void renderizarTextoIniciarPartida();
     void setAvionesSecundarios(list<avionSecundario> avionesSecundarios);
     void renderizarAvionesSecundarios(AvionVista* avion);
+    void agregarAvionSecundarioVista();
+    void cargarVistaAvionesSecundarios();
+
 
 
 };

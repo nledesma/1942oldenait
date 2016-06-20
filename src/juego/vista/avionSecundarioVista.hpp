@@ -31,7 +31,7 @@ public:
 
     void cargarImagen(SDL_Renderer *renderer, int color = BASE);
 
-    void render(SDL_Renderer *renderer);
+    void render(float posX, float posY, int estadoAnimacion, SDL_Renderer *renderer);
 
     int getEstadoAnimacion();
 

@@ -4,12 +4,6 @@ AvionSecundarioVista::AvionSecundarioVista(float posX, float posY){
     this->iniciarAvion(posX, posY);
 }
 
-AvionSecundarioVista::AvionSecundarioVista(string infoAvion){
-    float posX = Decodificador::popFloat(infoAvion);
-    float posY = Decodificador::popFloat(infoAvion);
-    this->iniciarAvion(posX, posY);
-}
-
 AvionSecundarioVista::~AvionSecundarioVista() { }
 
 void AvionSecundarioVista::iniciarAvion(float posX, float posY){
@@ -131,10 +125,10 @@ void AvionSecundarioVista::cargarImagen(SDL_Renderer* renderer, int color){
     }
 }
 
-void AvionSecundarioVista::render(SDL_Renderer* renderer){
+void AvionSecundarioVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer* renderer){
     pthread_mutex_lock(&mutexActualizarAvionesSecundarios);
     if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO) {
-        figura->render((int) posX, (int) posY, renderer, &clipsAnimacion[estadoAnimacion]);
+        figura->render((int)posX, (int)posY, renderer, &clipsAnimacion[estadoAnimacion]);
     }
     pthread_mutex_unlock(&mutexActualizarAvionesSecundarios);
 }

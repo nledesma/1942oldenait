@@ -70,7 +70,6 @@ public:
     void setAvionesSecundariosVista(list <AvionSecundarioVista*> avionesSecundariosVista);
 
     void cargarAvionesSecundariosVista(float posX, float posY);
-
 };
 
 
