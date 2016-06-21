@@ -562,7 +562,7 @@ void Avion::cargarListaAvionesSecundarios(){
 
     AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, IZQUIERDO, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
     this->avionesSecundarios.push_back(avionIzquierdo);
-    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, DERECHO, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + ANCHO_AVION_COMUN, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, DERECHO, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
     this->avionesSecundarios.push_back(avionDerecho);
 }
 

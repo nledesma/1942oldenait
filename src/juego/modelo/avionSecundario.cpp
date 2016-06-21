@@ -76,15 +76,20 @@ void AvionSecundario::mover(float timeStep){
         if (this->estadoAnimacion < 3){
             // cout << "ENTRO AL IF DE MOVER DE AVION SECUNDARIO" << endl;
             this->posX += this->velocidadX * timeStep;
-            if (this->posX < 0) {
-                if(this->ubicacion == DERECHO){
-                    this->posX = ANCHO_AVION_CON_POWER_UP;
-                }else{
-                    this->posX = 0;
+            if (this->ubicacion == IZQUIERDO){
+                if(this->posX < 0){
+                    this->posX = ANCHO_AVION_CON_POWER_UP + ANCHO_AVION_SECUNDARIO;
+                } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO - (ANCHO_AVION_CON_POWER_UP)) {
+                    this->posX = ANCHO_ESCENARIO - this->getAncho();
                 }
-            } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
-                this->posX = ANCHO_ESCENARIO - this->getAncho();
+            } else if (this->ubicacion == DERECHO){
+                if(this->posX < 0){
+                    this->posX = ANCHO_AVION_SECUNDARIO;
+                } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO - (ANCHO_AVION_CON_POWER_UP + ANCHO_AVION_SECUNDARIO)) {
+                    this->posX = ANCHO_ESCENARIO - ANCHO_AVION_CON_POWER_UP - ANCHO_AVION_SECUNDARIO;
+                }
             }
+            cout << "POS X: " << this->posX << "DEL AVION: " << this->ubicacion << endl;
             this->posY += this->velocidadY * timeStep;
             if (this->posY < 0) {
                 this->posY = 0;
