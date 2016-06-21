@@ -224,7 +224,7 @@ void Avion::moverConPowerUP(float timeStep){
             this->posX += this->velocidadX * timeStep;
             cout << "POS X: " << this->posX << endl;
             if (this->posX < 0) {
-                this->posX = 0;
+                this->posX = ANCHO_AVION_SECUNDARIO;
             } else if (this->posX + this->getAncho() > offset) {
                 cout << "ENTRO AL ELSE IF" << endl;
                 this->posX = cambiarPosicion;
