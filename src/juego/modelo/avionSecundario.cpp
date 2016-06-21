@@ -69,9 +69,11 @@ void AvionSecundario::manejarEvento(int evento){
 
 
 void AvionSecundario::mover(float timeStep){
+    // cout << "ENTRO AL MOVER DE AVION SECUNDARIO" << endl;
     pthread_mutex_lock(&this->mutexMoverAvionSecundario);
     if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO) {
         if (this->estadoAnimacion < 3){
+            // cout << "ENTRO AL IF DE MOVER DE AVION SECUNDARIO" << endl;
             this->posX += this->velocidadX * timeStep;
             if (this->posX < 0) {
                 this->posX = 0;
@@ -142,11 +144,15 @@ int AvionSecundario::getEstadoAnimacion(){
 }
 
 vector<Disparo*> AvionSecundario::disparar(){
+    cout << "ENTRO A DISPARAR DE AVION SECUNDARIO" << endl;
     // Por ahora sale con la misma velocidad y posición que el avión.
     vector<Disparo*> disparos;
     if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
-        return disparos;
-        this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO;
+        //return disparos;
+        // this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO_AVION_SECUNDARIO;
+        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_SECUNDARIO / 2.f - ANCHO_DISPARO_COMUN / 2.f,
+                                       this->getPosicionY(), velocidadDisparos));
+        this->cantidadDisparos+= 1;
     }
     return disparos;
 }

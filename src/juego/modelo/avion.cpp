@@ -50,7 +50,21 @@ AvionSecundario* Avion::getAvionSecundario(){
     return avionSecundario;
 }
 
+void Avion::manejarAvionesSecundarios(int evento){
+    for(list<AvionSecundario*>::iterator itAvionesSecundarios = this->avionesSecundarios.begin(); itAvionesSecundarios != this->avionesSecundarios.end(); itAvionesSecundarios++){
+        AvionSecundario* avionSecundario = (*itAvionesSecundarios);
+        avionSecundario->manejarEvento(evento);
+    }
+}
 
+vector<Disparo*> Avion::dispararAvionesSecundarios(){
+    vector<Disparo*> disparo;
+    for(list<AvionSecundario*>::iterator itAvionesSecundarios = this->avionesSecundarios.begin(); itAvionesSecundarios != this->avionesSecundarios.end(); itAvionesSecundarios++){
+        AvionSecundario* avionSecundario = (*itAvionesSecundarios);
+        disparo = avionSecundario->disparar();
+    }
+    return disparo;
+}
 
 void Avion::manejarEvento(int evento){
     /* Se realizan acciones de avión si el mismo no esta loopeando */
@@ -244,15 +258,15 @@ vector<Disparo*> Avion::disparar(){
                                 this->getPosicionY(), velocidadDisparos));
             this->cantidadDisparos+= 2;
         } else if (this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS){
-            disparos.push_back(
-                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,
-                                this->getPosicionY() + 15, velocidadDisparos));
+            // disparos.push_back(
+            //         new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,
+            //                     this->getPosicionY() + 15, velocidadDisparos));
             disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f,
                                            this->getPosicionY(), velocidadDisparos));
-            disparos.push_back(
-                    new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 25,
-                                this->getPosicionY() + 15, velocidadDisparos));
-            this->cantidadDisparos+= 3;
+            // disparos.push_back(
+            //         new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f + 25,
+            //                     this->getPosicionY() + 15, velocidadDisparos));
+            this->cantidadDisparos+= 1;
         } else if (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE){
             disparos.push_back(
                     new Disparo(this->getPosicionX() + ANCHO_AVION_COMUN / 2.f - ANCHO_DISPARO_COMUN / 2.f - 25,

@@ -125,10 +125,10 @@ void AvionSecundarioVista::cargarImagen(SDL_Renderer* renderer, int color){
     }
 }
 
-void AvionSecundarioVista::render(float posX, float posY, int estadoAnimacion, SDL_Renderer* renderer){
+void AvionSecundarioVista::render(float posX, float posY, int estado, SDL_Renderer* renderer){
     pthread_mutex_lock(&mutexActualizarAvionesSecundarios);
     if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO) {
-        figura->render((int)posX, (int)posY, renderer, &clipsAnimacion[estadoAnimacion]);
+        figura->render((int)posX, (int)posY, renderer, &clipsAnimacion[estado]);
     }
     pthread_mutex_unlock(&mutexActualizarAvionesSecundarios);
 }

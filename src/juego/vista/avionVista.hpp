@@ -23,7 +23,7 @@ private:
     void iniciarAvion(float posX, float posY , string pathSprite, int estadoPowerUP);
     int vidas;
     int estadoPowerUP;
-    list<AvionSecundarioVista*> avionesSecundariosVista;
+
 public:
     AvionVista(float posX, float posY, string pathSprite,  int estadoPowerUP);
 
@@ -65,11 +65,6 @@ public:
 
     void cerrar();
 
-    list<AvionSecundarioVista*> &getAvionesSecundariosVista();
-
-    void setAvionesSecundariosVista(list <AvionSecundarioVista*> avionesSecundariosVista);
-
-    void cargarAvionesSecundariosVista(float posX, float posY);
 };
 
 

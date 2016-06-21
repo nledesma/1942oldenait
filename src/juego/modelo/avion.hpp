@@ -141,6 +141,10 @@ public:
     list<AvionSecundario*> &getAvionesSecundarios();
 
     void cargarListaAvionesSecundarios();
+
+    void manejarAvionesSecundarios(int evento);
+
+    vector<Disparo*> dispararAvionesSecundarios();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

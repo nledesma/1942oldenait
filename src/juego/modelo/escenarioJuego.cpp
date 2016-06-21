@@ -118,12 +118,16 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
     vector<Disparo *> disparo;
+    vector<Disparo *> disparo2;
     switch (evento) {
         case PRESIONA_R:
             reset();
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
+            if((avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
+                disparo2 = avion(nroAvion)->dispararAvionesSecundarios();
+            }
             if (!disparo.empty()) {
                 for (unsigned int i = 0; i < disparo.size(); i++) {
                     disparo[i]->setAvion(nroAvion);
@@ -139,6 +143,9 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             // TODO x para la partida para todos?
         default:
             avion(nroAvion)->manejarEvento(evento);
+            if((avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
+                avion(nroAvion)->manejarAvionesSecundarios(evento);
+            }
             break;
     }
 }

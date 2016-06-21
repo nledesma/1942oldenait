@@ -213,9 +213,6 @@ int AvionVista::actualizar(string codigo){
     this->posY = Decodificador::popFloat(codigo);
     int estadoPowerUPActual = Decodificador::popInt(codigo);
     this->estadoPowerUP = estadoPowerUPActual;
-    if (((this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE)) && (this->avionesSecundariosVista.size() == 0)){
-        cargarAvionesSecundariosVista(this->posX,this->posY);
-    }
     int estadoAnimacionActual = Decodificador::popInt(codigo);
     this->vidas = Decodificador::popInt(codigo);
     if (estadoAnimacionActual >= OFFSET_ESTADO_DISPARO && estadoAnimacionActual < OFFSET_ESTADO_LOOP){
@@ -300,19 +297,6 @@ int AvionVista::getVidas(){
     return this->vidas;
 }
 
-void AvionVista::cargarAvionesSecundariosVista(float posX, float posY){
-    //cout << "Las posiciones recibidas en AvionVista son: X: " << posX << " Y: " << posY << endl;
-    AvionSecundarioVista* avionSecundarioVistaIzquierdo = new AvionSecundarioVista(posX - ANCHO_AVION_COMUN, posY);
-    this->avionesSecundariosVista.push_back(avionSecundarioVistaIzquierdo);
-    AvionSecundarioVista* avionSecundarioVistaDerecho = new AvionSecundarioVista(posX + ANCHO_AVION_COMUN, posY);
-    this->avionesSecundariosVista.push_back(avionSecundarioVistaDerecho);
-}
-
-list<AvionSecundarioVista*> &AvionVista::getAvionesSecundariosVista(){
-  return this->avionesSecundariosVista;
-}
-
 int AvionVista::getEstadoPowerUp(){
     return this->estadoPowerUP;
 }
-//
