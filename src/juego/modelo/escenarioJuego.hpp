@@ -11,6 +11,7 @@
 #include "avionGrande.hpp"
 #include "avionDeEscuadron.hpp"
 #include "avionEnemigo.hpp"
+#include "avionSecundario.hpp"
 #include "powerUp.hpp"
 #include "powerUpBonificacion.hpp"
 #include "powerUpDestruirEnemigos.hpp"
@@ -42,6 +43,7 @@ private:
     list<AvionEnemigo*> enemigos;
     list<Elemento*> elementos;
     list<Disparo*> disparos;
+    list<DisparoAvionSecundario*> disparosAvionesSecundarios;
     list<DisparoEnemigo*> disparosEnemigos;
     list<PowerUp*> powerUps;
     /* Specs */
@@ -61,6 +63,7 @@ private:
     Temporizador temporizador;
     ColaConcurrente<pair<int, int>> colaEventos;
     pthread_mutex_t mutexListaDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexListaDisparosAvionesSecundarios = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaDisparosEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexListaEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
@@ -137,6 +140,9 @@ public:
     void crearPowerUpBonus(float posX, float posY, int valor);
     void setEquipo(int nroAvion, int equipo);
     void moverAvionesSecundarios(float timestep, Avion * avion);
+    void proyectarDisparosAvionesSecundarios(float timeStep);
+    void moverDisparosAvionesSecundarios(float timeStep);
+    list<DisparoAvionSecundario *> getDisparosAvionesSecundarios();
 };
 
 

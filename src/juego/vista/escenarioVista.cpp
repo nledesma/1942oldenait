@@ -157,6 +157,23 @@ void EscenarioVista::actualizarComponentes(string infoActualizacion) {
     }
     this->setDisparos(disparos);
 
+    list<disparoAvionSecundario> disparosAvionesSecundarios;
+    int cantDisparosAvionesSecundarios = Decodificador::popInt(infoActualizacion);
+    if (cantDisparosAvionesSecundarios != 0) {
+    }
+    for (int i = 0; i < cantDisparosAvionesSecundarios; ++i) {
+        disparoAvionSecundario unDisparoAvionSecundario;
+        unDisparoAvionSecundario.posX = Decodificador::popFloat(infoActualizacion);
+        //TODO la pos X llega bien, la pos Y no.
+        // cout << "POS X DEL DISPARO DEL AVION SECUNDARIO: " << unDisparoAvionSecundario.posX << endl;
+        unDisparoAvionSecundario.posY = Decodificador::popFloat(infoActualizacion);
+        // cout << "POS Y DEL DISPARO DEL AVION SECUNDARIO: " << unDisparoAvionSecundario.posY << endl;
+        unDisparoAvionSecundario.estado = Decodificador::popInt(infoActualizacion);
+        // cout << "ESTADO DEL DISPARO DEL AVION SECUNDARIO: " << unDisparoAvionSecundario.estado << endl;
+        disparosAvionesSecundarios.push_front(unDisparoAvionSecundario);
+    }
+    this->setDisparosAvionesSecundarios(disparosAvionesSecundarios);
+
     int cantEnemigos = Decodificador::popInt(infoActualizacion);
     list<enemigo> enemigos;
     for (int i = 0; i < cantEnemigos; ++i) {
@@ -268,6 +285,7 @@ int EscenarioVista::mainLoop(){
         this->renderizarPowerUps();
         this->renderizarAviones();
         this->renderizarDisparos();
+        this->renderizarDisparosAvionesSecundarios();
         this->renderizarDisparosEnemigos();
         this->renderizarEnemigos();
         // NOTE esta imágen se recarga si hubo cambios y debe estar en este thread.
@@ -371,6 +389,7 @@ void EscenarioVista::cerrar() {
         elementoVista->cerrar();
     }
     this->disparoVista->cerrar();
+    this->disparoAvionSecundarioVista->cerrar();
     // this->ventana->cerrar();
 }
 
@@ -378,6 +397,12 @@ void EscenarioVista::setDisparos(list<disparo> disparosParam){
     pthread_mutex_lock(&this->mutexDisparos);
     this->disparos = disparosParam;
     pthread_mutex_unlock(&this->mutexDisparos);
+}
+
+void EscenarioVista::setDisparosAvionesSecundarios(list<disparoAvionSecundario> disparosAvionesSecundariosParam){
+    pthread_mutex_lock(&this->mutexDisparosAvionesSecundarios);
+    this->disparosAvionesSecundarios = disparosAvionesSecundariosParam;
+    pthread_mutex_unlock(&this->mutexDisparosAvionesSecundarios);
 }
 
 void EscenarioVista::setDisparosEnemigos(list<disparoEnemigo> disparosEnemigosParam){
@@ -417,6 +442,7 @@ void EscenarioVista::agregarAvionVista(string infoAvion){
 
 void EscenarioVista::agregarDisparoVista(string pathSprite){
     this->disparoVista = new DisparoVista(pathSprite);
+    this->disparoAvionSecundarioVista = new DisparoAvionSecundarioVista(pathSprite);
 }
 
 void EscenarioVista::agregarDisparoEnemigoVista(){
@@ -467,6 +493,7 @@ void EscenarioVista::cargarVistasElementos(){
 
 void EscenarioVista::cargarVistaDisparos() {
     this->disparoVista->cargarImagen(this->ventana->getVentanaRenderer());
+    this->disparoAvionSecundarioVista->cargarImagen(this->ventana->getVentanaRenderer());
 }
 
 void EscenarioVista::cargarVistaDisparosEnemigos() {
@@ -608,6 +635,41 @@ void EscenarioVista::renderizarDisparos(){
     pthread_mutex_unlock(&mutexDisparos);
 }
 
+void EscenarioVista::renderizarDisparosAvionesSecundarios(){
+    list<AvionVista*>::iterator iterador;
+    AvionVista* avionDelCliente;
+
+    int i = 0;
+    for(iterador = this->getAviones().begin(); iterador != this->getAviones().end(); ++iterador) {
+        ++i;
+        // Primero dibujamos los aviones que no le correspondan a este cliente.
+        if (i != nroAvion) {
+            AvionVista* avion = *iterador;
+            if ((avion->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avion->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
+                pthread_mutex_lock(&mutexDisparosAvionesSecundarios);
+                for(list<disparoAvionSecundario>::iterator iterador = this->disparosAvionesSecundarios.begin(); iterador != this->disparosAvionesSecundarios.end(); ++iterador) {
+                    disparoAvionSecundario disparo1 = *iterador;
+                    disparoAvionSecundarioVista->render(disparo1.posX, disparo1.posY, disparo1.estado, this->ventana->getVentanaRenderer());
+                }
+                pthread_mutex_unlock(&mutexDisparosAvionesSecundarios);
+            }
+        } else {
+            avionDelCliente = *iterador;
+        }
+    }
+    avionDelCliente->render(this->ventana->getVentanaRenderer());
+    //cout << "Estado del powerup: " << avionDelCliente->getEstadoPowerUp() << endl;
+    if ((avionDelCliente->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avionDelCliente->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
+        pthread_mutex_lock(&mutexDisparosAvionesSecundarios);
+        for(list<disparoAvionSecundario>::iterator iterador = this->disparosAvionesSecundarios.begin(); iterador != this->disparosAvionesSecundarios.end(); ++iterador) {
+            disparoAvionSecundario disparo1 = *iterador;
+            disparoAvionSecundarioVista->render(disparo1.posX, disparo1.posY, disparo1.estado, this->ventana->getVentanaRenderer());
+        }
+        pthread_mutex_unlock(&mutexDisparosAvionesSecundarios);
+    }
+
+}
+
 void EscenarioVista::renderizarDisparosEnemigos(){
     pthread_mutex_lock(&mutexDisparosEnemigos);
     for(list<disparoEnemigo>::iterator iterador = this->disparosEnemigos.begin(); iterador != this->disparosEnemigos.end(); ++iterador) {
@@ -658,7 +720,7 @@ void EscenarioVista::renderizarAvionesSecundarios(AvionVista* avion){
     pthread_mutex_lock(&mutexAvionesSecundarios);
     for(list<avionSecundario>::iterator iterador = this->avionesSecundarios.begin(); iterador != this->avionesSecundarios.end(); ++iterador){
         avionSecundario unAvionSecundario = *iterador;
-        cout << "AVION SECUNDARIO VISTA ESTADO DE ANIMACION: " << unAvionSecundario.estadoAnimacion << endl;
+        // cout << "AVION SECUNDARIO VISTA ESTADO DE ANIMACION: " << unAvionSecundario.estadoAnimacion << endl;
         this->avionSecundarioVista->render(unAvionSecundario.posX,unAvionSecundario.posY, unAvionSecundario.estadoAnimacion,ventana->getVentanaRenderer());
     }
     pthread_mutex_unlock(&mutexAvionesSecundarios);

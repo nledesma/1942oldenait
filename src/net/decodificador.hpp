@@ -22,6 +22,7 @@ public:
     static void push(string & codigo, Elemento *e);
     static void push(string & codigo, Avion *a);
     static void push(string & codigo, Disparo *d);
+    static void push(string & codigo, DisparoAvionSecundario *d);
     static void push(string & codigo, DisparoEnemigo *d);
     static void push(string & codigo, AvionEnemigo *enemigo);
     static void push(string & codigo, EscenarioJuego *e);

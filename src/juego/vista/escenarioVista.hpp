@@ -13,6 +13,7 @@
 #include "elementoVista.hpp"
 #include "etapaVista.hpp"
 #include "disparoVista.hpp"
+#include "disparoAvionSecundarioVista.hpp"
 #include "soundboard.hpp"
 #include "../../accesorios/colaConcurrente/colaConcurrente.hpp"
 #include "../../accesorios/temporizador.hpp"
@@ -82,6 +83,7 @@ private:
     list<AvionVista *> aviones;
     list<ElementoVista *> elementos;
     DisparoVista* disparoVista;
+    DisparoAvionSecundarioVista* disparoAvionSecundarioVista;
     DisparoEnemigoVista* disparoEnemigoVista;
     EnemigoPequenio* enemigoPequenio;
     EnemigoDeEscuadron* enemigoDeEscuadron;
@@ -89,6 +91,7 @@ private:
     EnemigoGrande* enemigoGrande;
     list<powerUp> powerUps;
     list<disparo> disparos;
+    list<disparoAvionSecundario> disparosAvionesSecundarios;
     list<disparoEnemigo> disparosEnemigos;
     list<enemigo> enemigos;
     list<avionSecundario> avionesSecundarios;
@@ -108,6 +111,7 @@ private:
     /* Sincronización */
     pthread_mutex_t mutexActualizar = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparos = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutexDisparosAvionesSecundarios = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexDisparosEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexEnemigos = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t mutexPowerUps = PTHREAD_MUTEX_INITIALIZER;
@@ -185,6 +189,8 @@ public:
     void renderizarAvionesSecundarios(AvionVista* avion);
     void agregarAvionSecundarioVista();
     void cargarVistaAvionesSecundarios();
+    void setDisparosAvionesSecundarios(list<disparoAvionSecundario> disparosAvionesSecundariosParam);
+    void renderizarDisparosAvionesSecundarios();
 
 
 

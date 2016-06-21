@@ -9,7 +9,7 @@
 #include "../../accesorios/codigo.hpp"
 #include "../../accesorios/default.hpp"
 #include "../../accesorios/colisiones/colisionable.hpp"
-#include "disparo.hpp"
+#include "disparoAvionSecundario.hpp"
 #include <pthread.h>
 
 #define AVION_SECUNDARIO_ANCHO ANCHO_AVION_SECUNDARIO;
@@ -47,7 +47,7 @@ public:
 
     void manejarEvento(int evento);
 
-    vector<Disparo*> disparar();
+    vector<DisparoAvionSecundario*> disparar();
 
     float getVelocidad();
 

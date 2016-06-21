@@ -88,6 +88,7 @@ void AvionSecundario::mover(float timeStep){
             }
             this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION_SECUNDARIO);
         }
+        // cout << "POS X MOVIENDOSE: " << this->getPosicionX() << endl;
     }
     pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
 }
@@ -143,14 +144,19 @@ int AvionSecundario::getEstadoAnimacion(){
     return estado;
 }
 
-vector<Disparo*> AvionSecundario::disparar(){
-    cout << "ENTRO A DISPARAR DE AVION SECUNDARIO" << endl;
+vector<DisparoAvionSecundario*> AvionSecundario::disparar(){
+    // cout << "ENTRO A DISPARAR DE AVION SECUNDARIO" << endl;
     // Por ahora sale con la misma velocidad y posición que el avión.
-    vector<Disparo*> disparos;
+    vector<DisparoAvionSecundario*> disparos;
     if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
         //return disparos;
         // this->estadoAnimacion = this->estadoAnimacion + OFFSET_ESTADO_DISPARO_AVION_SECUNDARIO;
-        disparos.push_back(new Disparo(this->getPosicionX() + ANCHO_AVION_SECUNDARIO / 2.f - ANCHO_DISPARO_COMUN / 2.f,
+        //TODO estos couts de aca abajo indicarian que en el modelo los aviones secundarios disparan bien.
+        // cout << "POSICION X DEL AVION SECUNDARIO: " << this->getPosicionX() << endl;
+        // cout << "POSICION Y DEL AVION SECUNDARIO: " << this->getPosicionY() << endl;
+        // cout << "POSICION X DONDE VA A DISPARAR EL AVION SECUNDARIO: " << this->getPosicionX() + ANCHO_AVION_SECUNDARIO / 2.f - ANCHO_DISPARO_COMUN / 2.f << endl;
+        // cout << "POSICION Y DONDE VA A DISPARAR EL AVION SECUNDARIO: " << this->getPosicionY() << endl;
+        disparos.push_back(new DisparoAvionSecundario(this->getPosicionX() + ANCHO_AVION_SECUNDARIO / 2.f - ANCHO_DISPARO_COMUN / 2.f,
                                        this->getPosicionY(), velocidadDisparos));
         this->cantidadDisparos+= 1;
     }

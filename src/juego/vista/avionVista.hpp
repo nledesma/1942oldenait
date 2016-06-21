@@ -65,6 +65,8 @@ public:
 
     void cerrar();
 
+    void renderizarDisparosAvionesSecundarios();
+
 };
 
 

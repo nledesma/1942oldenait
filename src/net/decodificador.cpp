@@ -59,7 +59,17 @@ void Decodificador::push(string &codigo, PowerUp *powerUp){
 /* Push y pop de disparo. */
 void Decodificador::push(string & codigo, Disparo *d) {
     push(codigo, d->getPosX());
+    // cout << "EN EL PUSH LA POS X ES : " << d->getPosX() << endl;
     push(codigo, d->getPosY());
+    // cout << "EN EL PUSH LA POS Y ES : " << d->getPosY() << endl;
+    push(codigo, d->getEstado());
+}
+
+void Decodificador::push(string & codigo, DisparoAvionSecundario *d) {
+    push(codigo, d->getPosX());
+    // cout << "EN EL PUSH LA POS X ES : " << d->getPosX() << endl;
+    push(codigo, d->getPosY());
+    // cout << "EN EL PUSH LA POS Y ES : " << d->getPosY() << endl;
     push(codigo, d->getEstado());
 }
 
@@ -271,9 +281,25 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
     if(!disparos.empty()){
         for(list<Disparo*>::iterator iterador = disparos.begin(); iterador != disparos.end(); ++iterador) {
             Disparo* disparo = *iterador;
+            // cout << "EN EL DECO LA POS X DEL DISPARO ES: " << disparo->getPosX() << endl;
+            // cout << "EN EL DECO LA POS Y DEL DISPARO ES: " << disparo->getPosY() << endl;
             Decodificador::push(codigo, disparo);
         }
     }
+
+    //TODO a partir de aca agregue
+    list <DisparoAvionSecundario*> disparosAvionesSecundarios = escenarioJuego->getDisparosAvionesSecundarios();
+    // cout « "EN EL DECO EL TAMAÑO DE LA LISTA DE AVIONES SECUNDARIOS DE AVION ES: " « avionesSecundarios.size()« endl;
+    Decodificador::pushCantidad(codigo, (int) disparosAvionesSecundarios.size());
+    if(!disparosAvionesSecundarios.empty()){
+        for(list<DisparoAvionSecundario*>::iterator iterador = disparosAvionesSecundarios.begin(); iterador != disparosAvionesSecundarios.end(); ++iterador){
+            DisparoAvionSecundario* disparoAvionSecundario = *iterador;
+            // cout << "EN EL DECO LA POS X DEL DISPARO ES: " << disparoAvionSecundario->getPosX() << endl;
+            // cout << "EN EL DECO LA POS Y DEL DISPARO ES: " << disparoAvionSecundario->getPosY() << endl;
+            Decodificador::push(codigo, disparoAvionSecundario);
+        }
+    }
+    //TODO hasta aca agregue
     list<AvionEnemigo*> enemigos = escenarioJuego->getEnemigos();
     Decodificador::pushCantidad(codigo, (int) enemigos.size());
     if(!enemigos.empty()){
@@ -282,6 +308,7 @@ string Decodificador::getCodigoEstadoActual(EscenarioJuego *escenarioJuego) {
             Decodificador::push(codigo, enemigo);
         }
     }
+
     list<DisparoEnemigo*> disparosEnemigos = escenarioJuego->getDisparosEnemigos();
     Decodificador::pushCantidad(codigo, (int) disparosEnemigos.size());
     if(!disparosEnemigos.empty()){

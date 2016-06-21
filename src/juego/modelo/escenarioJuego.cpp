@@ -31,6 +31,7 @@ EscenarioJuego::EscenarioJuego(float velocidadDesplazamientoY, int ancho, int al
 
 void EscenarioJuego::reset() {
     disparos.clear();
+    disparosAvionesSecundarios.clear();
     posicionY = 0;
     this->enemigos.clear();
     this->disparosEnemigos.clear();
@@ -53,6 +54,7 @@ EscenarioJuego::~EscenarioJuego() {
     while(!this->aviones.empty()) delete this->aviones.front(), this->aviones.pop_front();
     while(!this->elementos.empty()) delete this->elementos.front(), this->elementos.pop_front();
     while(!this->disparos.empty()) delete this->disparos.front(), this->disparos.pop_front();
+    while(!this->disparosAvionesSecundarios.empty()) delete this->disparosAvionesSecundarios.front(), this->disparosAvionesSecundarios.pop_front();
     while(!this->powerUps.empty()) delete this->powerUps.front(), this->powerUps.pop_front();
 }
 
@@ -118,7 +120,7 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
 
 void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
     vector<Disparo *> disparo;
-    vector<Disparo *> disparo2;
+    vector<DisparoAvionSecundario *> disparo2;
     switch (evento) {
         case PRESIONA_R:
             reset();
@@ -127,6 +129,19 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             disparo = avion(nroAvion)->disparar();
             if((avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
                 disparo2 = avion(nroAvion)->dispararAvionesSecundarios();
+                if (!disparo2.empty()) {
+                    for (unsigned int i = 0; i < disparo2.size(); i++) {
+                        disparo2[i]->setAvion(nroAvion);
+                        // cout << "DISPARO AVION SECUNDARIO: " << disparo2[i] << endl;
+                        pthread_mutex_lock(&this->mutexListaDisparosAvionesSecundarios);
+                        disparosAvionesSecundarios.push_back(disparo2[i]);
+                        // cout << "SE AGREGO EL DISPARO DEL AVION SECUNDARIO A LA LISTA" << endl;
+                        //TODO aca los disparos parecen llegar bien!.
+                        // cout << "SE AGREGO EL DISPARO DE AVION SECUNDARIO EN LA POS X: " << disparo2[i]->getPosX() << endl;
+                        // cout << "SE AGREGO EL DISPARO DE AVION SECUNDARIO EN LA POS Y: " << disparo2[i]->getPosY() << endl;
+                        pthread_mutex_unlock(&this->mutexListaDisparosAvionesSecundarios);
+                    }
+                }
             }
             if (!disparo.empty()) {
                 for (unsigned int i = 0; i < disparo.size(); i++) {
@@ -145,6 +160,19 @@ void EscenarioJuego::manejarEvento(int nroAvion, int evento) {
             avion(nroAvion)->manejarEvento(evento);
             if((avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (avion(nroAvion)->getEstadoPowerUp() == ESTADO_POWER_UP_DOBLE)){
                 avion(nroAvion)->manejarAvionesSecundarios(evento);
+                if (!disparo2.empty()) {
+                    for (unsigned int i = 0; i < disparo2.size(); i++) {
+                        disparo2[i]->setAvion(nroAvion);
+                        // cout << "DISPARO AVION SECUNDARIO: " << disparo2[i] << endl;
+                        pthread_mutex_lock(&this->mutexListaDisparosAvionesSecundarios);
+                        disparosAvionesSecundarios.push_back(disparo2[i]);
+                        // cout << "SE AGREGO EL DISPARO DEL AVION SECUNDARIO A LA LISTA" << endl;
+                        //TODO aca los disparos parecen llegar bien!.
+                        // cout << "SE AGREGO EL DISPARO DE AVION SECUNDARIO EN LA POS X: " << disparo2[i]->getPosX() << endl;
+                        // cout << "SE AGREGO EL DISPARO DE AVION SECUNDARIO EN LA POS Y: " << disparo2[i]->getPosY() << endl;
+                        pthread_mutex_unlock(&this->mutexListaDisparosAvionesSecundarios);
+                    }
+                }
             }
             break;
     }
@@ -164,6 +192,7 @@ void EscenarioJuego::comenzarEtapa() {
     scrollingOffset = 0;
     posicionY = 0;
     disparos.clear();
+    disparosAvionesSecundarios.clear();
     this->infoEscuadrones.clear();
     elementos = etapaActual()->getElementos();
     powerUps = etapaActual()->getPowerUps();
@@ -218,15 +247,18 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
         this->moverEnemigos(timeStep);
         this->moverPowerUps(timeStep);
         this->proyectarDisparos(timeStep);
+        this->proyectarDisparosAvionesSecundarios(timeStep);
         this->moverDisparosEnemigos(timeStep);
         this->manejarProximoEvento();
         this->verificarColisiones();
         this->moverDisparos(timeStep);
+        this->moverDisparosAvionesSecundarios(timeStep);
         this->getProximoEnemigo();
     } else {
         this->moverEnemigos(timeStep);
         this->moverDisparosEnemigos(timeStep);
         this->moverDisparos(timeStep);
+        this->moverDisparosAvionesSecundarios(timeStep);
         bool avionesEstacionados = this->moverAvionesAposicionFinal(timeStep);
         if (avionesEstacionados){
             pthread_mutex_lock(&this->mutexListaEnemigos);
@@ -235,6 +267,9 @@ void EscenarioJuego::actualizarEstado(float timeStep) {
             pthread_mutex_lock(&this->mutexListaDisparos);
             this->disparos.clear();
             pthread_mutex_unlock(&this->mutexListaDisparos);
+            pthread_mutex_lock(&this->mutexListaDisparosAvionesSecundarios);
+            this->disparosAvionesSecundarios.clear();
+            pthread_mutex_unlock(&this->mutexListaDisparosAvionesSecundarios);
             pthread_mutex_lock(&this->mutexListaDisparosEnemigos);
             this->disparosEnemigos.clear();
             pthread_mutex_unlock(&this->mutexListaDisparosEnemigos);
@@ -379,6 +414,25 @@ void EscenarioJuego::moverDisparos(float timeStep) {
     }
 }
 
+void EscenarioJuego::moverDisparosAvionesSecundarios(float timeStep) {
+    if (this->disparosAvionesSecundarios.size() > 0) {
+        for (list<DisparoAvionSecundario *>::iterator iterador = disparosAvionesSecundarios.begin(); iterador != disparosAvionesSecundarios.end(); iterador++) {
+            if ((*iterador)->mover(timeStep) == 0) {
+                //TODO aca ya llega mal.
+                // cout << "SE MOVIO EL DISPARO EN LA POS X: " << (*iterador)->getPosX() << endl;
+                // cout << "SE MOVIO EL DISPARO EN LA POS Y: " << (*iterador)->getPosY() << endl;
+//                // Por ahora se añade el puntaje cuando el disparo se va de la pantalla.
+//                subirPuntaje(1, (*iterador)->getNroAvion());
+//                // Se borra el disparo.
+                delete (*iterador);
+                pthread_mutex_lock(&this->mutexListaDisparosAvionesSecundarios);
+                iterador = disparosAvionesSecundarios.erase(iterador);
+                pthread_mutex_unlock(&this->mutexListaDisparosAvionesSecundarios);
+            }
+        }
+    }
+}
+
 void EscenarioJuego::moverDisparosEnemigos(float timeStep) {
     if (this->disparosEnemigos.size() > 0) {
         for (list<DisparoEnemigo *>::iterator iterador = disparosEnemigos.begin(); iterador != disparosEnemigos.end(); iterador++) {
@@ -457,6 +511,15 @@ list<Disparo *> EscenarioJuego::getDisparos() {
     pthread_mutex_unlock(&this->mutexListaDisparos);
     return listaDisparos;
 }
+
+list<DisparoAvionSecundario *> EscenarioJuego::getDisparosAvionesSecundarios() {
+    list<DisparoAvionSecundario*> listaDisparosAvionesSecundarios;
+    pthread_mutex_lock(&this->mutexListaDisparosAvionesSecundarios);
+    listaDisparosAvionesSecundarios = this->disparosAvionesSecundarios;
+    pthread_mutex_unlock(&this->mutexListaDisparosAvionesSecundarios);
+    return listaDisparosAvionesSecundarios;
+}
+
 
 list<DisparoEnemigo *> EscenarioJuego::getDisparosEnemigos() {
     list<DisparoEnemigo *> listaDisparosEnemigos;
@@ -556,7 +619,7 @@ void EscenarioJuego::verificarColisiones(){
     this->grilla->ubicarEnemigos(this->enemigos);
     this->grilla->verificarColisiones();
     this->grilla->limpiarGrilla();*/
-
+    //TODO faltarian las colisiones de los disparos de los aviones secundarios.
     for(list<Disparo*>::iterator itDisparos = this->disparos.begin(); itDisparos != this->disparos.end(); itDisparos++){
         AvionEnemigo* enemigoAColisionar = NULL;
         //TODO refactor, esto se usa para ver cual es el avion enemigo más cercano al enemigo, pero el codigo quedó horrible
@@ -694,7 +757,16 @@ void EscenarioJuego::aplicarPowerUp(PowerUp* powerUp, Avion* avion){
 
 void EscenarioJuego::proyectarDisparos(float timeStep) {
     for(list<Disparo*>::iterator itDisparos = this->disparos.begin(); itDisparos != this->disparos.end(); itDisparos++){
+        // cout << "SE VA A PROYECTAR EL DISAPRO EN LA POS X: " << (*itDisparos)->getPosX() << endl;
+        // cout << "SE VA A PROYECTAR EL DISAPRO EN LA POS Y: " << (*itDisparos)->getPosY() << endl;
         (*itDisparos)->getColisionable()->proyectarColisionable(timeStep);
+    }
+}
+
+void EscenarioJuego::proyectarDisparosAvionesSecundarios(float timeStep) {
+    for(list<DisparoAvionSecundario*>::iterator itDisparosAvionesSecundarios = this->disparosAvionesSecundarios.begin();
+    itDisparosAvionesSecundarios != this->disparosAvionesSecundarios.end(); itDisparosAvionesSecundarios++){
+        (*itDisparosAvionesSecundarios)->getColisionable()->proyectarColisionable(timeStep);
     }
 }
 

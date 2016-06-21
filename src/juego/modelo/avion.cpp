@@ -57,13 +57,21 @@ void Avion::manejarAvionesSecundarios(int evento){
     }
 }
 
-vector<Disparo*> Avion::dispararAvionesSecundarios(){
-    vector<Disparo*> disparo;
+vector<DisparoAvionSecundario*> Avion::dispararAvionesSecundarios(){
+    //TODO aca los disparos se mandan bien.!
+    // cout << "ENTRO AL METODO DISPARAR AVIONES SECUNDARIOS DE AVION COMUN" << endl;
+    vector<DisparoAvionSecundario*> disparos;
     for(list<AvionSecundario*>::iterator itAvionesSecundarios = this->avionesSecundarios.begin(); itAvionesSecundarios != this->avionesSecundarios.end(); itAvionesSecundarios++){
         AvionSecundario* avionSecundario = (*itAvionesSecundarios);
-        disparo = avionSecundario->disparar();
+        // cout << "ESTA POR DISPARAR UN AVION SECUNDARIO" << endl;
+        disparos = avionSecundario->disparar();
+        // cout << "DISPARO: " << disparo[i] << endl;
     }
-    return disparo;
+    // for(int i = 0; i < disparos.size(); i++){
+    //     cout << "DISPARO AVION SECUNDARIO EN X: " << disparos[i]->getPosX() << endl;
+    //     cout << "DISPARO AVION SECUNDARIO EN Y: " << disparos[i]->getPosY() << endl;
+    // }
+    return disparos;
 }
 
 void Avion::manejarEvento(int evento){
@@ -135,6 +143,75 @@ void Avion::disminuirTiempoInmunidad(float timestep) {
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
+    if((this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE)){
+        moverConPowerUP(timeStep);
+    } else {
+        if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
+            if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
+                this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
+            } else if (this->estadoAnimacion >= OFFSET_ESTADO_LOOP && this->estadoAnimacion < OFFSET_ESTADO_EXPLOSION) {
+                this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_LOOP;
+            } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION) {
+                this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
+            }
+            if (this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
+                this->posX += this->velocidadX * timeStep;
+                if (this->posX < 0) {
+                    this->posX = 0;
+                } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
+                    this->posX = ANCHO_ESCENARIO - this->getAncho();
+                }
+                this->posY += this->velocidadY * timeStep;
+                if (this->posY < 0) {
+                    this->posY = 0;
+                } else if (this->posY + this->getAlto() > ALTO_ESCENARIO) {
+                    this->posY = ALTO_ESCENARIO - this->getAlto();
+                }
+                this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
+            } else {
+                if (this->estadoAnimacion != DESCONECTADO) {
+                    if (this->contador > 0) {
+                        this->contador--;
+                        if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5) {
+                            this->posY -= (this->velocidad / 2.f) * timeStep;
+                        } else if (this->estadoAnimacion >= LOOP_ETAPA_7 && this->estadoAnimacion < LOOP_ETAPA_13) {
+                            this->posY += (this->velocidad / 2.f) * timeStep;
+                        }
+                    } else {
+                        this->contador = CONTADOR_INICIAL;
+                        if (this->estadoAnimacion == LOOP_ETAPA_17) {
+                            this->estadoAnimacion = ESTADO_NORMAL;
+                        } else if (this->estadoAnimacion == EXPLOSION_ETAPA_10) {
+                            this->volverEstadoInicial();
+                        } else {
+                            this->estadoAnimacion++;
+                        }
+                    }
+                    if (this->estadoAnimacion == LOOP_ETAPA_17) {
+                        this->velocidadX = 0;
+                        this->velocidadY = 0;
+                    }
+                }
+            }
+            this->disminuirTiempoInmunidad(timeStep);
+        }
+    }
+    pthread_mutex_unlock(&this->mutexMover);
+}
+
+void Avion::moverConPowerUP(float timeStep){
+    int offset = ANCHO_ESCENARIO;
+    int cambiarPosicion = 0;
+    if(this->posX > ANCHO_ESCENARIO/2){
+        offset -= ANCHO_AVION_SECUNDARIO;
+        cambiarPosicion = ANCHO_ESCENARIO - ANCHO_AVION_CON_POWER_UP;
+        // cout << "CAMBIAR POSICION: " << cambiarPosicion << endl;
+    } else {
+        // cout << "ENTRO AL LADO IZQUIERDO" << endl;
+        offset += ANCHO_AVION_SECUNDARIO;
+        cambiarPosicion = ANCHO_AVION_CON_POWER_UP;
+        // cout << "CAMBIAR POSICION: " << cambiarPosicion << endl;
+    }
     if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
         if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
             this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_DISPARO;
@@ -143,13 +220,15 @@ void Avion::mover(float timeStep){
         } else if (this->estadoAnimacion >= OFFSET_ESTADO_EXPLOSION) {
             this->estadoAnimacion = this->estadoAnimacion - OFFSET_ESTADO_EXPLOSION;
         }
-
-        if (this->estadoAnimacion < 3 || this->estadoAnimacion == INTERMITENCIA) {
+        if (this->estadoAnimacion < 3) {
             this->posX += this->velocidadX * timeStep;
+            cout << "POS X: " << this->posX << endl;
             if (this->posX < 0) {
                 this->posX = 0;
-            } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
-                this->posX = ANCHO_ESCENARIO - this->getAncho();
+            } else if (this->posX + this->getAncho() > offset) {
+                cout << "ENTRO AL ELSE IF" << endl;
+                this->posX = cambiarPosicion;
+                cout << "POS X: " << this->posX << endl;
             }
             this->posY += this->velocidadY * timeStep;
             if (this->posY < 0) {
@@ -185,7 +264,6 @@ void Avion::mover(float timeStep){
         }
         this->disminuirTiempoInmunidad(timeStep);
     }
-    pthread_mutex_unlock(&this->mutexMover);
 }
 
 
@@ -283,6 +361,10 @@ vector<Disparo*> Avion::disparar(){
             this->cantidadDisparos+= 4;
         }
     }
+    // for(int i = 0; i < disparos.size(); i++){
+    //     cout << "DISPARO AVION COMUN: " << disparos[i]->getPosX() << endl;
+    //     cout << "DISPARO AVION COMUN: " << disparos[i]->getPosY() << endl;
+    // }
     return disparos;
 }
 

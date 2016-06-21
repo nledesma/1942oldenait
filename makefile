@@ -29,8 +29,8 @@ vpath %.cpp $(SRC)
 
 # Compilados.
 OBJS_LIST = tinyxml2.o cliente.o servidor.o servidorParser.o gameSocket.o \
-	logger.o colaConcurrente.o avion.o disparo.o clienteParser.o etapa.o etapaVista.o \
-	elemento.o escenarioJuego.o avionVista.o avionSecundarioVista.o disparoVista.o elementoVista.o \
+	logger.o colaConcurrente.o avion.o disparo.o disparoAvionSecundario.o clienteParser.o etapa.o etapaVista.o \
+	elemento.o escenarioJuego.o avionVista.o avionSecundarioVista.o disparoVista.o disparoAvionSecundarioVista.o elementoVista.o \
 	escenarioVista.o figura.o ventana.o decodificador.o temporizador.o parserXML.o \
 	soundboard.o avionEnemigo.o avionPequenio.o avionDeEscuadron.o avionMediano.o \
 	avionGrande.o avionSecundario.o desplazamiento.o giro.o tipoMovimiento.o trayectoriaCuadrada.o \
