@@ -222,13 +222,13 @@ void Avion::moverConPowerUP(float timeStep){
         }
         if (this->estadoAnimacion < 3) {
             this->posX += this->velocidadX * timeStep;
-            cout << "POS X: " << this->posX << endl;
+            // cout << "POS X: " << this->posX << endl;
             if (this->posX < 0) {
                 this->posX = ANCHO_AVION_SECUNDARIO;
             } else if (this->posX + this->getAncho() > offset) {
-                cout << "ENTRO AL ELSE IF" << endl;
+                // cout << "ENTRO AL ELSE IF" << endl;
                 this->posX = cambiarPosicion;
-                cout << "POS X: " << this->posX << endl;
+                // cout << "POS X: " << this->posX << endl;
             }
             this->posY += this->velocidadY * timeStep;
             if (this->posY < 0) {
@@ -560,9 +560,9 @@ int Avion::getPorcentajeAciertos() {
 void Avion::cargarListaAvionesSecundarios(){
     while(!this->avionesSecundarios.empty()) delete this->avionesSecundarios.front(), this->avionesSecundarios.pop_front();
 
-    AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, IZQUIERDO, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
     this->avionesSecundarios.push_back(avionIzquierdo);
-    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, DERECHO, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
     this->avionesSecundarios.push_back(avionDerecho);
 }
 

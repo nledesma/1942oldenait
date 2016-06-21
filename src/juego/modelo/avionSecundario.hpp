@@ -39,9 +39,10 @@ private:
     Colisionable* colisionable;
     int cantidadDisparos = 0;
     int cantidadAciertos = 0;
+    int ubicacion; //Esto es si esta a la derecha o a la izquierda de millenium.
 
 public:
-    AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos, float posXFinal = 0, float posYFinal = 0);
+    AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos, int ubicacion, float posXFinal = 0, float posYFinal = 0);
 
     ~AvionSecundario();
 
