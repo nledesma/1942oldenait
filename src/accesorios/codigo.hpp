@@ -37,7 +37,7 @@
 #define PRESIONA_X 12
 #define PRESIONA_L 13
 #define PRESIONA_P 14
-
+#define PRESIONA_C 15
 /* Dimensiones */
 
 #define ANCHO_ESCENARIO 800
@@ -272,4 +272,11 @@
 #define COLISION_AVION_CON_POWERUP 14
 
 #define VALOR_POWERUP_1500 1500
+
+/* Eventos del escenarioJuego */
+
+#define CONTINUA_PARTIDA 0
+#define RESETEA_PARTIDA 1
+#define CIERRA_PARTIDA 2
+
 #endif //INC_1942OLDENAIT_CODIGO_HPP
