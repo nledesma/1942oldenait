@@ -28,20 +28,20 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
             this->crearDisparoEnemigo(x, y, angulo);
             break;
         case TIPO_POWERUP_BONIFICACION:
-             this->crearPowerUp(x,y,0);
-             break;
-         case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
-             this->crearPowerUp(x,y,0);
-             break;
-         case TIPO_POWERUP_DOS_AMETRALLADORAS:
-             this->crearPowerUp(x,y,0);
-             break;
-         case TIPO_POWERUP_AVIONES_SECUNDARIOS:
-             this->crearPowerUp(x,y,0);
-             break;
-         case TIPO_POWERUP_BONIFICACION_1500:
-             this->crearPowerUp(x,y,0);
-             break;
+            this->crearPowerUp(x,y,0);
+            break;
+        case TIPO_POWERUP_DESTRUIR_ENEMIGOS:
+            this->crearPowerUp(x,y,0);
+            break;
+        case TIPO_POWERUP_DOS_AMETRALLADORAS:
+            this->crearPowerUp(x,y,0);
+            break;
+        case TIPO_POWERUP_AVIONES_SECUNDARIOS:
+            this->crearPowerUp(x,y,0);
+            break;
+        case TIPO_POWERUP_BONIFICACION_1500:
+            this->crearPowerUp(x,y,0);
+            break;
     }
 }
 
@@ -151,11 +151,11 @@ void Colisionable::crearPowerUp(float posX, float posY, float angulo){
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro, TIPO_POWERUP);
 }
 
-
 void Colisionable::mover(float posX, float posY, float angulo, int tipoElemento){
     this->superficiePrincipal->mover(posX, posY);
     float xCentral = posX + (this->superficiePrincipal->getAncho() / 2);
     float yCentral = posY + (this->superficiePrincipal->getAlto() / 2);
+    //this->superficiePrincipal->rotar(angulo, xCentral, yCentral);
     for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
         this->superficiesSecundarias[i]->mover(posX, posY);
         this->superficiesSecundarias[i]->rotar(angulo, xCentral, yCentral, tipoElemento);
@@ -276,6 +276,7 @@ float Colisionable::getExtremoSuperior(){
     if(extremoSuperior < superficiePrincipal->getIzqArriba()->getPosY()){
         extremoSuperior  = superficiePrincipal->getIzqArriba()->getPosY();
     }
+
 
     if(extremoSuperior < superficiePrincipal->getDerArriba()->getPosY()){
         extremoSuperior = superficiePrincipal->getDerArriba()->getPosY();

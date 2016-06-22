@@ -116,12 +116,12 @@ void EscenarioJuego::agregarEtapa(Etapa * etapa) {
     this->etapas.push_back(etapa);
 }
 
-bool EscenarioJuego::manejarEvento(int nroAvion, int evento) {
+int EscenarioJuego::manejarEvento(int nroAvion, int evento) {
     vector<Disparo *> disparo;
-    bool resetea = false;
+    int eventoIteracion = CONTINUA_PARTIDA;
     switch (evento) {
         case PRESIONA_R:
-            resetea = true;
+            eventoIteracion = RESETEA_PARTIDA;
             break;
         case PRESIONA_ESPACIO:
             disparo = avion(nroAvion)->disparar();
@@ -141,11 +141,13 @@ bool EscenarioJuego::manejarEvento(int nroAvion, int evento) {
         case PRESIONA_P:
             this->togglePausa();
             break;
+        case PRESIONA_C:
+            eventoIteracion = CIERRA_PARTIDA;
         default:
             avion(nroAvion)->manejarEvento(evento);
             break;
     }
-    return resetea;
+    return eventoIteracion;
 }
 
 void EscenarioJuego::avanzarEtapa() {
@@ -187,6 +189,29 @@ void EscenarioJuego::reiniciarEtapas() {
     }
     temporizador.detener();
 
+}
+
+void EscenarioJuego::terminarEtapas() {
+    desactivar();
+    pthread_mutex_lock(&mutexPowerUps);
+    this->powerUps.clear();
+    pthread_mutex_unlock(&mutexPowerUps);
+    pthread_mutex_lock(&mutexListaEnemigos);
+    this->enemigos.clear();
+    pthread_mutex_unlock(&mutexListaEnemigos);
+    pthread_mutex_lock(&mutexListaDisparosEnemigos);this->disparos.clear();
+    this->disparosEnemigos.clear();
+    pthread_mutex_unlock(&mutexListaDisparosEnemigos);
+    pthread_mutex_lock(&mutexListaDisparos);this->disparos.clear();
+    this->disparos.clear();
+    pthread_mutex_unlock(&mutexListaDisparos);
+
+    while (!this->colaEventos.vacia()) {
+        this->colaEventos.pop();
+    }
+    temporizador.detener();
+
+    this->etapas.clear();
 }
 
 int EscenarioJuego::comenzarEtapa() {
@@ -234,7 +259,7 @@ int EscenarioJuego::mainLoop() {
 }
 
 int EscenarioJuego::actualizarEstado(float timeStep) {
-    bool resetear = false;
+    int eventoIteracion = CONTINUA_PARTIDA;
     int eventoFinal = AVANZAR_ETAPA;
     if (this->posicionY < this->etapaActual()->getLongitud() - 800) {
         if (!this->pausado) {
@@ -253,7 +278,7 @@ int EscenarioJuego::actualizarEstado(float timeStep) {
             this->moverDisparos(timeStep);
             this->getProximoEnemigo();
         }
-        resetear = this->manejarProximoEvento();
+        eventoIteracion = this->manejarProximoEvento();
     } else {
         this->moverEnemigos(timeStep);
         this->moverDisparosEnemigos(timeStep);
@@ -282,9 +307,12 @@ int EscenarioJuego::actualizarEstado(float timeStep) {
             }
         }
     }
-    if (resetear){
+    if (eventoIteracion == RESETEA_PARTIDA){
         this->reiniciarEtapas();
         eventoFinal = REINICIAR_ESCENARIO;
+    } else if (eventoIteracion == CIERRA_PARTIDA){
+        this->terminarEtapas();
+        eventoFinal = FINALIZAR_JUEGO;
     }
     return eventoFinal;
 }
@@ -351,19 +379,19 @@ int EscenarioJuego::jugar(bool serverActivo) {
     return comenzarEtapa();
 }
 
-bool EscenarioJuego::manejarProximoEvento() {
-    bool resetear = false;
+int EscenarioJuego::manejarProximoEvento() {
+    int eventoIteracion = CONTINUA_PARTIDA;
     if (!this->colaEventos.vacia()) {
         pair<int, int> evento = this->colaEventos.pop();
         if (!this->pausado){
-            resetear = this->manejarEvento(evento.first, evento.second);
+            eventoIteracion = this->manejarEvento(evento.first, evento.second);
         } else {
             if (evento.second == PRESIONA_P || evento.second == PRESIONA_R){
-                resetear = this->manejarEvento(evento.first, evento.second);
+                eventoIteracion = this->manejarEvento(evento.first, evento.second);
             }
         }
     }
-    return resetear;
+    return eventoIteracion;
 }
 
 void EscenarioJuego::pushEvento(pair<int, int> evento) {

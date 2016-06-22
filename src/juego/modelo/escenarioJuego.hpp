@@ -85,13 +85,14 @@ public:
     void agregarEtapa(Etapa * etapa);
     void avanzarEtapa();
     void reiniciarEtapas();
+    void terminarEtapas();
     int comenzarEtapa();
     bool quedanEtapas();
     /* Enemigos */
     void getProximoEnemigo();
     /* Eventos */
-    bool manejarProximoEvento();
-    bool manejarEvento(int nroAvion, int evento);
+    int manejarProximoEvento();
+    int manejarEvento(int nroAvion, int evento);
     void pushEvento(pair<int, int> evento);
     /* mainLoop */
     int jugar(bool serverActivo);

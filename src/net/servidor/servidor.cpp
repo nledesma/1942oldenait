@@ -225,15 +225,17 @@ int Servidor::aceptar() {
 }
 
 void Servidor::cerrar() {
-    this->desactivarServidor();
-    for (map<int, datosCliente>::iterator iterador = getClientes().begin(); iterador != getClientes().end(); iterador++) {
-        int clienteActual = iterador->first;
-        shutdown(clienteActual, 0);
-        close(clienteActual);
-        iterador->second.colaSalida.avisar();
+    if (this->servidorActivo()) {
+        this->desactivarServidor();
+        for (map<int, datosCliente>::iterator iterador = getClientes().begin();
+             iterador != getClientes().end(); iterador++) {
+            int clienteActual = iterador->first;
+            shutdown(clienteActual, 0);
+            close(clienteActual);
+            iterador->second.colaSalida.avisar();
+        }
+        cerrarSocket();
     }
-
-    cerrarSocket();
 
     // Cerramos las colas.
     colaDeMensajes.avisar();
@@ -407,9 +409,10 @@ void Servidor::desencolar() {
         int intEvento = Decodificador::popInt(clienteMensaje.second);
         int intJugador = clientes[clienteMensaje.first].nroJugador;
         pair <int, int> evento(intJugador, intEvento);
-        if(intEvento != PRESIONA_X){
+        if(intEvento != PRESIONA_X && intEvento != PRESIONA_C){
             this->escenario->pushEvento(evento);
         } else {
+            this->escenario->pushEvento(evento);
             this->cerrar();
         }
     }
