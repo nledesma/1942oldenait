@@ -784,3 +784,7 @@ int EscenarioJuego::validarBonificacionEscuadron(AvionEnemigo * avionEnemigo, in
 void EscenarioJuego::iniciarModoPractica() {
     this->modoPractica = true;
 }
+
+int EscenarioJuego::getCantidadJugadores(int equipo){
+    return equipos[equipo].size();
+}

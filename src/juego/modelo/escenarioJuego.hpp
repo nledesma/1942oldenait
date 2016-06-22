@@ -141,6 +141,7 @@ public:
     void iniciarModoPractica();
     void crearPowerUpBonus(float posX, float posY, int valor);
     void setEquipo(int nroAvion, int equipo);
+    int getCantidadJugadores(int equipo);
 
 };
 

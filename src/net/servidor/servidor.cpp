@@ -296,18 +296,31 @@ string Servidor::obtenerDireccion(int fdCliente){
 void Servidor::asignarEquipo(int fdCliente, int nroJugador) {
     int equipoDelCliente;
     // Primero le avisamos al cliente si necesitamos o no que nos envíe un equipo.
-    cout << "Le decimos al cliente si es por equipos." << endl;
     string necesitamosEquipo = "";
-    Decodificador::push(necesitamosEquipo, !partidaEnJuego && escenario->porEquipos());
+    Decodificador::push(necesitamosEquipo, !partidaEnJuego && escenario->porEquipos()
+        && escenario->getCantidadJugadores(0) != cantidadMaximaDeClientes - 1
+        && escenario->getCantidadJugadores(1) != cantidadMaximaDeClientes - 1
+        && escenario->getCantidadJugadores(0) != 3
+        && escenario->getCantidadJugadores(1) != 3);
     enviarMensaje(necesitamosEquipo, fdCliente);
 
     // Si la partida no está en juego, corresponde asignar un equipo.
     if (!partidaEnJuego) {
-        // Si efectivamente es por equipos, recibimos el equipo correspondiente.
         if (escenario->porEquipos()) {
-            string mensajeEquipoCliente;
-            recibirMensaje(mensajeEquipoCliente, fdCliente);
-            equipoDelCliente = Decodificador::popInt(mensajeEquipoCliente);
+            // TODO algo de esto debería estar mutexeado quizás.
+
+            // Si alguno de los equipos está lleno o todos están en ese equipo, se le asigna el otro.
+            if (escenario->getCantidadJugadores(0) == 3 || escenario->getCantidadJugadores(0) == cantidadMaximaDeClientes - 1) {
+                // NOTE hay que dejar de hardcodear por dos años.
+                equipoDelCliente = 1;
+            } else if (escenario->getCantidadJugadores(1) == 3 || escenario->getCantidadJugadores(1) == cantidadMaximaDeClientes - 1) {
+                equipoDelCliente = 0;
+            } else {
+                // En el caso de que lo necesitemos, recibimos el equipo correspondiente.
+                string mensajeEquipoCliente;
+                recibirMensaje(mensajeEquipoCliente, fdCliente);
+                equipoDelCliente = Decodificador::popInt(mensajeEquipoCliente);
+            }
         } else {
             // Si no es por equipos, le asignamos, como a todos, el equipo 0.
             equipoDelCliente = 0;

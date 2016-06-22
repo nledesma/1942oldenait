@@ -14,7 +14,7 @@
             <alto>800</alto>
             <velocidadDesplazamientoY>180</velocidadDesplazamientoY>
         </fondo>
-        <modo>colaborativo</modo>
+        <modo>equipos</modo>
         <etapas>
             <etapa>
                 <longitud>8000</longitud>
