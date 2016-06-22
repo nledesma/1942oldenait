@@ -2,7 +2,7 @@
 
 using namespace std;
 
-AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos ,float posXFinal, float posYFinal){
+AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos ,  int ubicacion, float posXFinal, float posYFinal){
     this->posX = posX;
     this->posY = posY;
     this->posXInicial = posX;
@@ -20,6 +20,8 @@ AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float 
     this->cantidadDisparos = 0;
     this->cantidadAciertos = 0;
     this->contador = CONTADOR_INICIAL;
+    this->ubicacion = ubicacion;
+
 }
 
 AvionSecundario::~AvionSecundario(){
@@ -77,11 +79,20 @@ int AvionSecundario::mover(float timeStep){
         if (this->estadoAnimacion < 3){
             // cout << "ENTRO AL IF DE MOVER DE AVION SECUNDARIO" << endl;
             this->posX += this->velocidadX * timeStep;
-            if (this->posX < 0) {
-                this->posX = 0;
-            } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO) {
-                this->posX = ANCHO_ESCENARIO - this->getAncho();
+            if (this->ubicacion == IZQUIERDO){
+                if(this->posX < 0){
+                    this->posX = ANCHO_AVION_CON_POWER_UP + ANCHO_AVION_SECUNDARIO;
+                } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO - (ANCHO_AVION_CON_POWER_UP)) {
+                    this->posX = ANCHO_ESCENARIO - this->getAncho();
+                }
+            } else if (this->ubicacion == DERECHO){
+                if(this->posX < 0){
+                    this->posX = ANCHO_AVION_SECUNDARIO;
+                } else if (this->posX + this->getAncho() > ANCHO_ESCENARIO - (ANCHO_AVION_CON_POWER_UP + ANCHO_AVION_SECUNDARIO)) {
+                    this->posX = ANCHO_ESCENARIO - ANCHO_AVION_CON_POWER_UP - ANCHO_AVION_SECUNDARIO;
+                }
             }
+            cout << "POS X: " << this->posX << "DEL AVION: " << this->ubicacion << endl;
             this->posY += this->velocidadY * timeStep;
             if (this->posY < 0) {
                 this->posY = 0;
