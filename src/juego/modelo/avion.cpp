@@ -310,14 +310,6 @@ Colisionable* Avion::getColisionable(){
 
 void Avion::colisionar(){
     if (this->contadorTiempoInmunidad == 0) {
-        // cout << "ESTADO ANIMACION: " << this->estadoAnimacion << endl;
-        // if((this->estadoAnimacion < AVION_TRANSFORMADO_EXPLOSION_ETAPA_1) && (this->estadoAnimacion > EXPLOSION_ETAPA_10)){
-        //     if((contadorColisiones > 0) && ((this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE))){
-        //         contadorColisiones--;
-        //         this->estadoAnimacion = AVION_TRANSFORMADO_EXPLOSION_ETAPA_1;
-        //         cout << "CONTADOR COLISIONES: " << contadorColisiones << endl;
-        //     }
-        // }
         if (this->estadoAnimacion < EXPLOSION_ETAPA_1) {
             this->estadoAnimacion = EXPLOSION_ETAPA_1 ;
             if (this->vidas > 0) {

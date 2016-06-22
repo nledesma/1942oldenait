@@ -79,7 +79,6 @@ list<Celda*> Grilla::ubicarEnCeldas(Colisionable * colisionable, int *&posCelda)
     int filaAbajo = colisionable->getExtremoInferior() / this->altoCeldas;
     int filaArriba = colisionable->getExtremoSuperior() / this->altoCeldas;
 
-    //cout << colDerecha << " "  << colIzquierda << " " << filaAbajo << " " << filaArriba << endl;
     int* posicionesCeldas = new int[4];
     posicionesCeldas[0] = colDerecha;
     posicionesCeldas[1] = colIzquierda;

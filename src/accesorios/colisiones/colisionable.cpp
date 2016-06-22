@@ -156,7 +156,6 @@ void Colisionable::mover(float posX, float posY, float angulo, int tipoElemento)
     this->superficiePrincipal->mover(posX, posY);
     float xCentral = posX + (this->superficiePrincipal->getAncho() / 2);
     float yCentral = posY + (this->superficiePrincipal->getAlto() / 2);
-    //this->superficiePrincipal->rotar(angulo, xCentral, yCentral);
     for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
         this->superficiesSecundarias[i]->mover(posX, posY);
         this->superficiesSecundarias[i]->rotar(angulo, xCentral, yCentral, tipoElemento);

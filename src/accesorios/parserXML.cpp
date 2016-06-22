@@ -2,7 +2,6 @@
 
 /* Lectores */
 bool ParserXML::getString(XMLElement * padre, const char * nombreHijo, string & s) {
-	// Hay que hacer delete de esto?
 	XMLElement * pHijo = padre->FirstChildElement(nombreHijo);
 	if (!pHijo) return false;
 

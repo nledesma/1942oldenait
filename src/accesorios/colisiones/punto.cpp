@@ -33,10 +33,6 @@ void Punto::mover(float x, float y){
 void Punto::rotar(float angulo, float x, float y){
     float xOriginal = this->posX;
     float yOriginal = this->posY;
-    // cout << "Coseno " << Trigonomaster::getCoseno(angulo) << endl;
-    // cout << "Seno " << Trigonomaster::getSeno(angulo) << endl;
-    // cout << "xOriginal - x " << (xOriginal - x) << endl;
-    // cout << "yOriginal - y " << (yOriginal - y) << endl;
     this->posX = Trigonomaster::getCoseno(angulo) * (xOriginal - x) - Trigonomaster::getSeno(angulo) * (yOriginal - y) + x;
     this->posY = Trigonomaster::getSeno(angulo) * (xOriginal - x) + Trigonomaster::getCoseno(angulo) * (yOriginal - y) + y;
 }
