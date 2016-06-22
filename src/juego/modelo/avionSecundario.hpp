@@ -39,6 +39,7 @@ private:
     Colisionable* colisionable;
     int cantidadDisparos = 0;
     int cantidadAciertos = 0;
+    float contador;
 
 public:
     AvionSecundario(float posX, float posY, float velocidad, float velocidadDisparos, string idSpriteDisparos, float posXFinal = 0, float posYFinal = 0);
@@ -61,7 +62,7 @@ public:
 
     void setEstadoAnimacion(int estadoAnimacion);
 
-    void mover(float timeStep);
+    int mover(float timeStep);
 
     int getAncho();
 

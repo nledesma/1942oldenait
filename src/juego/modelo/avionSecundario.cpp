@@ -19,6 +19,7 @@ AvionSecundario::AvionSecundario(float posX, float posY, float velocidad, float 
     this->puntaje = 0;
     this->cantidadDisparos = 0;
     this->cantidadAciertos = 0;
+    this->contador = CONTADOR_INICIAL;
 }
 
 AvionSecundario::~AvionSecundario(){
@@ -68,7 +69,8 @@ void AvionSecundario::manejarEvento(int evento){
 }
 
 
-void AvionSecundario::mover(float timeStep){
+int AvionSecundario::mover(float timeStep){
+    int resultado = 1;
     // cout << "ENTRO AL MOVER DE AVION SECUNDARIO" << endl;
     pthread_mutex_lock(&this->mutexMoverAvionSecundario);
     if (this->estadoAnimacion != ESTADO_AVION_SECUNDARIO_DESTRUIDO) {
@@ -87,10 +89,24 @@ void AvionSecundario::mover(float timeStep){
                 this->posY = ALTO_ESCENARIO - this->getAlto();
             }
             this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION_SECUNDARIO);
+            resultado = 1;
+        } else {
+            if (this->contador > 0) {
+                this->contador = this->contador - this->contador * timeStep;
+            } else {
+                this->contador = CONTADOR_INICIAL;
+                if(this->estadoAnimacion < ESTADO_AVION_SECUNDARIO_EXPLOSION_10){
+                    this->estadoAnimacion++;
+                    resultado = 1;
+                } else {
+                    resultado = 0;
+                }
+            }
         }
         // cout << "POS X MOVIENDOSE: " << this->getPosicionX() << endl;
     }
     pthread_mutex_unlock(&this->mutexMoverAvionSecundario);
+    return resultado;
 }
 
 

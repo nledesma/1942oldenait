@@ -147,6 +147,8 @@ public:
     vector<DisparoAvionSecundario*> dispararAvionesSecundarios();
 
     void moverConPowerUP(float timeStep);
+
+    void destruirAvionesSecundarios();
 };
 
 #endif //INC_1942OLDENAIT_AVION_HPP

@@ -374,7 +374,9 @@ void EscenarioJuego::moverAviones(float timeStep) {
 void EscenarioJuego::moverAvionesSecundarios(float timeStep, Avion* unAvion){
     for(list<AvionSecundario*>::iterator iterador = unAvion->getAvionesSecundarios().begin(); iterador != unAvion->getAvionesSecundarios().end(); ++iterador){
       AvionSecundario* unAvionSecundario = *iterador;
-      unAvionSecundario->mover(timeStep);
+      if(unAvionSecundario->mover(timeStep) == 0){
+          iterador = unAvion->getAvionesSecundarios().erase(iterador);
+      }
     }
 }
 
@@ -674,6 +676,7 @@ void EscenarioJuego::verificarColisiones(){
                                      (*itAvSec)->colisionar();
                                  }
                                  (*itAviones)->sumarPuntos((*itEnemigos)->estallar());
+
                                  (*itAvSec)->colisionar();
                             }
                         }

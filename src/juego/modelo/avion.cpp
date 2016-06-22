@@ -143,8 +143,8 @@ void Avion::disminuirTiempoInmunidad(float timestep) {
 
 void Avion::mover(float timeStep){
     pthread_mutex_lock(&this->mutexMover);
-    if((this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE)){
-        moverConPowerUP(timeStep);
+    if(this->estadoAnimacion < EXPLOSION_ETAPA_1 && this->estadoAnimacion != ESTADO_AVION_DESTRUIDO  && ((this->estadoPowerUP == ESTADO_POWER_UP_AVIONES_SECUNDARIOS) || (this->estadoPowerUP == ESTADO_POWER_UP_DOBLE) || (this->avionesSecundarios.size() > 0))){
+        this->moverConPowerUP(timeStep);
     } else {
         if (this->estadoAnimacion != ESTADO_AVION_DESTRUIDO) {
             if (this->estadoAnimacion >= OFFSET_ESTADO_DISPARO && this->estadoAnimacion < OFFSET_ESTADO_LOOP) {
@@ -170,6 +170,9 @@ void Avion::mover(float timeStep){
                 this->colisionable->mover(this->posX, this->posY, 0, TIPO_AVION);
             } else {
                 if (this->estadoAnimacion != DESCONECTADO) {
+                    if(this->estadoAnimacion >= EXPLOSION_ETAPA_1){
+                        this->destruirAvionesSecundarios();
+                    }
                     if (this->contador > 0) {
                         this->contador--;
                         if (this->estadoAnimacion >= LOOP_ETAPA_1 && this->estadoAnimacion < LOOP_ETAPA_5) {
@@ -266,6 +269,13 @@ void Avion::moverConPowerUP(float timeStep){
     }
 }
 
+
+void Avion::destruirAvionesSecundarios() {
+    for(list<AvionSecundario*>::iterator itAvionesSec = this->avionesSecundarios.begin(); itAvionesSec != this->avionesSecundarios.end(); itAvionesSec++){
+        (*itAvionesSec)->setVelocidad(0);
+        (*itAvionesSec)->colisionar();
+    }
+}
 
 float Avion::getVelocidad(){
     return this->velocidad;
@@ -561,8 +571,23 @@ void Avion::cargarListaAvionesSecundarios(){
     while(!this->avionesSecundarios.empty()) delete this->avionesSecundarios.front(), this->avionesSecundarios.pop_front();
 
     AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - (ANCHO_AVION_COMUN/2), this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
-    this->avionesSecundarios.push_back(avionIzquierdo);
     AvionSecundario* avionDerecho = new AvionSecundario(this->posX + (ANCHO_AVION_SECUNDARIO +ANCHO_AVION_COMUN/2) , this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    if(this->velocidadX < 0){
+        avionDerecho->manejarEvento(IZQUIERDA_PRESIONA);
+        avionIzquierdo->manejarEvento(IZQUIERDA_PRESIONA);
+    } else if (this->velocidadX > 0) {
+        avionDerecho->manejarEvento(DERECHA_PRESIONA);
+        avionIzquierdo->manejarEvento(DERECHA_PRESIONA);
+    }
+
+    if(this->velocidadY < 0) {
+        avionDerecho->manejarEvento(ARRIBA_PRESIONA);
+        avionIzquierdo->manejarEvento(ARRIBA_PRESIONA);
+    } else if(this->velocidadY > 0) {
+        avionDerecho->manejarEvento(ABAJO_PRESIONA);
+        avionIzquierdo->manejarEvento(ABAJO_PRESIONA);
+    }
+    this->avionesSecundarios.push_back(avionIzquierdo);
     this->avionesSecundarios.push_back(avionDerecho);
 }
 
