@@ -10,13 +10,11 @@ ManejadorDeMenues::~ManejadorDeMenues(){
 }
 
 void ManejadorDeMenues::menuAnterior() {
-    cout << "Se retrocede de menu" << endl;
     actual->accionAnterior();
     actual = actual->getAnterior();
 }
 
 void ManejadorDeMenues::menuSiguiente() {
-    cout << "Se avanza de menu." << endl;
     actual->accionSiguiente();
     actual = actual->getSiguiente();
 }
@@ -35,7 +33,6 @@ void ManejadorDeMenues::renderLoop() {
 }
 
 void ManejadorDeMenues::finalizarRender() {
-    cout << "Se llama a finalizar" << endl;
     dibujar = false;
 }
 

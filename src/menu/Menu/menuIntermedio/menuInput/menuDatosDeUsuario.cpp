@@ -17,5 +17,4 @@ void MenuDatosDeUsuario::accionAnterior() {}
 
 void MenuDatosDeUsuario::accionSiguiente() {
     cliente->setAlias(input->getTexto());
-    cout << "se le dio al cliente el nombre" << cliente->getAlias() << endl;
 }
