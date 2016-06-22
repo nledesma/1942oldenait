@@ -270,6 +270,11 @@ void* Cliente::esperarEvento_th(void* argsVoid) {
 }
 
 void Cliente::esperarJugadores() {
+	// NOTE estas responsabilidades no le corresponden mucho al cliente, pero no hay tiempo de abstraer más.
+	TextoDinamico *texto = new TextoDinamico(25, AMARILLO_STAR_WARS, STAR_WARS_FONT, ventana);
+	Figura * fondo = new Figura();
+	fondo->loadFromFilePNG(ventana->getVentanaRenderer(), "estrellas");
+
 	string mensajeRespuesta;
 	int nActual = 10; // Nunca van a ser 10 jugadores, el máximo es 6.
 	int nRecibido;
@@ -281,13 +286,20 @@ void Cliente::esperarJugadores() {
 	while(nRecibido != 0 && cliente_conectado) {
 		if (nRecibido != nActual) {
 			nActual = nRecibido;
-			// TODO mostrar en la pantalla.
-			cout << "Faltan " << nRecibido << " jugadores para comenzar." << endl;
+			fondo->render(0, 0, ventana->getVentanaRenderer());
+			stringstream ss;
+			ss << "Falta" << (nRecibido==1?" ":"n ") << nRecibido << (nRecibido==1?" jugador ":" jugadores ") << "para comenzar.";
+			texto->cambiarTexto(ss.str());
+			texto->renderCentrado(375);
+			SDL_RenderPresent(ventana->getVentanaRenderer());
 		}
 		if(recibirMensaje(mensajeRespuesta) != MENSAJEOK) return;
 		nRecibido = Decodificador::popInt(mensajeRespuesta);
 	}
-	cout << "Todos los jugadores conectados!" << endl;
+	fondo->render(0, 0, ventana->getVentanaRenderer());
+	texto->cambiarTexto("Todos los jugadores conectados!");
+	texto->renderCentrado(375);
+	SDL_RenderPresent(ventana->getVentanaRenderer());
 }
 
 /* Getters y setters.*/
