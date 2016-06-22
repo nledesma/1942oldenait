@@ -234,9 +234,8 @@ void Servidor::cerrar() {
             close(clienteActual);
             iterador->second.colaSalida.avisar();
         }
+        cerrarSocket();
     }
-
-    cerrarSocket();
 
     // Cerramos las colas.
     colaDeMensajes.avisar();
