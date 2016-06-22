@@ -12,6 +12,7 @@ class MenuConexionManual: public MenuInput {
         void setMenuConexiones(Menu * menu);
         void accionAnterior();
         void accionSiguiente();
+        string getIP();
 };
 
 #endif

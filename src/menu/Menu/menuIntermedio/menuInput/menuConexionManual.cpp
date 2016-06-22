@@ -17,3 +17,7 @@ void MenuConexionManual::accionAnterior() {}
 void MenuConexionManual::accionSiguiente() {
     cout << "acá se debería setear la IP." << endl;
 }
+
+string MenuConexionManual::getIP() {
+    return input->getTexto();
+}

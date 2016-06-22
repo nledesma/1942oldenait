@@ -7,7 +7,7 @@ Manejador1942::Manejador1942(Ventana * ventana, Cliente * cliente, SoundBoard * 
     menuPrincipal = new MenuPrincipal(ventana);
     menuConexiones = new MenuConexiones(ventana, cliente);
     menuIp = new MenuConexionManual(ventana);
-    menuPuerto = new MenuConexionPuerto(ventana);
+    menuPuerto = new MenuConexionPuerto(ventana, cliente);
     menuDatosDeUsuario = new MenuDatosDeUsuario(ventana, cliente);
     menuPorEquipos = new MenuPorEquipos(ventana, cliente);
 
