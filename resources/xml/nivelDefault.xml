@@ -84,25 +84,25 @@
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>ametralladoras</tipo>
+                      <tipo>aviones</tipo>
                       <posx>400</posx>
                       <posy>2000</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>destruir</tipo>
+                      <tipo>aviones</tipo>
                       <posx>700</posx>
                       <posy>1700</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>destruir</tipo>
+                      <tipo>aviones</tipo>
                       <posx>250</posx>
                       <posy>300</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>destruir</tipo>
+                      <tipo>aviones</tipo>
                       <posx>200</posx>
                       <posy>3000</posy>
                       <valor>0</valor>
@@ -163,7 +163,7 @@
                 </enemigos>
                 <powerUps>
                     <powerUp>
-                      <tipo>bonificacion</tipo>
+                      <tipo>aviones</tipo>
                       <posx>200</posx>
                       <posy>250</posy>
                       <valor>1000</valor>
@@ -175,13 +175,13 @@
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>ametralladoras</tipo>
+                      <tipo>aviones</tipo>
                       <posx>400</posx>
                       <posy>300</posy>
                       <valor>0</valor>
                     </powerUp>
                     <powerUp>
-                      <tipo>destruir</tipo>
+                      <tipo>aviones</tipo>
                       <posx>700</posx>
                       <posy>350</posy>
                       <valor>0</valor>

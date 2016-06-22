@@ -712,14 +712,14 @@ void EscenarioJuego::verificarColisiones(){
                         aplicarPowerUp(*itPowerUps,*itAviones);
                     }
                 }
-                for(list<AvionSecundario*>::iterator itAvSec = (*itAviones)->getAvionesSecundarios().begin(); itAvSec != (*itAviones)->getAvionesSecundarios().end(); ++ itAvSec){
-                    if ((*itAvSec)->getColisionable()->colisiona((*itPowerUps)->getColisionable())) {
-                      if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
-                          (*itPowerUps)->colisionar();
-                          aplicarPowerUp(*itPowerUps,*itAviones);
-                      }
-                    }
-                }
+//                for(list<AvionSecundario*>::iterator itAvSec = (*itAviones)->getAvionesSecundarios().begin(); itAvSec != (*itAviones)->getAvionesSecundarios().end(); ++ itAvSec){
+//                    if ((*itAvSec)->getColisionable()->colisiona((*itPowerUps)->getColisionable())) {
+//                      if ((*itPowerUps)->getEstadoAnimacion() < POWER_UP_COLISIONADO){
+//                          (*itPowerUps)->colisionar();
+//                          aplicarPowerUp(*itPowerUps,*itAviones);
+//                      }
+//                    }
+//                }
             }
         }
         nroAvion++;

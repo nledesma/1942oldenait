@@ -560,9 +560,9 @@ int Avion::getPorcentajeAciertos() {
 void Avion::cargarListaAvionesSecundarios(){
     while(!this->avionesSecundarios.empty()) delete this->avionesSecundarios.front(), this->avionesSecundarios.pop_front();
 
-    AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    AvionSecundario* avionIzquierdo = new AvionSecundario(this->posX - (ANCHO_AVION_COMUN/2), this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal - ANCHO_AVION_SECUNDARIO, this->posYFinal);
     this->avionesSecundarios.push_back(avionIzquierdo);
-    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + ANCHO_AVION_SECUNDARIO, this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
+    AvionSecundario* avionDerecho = new AvionSecundario(this->posX + (ANCHO_AVION_SECUNDARIO +ANCHO_AVION_COMUN/2) , this->posY, this->velocidad, this->velocidadDisparos, this->idSpriteDisparos, this->posXFinal + ANCHO_AVION_SECUNDARIO, this->posYFinal);
     this->avionesSecundarios.push_back(avionDerecho);
 }
 

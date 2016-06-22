@@ -9,7 +9,6 @@ Disparo::Disparo(float posX, float posY, float velocidad){
     this->alturaDeMuerte = -1;
     this->estado = 0;
     this->contadorExplosionImpacto = TIEMPO_EXPLOSION_IMPACTO;
-    this->numeroDeAvion = numeroDeAvion;
 }
 
 Disparo::~Disparo(){
@@ -95,8 +94,4 @@ Colisionable* Disparo::getColisionable(){
 void Disparo::colisionar(){
     this->colisiono = true;
     this->alturaDeMuerte = this->colisionable->getExtremoSuperior();
-}
-
-int Disparo::getNumeroDeAvion() {
-    return this->numeroDeAvion;
 }

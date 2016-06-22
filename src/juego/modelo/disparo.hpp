@@ -22,7 +22,6 @@ private:
 	float alturaDeMuerte;
 	int estado;
 	float contadorExplosionImpacto;
-	int numeroDeAvion;
 
 public:
 	Disparo(float posX, float posY, float velocidad);

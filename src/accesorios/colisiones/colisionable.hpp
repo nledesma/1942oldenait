@@ -28,6 +28,7 @@ private:
     void crearDisparo(float posX, float posY, float angulo);
     void crearDisparoEnemigo(float posX, float posY, float angulo);
     void crearPowerUp(float posX, float posY, float angulo);
+    void crearAvionSecundario(float posX, float posY, float angulo);
 
 
 

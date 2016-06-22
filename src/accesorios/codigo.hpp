@@ -154,7 +154,7 @@
 #define TIPO_AVION_MEDIANO 3
 #define TIPO_AVION_GRANDE 4
 #define TIPO_AVION 5
-#define TIPO_AVION_SECUNDARIO 6
+#define TIPO_AVION_SECUNDARIO 14
 
 /* Tipos de disparos */
 

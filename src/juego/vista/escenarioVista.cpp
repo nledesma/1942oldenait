@@ -259,7 +259,7 @@ void EscenarioVista::preloop(){
 int EscenarioVista::mainLoop(){
     cout << "se entra al mainLoop" << endl;
     SDL_Event e;
-    this->soundBoard->toggleMusica();
+    //this->soundBoard->toggleMusica();
     while(this->getActivo()){
         while ( SDL_PollEvent( &e ) != 0 ) {
             if (e.type == SDL_WINDOWEVENT) {

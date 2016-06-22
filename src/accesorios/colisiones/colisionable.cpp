@@ -42,6 +42,9 @@ Colisionable::Colisionable(float x, float y, float angulo, int tipoDeElemento){
          case TIPO_POWERUP_BONIFICACION_1500:
              this->crearPowerUp(x,y,0);
              break;
+        case TIPO_AVION_SECUNDARIO:
+            this->crearAvionSecundario(x, y, 0);
+            break;
     }
 }
 
@@ -151,12 +154,14 @@ void Colisionable::crearPowerUp(float posX, float posY, float angulo){
     this->superficiePrincipal->rotar(angulo, xCentro, yCentro, TIPO_POWERUP);
 }
 
+void Colisionable::crearAvionSecundario(float posX, float posY, float angulo) {
+    this->superficiePrincipal = new Superficie(posX, posY, ANCHO_AVION_SECUNDARIO, ALTO_AVION_SECUNDARIO, 0, 0);
+}
 
 void Colisionable::mover(float posX, float posY, float angulo, int tipoElemento){
     this->superficiePrincipal->mover(posX, posY);
     float xCentral = posX + (this->superficiePrincipal->getAncho() / 2);
     float yCentral = posY + (this->superficiePrincipal->getAlto() / 2);
-    //this->superficiePrincipal->rotar(angulo, xCentral, yCentral);
     for(unsigned int i = 0; i < this->superficiesSecundarias.size(); i++){
         this->superficiesSecundarias[i]->mover(posX, posY);
         this->superficiesSecundarias[i]->rotar(angulo, xCentral, yCentral, tipoElemento);
