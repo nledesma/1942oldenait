@@ -24,7 +24,6 @@ Figura* Boton::getFigura(){
 }
 
 int Boton::manejarEvento(SDL_Event* e){
-	// cout << "ENTRO AL MANEJAR EVENTO DE BOTON GENERAL" << endl;
 	if(e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP){
 		int x, y;
 		SDL_GetMouseState(&x, &y);

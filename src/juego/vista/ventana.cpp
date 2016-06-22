@@ -29,7 +29,7 @@ int Ventana::iniciar() {
     } else {
         SDL_SetRenderDrawColor(gVentanaRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     }
-    //Initialize SDL_ttf
+    //Se inicia SDL_TTF
     if(TTF_Init() == -1){
         cout << "SDL_ttf could not initialize! SDL_ttf Error:" << TTF_GetError() << endl;
         success = false;

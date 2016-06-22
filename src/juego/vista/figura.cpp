@@ -1,10 +1,7 @@
 #include "figura.hpp"
 #include "ventana.hpp"
 
-// Vectores
-
 Figura::Figura(){
-    //Initialize
     this->textura = NULL;
     this->mWidth = 0;
     this->mHeight = 0;
@@ -51,7 +48,6 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
     SDL_Surface* loadedSurface = SDL_LoadBMP(fullPath.c_str());
     if(loadedSurface == NULL){
         Logger::instance()->logError(errno, "No se ha podido cargar la imagen" + path);
-        //cout << "No se ha podido cargar la imagen " + path << IMG_GetError() << endl;
         return false;
     }else{
         SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
@@ -60,7 +56,6 @@ bool Figura::loadFromFile(string path, SDL_Renderer* renderer, int color){
         nuevaTextura = SDL_CreateTextureFromSurface(renderer, loadedSurface);
         if(nuevaTextura == NULL){
           Logger::instance()->logError(errno, "No se ha podido crear la textura" + path);
-            //cout <<  "No se ha podido crear la textura " +  path <<  SDL_GetError() << endl;
             return false;
         }
         else{
@@ -143,14 +138,11 @@ bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_F
 }
 
 void Figura::renderMenu(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip){
-	// Set rendering space and render to screen
 	SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-	// Set clip rendering dimensions
 	if(clip != NULL) {
 		renderQuad.w = clip->w;
 		renderQuad.h = clip->h;
 	}
-	// Render to screen
 	SDL_RenderCopyEx(renderer, textura, clip, &renderQuad, angle, center, flip);
 }
 

@@ -50,7 +50,6 @@ private:
     int numeroAvion;
     int cantidadDisparos = 0;
     int cantidadAciertos = 0;
-    //int contadorColisiones = 3;
 
 
 public:
@@ -126,7 +125,7 @@ public:
 
     void setPowerUpAmetralladoras();
 
-    
+
     void setPowerUpAvionesSecundarios();
 
     int getEstadoPowerUp();

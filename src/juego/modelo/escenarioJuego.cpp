@@ -224,12 +224,6 @@ int EscenarioJuego::mainLoop() {
     this->pausado = false;
     activar();
     int eventoFinal = AVANZAR_ETAPA;
-//    Trayectoria* cuadrada = new TrayectoriaCuadrada();
-//    AvionEnemigo* enemigo = new AvionPequenio((float)50,(float)50,(float)200,(float)0,(float)100, cuadrada);
-//    Trayectoria* trayectoriaAvionGrande = new TrayectoriaAvionGrande();
-//    AvionEnemigo* enemigoGrande = new AvionGrande((float)500,(float)799,(float)100,(float)0,(float)100, trayectoriaAvionGrande);
-//    escenario->agregarEnemigo(enemigo);
-//    escenario->agregarEnemigo(enemigoGrande);
     while (estaActivo()) {
         float timeStep = temporizador.getTicks() / 1000.f;
         temporizador.comenzar();
@@ -342,7 +336,6 @@ void EscenarioJuego::sortearDisparosEnemigos(float timeStep) {
 }
 
 int EscenarioJuego::jugar(bool serverActivo) {
-    // TODO POS
     /* Se fijan las posiciones de los aviones */
     float d = ancho/(aviones.size() + 1);
     list<Avion*>::iterator it;
@@ -453,16 +446,6 @@ void EscenarioJuego::subirPuntaje(int puntos, int nroAvion) {
 void EscenarioJuego::moverEnemigos(float timeStep) {
     if (this->enemigos.size() > 0) {
         for (list<AvionEnemigo *>::iterator iterador = enemigos.begin(); iterador != enemigos.end(); iterador++) {
-//            cout << "Puntos Enemigo:" << endl;
-//            cout << (*iterador)->getPosicionX() << " " << (*iterador)->getPosicionY() << " " << (*iterador)->getAngulo() << endl << endl;
-//            cout << "Puntos colisionable:" << endl;
-//            cout << (*iterador)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiePrincipal()->getDerAbajo()->getPosY() << endl << endl;
-//            for(int i = 0; i < (*iterador)->getColisionable()->getSuperficiesSecundarias().size(); i++){
-//                cout << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getDerAbajo()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getDerAbajo()->getPosY() << endl;
-//                cout << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getIzqArriba()->getPosX() << " " << (*iterador)->getColisionable()->getSuperficiesSecundarias()[i]->getIzqArriba()->getPosY() << endl;
-//                cout << endl;
-//            }
-//            cout << endl << endl << endl;
              if ((*iterador)->mover(timeStep) == 0) {
                 pthread_mutex_lock(&this->mutexListaEnemigos);
                 iterador = enemigos.erase(iterador);
