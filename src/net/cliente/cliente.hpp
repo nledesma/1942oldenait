@@ -4,6 +4,7 @@
 #include "../decodificador.hpp"
 #include "../../juego/vista/escenarioVista.hpp"
 #include "../../juego/vista/espacioEntreEtapas.hpp"
+#include "../../juego/vista/aviso.hpp"
 #include <list>
 #include <string>
 #include <errno.h>
@@ -41,7 +42,7 @@ public:
 	Cliente(Ventana* ventana, SoundBoard* soundBoard);
     ~Cliente();
     void setAddress(string serverAddress, int port);
-    bool conectar();
+    bool conectar(Aviso * aviso = NULL);
     void cerrar();
 	/* Lógica del juego */
 	void ejecutar();
@@ -57,7 +58,7 @@ public:
 	void esperarEvento(int evento);
 	static void* esperarEvento_th(void* args);
 	int recibirMensaje(string & mensaje);
-	bool sePuedeEntrar();
+	bool sePuedeEntrar(Aviso * aviso = NULL);
     /* getters */
 	bool conectado();
     EscenarioVista * getEscenario();

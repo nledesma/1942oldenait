@@ -11,6 +11,7 @@ class MenuConexiones: public MenuLista {
         Menu * menuConexionManual;
         Cliente * cliente;
         list<Conexion> conexionesGuardadas;
+        Aviso * aviso;
     public:
         MenuConexiones(Ventana* ventana, Cliente * cliente);
         ~MenuConexiones();
@@ -22,6 +23,7 @@ class MenuConexiones: public MenuLista {
         void accionAnterior();
         void accionSiguiente();
         bool conectar(string ip, int puerto);
+        void render();
 };
 
 #endif

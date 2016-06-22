@@ -32,7 +32,7 @@ void Cliente::setAddress(string serverAddress, int port){
 	memset(this->addr_info.sin_zero, 0, sizeof(this->addr_info.sin_zero));
 }
 
-bool Cliente::conectar(){
+bool Cliente::conectar(Aviso * aviso){
 	// Me conecto a la direccion.
 	iniciarSocket();
 	try {
@@ -42,7 +42,7 @@ bool Cliente::conectar(){
 			cliente_conectado = true;
 			cout << "Conexión exitosa" << endl;
 			// Una vez conectado, le preguntamos al servidor si hay lugar.
-			if (!sePuedeEntrar()) {
+			if (!sePuedeEntrar(aviso)) {
 				// Caso contrario, cerramos la conexión.
 				cerrar();
 				return false;
@@ -51,8 +51,12 @@ bool Cliente::conectar(){
 			}
 		} else if (connected == -1) {
 			cliente_conectado = false;
-			cout << "La conexión falló, error " << errno << endl;
-			throw runtime_error("CLIENTE_EXCEPTION");
+			if (aviso == NULL) {
+				cout << "La conexión falló, error " << errno << endl;
+				throw runtime_error("CLIENTE_EXCEPTION");
+			} else {
+				aviso->avisar("Error en la conexion ("+string(strerror(errno))+")");
+			}
 			return false;
 		}
 	} catch(runtime_error &e){
@@ -82,11 +86,9 @@ void Cliente::cerrar(){
 
 /* Comunicación */
 
-bool Cliente::sePuedeEntrar() {
+bool Cliente::sePuedeEntrar(Aviso * aviso) {
 	// Primero se envía un mensaje con el nombre.
-	cout << "Se envia el nombre." << endl;
 	enviarMensaje(alias, socketFd);
-	cout << "Se envió el nombre" << endl;
 	// Luego el servidor evalua y envia su respuesta. Si es OK se puede.
 	string mensaje = "";
 	if(recibirMensaje(mensaje) != MENSAJEOK) return false;
@@ -94,8 +96,13 @@ bool Cliente::sePuedeEntrar() {
 		cout << "Se puede entrar." << endl;
 		return true;
 	} else {
-		cout << "No fue posible conectarse. El servidor responde: \"";
-		cout << mensaje << "\"" << endl;
+		if (aviso == NULL) {
+			cout << "No fue posible conectarse. El servidor responde: \"";
+			cout << mensaje << "\"" << endl;
+		} else {
+			cout << "le vamos a avisar al aviso desde el cliente." << endl;
+			aviso->avisar("Conexión rechazada: " + mensaje);
+		}
 		return false;
 	}
 }

@@ -26,7 +26,6 @@ void ManejadorDeMenues::renderLoop() {
     SDL_Event e;
     while (dibujar) {
         while (SDL_PollEvent(&e) != 0) {
-            if (actual->esSalida(&e)) {cout << "Evento de salida." << endl;}
             this->manejarEvento(actual->manejarEvento(&e));
             // TODO habría que ver si se hace algún chequeo acá.
         }

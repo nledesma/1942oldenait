@@ -123,7 +123,7 @@ bool Figura::loadFromRenderedText(string textureText, SDL_Color textColor, TTF_F
     // Liberamos texturas preexistentes.
 	free();
 	// Se renderiza una superficie auxiliar con el texto.
-	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+	SDL_Surface* textSurface = TTF_RenderUTF8_Solid(gFont, textureText.c_str(), textColor);
 	if (textSurface == NULL) {
 		cout << "No se ha podido renderizar el texto sobre la superficie. SDL_ttf Error: " << TTF_GetError() << endl;
 	} else {

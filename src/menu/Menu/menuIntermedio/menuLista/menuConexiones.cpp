@@ -3,6 +3,7 @@
 MenuConexiones::MenuConexiones(Ventana* ventana, Cliente * cliente) : MenuLista(ventana){
     this->cliente = cliente;
     titulo->cargarFuente("CONEXIONES");
+    aviso = new Aviso(ventana);
     agregarOpciones();
 }
 
@@ -44,6 +45,7 @@ void MenuConexiones::setMenuDatosUsuario(Menu * m) {
 
 
 int MenuConexiones::manejarEvento(SDL_Event * e) {
+    aviso->manejarEvento(e);
     if (esTecla(e,SDLK_RETURN) || botonSiguiente->manejarEvento(e) == BOTON_APRETADO) {
         if (lista->getNroBotonSeleccionado() != lista->getCantidadOpciones() - 1) {
             // Caso conexión específica.
@@ -51,7 +53,7 @@ int MenuConexiones::manejarEvento(SDL_Event * e) {
             advance(it, lista->getNroBotonSeleccionado());
             this->cliente->setAddress(it->ip, it->puerto);
             cout << "Se seteó la dirección en " << it->ip << ":" << it->puerto << endl;
-            if (cliente->conectar()) {
+            if (cliente->conectar(aviso)) {
                 string elServidorNecesitaEquipo;
                 cout << "El servidor nos dirá si es por equipos." << endl;
                 if(cliente->recibirMensaje(elServidorNecesitaEquipo) != MENSAJEOK) return SALIR;
@@ -69,4 +71,9 @@ int MenuConexiones::manejarEvento(SDL_Event * e) {
         }
     }
     return MenuLista::manejarEvento(e);
+}
+
+void MenuConexiones::render() {
+    MenuLista::render();
+    aviso->render();
 }
