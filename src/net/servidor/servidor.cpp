@@ -234,15 +234,16 @@ void Servidor::cerrar() {
             close(clienteActual);
             iterador->second.colaSalida.avisar();
         }
+    }
 
-        cerrarSocket();
+    cerrarSocket();
 
-        // Cerramos las colas.
-        colaDeMensajes.avisar();
-        this->escenario->desactivar();
-        pthread_cond_signal(&condPartidaLlena);
-        cout << "Servidor cerrado" << endl;
-        Logger::instance()->logInfo("El servidor ha sido cerrado");
+    // Cerramos las colas.
+    colaDeMensajes.avisar();
+    this->escenario->desactivar();
+    pthread_cond_signal(&condPartidaLlena);
+    cout << "Servidor cerrado" << endl;
+    Logger::instance()->logInfo("El servidor ha sido cerrado");
 }
 
 bool Servidor::servidorActivo() {
